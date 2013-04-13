@@ -57,7 +57,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
   
   $wrapper.html(video);
-  this.$element = $wrapper.children();
 };
 
 /**
