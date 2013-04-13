@@ -1,0 +1,19 @@
+{
+  "title": "Video",
+  "contentType": "Library",
+  "description": "Simple library that displays a video player.",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "runnable": 0,
+  "machineName": "H5P.Video",
+  "author": "Frode Petterson",
+  "preloadedJs": [
+    {
+      "path": "scripts/video.js"
+    },
+    {
+      "path": "scripts/flowplayer-3.2.12.min.js"
+    }
+  ]
+}
