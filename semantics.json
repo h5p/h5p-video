@@ -2,17 +2,20 @@
   {
     "name": "files",
     "type": "video",
-    "label": "Source files"
+    "label": "Video files",
+    "description": "Supported formats are webm, mp4 and ogv."
   },
   {
     "name": "fitToWrapper",
     "type": "boolean",
-    "label": "Fit to wrapper"
+    "label": "Fit to wrapper",
+    "default": 1
   },
   {
     "name": "controls",
     "type": "boolean",
-    "label": "Enable controls"
+    "label": "Enable controls",
+    "default": 1
   },
   {
     "name": "autoplay",

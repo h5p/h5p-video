@@ -1,11 +1,11 @@
 {
   "title": "Video",
-  "contentType": "Library",
-  "description": "Simple library that displays a video player.",
+  "contentType": "Media",
+  "description": "Simple library that displays a video.",
   "majorVersion": 1,
   "minorVersion": 0,
   "patchVersion": 0,
-  "runnable": 0,
+  "runnable": 1,
   "machineName": "H5P.Video",
   "author": "Frode Petterson",
   "preloadedJs": [

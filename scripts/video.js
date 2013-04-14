@@ -5,7 +5,6 @@ var H5P = H5P || {};
  * 
  * @param {object} params Options for this library.
  * @param {string} contentPath The path to our content folder.
- * @returns {undefined}
  */
 H5P.Video = function (params, contentPath) {
   for (var i = 0; i < params.files.length; i++) {
@@ -20,7 +19,6 @@ H5P.Video = function (params, contentPath) {
  * Wipe out the content of the wrapper and put our HTML in it.
  * 
  * @param {jQuery} $wrapper Our poor container.
- * @returns {undefined}
  */
 H5P.Video.prototype.attach = function ($wrapper) {
   // Check if browser supports video.
