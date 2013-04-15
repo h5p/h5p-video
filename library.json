@@ -5,7 +5,7 @@
   "majorVersion": 1,
   "minorVersion": 0,
   "patchVersion": 0,
-  "runnable": 1,
+  "runnable": 0,
   "machineName": "H5P.Video",
   "author": "Frode Petterson",
   "preloadedJs": [
