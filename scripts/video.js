@@ -26,14 +26,16 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
   
   // Add supported source files.
-  for (var i = 0; i < this.params.files.length; i++) {
-    var file = this.params.files[i];
+  if (this.params.files !== undefined) {
+    for (var i = 0; i < this.params.files.length; i++) {
+      var file = this.params.files[i];
     
-    if (video.canPlayType(file.mime)) {
-      var source = document.createElement('source');
-      source.src = this.contentPath + file.path;
-      source.type = file.mime;
-      video.appendChild(source);
+      if (video.canPlayType(file.mime)) {
+        var source = document.createElement('source');
+        source.src = this.contentPath + file.path;
+        source.type = file.mime;
+        video.appendChild(source);
+      }
     }
   }
   
@@ -60,11 +62,13 @@ H5P.Video.prototype.attach = function ($wrapper) {
  * @returns {undefined}
  */
 H5P.Video.prototype.attachFlash = function ($wrapper) {
-  for (var i = 0; i < this.params.files.length; i++) {
-    var file = this.params.files[i];
-    if (file.mime === 'video/mp4') {
-      var videoSource = this.contentPath + file.path;
-      break;
+  if (this.params.files !== undefined) {
+    for (var i = 0; i < this.params.files.length; i++) {
+      var file = this.params.files[i];
+      if (file.mime === 'video/mp4') {
+        var videoSource = this.contentPath + file.path;
+        break;
+      }
     }
   }
   
