@@ -44,6 +44,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
     return;
   }
   
+  video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
   video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
   
