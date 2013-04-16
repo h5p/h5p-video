@@ -6,13 +6,9 @@ var H5P = H5P || {};
  * @param {object} params Options for this library.
  * @param {string} contentPath The path to our content folder.
  */
-H5P.Video = function (params, contentPath) {
-  for (var i = 0; i < params.files.length; i++) {
-    var file = params.files[i];
-    file.path = contentPath + file.path;
-  }
-  
+H5P.Video = function (params, contentPath) {  
   this.params = params;
+  this.contentPath = contentPath;
 };
 
 /**
@@ -35,7 +31,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
     
     if (video.canPlayType(file.mime)) {
       var source = document.createElement('source');
-      source.src = file.path;
+      source.src = this.contentPath + file.path;
       source.type = file.mime;
       video.appendChild(source);
     }
@@ -67,7 +63,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   for (var i = 0; i < this.params.files.length; i++) {
     var file = this.params.files[i];
     if (file.mime === 'video/mp4') {
-      var videoSource = file.path;
+      var videoSource = this.contentPath + file.path;
       break;
     }
   }
