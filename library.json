@@ -11,9 +11,13 @@
   "preloadedJs": [
     {
       "path": "scripts/video.js"
-    },
+    }
+  ],
+  "preloadedDependencies": [
     {
-      "path": "scripts/flowplayer-3.2.12.min.js"
+      "machineName": "flowplayer",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ]
 }
