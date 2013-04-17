@@ -36,6 +36,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
     
       if (video.canPlayType(file.mime)) {
         var source = document.createElement('source');
+        // TODO: Clean up tmp stuff.
         source.src = (file.tmp !== undefined && file.tmp ? this.tmpPath : this.contentPath) + file.path;
         source.type = file.mime;
         video.appendChild(source);
