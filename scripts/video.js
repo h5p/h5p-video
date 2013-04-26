@@ -2,14 +2,14 @@ var H5P = H5P || {};
 
 /**
  * Constructor.
- * 
+ *
  * @param {object} params Options for this library.
  * @param {string} contentPath The path to our content folder.
  */
-H5P.Video = function (params, contentPath) {  
+H5P.Video = function (params, contentPath) {
   this.params = params;
   this.contentPath = contentPath;
-  
+
   if (window['H5PEditor'] !== undefined) {
     this.tmpPath = H5PEditor.filesPath + '/h5peditor/';
   }
@@ -17,7 +17,7 @@ H5P.Video = function (params, contentPath) {
 
 /**
  * Wipe out the content of the wrapper and put our HTML in it.
- * 
+ *
  * @param {jQuery} $wrapper Our poor container.
  */
 H5P.Video.prototype.attach = function ($wrapper) {
@@ -28,12 +28,12 @@ H5P.Video.prototype.attach = function ($wrapper) {
     this.attachFlash($wrapper);
     return;
   }
-  
+
   // Add supported source files.
   if (this.params.files !== undefined) {
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
-    
+
       if (video.canPlayType(file.mime)) {
         var source = document.createElement('source');
         // TODO: Clean up tmp stuff.
@@ -43,27 +43,33 @@ H5P.Video.prototype.attach = function ($wrapper) {
       }
     }
   }
-  
+
   if (!video.children) {
-    $wrapper.text('No supported video files found.');
+    // Try flash
+    this.attachFlash($wrapper);
     return;
   }
-  
+
+  if (this.endedCallback !== undefined) {
+    video.addEventListener('ended', this.endedCallback, false);
+  }
+
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
   video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
-  
+
   if (this.params.fitToWrapper === undefined || this.params.fitToWrapper) {
     video.setAttribute('width', '100%');
     video.setAttribute('height', '100%');
   }
-  
+
   $wrapper.html(video);
+  this.video = video;
 };
 
 /**
  * Attaches a flash video player to the wrapper.
- * 
+ *
  * @param {jQuery} $wrapper Our dear container.
  * @returns {undefined}
  */
@@ -77,11 +83,15 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
       }
     }
   }
-  
+
   if (videoSource === undefined) {
     $wrapper.text('No supported video files found.');
+    if (this.endedCallback !== undefined) {
+      this.endedCallback();
+    }
+    return;
   }
-  
+
   var options = {
     buffering: true,
     clip: {
@@ -92,15 +102,29 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
     },
     plugins: {}
   };
-  
+
   if (this.params.controls === undefined || this.params.controls) {
     options.plugins.controls = {
       url: 'http://releases.flowplayer.org/swf/flowplayer.controls-tube-3.2.15.swf'
     };
   }
-  
+
+  if (this.endedCallback !== undefined) {
+    options.clip.onFinish = this.endedCallback;
+    options.clip.onError = this.endedCallback;
+  }
+
   this.flowplayer = flowplayer($wrapper[0], {
     src: "http://releases.flowplayer.org/swf/flowplayer-3.2.16.swf",
     wmode: "opaque"
   }, options);
+};
+
+H5P.Video.prototype.stop = function () {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.stop().close().unload();
+  }
+  if (this.video !== undefined) {
+    this.video.pause();
+  }
 };
