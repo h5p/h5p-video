@@ -44,7 +44,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
     }
   }
 
-  if (!video.children) {
+  if (!video.children.length) {
     // Try flash
     this.attachFlash($wrapper);
     return;
@@ -100,13 +100,13 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
       autoBuffering: true,
       scaling: 'fit'
     },
-    plugins: {}
+    plugins: {
+      controls: null
+    }
   };
 
   if (this.params.controls === undefined || this.params.controls) {
-    options.plugins.controls = {
-      url: 'http://releases.flowplayer.org/swf/flowplayer.controls-tube-3.2.15.swf'
-    };
+    options.plugins.controls = {};
   }
 
   if (this.endedCallback !== undefined) {
@@ -120,6 +120,11 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   }, options);
 };
 
+/**
+ * Stop the video. TODO: Rename to pause?
+ *
+ * @returns {undefined}
+ */
 H5P.Video.prototype.stop = function () {
   if (this.flowplayer !== undefined) {
     this.flowplayer.stop().close().unload();
