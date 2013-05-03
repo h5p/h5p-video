@@ -21,6 +21,8 @@ H5P.Video = function (params, contentPath) {
  * @param {jQuery} $wrapper Our poor container.
  */
 H5P.Video.prototype.attach = function ($wrapper) {
+  var that = this;
+
   // Check if browser supports video.
   var video = document.createElement('video');
   if (video.canPlayType === undefined) {
@@ -37,7 +39,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
       if (video.canPlayType(file.mime)) {
         var source = document.createElement('source');
         // TODO: Clean up tmp stuff.
-        source.src = (file.tmp !== undefined && file.tmp ? this.tmpPath : this.contentPath) + file.path;
+        source.src = (file.path.substr(0, 7) === 'http://' ? '' : (file.tmp !== undefined && file.tmp ? this.tmpPath : this.contentPath)) + file.path;
         source.type = file.mime;
         video.appendChild(source);
       }
@@ -54,9 +56,17 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.addEventListener('ended', this.endedCallback, false);
   }
 
+  video.addEventListener('play', function (e) {
+    if (video.readyState === 0) {
+      // Jump to flash
+      $wrapper[0].removeChild(video);
+      that.attachFlash($wrapper);
+      that.flowplayer.play();
+    }
+  }, false);
+
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
-  video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
 
   if (this.params.fitToWrapper === undefined || this.params.fitToWrapper) {
     video.setAttribute('width', '100%');
@@ -64,6 +74,11 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
+
+  if (this.params.autoplay !== undefined && this.params.autoplay) {
+    video.play();
+  }
+
   this.video = video;
 };
 
@@ -74,11 +89,13 @@ H5P.Video.prototype.attach = function ($wrapper) {
  * @returns {undefined}
  */
 H5P.Video.prototype.attachFlash = function ($wrapper) {
+  $wrapper = $('<div class="h5p-video-flash"></div>').appendTo($wrapper);
+
   if (this.params.files !== undefined) {
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
       if (file.mime === 'video/mp4') {
-        var videoSource = (file.tmp !== undefined && file.tmp ? this.tmpPath : this.contentPath) + file.path;
+        var videoSource = (file.path.substr(0, 7) === 'http://' ? '' : window.location.protocol + '//' + window.location.host + (file.tmp !== undefined && file.tmp ? this.tmpPath : this.contentPath)) + file.path;
         break;
       }
     }
@@ -95,7 +112,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   var options = {
     buffering: true,
     clip: {
-      url: window.location.protocol + '//' + window.location.host + videoSource,
+      url: videoSource,
       autoPlay: this.params.autoplay === undefined ? false : this.params.autoplay,
       autoBuffering: true,
       scaling: 'fit'
