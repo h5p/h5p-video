@@ -9,17 +9,20 @@
     "name": "fitToWrapper",
     "type": "boolean",
     "label": "Fit to wrapper",
-    "default": 1
+    "default": 1,
+    "descriptions": "Adjust video size to use available space"
   },
   {
     "name": "controls",
     "type": "boolean",
     "label": "Enable controls",
-    "default": 1
+    "default": 1,
+    "description": "Controls allow the user to for instance pause the video"
   },
   {
     "name": "autoplay",
     "type": "boolean",
-    "label": "Enable autoplay"
+    "label": "Enable autoplay",
+    "description": "With autoplay the video starts to play immediately. If autoplay is disabled the user presses a play button to start the video."
   }
 ]

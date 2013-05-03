@@ -1,0 +1,20 @@
+{
+  "semantics": [
+    {
+      "label": "Video filer",
+      "description": "Formater som støttes er webm, mp4 og ogv."
+    },
+    {
+      "label": "Tilpass størrelse",
+      "description": "Forstør og forminsk avhengig av tilgjengelig størrelse"
+    },
+    {
+      "label": "Slå på kontroller",
+      "description": "Kontrollene lar bl.a. brukeren sette videoavspillingen på pause"
+    },
+    {
+       "label": "Slå på automatisk avspilling",
+      "description": "Med automatisk avspilling begynner videoen å spille av seg selv med en gang. Hvis automatisk avspilling er avslått må brukeren klikke for å starte avspillingen."
+    }
+  ]
+}
