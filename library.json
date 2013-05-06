@@ -4,10 +4,10 @@
   "description": "Simple library that displays a video.",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 5,
+  "patchVersion": 6,
   "runnable": 0,
   "machineName": "H5P.Video",
-  "author": "Frode Petterson",
+  "author": "Amendor AS",
   "preloadedJs": [
     {
       "path": "scripts/video.js"
