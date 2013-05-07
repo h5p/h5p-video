@@ -21,8 +21,6 @@ H5P.Video = function (params, contentPath) {
  * @param {jQuery} $wrapper Our poor container.
  */
 H5P.Video.prototype.attach = function ($wrapper) {
-  var that = this;
-
   // Check if browser supports video.
   var video = document.createElement('video');
   if (video.canPlayType === undefined) {
@@ -56,17 +54,9 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.addEventListener('ended', this.endedCallback, false);
   }
 
-  video.addEventListener('play', function (e) {
-    if (video.readyState === 0) {
-      // Jump to flash
-      $wrapper[0].removeChild(video);
-      that.attachFlash($wrapper);
-      that.flowplayer.play();
-    }
-  }, false);
-
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
+  video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
 
   if (this.params.fitToWrapper === undefined || this.params.fitToWrapper) {
     video.setAttribute('width', '100%');
@@ -74,11 +64,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
-
-  if (this.params.autoplay !== undefined && this.params.autoplay) {
-    video.play();
-  }
-
   this.video = video;
 };
 
