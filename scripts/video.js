@@ -56,6 +56,15 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.addEventListener('ended', this.endedCallback, false);
   }
 
+  video.addEventListener('play', function (e) {
+    if (video.readyState === 0) {
+      // Jump to flash
+      $wrapper[0].removeChild(video);
+      that.attachFlash($wrapper);
+      that.flowplayer.play();
+    }
+  }, false);
+
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
 
@@ -80,7 +89,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
  * @returns {undefined}
  */
 H5P.Video.prototype.attachFlash = function ($wrapper) {
-  $wrapper = $('<div class="h5p-video-flash"></div>').appendTo($wrapper);
+  $wrapper = $('<div class="h5p-video-flash" style="width:100%;height:100%"></div>').appendTo($wrapper);
 
   if (this.params.files !== undefined) {
     for (var i = 0; i < this.params.files.length; i++) {
