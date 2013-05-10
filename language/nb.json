@@ -2,19 +2,19 @@
   "semantics": [
     {
       "label": "Video filer",
-      "description": "Formater som støttes er webm, mp4 og ogv."
+      "description": "Format som støttast er webm, mp4 og ogv."
     },
     {
       "label": "Tilpass størrelse",
-      "description": "Forstør og forminsk avhengig av tilgjengelig størrelse"
+      "description": "Forstør og forminsk avheng av tilgjengelig størrelse"
     },
     {
       "label": "Slå på kontroller",
-      "description": "Kontrollene lar bl.a. brukeren sette videoavspillingen på pause"
+      "description": "Kontrollane lar mellom anna brukaren sette videoavspillinga på pause"
     },
     {
        "label": "Slå på automatisk avspilling",
-      "description": "Med automatisk avspilling begynner videoen å spille av seg selv med en gang. Hvis automatisk avspilling er avslått må brukeren klikke for å starte avspillingen."
+      "description": "Med automatisk avspilling startar videoen å spele av seg sjølv med ein gong. Viss automatisk avspeling er slått av må brukaren klikke for å starte avspelinga."
     }
   ]
 }
