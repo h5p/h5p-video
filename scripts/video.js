@@ -21,6 +21,8 @@ H5P.Video = function (params, contentPath) {
  * @param {jQuery} $wrapper Our poor container.
  */
 H5P.Video.prototype.attach = function ($wrapper) {
+//  this.attachFlash($wrapper);return;
+
   // Check if browser supports video.
   var video = document.createElement('video');
   if (video.canPlayType === undefined) {
@@ -52,6 +54,10 @@ H5P.Video.prototype.attach = function ($wrapper) {
 
   if (this.endedCallback !== undefined) {
     video.addEventListener('ended', this.endedCallback, false);
+  }
+
+  if (this.loadedCallback !== undefined) {
+    video.addEventListener('loadedmetadata', this.loadedCallback, false);
   }
 
   video.className = 'h5p-video';
@@ -116,6 +122,10 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
     options.clip.onError = this.endedCallback;
   }
 
+  if (this.loadedCallback !== undefined) {
+    options.clip.onMetaData = this.loadedCallback;
+  }
+
   this.flowplayer = flowplayer($wrapper[0], {
     src: "http://releases.flowplayer.org/swf/flowplayer-3.2.16.swf",
     wmode: "opaque"
@@ -123,7 +133,35 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
 };
 
 /**
- * Stop the video. TODO: Rename to pause?
+ * Play the clip.
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.play = function () {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.play();
+  }
+  else {
+    this.video.play();
+  }
+};
+
+/**
+ * Pause the clip.
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.pause = function () {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.pause();
+  }
+  else {
+    this.video.pause();
+  }
+};
+
+/**
+ * Stop the video.
  *
  * @returns {undefined}
  */
@@ -133,5 +171,52 @@ H5P.Video.prototype.stop = function () {
   }
   if (this.video !== undefined) {
     this.video.pause();
+  }
+};
+
+/**
+ * Get current time in clip.
+ *
+ * @returns Float
+ */
+H5P.Video.prototype.getTime = function () {
+  if (this.flowplayer !== undefined) {
+    return this.flowplayer.getTime();
+  }
+  else {
+    return this.video.currentTime;
+  }
+};
+
+/**
+ * Jump to the given time in the video clip.
+ *
+ * @param {int} time
+ * @returns {undefined}
+ */
+H5P.Video.prototype.seek = function (time) {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.seek(time);
+  }
+  else {
+    this.video.currentTime = time;
+  }
+};
+
+/**
+ * Resize the video DOM to use all available space.
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.resize = function () {
+  if (this.flowplayer !== undefined) {
+    var $object = $(this.flowplayer.getParent()).children('object');
+    var clip = this.flowplayer.getClip();
+
+    $object.css('height', $object.width() * (clip.metaData.height / clip.metaData.width));
+  }
+  else {
+    var $video = $(this.video);
+    $video.css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
   }
 };
