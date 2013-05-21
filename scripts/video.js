@@ -15,6 +15,9 @@ H5P.Video = function (params, contentPath) {
   }
 };
 
+// For android specific stuff.
+H5P.Video.android = navigator.userAgent.indexOf('Android') !== -1;
+
 /**
  * Wipe out the content of the wrapper and put our HTML in it.
  *
@@ -22,6 +25,7 @@ H5P.Video = function (params, contentPath) {
  */
 H5P.Video.prototype.attach = function ($wrapper) {
 //  this.attachFlash($wrapper);return;
+  var that = this;
 
   // Check if browser supports video.
   var video = document.createElement('video');
@@ -57,7 +61,19 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   if (this.loadedCallback !== undefined) {
-    video.addEventListener('loadedmetadata', this.loadedCallback, false);
+    if (H5P.Video.android) {
+      var play = function () {
+        video.addEventListener('durationchange', function (e) {
+          // On Android duration isn't available until after play.
+          that.loadedCallback();
+        }, false);
+        video.removeEventListener('play', play ,false);
+      };
+      video.addEventListener('play', play, false);
+    }
+    else {
+      video.addEventListener('loadedmetadata', this.loadedCallback, false);
+    }
   }
 
   video.className = 'h5p-video';
@@ -189,6 +205,20 @@ H5P.Video.prototype.getTime = function () {
 };
 
 /**
+ * Get current time in clip.
+ *
+ * @returns Float
+ */
+H5P.Video.prototype.getDuration = function () {
+  if (this.flowplayer !== undefined) {
+    return this.flowplayer.getClip().metaData.duration;
+  }
+  else {
+    return this.video.duration;
+  }
+};
+
+/**
  * Jump to the given time in the video clip.
  *
  * @param {int} time
@@ -200,6 +230,34 @@ H5P.Video.prototype.seek = function (time) {
   }
   else {
     this.video.currentTime = time;
+  }
+};
+
+/**
+ * Mute the video
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.mute = function () {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.mute();
+  }
+  else {
+    this.video.muted = true;
+  }
+};
+
+/**
+ * Unmute the video
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.unmute = function () {
+  if (this.flowplayer !== undefined) {
+    this.flowplayer.unmute();
+  }
+  else {
+    this.video.muted = false;
   }
 };
 
