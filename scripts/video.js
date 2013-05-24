@@ -229,7 +229,17 @@ H5P.Video.prototype.seek = function (time) {
     this.flowplayer.seek(time);
   }
   else {
-    this.video.currentTime = time;
+    var seekable = false;
+    for (var i = 0; i < this.video.seekable.length; i++) {
+      if (time >= this.video.seekable.start(i) && time <= this.video.seekable.end(i)) {
+        seekable = true;
+        break;
+      }
+    }
+
+    if (seekable) {
+      this.video.currentTime = time;
+    }
   }
 };
 
