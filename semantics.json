@@ -90,6 +90,10 @@
             "label": "Attribution-NonCommercial-NoDerivs"
           },
           {
+            "value": "GNU GPL",
+            "label": "General Public License"
+          },
+          {
             "value": "PD",
             "label": "Public Domain"
           },
