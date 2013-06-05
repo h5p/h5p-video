@@ -76,6 +76,10 @@ H5P.Video.prototype.attach = function ($wrapper) {
     }
   }
 
+  if (this.errorCallback !== undefined) {
+    video.addEventListener('error', this.errorCallback, false);
+  }
+
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
   video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
@@ -135,11 +139,14 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
 
   if (this.endedCallback !== undefined) {
     options.clip.onFinish = this.endedCallback;
-    options.clip.onError = this.endedCallback;
   }
 
   if (this.loadedCallback !== undefined) {
     options.clip.onMetaData = this.loadedCallback;
+  }
+
+  if (this.errorCallback !== undefined) {
+    options.onError = this.errorCallback;
   }
 
   this.flowplayer = flowplayer($wrapper[0], {
