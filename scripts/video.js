@@ -33,7 +33,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   // Add supported source files.
-  if (this.params.files !== undefined) {
+  if (this.params.files !== undefined && this.params.files instanceof Object) {
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
 
@@ -98,7 +98,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
 H5P.Video.prototype.attachFlash = function ($wrapper) {
   $wrapper = H5P.jQuery('<div class="h5p-video-flash" style="width:100%;height:100%"></div>').appendTo($wrapper);
 
-  if (this.params.files !== undefined) {
+  if (this.params.files !== undefined && this.params.files instanceof Object) {
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
       if (file.mime === 'video/mp4') {
@@ -286,7 +286,7 @@ H5P.Video.prototype.resize = function () {
 
     $object.css('height', $object.width() * (clip.metaData.height / clip.metaData.width));
   }
-  else {
+  else if (this.video !== undefined) {
     var $video = H5P.jQuery(this.video);
     $video.css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
   }
