@@ -15,6 +15,11 @@
   ],
   "preloadedDependencies": [
     {
+      "machineName": "H5P.API",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
       "machineName": "flowplayer",
       "majorVersion": 1,
       "minorVersion": 0
