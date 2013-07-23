@@ -40,7 +40,6 @@ H5P.Video.android = navigator.userAgent.indexOf('Android') !== -1;
  * @param {jQuery} $wrapper Our poor container.
  */
 H5P.Video.prototype.attach = function ($wrapper) {
-//  this.attachFlash($wrapper);return;
   var that = this;
 
   // Check if browser supports video.
@@ -91,6 +90,10 @@ H5P.Video.prototype.attach = function ($wrapper) {
     }
   }
 
+  video.addEventListener('play', function () {
+    H5P.jQuery('.h5pVideoStartOverlay', $wrapper).hide();
+  }, false);
+
   if (this.errorCallback !== undefined) {
     video.addEventListener('error', this.errorCallback, false);
   }
@@ -105,6 +108,11 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
+  H5P.jQuery('<div class="h5pVideoStartOverlay"></div>')
+  .click(function () {
+    video.play();
+  })
+  .appendTo($wrapper);
   this.video = video;
 };
 

@@ -13,6 +13,11 @@
       "path": "scripts/video.js"
     }
   ],
+  "preloadedCss": [
+    {
+      "path": "styles/video.css"
+    }
+  ],
   "preloadedDependencies": [
     {
       "machineName": "H5P.API",

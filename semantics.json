@@ -23,7 +23,7 @@
     "name": "autoplay",
     "type": "boolean",
     "label": "Enable autoplay",
-    "description": "With autoplay the video starts to play immediately. If autoplay is disabled the user presses a play button to start the video."
+    "description": "With autoplay the video starts to play immediately. If autoplay is disabled the user presses a play button to start the video. Note that autoplay does not work on mobile devices."
   },
   {
     "name": "copyright",

@@ -14,7 +14,7 @@
     },
     {
       "label": "Slå på automatisk avspeling",
-      "description": "Med automatisk avspeling startar videoen å spele av seg sjølv med ein gong. Viss automatisk avspeling er slått av må brukaren trykkje for å starte avspelinga."
+      "description": "Med automatisk avspeling startar videoen å spele av seg sjølv med ein gong. Viss automatisk avspeling er slått av må brukaren trykkje for å starte avspelinga. Merk at automatisk avspeling ikkje virkar på mobile einingar."
     },
     {
       "label": "Informasjon om opphavsrett",
