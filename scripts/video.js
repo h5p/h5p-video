@@ -108,11 +108,14 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
+
+  if (!this.params.controls) {
   H5P.jQuery('<div class="h5p-video-start-overlay"></div>')
-  .click(function () {
-    video.play();
-  })
-  .appendTo($wrapper);
+    .click(function () {
+      video.play();
+    })
+    .appendTo($wrapper);
+  }
   this.video = video;
 };
 
@@ -315,6 +318,6 @@ H5P.Video.prototype.resize = function () {
   }
   else if (this.video !== undefined) {
     var $video = H5P.jQuery(this.video);
-    $video.css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
+    $video.parent().css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
   }
 };
