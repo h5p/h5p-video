@@ -91,7 +91,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   video.addEventListener('play', function () {
-    H5P.jQuery('.h5pVideoStartOverlay', $wrapper).hide();
+    H5P.jQuery('.h5p-video-start-overlay', $wrapper).hide();
   }, false);
 
   if (this.errorCallback !== undefined) {
@@ -108,7 +108,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
-  H5P.jQuery('<div class="h5pVideoStartOverlay"></div>')
+  H5P.jQuery('<div class="h5p-video-start-overlay"></div>')
   .click(function () {
     video.play();
   })
