@@ -9,14 +9,14 @@
     "name": "fitToWrapper",
     "type": "boolean",
     "label": "Fit to wrapper",
-    "default": 1,
+    "default": true,
     "descriptions": "Adjust video size to use available space"
   },
   {
     "name": "controls",
     "type": "boolean",
     "label": "Enable controls",
-    "default": 1,
+    "default": true,
     "description": "Controls allow the user to for instance pause the video"
   },
   {
