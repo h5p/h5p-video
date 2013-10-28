@@ -132,7 +132,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
       if (file.mime === 'video/mp4') {
-        var videoSource = (file.path.substr(0, 7) === 'http://' ? file.path : window.location.protocol + '//' + window.location.host + H5P.getPath(file.path, this.contentId));
+        var videoSource = H5P.getPath(file.path, this.contentId);
         break;
       }
     }
@@ -314,7 +314,9 @@ H5P.Video.prototype.resize = function () {
     var $object = H5P.jQuery(this.flowplayer.getParent()).children('object');
     var clip = this.flowplayer.getClip();
 
-    $object.css('height', $object.width() * (clip.metaData.height / clip.metaData.width));
+    if (clip !== undefined) {
+      $object.css('height', $object.width() * (clip.metaData.height / clip.metaData.width));
+    }
   }
   else if (this.video !== undefined) {
     var $video = H5P.jQuery(this.video);
