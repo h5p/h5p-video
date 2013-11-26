@@ -42,6 +42,8 @@ H5P.Video.android = navigator.userAgent.indexOf('Android') !== -1;
 H5P.Video.prototype.attach = function ($wrapper) {
   var that = this;
 
+  $wrapper.addClass('h5p-video-wrapper')
+
   // Check if browser supports video.
   var video = document.createElement('video');
   if (video.canPlayType === undefined) {
@@ -101,6 +103,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
   video.className = 'h5p-video';
   video.controls = this.params.controls === undefined ? true : this.params.controls;
   video.autoplay = this.params.autoplay === undefined ? false : this.params.autoplay;
+  video.style.display = 'block';
 
   if (this.params.fitToWrapper === undefined || this.params.fitToWrapper) {
     video.setAttribute('width', '100%');
