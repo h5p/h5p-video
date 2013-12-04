@@ -363,6 +363,7 @@ H5P.Video.prototype.resize = function () {
   }
   else if (this.video !== undefined) {
     var $video = H5P.jQuery(this.video);
+    $video.css('height', '100%'); // Fixes size on ios7.
     $video.parent().css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
   }
 };
