@@ -32,7 +32,10 @@ H5P.Video = function (params, id) {
 };
 
 // For android specific stuff.
-H5P.Video.android = navigator.userAgent.indexOf('Android') !== -1;
+H5P.Video.android = (navigator.userAgent.indexOf('Android') !== -1);
+
+// For chrome specific stuff.
+H5P.Video.chrome = (navigator.userAgent.indexOf('Chrome') !== -1);
 
 /**
  * Wipe out the content of the wrapper and put our HTML in it.
@@ -54,15 +57,52 @@ H5P.Video.prototype.attach = function ($wrapper) {
 
   // Add supported source files.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
+    var quality = []; // Sort sources by quality.
+  
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
 
-      if (video.canPlayType(file.mime)) {
+      if (video.canPlayType(file.mime)) { // Check if we can play file.
+        if (file.quality === undefined) {
+          file.quality = { // Add default quality.
+            level: 0,
+            label: 'Default'
+          };
+        }
+        
+        // Create source.
         var source = document.createElement('source');
         source.src = H5P.getPath(file.path, this.contentId);
         source.type = file.mime;
-        video.appendChild(source);
+        if (file.codecs !== undefined)  {
+          source.type += '; codecs="' + file.codecs + '"'; // Add codecs.
+        }
+        
+        if (quality[file.quality.level] === undefined) {
+          quality[file.quality.level] = { // New quality.
+            label: file.quality.label,
+            sources: [source]
+          };
+        }
+        else {
+          // mp4 should be first for iPad to work, but some mp4 codecs have trouble on chrome.
+          var first = (H5P.Video.chrome ? 'webm' : 'mp4')
+          if (file.mime.split('/')[1] === first) {
+            quality[file.quality.level].sources.splice(0, 0, source);
+          }
+          else {
+            quality[file.quality.level].sources.push(source);
+          }
+        }
       }
+    }
+    
+    // Append first quality level sources to videotag.
+    for (var level in quality) {
+      for (var i = 0; i < quality[level].sources.length; i++) {     
+        video.appendChild(quality[level].sources[i]);
+      }
+      break;
     }
   }
 
