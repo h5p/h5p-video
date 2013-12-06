@@ -172,12 +172,32 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   $wrapper = H5P.jQuery('<div class="h5p-video-flash" style="width:100%;height:100%"></div>').appendTo($wrapper);
 
   if (this.params.files !== undefined && this.params.files instanceof Object) {
+    var quality = []; // Sort sources by quality.
+  
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
-      if (file.mime === 'video/mp4') {
-        var videoSource = H5P.getPath(file.path, this.contentId);
-        break;
+
+      if (file.mime === 'video/mp4') { // Check if we can play file.
+        if (file.quality === undefined) {
+          file.quality = { // Add default quality.
+            level: 0,
+            label: 'Default'
+          };
+        }
+        
+        if (quality[file.quality.level] === undefined) {
+          quality[file.quality.level] = { // New quality.
+            label: file.quality.label,
+            sources: [file.path]
+          };
+        }
       }
+    }
+    
+    // Use first quality level source to videotag.
+    for (var level in quality) {
+      var videoSource = H5P.getPath(quality[level].sources[0], this.contentId);
+      break;
     }
   }
 
