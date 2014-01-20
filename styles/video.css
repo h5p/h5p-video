@@ -1,6 +1,15 @@
 .h5p-video-flash {
   color: #fff;
 }
+.h5p-video-loading {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
 .h5p-video-start-overlay {
   position: absolute;
   top: 0;

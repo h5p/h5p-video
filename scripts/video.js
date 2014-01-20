@@ -55,59 +55,53 @@ H5P.Video.prototype.attach = function ($wrapper) {
     return;
   }
 
-  // Add supported source files.
+  // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
-    var quality = []; // Sort sources by quality.
+    this.qualities = []; // Sort sources by quality.
   
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
+      
+      var type = file.mime;
+      if (file.codecs !== undefined)  {
+        type += '; codecs="' + file.codecs + '"'; 
+      }
 
-      if (video.canPlayType(file.mime)) { // Check if we can play file.
+      // Check if we can play this source.
+      if (video.canPlayType(type) !== '') { 
         if (file.quality === undefined) {
-          file.quality = { // Add default quality.
+          // Add default quality if source has none.
+          file.quality = {
             level: 0,
             label: 'Default'
           };
         }
         
-        // Create source.
-        var source = document.createElement('source');
-        source.src = H5P.getPath(file.path, this.contentId);
-        source.type = file.mime;
-        if (file.codecs !== undefined)  {
-          source.type += '; codecs="' + file.codecs + '"'; // Add codecs.
-        }
-        
-        if (quality[file.quality.level] === undefined) {
-          quality[file.quality.level] = { // New quality.
+        var source = H5P.getPath(file.path, this.contentId);
+        if (this.qualities[file.quality.level] === undefined) {
+          // Add new source.
+          this.qualities[file.quality.level] = { 
             label: file.quality.label,
-            sources: [source]
+            source: source
           };
         }
         else {
-          // mp4 should be first for iPad to work, but some mp4 codecs have trouble on chrome.
-          var first = (H5P.Video.chrome ? 'webm' : 'mp4')
-          if (file.mime.split('/')[1] === first) {
-            quality[file.quality.level].sources.splice(0, 0, source);
-          }
-          else {
-            quality[file.quality.level].sources.push(source);
+          // Replace source if we have a better.
+          // Prefer mp4, but webm for Chrome due to trouble with some mp4 codecs.
+          var preferred = (H5P.Video.chrome ? 'webm' : 'mp4')
+          if (file.mime.split('/')[1] === preferred) {
+            this.qualities[file.quality.level].source = source;
           }
         }
       }
     }
     
-    // Append first quality level sources to videotag.
-    for (var level in quality) {
-      for (var i = 0; i < quality[level].sources.length; i++) {     
-        video.appendChild(quality[level].sources[i]);
-      }
-      break;
-    }
+    // Get preferred quality level through cookie.
+    video.src = this.getPreferredQuality();
   }
 
-  if (!video.children.length) {
-    // Try flash
+  if (video.src === '') {
+    // Found no source. Try flash.
     this.attachFlash($wrapper);
     return;
   }
@@ -116,19 +110,26 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.addEventListener('ended', this.endedCallback, false);
   }
 
+  // Fire callback when loaded
   if (this.loadedCallback !== undefined) {
     if (H5P.Video.android) {
       var play = function () {
-        video.addEventListener('durationchange', function (e) {
-          // On Android duration isn't available until after play.
-          that.loadedCallback();
-        }, false);
         video.removeEventListener('play', play ,false);
+        var loaded = function () {
+          // On Android duration isn't available until after play.
+          video.removeEventListener('durationchange', loaded, false);
+          that.loadedCallback();
+        }
+        video.addEventListener('durationchange', loaded, false);
       };
       video.addEventListener('play', play, false);
     }
     else {
-      video.addEventListener('loadedmetadata', this.loadedCallback, false);
+      var loaded = function () {
+        video.removeEventListener('loadedmetadata', loaded, false);
+        that.loadedCallback();
+      }
+      video.addEventListener('loadedmetadata', loaded, false);
     }
   }
 
@@ -151,9 +152,12 @@ H5P.Video.prototype.attach = function ($wrapper) {
   }
 
   $wrapper.html(video);
+  this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>').appendTo($wrapper);
 
   if (!this.params.controls) {
-  H5P.jQuery('<div class="h5p-video-start-overlay"></div>')
+    // TODO: Move to IV. No controls means no controls. Should _only_ be programatically controlled when controls is set to false.
+    // Also this isn't here when using flash...
+    H5P.jQuery('<div class="h5p-video-start-overlay"></div>')
     .click(function () {
       video.play();
     })
@@ -169,36 +173,38 @@ H5P.Video.prototype.attach = function ($wrapper) {
  * @returns {undefined}
  */
 H5P.Video.prototype.attachFlash = function ($wrapper) {
+  var that = this;
   $wrapper = H5P.jQuery('<div class="h5p-video-flash" style="width:100%;height:100%"></div>').appendTo($wrapper);
 
+  // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
-    var quality = []; // Sort sources by quality.
+    this.qualities = []; // Sort sources by quality.
   
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
 
-      if (file.mime === 'video/mp4') { // Check if we can play file.
+      // Only supported sources.
+      if (file.mime === 'video/mp4') { 
         if (file.quality === undefined) {
-          file.quality = { // Add default quality.
+          // Add default quality if source has none.
+          file.quality = {
             level: 0,
             label: 'Default'
           };
         }
         
-        if (quality[file.quality.level] === undefined) {
-          quality[file.quality.level] = { // New quality.
+        if (this.qualities[file.quality.level] === undefined) {
+          // Add new quality
+          this.qualities[file.quality.level] = {
             label: file.quality.label,
-            sources: [file.path]
+            source: H5P.getPath(file.path, this.contentId)
           };
         }
       }
     }
     
-    // Use first quality level source to videotag.
-    for (var level in quality) {
-      var videoSource = H5P.getPath(quality[level].sources[0], this.contentId);
-      break;
-    }
+    // Get preferred quality level through cookie.
+    var videoSource = this.getPreferredQuality();
   }
 
   if (videoSource === undefined) {
@@ -215,13 +221,25 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
       url: videoSource,
       autoPlay: this.params.autoplay === undefined ? false : this.params.autoplay,
       autoBuffering: true,
-      scaling: 'fit'
+      scaling: 'fit',
+      onMetaData: function () {        
+        setTimeout(function () {
+          if (that.onLoad !== undefined) {
+            that.onLoad();
+            // onLoad is only used once.
+            delete that.onLoad;
+          }
+        }, 1);
+      }
     },
     plugins: {
       controls: null
+    },
+    onPlaylistReplace: function () {
+      that.playlistReplaced();
     }
   };
-
+  
   if (this.params.controls === undefined || this.params.controls) {
     options.plugins.controls = {};
   }
@@ -230,12 +248,12 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
     options.clip.onFinish = this.endedCallback;
   }
 
-  if (this.loadedCallback !== undefined) {
-    options.clip.onMetaData = this.loadedCallback;
-  }
-
   if (this.errorCallback !== undefined) {
     options.onError = this.errorCallback;
+  }
+  
+  if (this.loadedCallback !== undefined) {
+    this.onLoad = this.loadedCallback;
   }
 
   this.flowplayer = flowplayer($wrapper[0], {
@@ -387,3 +405,139 @@ H5P.Video.prototype.resize = function () {
     $video.parent().css('height', $video.width() * (this.video.videoHeight / this.video.videoWidth));
   }
 };
+
+/**
+ * Check if the video is playing.
+ *
+ * @returns {Boolean} Status
+ */
+H5P.Video.prototype.isPlaying = function () {
+  if (this.flowplayer !== undefined) {
+    return this.flowplayer.isPlaying();
+  }
+  else {
+    return (this.video.paused === false && this.video.ended === false)
+  }
+};
+
+/**
+ * Resize the video DOM to use all available space.
+ *
+ * @returns {undefined}
+ */
+H5P.Video.prototype.setQuality = function (level) {
+  var that = this;
+  
+  // Keep track of last choice through cookies
+  this.setPreferredQuality(level);
+  
+  // Keep track of state
+  isPlaying = this.isPlaying();
+  if (isPlaying === true) {
+    this.pause();
+  }
+  
+  var time = this.getTime() - 1; // Rewind one second
+  if (time < 0) {
+    time = 0;
+  }
+  
+  if (this.flowplayer !== undefined) {
+    // Control flash player
+    this.onLoad = function () {
+      that.flowplayer.seek(time);
+      if (isPlaying === true) {
+        that.flowplayer.play();
+      }
+    }
+    
+    // Change source
+    this.flowplayer.setClip(this.qualities[level].source);
+    this.flowplayer.startBuffering();
+  }
+  else {
+    // Hide loading screen after seeking.
+    var seeked = function () {
+      that.video.removeEventListener('seeked', seeked, false);
+      that.$loading.hide();
+    }
+    that.video.addEventListener('seeked', seeked, false);
+    
+    // Seek and start video again after loading.
+    var loaded = function () {
+      that.video.removeEventListener('loadedmetadata', loaded, false);
+
+      if (H5P.Video.android) {
+        var andLoaded = function () {
+          that.video.removeEventListener('durationchange', andLoaded, false);
+          // On Android seeking isn't ready until after play.            
+          that.seek(time);
+        };
+        that.video.addEventListener('durationchange', andLoaded, false);
+      }
+      else {
+        // Seek to current time.    
+        that.seek(time);
+      }
+  
+      // Resume playing
+      if (isPlaying === true) {
+        that.play();
+      }
+    }
+    this.video.addEventListener('loadedmetadata', loaded, false);
+
+    // Show loading screen
+    this.$loading.show();
+
+    // Change source
+    this.video.src = this.qualities[level].source; // Note that iPad does not support #t=.
+  }
+};
+
+/**
+ * Set Preferred video quality.
+ *
+ * @param {Number} level Index of preferred quality
+ */
+H5P.Video.prototype.setPreferredQuality = function (level) {
+  var settings = document.cookie.split(';');
+  for (var i = 0; i < settings.length; i++) {
+    var setting = settings[i].split('=');
+    if (setting[0] === 'H5PVideoQuality') {
+      setting[1] = level;
+      settings[i] = setting.join('=');
+      document.cookie = settings.join(';');
+      return;
+    }
+  }
+  
+  document.cookie = 'H5PVideoQuality=' + level + '; ' + document.cookie;
+}
+
+/**
+ * Return source of preferred video quality.
+ *
+ * @returns {String} URL or undefined if not found.
+ */
+H5P.Video.prototype.getPreferredQuality = function () {
+  var level, settings = document.cookie.split(';');
+  for (var i = 0; i < settings.length; i++) {
+    var setting = settings[i].split('=');
+    if (setting[0] === 'H5PVideoQuality') {
+      level = setting[1];
+      break;
+    }
+  }
+  
+  if (level === undefined || this.qualities[level] === undefined) {
+    // Just pick the first/lowest quality source.
+    for (level in this.qualities) {
+      return this.qualities[level].source;
+      break;
+    }
+  }
+  else {
+    return this.qualities[level].source;
+  }
+}
