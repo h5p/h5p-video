@@ -133,10 +133,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
     }
   }
 
-  video.addEventListener('play', function () {
-    H5P.jQuery('.h5p-video-start-overlay', $wrapper).hide();
-  }, false);
-
   if (this.errorCallback !== undefined) {
     video.addEventListener('error', this.errorCallback, false);
   }
@@ -153,16 +149,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
 
   $wrapper.html(video);
   this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>').appendTo($wrapper);
-
-  if (!this.params.controls) {
-    // TODO: Move to IV. No controls means no controls. Should _only_ be programatically controlled when controls is set to false.
-    // Also this isn't here when using flash...
-    H5P.jQuery('<div class="h5p-video-start-overlay"></div>')
-    .click(function () {
-      video.play();
-    })
-    .appendTo($wrapper);
-  }
   this.video = video;
 };
 
@@ -533,11 +519,13 @@ H5P.Video.prototype.getPreferredQuality = function () {
   if (level === undefined || this.qualities[level] === undefined) {
     // Just pick the first/lowest quality source.
     for (level in this.qualities) {
+      this.qualities[level]['default'] = true;
       return this.qualities[level].source;
       break;
     }
   }
   else {
+    this.qualities[level]['default'] = true;
     return this.qualities[level].source;
   }
 }
