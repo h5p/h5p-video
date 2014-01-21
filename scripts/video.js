@@ -208,6 +208,12 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
       autoPlay: this.params.autoplay === undefined ? false : this.params.autoplay,
       autoBuffering: true,
       scaling: 'fit',
+      onSeek: function () {
+        if (that.wasPlaying !== undefined) {
+          delete that.lastTime;
+          delete that.wasPlaying;
+        }
+      },
       onMetaData: function () {        
         setTimeout(function () {
           if (that.onLoad !== undefined) {
@@ -418,21 +424,26 @@ H5P.Video.prototype.setQuality = function (level) {
   this.setPreferredQuality(level);
   
   // Keep track of state
-  isPlaying = this.isPlaying();
-  if (isPlaying === true) {
+  if (this.wasPlaying === undefined) {
+    this.wasPlaying = this.isPlaying();
+  }
+  if (this.wasPlaying === true) {
     this.pause();
   }
   
-  var time = this.getTime() - 1; // Rewind one second
-  if (time < 0) {
-    time = 0;
+  // Keep track of time
+  if (this.lastTime === undefined) {
+    this.lastTime = this.getTime() - 1; // Rewind one second
+    if (this.lastTime < 0) {
+      this.lastTime = 0;
+    }
   }
   
   if (this.flowplayer !== undefined) {
     // Control flash player
     this.onLoad = function () {
-      that.flowplayer.seek(time);
-      if (isPlaying === true) {
+      that.flowplayer.seek(that.lastTime);
+      if (that.wasPlaying === true) {
         that.flowplayer.play();
       }
     }
@@ -457,19 +468,22 @@ H5P.Video.prototype.setQuality = function (level) {
         var andLoaded = function () {
           that.video.removeEventListener('durationchange', andLoaded, false);
           // On Android seeking isn't ready until after play.            
-          that.seek(time);
+          that.seek(that.lastTime);
+          delete that.lastTime;
         };
         that.video.addEventListener('durationchange', andLoaded, false);
       }
       else {
         // Seek to current time.    
-        that.seek(time);
+        that.seek(that.lastTime);
+        delete that.lastTime;
       }
   
       // Resume playing
-      if (isPlaying === true) {
+      if (that.wasPlaying === true) {
         that.play();
       }
+      delete that.wasPlaying;
     }
     this.video.addEventListener('loadedmetadata', loaded, false);
 
