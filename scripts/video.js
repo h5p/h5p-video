@@ -214,7 +214,11 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
           delete that.wasPlaying;
         }
       },
-      onMetaData: function () {        
+      onMetaData: function () { 
+        /* Used before play:null
+        if (that.params.controls === false) {
+          that.flowplayer.getPlugin('play').hide();
+        }*/
         setTimeout(function () {
           if (that.onLoad !== undefined) {
             that.onLoad();
@@ -227,6 +231,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
     plugins: {
       controls: null
     },
+    play: null, // Disable overlay controls
     onPlaylistReplace: function () {
       that.playlistReplaced();
     }
@@ -234,6 +239,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   
   if (this.params.controls === undefined || this.params.controls) {
     options.plugins.controls = {};
+    delete options.play;
   }
 
   if (this.endedCallback !== undefined) {
