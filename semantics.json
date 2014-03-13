@@ -29,6 +29,7 @@
     "name": "copyright",
     "type": "group",
     "label": "Copyright information",
+    "deprecated": true,
     "fields": [
       {
         "name": "title",
