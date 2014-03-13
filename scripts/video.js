@@ -11,6 +11,18 @@ H5P.Video = function (params, id) {
   this.$ = H5P.jQuery(this);
   this.params = params;
   this.contentId = id;
+  
+  // Use new copyright information if available. Fallback to old.
+  if (params.files !== undefined
+      && params.files[0] !== undefined
+      && params.files[0].copyrights !== undefined
+      && params.files[0].copyrights.length) {
+      
+    this.copyrights = params.files[0].copyrights;
+  }
+  else if (params.copyright !== undefined) {
+    this.copyrights = [params.copyright];
+  }
 };
 
 // For android specific stuff.
@@ -535,3 +547,15 @@ H5P.Video.prototype.getPreferredQuality = function () {
     return this.qualities[level].source;
   }
 }
+
+
+/**
+ * Gather copyright information for the current content.
+ *
+ * @returns {Object} Copyright information
+ */
+H5P.Video.prototype.getCopyrights = function () {
+  return {
+    copyrights: H5P.getCopyrightList(this.copyrights)
+  };
+};
