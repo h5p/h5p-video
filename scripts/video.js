@@ -33,13 +33,12 @@ H5P.Video = function (params, id) {
   // Use new copyright information if available. Fallback to old.
   if (params.files !== undefined
       && params.files[0] !== undefined
-      && params.files[0].copyrights !== undefined
-      && params.files[0].copyrights.length) {
+      && params.files[0].copyright !== undefined) {
       
-    this.copyrights = params.files[0].copyrights;
+    this.copyright = params.files[0].copyright;
   }
   else if (params.copyright !== undefined) {
-    this.copyrights = [params.copyright];
+    this.copyright = params.copyright;
   }
 };
 
@@ -569,7 +568,10 @@ H5P.Video.prototype.getPreferredQuality = function () {
  * @returns {Object} Copyright information
  */
 H5P.Video.prototype.getCopyrights = function () {
+  if (this.copyright === undefined) {
+    return;
+  }
   return {
-    copyrights: H5P.getCopyrightList(this.copyrights)
+    copyrights: [H5P.getCopyrightFields(this.copyright)]
   };
 };
