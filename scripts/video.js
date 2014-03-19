@@ -38,10 +38,6 @@ H5P.Video.chrome = (navigator.userAgent.indexOf('Chrome') !== -1);
 H5P.Video.prototype.attach = function ($wrapper) {
   var that = this;
 
-  this.$.on('h5pResize', function () {
-    that.resize();
-  });
-
   // Check if browser supports video.
   var video = document.createElement('video');
   if (video.canPlayType === undefined) {
@@ -145,8 +141,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
   $wrapper.html(video);
   this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>').appendTo($wrapper);
   this.video = video;
-  
-
 };
 
 /**
