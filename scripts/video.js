@@ -545,13 +545,15 @@ H5P.Video.prototype.getPreferredQuality = function () {
 /**
  * Gather copyright information for the current content.
  *
- * @returns {Object} Copyright information
+ * @returns {H5P.ContentCopyrights}
  */
 H5P.Video.prototype.getCopyrights = function () {
   if (this.copyright === undefined) {
     return;
   }
-  return {
-    copyrights: [H5P.getCopyrightFields(this.copyright)]
-  };
+  
+  var info = new H5P.ContentCopyrights();
+  info.addMedia(new H5P.MediaCopyright(this.copyright));
+  
+  return info;
 };
