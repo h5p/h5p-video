@@ -134,8 +134,9 @@ H5P.Video.prototype.attach = function ($wrapper) {
   video.style.display = 'block';
 
   if (this.params.fitToWrapper === undefined || this.params.fitToWrapper) {
-    video.setAttribute('width', '100%');
-    video.setAttribute('height', '100%');
+    // Do not use attributes for relative sizes, not supported in IE9.
+    video.style.width = '100%';
+    video.style.height = '100%';
   }
 
   $wrapper.html(video);
