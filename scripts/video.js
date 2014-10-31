@@ -1,24 +1,5 @@
 var H5P = H5P || {};
 
-if (H5P.getPath === undefined) {
-  /**
-   * Find the path to the content files based on the id of the content
-   *
-   * Also identifies and returns absolute paths
-   *
-   * @param {String} path Absolute path to a file, or relative path to a file in the content folder
-   * @param {Number} contentId Identifier of the content requesting the path
-   * @returns {String} The path to use.
-   */
-  H5P.getPath = function (path, contentId) {
-    if (path.substr(0, 7) === 'http://' || path.substr(0, 8) === 'https://') {
-      return path;
-    }
-
-    return H5PIntegration.getContentPath(contentId) + path;
-  };
-}
-
 /**
  * Constructor.
  *
@@ -27,6 +8,7 @@ if (H5P.getPath === undefined) {
  * @returns {undefined}
  */
 H5P.Video = function (params, id) {
+  this.$ = H5P.jQuery(this);
   this.params = params;
   this.contentId = id;
   
@@ -55,8 +37,6 @@ H5P.Video.chrome = (navigator.userAgent.indexOf('Chrome') !== -1);
  */
 H5P.Video.prototype.attach = function ($wrapper) {
   var that = this;
-
-  $wrapper.addClass('h5p-video-wrapper')
 
   // Check if browser supports video.
   var video = document.createElement('video');
@@ -431,7 +411,7 @@ H5P.Video.prototype.isPlaying = function () {
 };
 
 /**
- * Resize the video DOM to use all available space.
+ * Set quality.
  *
  * @returns {undefined}
  */
