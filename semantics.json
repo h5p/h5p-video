@@ -29,6 +29,8 @@
     "name": "copyright",
     "type": "group",
     "label": "Copyright information",
+    "deprecated": true,
+    "optional": true,
     "fields": [
       {
         "name": "title",
