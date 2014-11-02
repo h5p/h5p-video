@@ -4,7 +4,7 @@
   "description": "Simple library that displays a video.",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 27,
+  "patchVersion": 29,
   "runnable": 0,
   "machineName": "H5P.Video",
   "author": "Amendor AS",
