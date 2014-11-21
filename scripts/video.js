@@ -139,8 +139,16 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.style.height = '100%';
   }
 
+  this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>');
+  video.addEventListener('play', function () {
+    that.$loading.show();
+  }, false);
+  video.addEventListener('playing', function () {
+    that.$loading.hide();
+  }, false);
+
   $wrapper.html(video);
-  this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>').appendTo($wrapper);
+  this.$loading.appendTo($wrapper);
   this.video = video;
 };
 
