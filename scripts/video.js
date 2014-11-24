@@ -49,6 +49,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
   // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
     this.qualities = []; // Sort sources by quality.
+    var $jan = H5P.jQuery('<div/>'); // Convert html to text (URLs have html entities)
 
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
@@ -68,7 +69,8 @@ H5P.Video.prototype.attach = function ($wrapper) {
           };
         }
 
-        var source = H5P.getPath(file.path, this.contentId);
+        $jan.html(file.path);
+        var source = H5P.getPath($jan.text(), this.contentId);
         if (this.qualities[file.quality.level] === undefined) {
           // Add new source.
           this.qualities[file.quality.level] = {
