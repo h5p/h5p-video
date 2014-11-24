@@ -24,8 +24,13 @@ H5P.Video = function (params, id) {
   }
 };
 
-// For android specific stuff.
-H5P.Video.android = (navigator.userAgent.indexOf('Android') !== -1);
+// For old android specific stuff.
+if (navigator.userAgent.indexOf('Android') !== -1) {
+  var chrome = navigator.userAgent.match(/Chrome\/(\d+)/);
+  if (chrome === null || chrome[1] === undefined || chrome[1] < 39) {
+    H5P.Video.android = true; // Not for chrome > 38
+  }
+}
 
 // For chrome specific stuff.
 H5P.Video.chrome = (navigator.userAgent.indexOf('Chrome') !== -1);
