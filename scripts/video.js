@@ -30,6 +30,9 @@ H5P.Video.android = (navigator.userAgent.indexOf('Android') !== -1);
 // For chrome specific stuff.
 H5P.Video.chrome = (navigator.userAgent.indexOf('Chrome') !== -1);
 
+// Used to convert between html and text. (Since URLs have html entities)
+H5P.Video.$cleaner = H5P.jQuery('<div/>');
+
 /**
  * Wipe out the content of the wrapper and put our HTML in it.
  *
@@ -49,7 +52,6 @@ H5P.Video.prototype.attach = function ($wrapper) {
   // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
     this.qualities = []; // Sort sources by quality.
-    var $jan = H5P.jQuery('<div/>'); // Convert html to text (URLs have html entities)
 
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
@@ -69,8 +71,8 @@ H5P.Video.prototype.attach = function ($wrapper) {
           };
         }
 
-        $jan.html(file.path);
-        var source = H5P.getPath($jan.text(), this.contentId);
+        H5P.Video.$cleaner.html(file.path);
+        var source = H5P.getPath(H5P.Video.$cleaner.text(), this.contentId);
         if (this.qualities[file.quality.level] === undefined) {
           // Add new source.
           this.qualities[file.quality.level] = {
