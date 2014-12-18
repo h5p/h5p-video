@@ -542,9 +542,7 @@ H5P.VideoHtml5 = (function ($) {
       var quality = qualities[lastQuality];
       if (quality) {
         // We have a source with this quality. Check if we have a better format.
-        // Prefer mp4, but webm for Chrome due to trouble with some mp4 codecs.
-        var preferred = (CHROME ? 'webm' : 'mp4');
-        if (source.mime.split('/')[1] === preferred) {
+        if (source.mime.split('/')[1] === PREFERRED_FORMAT) {
           quality.source = source;
         }
       }
@@ -603,10 +601,27 @@ H5P.VideoHtml5 = (function ($) {
   };
 
   /** @constant {Boolean} */
-  var ANDROID = (navigator.userAgent.indexOf('Android') !== -1);
+  var OLD_ANDROID_FIX = false;
 
   /** @constant {Boolean} */
-  var CHROME = (navigator.userAgent.indexOf('Chrome') !== -1);
+  var PREFERRED_FORMAT = 'mp4';
+
+  if (navigator.userAgent.indexOf('Android') !== -1) {
+    var chrome = navigator.userAgent.match(/Chrome\/(\d+)/);
+    if (chrome === null || chrome[1] === undefined || chrome[1] < 39) {
+      // Include old android fix for devices not running chrome > 38.
+      // (We don't know when video was fixed, so the number is just a guess)
+      // Should this be done for other browsers?
+      OLD_ANDROID_FIX = true;
+    }
+  }
+  else {
+    if (navigator.userAgent.indexOf('Chrome') !== -1) {
+      // If we're using chrome on a device that isn't Android, prefer the webm
+      // format. This is because Chrome has trouble with some mp4 codecs.
+      PREFERRED_FORMAT = 'webm';
+    }
+  }
 
   return Html5;
 })(H5P.jQuery);
