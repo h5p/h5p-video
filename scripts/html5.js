@@ -626,4 +626,4 @@ H5P.VideoHtml5 = (function ($) {
 
 // Register video handler
 H5P.videoHandlers = H5P.videoHandlers || [];
-//H5P.videoHandlers.push(H5P.VideoHtml5);
+H5P.videoHandlers.push(H5P.VideoHtml5);
