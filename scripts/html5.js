@@ -97,8 +97,7 @@ H5P.VideoHtml5 = (function ($) {
               $error.remove();
             }
 
-            // TODO: Merge
-            if (ANDROID) {
+            if (OLD_ANDROID_FIX) {
               var andLoaded = function () {
                 video.removeEventListener('durationchange', andLoaded, false);
                 // On Android seeking isn't ready until after play.
@@ -232,8 +231,7 @@ H5P.VideoHtml5 = (function ($) {
         // Seek and start video again after loading.
         var loaded = function () {
           video.removeEventListener('loadedmetadata', loaded, false);
-          // TODO: Merge
-          if (ANDROID) {
+          if (OLD_ANDROID_FIX) {
             var andLoaded = function () {
               video.removeEventListener('durationchange', andLoaded, false);
               // On Android seeking isn't ready until after play.
