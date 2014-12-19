@@ -612,11 +612,12 @@ H5P.VideoHtml5 = (function ($) {
   var PREFERRED_FORMAT = 'mp4';
 
   if (navigator.userAgent.indexOf('Android') !== -1) {
-    var chrome = navigator.userAgent.match(/Chrome\/(\d+)/);
-    if (chrome === null || chrome[1] === undefined || chrome[1] < 39) {
-      // Include old android fix for devices not running chrome > 38.
-      // (We don't know when video was fixed, so the number is just a guess)
-      // Should this be done for other browsers?
+    // We have Android, check version.
+    var version = navigator.userAgent.match(/AppleWebKit\/(\d+\.?\d*)/);
+    if (version && version[1] && Number(version[1]) <= 534.30) {
+      // Include fix for devices running the native Android browser.
+      // (We don't know when video was fixed, so the number is just the lastest
+      // native android browser we found.)
       OLD_ANDROID_FIX = true;
     }
   }
