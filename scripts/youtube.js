@@ -8,7 +8,7 @@ H5P.VideoYouTube = (function ($) {
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
    */
-  function YouTube(sources, options) {
+  function YouTube(sources, options, l10n) {
     var self = this;
 
     var player;
@@ -18,7 +18,7 @@ H5P.VideoYouTube = (function ($) {
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
       id: id,
-      text: 'YouTube player loading...' // l10n
+      text: l10n.loading
     }).appendTo($wrapper);
 
     // Optional placeholder
@@ -62,20 +62,20 @@ H5P.VideoYouTube = (function ($) {
             var message;
             switch (error.data) {
               case 2:
-                message = 'Invalid YouTube ID.'; // TODO: l10n
+                message = l10n.invalidYtId;
                 break;
 
               case 100:
-                message = 'Unable to find video with the given YouTube ID.';
+                message = l10n.unknownYtId;
                 break;
 
               case 101:
               case 150:
-                message = 'The owner of this video does not allow it to be embedded.';
+                message = l10n.restrictedYt;
                 break;
 
               default:
-                message = 'Unknow error playing YouTube video, code: ' + error.data + '.';
+                message = l10n.unknownError + ' ' + error.data;
                 break;
             }
             self.trigger('error', message);

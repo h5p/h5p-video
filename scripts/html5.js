@@ -8,7 +8,7 @@ H5P.VideoHtml5 = (function ($) {
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
    */
-  function Html5(sources, options) {
+  function Html5(sources, options, l10n) {
     var self = this;
 
     /**
@@ -130,24 +130,24 @@ H5P.VideoHtml5 = (function ($) {
       if (code instanceof Event) {
         switch (code.target.error.code) {
           case MediaError.MEDIA_ERR_ABORTED:
-            message = 'Media playback has been aborted.'; // TODO: l10n
+            message = l10n.aborted;
             break;
           case MediaError.MEDIA_ERR_NETWORK:
-            message = 'Network failure.';
+            message = l10n.networkFailure;
             break;
           case MediaError.MEDIA_ERR_DECODE:
-            message = 'Unable to decode media.';
+            message = l10n.cannotDecode;
             break;
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            message = 'Video format not supported.';
+            message = l10n.formatNotSupported;
             break;
           case MediaError.MEDIA_ERR_ENCRYPTED:
-            message = 'Encrypted.';
+            message = l10n.mediaEncrypted;
             break;
         }
       }
       if (!message) {
-        message = 'Unknown error.';
+        message = l10n.unknownError;
       }
 
       // Hide throbber

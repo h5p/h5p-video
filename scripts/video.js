@@ -14,11 +14,28 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
+    // Default language localization
+    parameters = $.extend(true, parameters, {
+      l10n: {
+        name: 'Video',
+        loading: 'Video player loading...',
+        noPlayers: 'Found no video players that supports the given video format.',
+        noSources: 'Video is missing sources.',
+        aborted: 'Media playback has been aborted.',
+        networkFailure: 'Network failure.',
+        cannotDecode: 'Unable to decode media.',
+        formatNotSupported: 'Video format not supported.',
+        mediaEncrypted: 'Media encrypted.',
+        unknownError: 'Unknown error.',
+        invalidYtId: 'Invalid YouTube ID.',
+        unknownYtId: 'Unable to find video with the given YouTube ID.',
+        restrictedYt: 'The owner of this video does not allow it to be embedded.'
+      }
+    });
+
+
     /** @private */
     var sources = [];
-    // TODO: Remove
-    self.debug = 'Video';
-    //sources.push({path: 'https://www.youtube.com/watch?v=6pxRHBw-k8M'});
     if (parameters.files) {
       for (var i = 0; i < parameters.files.length; i++) {
         // Clone to avoid changing of parameters.
@@ -26,11 +43,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
         // Create working URL without html entities.
         source.path = H5P.getPath($cleaner.html(source.path).text(), id);
-
         sources.push(source);
       }
     }
-    sources.push({path: 'asdasd.mp4'});
 
     /**
      * Attaches the video handler to the given container.
@@ -47,16 +62,16 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
       else {
         if (sources.length) {
-          $container.text('Found no video players that supports the video format.'); // l10n
+          $container.text(parameters.l10n.noPlayers);
         }
         else {
-          $container.text('This is a video with a source.'); // l10n
+          $container.text(parameters.l10n.noSources);
         }
       }
     };
 
     /**
-     * Handle resizing of the video.
+     * Handle resizing of the video. (old event system)
      *
      * @public
      */
@@ -98,7 +113,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             loop: false,
             fit: parameters.fitToWrapper,
             poster: null
-          }, id);
+          }, parameters.l10n);
           return;
         }
       }
