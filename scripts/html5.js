@@ -416,6 +416,13 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('loadedmetadata', 'loaded');
     mapEvent('error', 'error');
 
+    if (!video.controls) {
+      // Disable context menu(right click) to prevent controls.
+      video.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+      }, false);
+    }
+
     // Display throbber when buffering/loading video.
     self.on('stateChange', function (state) {
       lastState = state;
