@@ -11,12 +11,12 @@ H5P.Video = function (params, id) {
   this.$ = H5P.jQuery(this);
   this.params = params;
   this.contentId = id;
-  
+
   // Use new copyright information if available. Fallback to old.
-  if (params.files !== undefined
-      && params.files[0] !== undefined
-      && params.files[0].copyright !== undefined) {
-      
+  if (params.files !== undefined &&
+      params.files[0] !== undefined &&
+      params.files[0].copyright !== undefined) {
+
     this.copyright = params.files[0].copyright;
   }
   else if (params.copyright !== undefined) {
@@ -49,17 +49,17 @@ H5P.Video.prototype.attach = function ($wrapper) {
   // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
     this.qualities = []; // Sort sources by quality.
-  
+
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
-      
+
       var type = file.mime;
       if (file.codecs !== undefined)  {
-        type += '; codecs="' + file.codecs + '"'; 
+        type += '; codecs="' + file.codecs + '"';
       }
 
       // Check if we can play this source.
-      if (video.canPlayType(type) !== '') { 
+      if (video.canPlayType(type) !== '') {
         if (file.quality === undefined) {
           // Add default quality if source has none.
           file.quality = {
@@ -67,11 +67,11 @@ H5P.Video.prototype.attach = function ($wrapper) {
             label: 'Default'
           };
         }
-        
+
         var source = H5P.getPath(file.path, this.contentId);
         if (this.qualities[file.quality.level] === undefined) {
           // Add new source.
-          this.qualities[file.quality.level] = { 
+          this.qualities[file.quality.level] = {
             label: file.quality.label,
             source: source
           };
@@ -79,14 +79,14 @@ H5P.Video.prototype.attach = function ($wrapper) {
         else {
           // Replace source if we have a better.
           // Prefer mp4, but webm for Chrome due to trouble with some mp4 codecs.
-          var preferred = (H5P.Video.chrome ? 'webm' : 'mp4')
+          var preferred = (H5P.Video.chrome ? 'webm' : 'mp4');
           if (file.mime.split('/')[1] === preferred) {
             this.qualities[file.quality.level].source = source;
           }
         }
       }
     }
-    
+
     // Get preferred quality level through cookie.
     video.src = this.getPreferredQuality();
   }
@@ -110,7 +110,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
           // On Android duration isn't available until after play.
           video.removeEventListener('durationchange', loaded, false);
           that.loadedCallback();
-        }
+        };
         video.addEventListener('durationchange', loaded, false);
       };
       video.addEventListener('play', play, false);
@@ -119,7 +119,7 @@ H5P.Video.prototype.attach = function ($wrapper) {
       var loaded = function () {
         video.removeEventListener('loadedmetadata', loaded, false);
         that.loadedCallback();
-      }
+      };
       video.addEventListener('loadedmetadata', loaded, false);
     }
   }
@@ -139,8 +139,16 @@ H5P.Video.prototype.attach = function ($wrapper) {
     video.style.height = '100%';
   }
 
+  this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>');
+  video.addEventListener('play', function () {
+    that.$loading.show();
+  }, false);
+  video.addEventListener('playing', function () {
+    that.$loading.hide();
+  }, false);
+
   $wrapper.html(video);
-  this.$loading = H5P.jQuery('<div class="h5p-video-loading"></div>').appendTo($wrapper);
+  this.$loading.appendTo($wrapper);
   this.video = video;
 };
 
@@ -152,17 +160,18 @@ H5P.Video.prototype.attach = function ($wrapper) {
  */
 H5P.Video.prototype.attachFlash = function ($wrapper) {
   var that = this;
+  var videoSource;
   $wrapper = H5P.jQuery('<div class="h5p-video-flash" style="width:100%;height:100%"></div>').appendTo($wrapper);
 
   // Find supported sources.
   if (this.params.files !== undefined && this.params.files instanceof Object) {
     this.qualities = []; // Sort sources by quality.
-  
+
     for (var i = 0; i < this.params.files.length; i++) {
       var file = this.params.files[i];
 
       // Only supported sources.
-      if (file.mime === 'video/mp4') { 
+      if (file.mime === 'video/mp4') {
         if (file.quality === undefined) {
           // Add default quality if source has none.
           file.quality = {
@@ -170,7 +179,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
             label: 'Default'
           };
         }
-        
+
         if (this.qualities[file.quality.level] === undefined) {
           // Add new quality
           this.qualities[file.quality.level] = {
@@ -180,9 +189,9 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
         }
       }
     }
-    
+
     // Get preferred quality level through cookie.
-    var videoSource = this.getPreferredQuality();
+    videoSource = this.getPreferredQuality();
   }
 
   if (videoSource === undefined) {
@@ -206,7 +215,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
           delete that.wasPlaying;
         }
       },
-      onMetaData: function () { 
+      onMetaData: function () {
         /* Used before play:null
         if (that.params.controls === false) {
           that.flowplayer.getPlugin('play').hide();
@@ -228,7 +237,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
       that.playlistReplaced();
     }
   };
-  
+
   if (this.params.controls === undefined || this.params.controls) {
     options.plugins.controls = {};
     delete options.play;
@@ -241,7 +250,7 @@ H5P.Video.prototype.attachFlash = function ($wrapper) {
   if (this.errorCallback !== undefined) {
     options.onError = this.errorCallback;
   }
-  
+
   if (this.loadedCallback !== undefined) {
     this.onLoad = this.loadedCallback;
   }
@@ -417,10 +426,10 @@ H5P.Video.prototype.isPlaying = function () {
  */
 H5P.Video.prototype.setQuality = function (level) {
   var that = this;
-  
+
   // Keep track of last choice through cookies
   this.setPreferredQuality(level);
-  
+
   // Keep track of state
   if (this.wasPlaying === undefined) {
     this.wasPlaying = this.isPlaying();
@@ -428,7 +437,7 @@ H5P.Video.prototype.setQuality = function (level) {
   if (this.wasPlaying === true) {
     this.pause();
   }
-  
+
   // Keep track of time
   if (this.lastTime === undefined) {
     this.lastTime = this.getTime() - 1; // Rewind one second
@@ -436,7 +445,7 @@ H5P.Video.prototype.setQuality = function (level) {
       this.lastTime = 0;
     }
   }
-  
+
   if (this.flowplayer !== undefined) {
     // Control flash player
     this.onLoad = function () {
@@ -444,8 +453,8 @@ H5P.Video.prototype.setQuality = function (level) {
       if (that.wasPlaying === true) {
         that.flowplayer.play();
       }
-    }
-    
+    };
+
     // Change source
     this.flowplayer.setClip(this.qualities[level].source);
     this.flowplayer.startBuffering();
@@ -455,9 +464,9 @@ H5P.Video.prototype.setQuality = function (level) {
     var seeked = function () {
       that.video.removeEventListener('seeked', seeked, false);
       that.$loading.hide();
-    }
+    };
     that.video.addEventListener('seeked', seeked, false);
-    
+
     // Seek and start video again after loading.
     var loaded = function () {
       that.video.removeEventListener('loadedmetadata', loaded, false);
@@ -465,24 +474,24 @@ H5P.Video.prototype.setQuality = function (level) {
       if (H5P.Video.android) {
         var andLoaded = function () {
           that.video.removeEventListener('durationchange', andLoaded, false);
-          // On Android seeking isn't ready until after play.            
+          // On Android seeking isn't ready until after play.
           that.seek(that.lastTime);
           delete that.lastTime;
         };
         that.video.addEventListener('durationchange', andLoaded, false);
       }
       else {
-        // Seek to current time.    
+        // Seek to current time.
         that.seek(that.lastTime);
         delete that.lastTime;
       }
-  
+
       // Resume playing
       if (that.wasPlaying === true) {
         that.play();
       }
       delete that.wasPlaying;
-    }
+    };
     this.video.addEventListener('loadedmetadata', loaded, false);
 
     // Show loading screen
@@ -509,9 +518,9 @@ H5P.Video.prototype.setPreferredQuality = function (level) {
       return;
     }
   }
-  
+
   document.cookie = 'H5PVideoQuality=' + level + '; ' + document.cookie;
-}
+};
 
 /**
  * Return source of preferred video quality.
@@ -527,20 +536,19 @@ H5P.Video.prototype.getPreferredQuality = function () {
       break;
     }
   }
-  
+
   if (level === undefined || this.qualities[level] === undefined) {
     // Just pick the first/lowest quality source.
     for (level in this.qualities) {
       this.qualities[level]['default'] = true;
       return this.qualities[level].source;
-      break;
     }
   }
   else {
     this.qualities[level]['default'] = true;
     return this.qualities[level].source;
   }
-}
+};
 
 
 /**
@@ -552,9 +560,9 @@ H5P.Video.prototype.getCopyrights = function () {
   if (this.copyright === undefined) {
     return;
   }
-  
+
   var info = new H5P.ContentCopyrights();
   info.addMedia(new H5P.MediaCopyright(this.copyright));
-  
+
   return info;
 };
