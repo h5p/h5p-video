@@ -36,10 +36,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     /** @private */
     var sources = [];
-    if (parameters.files) {
-      for (var i = 0; i < parameters.files.length; i++) {
+    if (parameters.sources) {
+      for (var i = 0; i < parameters.sources.length; i++) {
         // Clone to avoid changing of parameters.
-        var source = $.extend(true, {}, parameters.files[i]);
+        var source = $.extend(true, {}, parameters.sources[i]);
 
         // Create working URL without html entities.
         source.path = H5P.getPath($cleaner.html(source.path).text(), id);
