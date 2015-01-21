@@ -7,6 +7,7 @@ H5P.VideoHtml5 = (function ($) {
    * @class
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
+   * @param {Object} l10n Localization strings
    */
   function Html5(sources, options, l10n) {
     var self = this;
@@ -402,7 +403,7 @@ H5P.VideoHtml5 = (function ($) {
      * Set video sound level.
      *
      * @public
-     * @param {Number} volume Between 0 and 100.
+     * @param {Number} level Between 0 and 100.
      */
     self.setVolume = function (level) {
       video.volume = level / 100;

@@ -7,6 +7,7 @@ H5P.VideoYouTube = (function ($) {
    * @class
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
+   * @param {Object} l10n Localization strings
    */
   function YouTube(sources, options, l10n) {
     var self = this;
@@ -301,7 +302,7 @@ H5P.VideoYouTube = (function ($) {
      * Set video sound level.
      *
      * @public
-     * @param {Number} volume Between 0 and 100.
+     * @param {Number} level Between 0 and 100.
      */
     self.setVolume = function (level) {
       if (!player || !player.setVolume) {
