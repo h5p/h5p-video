@@ -123,6 +123,7 @@ H5P.VideoYouTube = (function ($) {
       // Add labels
       for (var i = 0; i < qualities.length; i++) {
         var quality = qualities[i];
+        var label = (LABELS[quality] !== undefined ? LABELS[quality] : 'Unknown'); // TODO: l10n
         qualities[i] = {
           name: quality,
           label: LABELS[quality]
@@ -399,6 +400,7 @@ H5P.VideoYouTube = (function ($) {
     large: '480p',
     medium: '360p',
     small: '240p',
+    tiny: '144p',
     auto: 'Auto'
   };
 

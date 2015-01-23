@@ -531,7 +531,7 @@ H5P.VideoHtml5 = (function ($) {
           // Create a new quality tag
           source.quality = {
             name: 'q' + qualityIndex,
-            label: 'Quality ' + qualityIndex
+            label: 'Quality ' + qualityIndex // TODO: l10n
           };
           qualityIndex++;
         }
