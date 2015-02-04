@@ -8,7 +8,7 @@ var H5P = H5P || {};
  * @returns {undefined}
  */
 H5P.Video = function (params, id) {
-  this.$ = H5P.jQuery(this);
+  H5P.EventDispatcher.call(this);
   this.params = params;
   this.contentId = id;
 
@@ -23,6 +23,8 @@ H5P.Video = function (params, id) {
     this.copyright = params.copyright;
   }
 };
+H5P.Video.prototype = Object.create(H5P.EventDispatcher.prototype);
+H5P.Video.prototype.constructor = H5P.Video;
 
 // For android specific stuff.
 H5P.Video.android = (navigator.userAgent.indexOf('Android') !== -1);

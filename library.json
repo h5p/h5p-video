@@ -3,14 +3,14 @@
   "contentType": "Media",
   "description": "Simple library that displays a video.",
   "majorVersion": 1,
-  "minorVersion": 0,
-  "patchVersion": 31,
+  "minorVersion": 1,
+  "patchVersion": 0,
   "runnable": 0,
   "machineName": "H5P.Video",
-  "author": "Amendor AS",
+  "author": "Joubel AS",
   "coreApi": {
     "majorVersion": 1,
-    "minorVersion": 1
+    "minorVersion": 4
   },
   "preloadedJs": [
     {
