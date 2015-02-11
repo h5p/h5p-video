@@ -71,15 +71,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     };
 
     /**
-     * Handle resizing of the video. (old event system)
-     *
-     * @public
-     */
-    self.resize = function () {
-      self.trigger('resize');
-    };
-
-    /**
      * Gather copyright information for the current video.
      *
      * @public
@@ -99,7 +90,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
-      self.resize();
+      self.trigger('resize');
     });
 
     // Find player for video sources

@@ -425,7 +425,8 @@ H5P.VideoHtml5 = (function ($) {
     }
 
     // Display throbber when buffering/loading video.
-    self.on('stateChange', function (state) {
+    self.on('stateChange', function (event) {
+      var state = event.data;
       lastState = state;
       if (state === H5P.Video.BUFFERING) {
         $throbber.insertAfter(video);
