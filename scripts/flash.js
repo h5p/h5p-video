@@ -1,10 +1,10 @@
-/** @namespace H5P */
-H5P.VideoFlash = (function ($) {
+H5P.Video.Flash = (function ($) {
 
   /**
    * Flash video player for H5P.
    *
    * @class
+   * @namespace H5P.Video
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
    */
@@ -337,4 +337,4 @@ H5P.VideoFlash = (function ($) {
 
 // Register video handler
 H5P.videoHandlers = H5P.videoHandlers || [];
-H5P.videoHandlers.push(H5P.VideoFlash);
+H5P.videoHandlers.push(H5P.Video.Flash);

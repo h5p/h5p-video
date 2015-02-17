@@ -1,14 +1,15 @@
-/** @namespace H5P */
-H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
+H5P.Video.Player = (function ($, EventDispatcher, ContentCopyrights, MediaCopyright, handlers) {
 
   /**
    * The ultimate H5P video player!
    *
    * @class
+   * @namespace H5P.Video
+   * @extends H5P.EventDispatcher
    * @param {Object} parameters Options for this library.
    * @param {Number} id Content identifier
    */
-  function Video(parameters, id) {
+  function Player(parameters, id) {
     var self = this;
 
     // Initialize event inheritance
@@ -112,21 +113,21 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   }
 
   // Extends the event dispatcher
-  Video.prototype = Object.create(H5P.EventDispatcher.prototype);
-  Video.prototype.constructor = Video;
+  Player.prototype = Object.create(EventDispatcher.prototype);
+  Player.prototype.constructor = Player;
 
   // Player states
   /** @constant {Number} */
-  Video.ENDED = 0;
+  H5P.Video.ENDED = 0;
   /** @constant {Number} */
-  Video.PLAYING = 1;
+  H5P.Video.PLAYING = 1;
   /** @constant {Number} */
-  Video.PAUSED = 2;
+  H5P.Video.PAUSED = 2;
   /** @constant {Number} */
-  Video.BUFFERING = 3;
+  H5P.Video.BUFFERING = 3;
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
 
-  return Video;
-})(H5P.jQuery, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);
+  return Player;
+})(H5P.jQuery, H5P.EventDispatcher, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);

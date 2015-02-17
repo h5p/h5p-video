@@ -1,5 +1,6 @@
 {
   "machineName": "H5P.Video",
+  "constructor": "Player",
   "title": "Video",
   "contentType": "Media",
   "description": "Plays video from multple sources.",
@@ -24,7 +25,7 @@
       "path": "scripts/flash.js"
     },
     {
-      "path": "scripts/video.js"
+      "path": "scripts/player.js"
     }
   ],
   "preloadedCss": [

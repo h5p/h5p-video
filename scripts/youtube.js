@@ -1,10 +1,11 @@
-/** @namespace H5P */
-H5P.VideoYouTube = (function ($) {
+H5P.Video = {};
+H5P.Video.YouTube = (function ($) {
 
   /**
    * YouTube video player for H5P.
    *
    * @class
+   * @namespace H5P.Video
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
    * @param {Object} l10n Localization strings
@@ -415,4 +416,4 @@ H5P.VideoYouTube = (function ($) {
 
 // Register video handler
 H5P.videoHandlers = H5P.videoHandlers || [];
-H5P.videoHandlers.push(H5P.VideoYouTube);
+H5P.videoHandlers.push(H5P.Video.YouTube);
