@@ -44,7 +44,8 @@ H5P.VideoYouTube = (function ($) {
           loop: options.loop ? 1 : 0,
           rel: 0,
           showinfo: 0,
-          iv_load_policy: 3
+          iv_load_policy: 3,
+          wmode: "opaque"
         },
         events: {
           onReady: function () {
