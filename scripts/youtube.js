@@ -87,6 +87,14 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
+     * Indicates if the video must be clicked for it to start playing.
+     * For instance YouTube videos on iPad must be pressed to start playing.
+     *
+     * @public
+     */
+    self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
+
+    /**
     * Appends the video player to the DOM.
     *
     * @public
