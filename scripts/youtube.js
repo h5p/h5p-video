@@ -31,9 +31,13 @@ H5P.VideoYouTube = (function ($) {
      * @private
      */
     var create = function () {
+      var width = $wrapper.width();
+      if (width < 200) {
+        width = 200;
+      }
       player = new YT.Player(id, {
-        width: '640',
-        height: '360',
+        width: width,
+        height: width * (9/16),
         videoId: getId(sources[0].path),
         playerVars: {
           origin: ORIGIN,
