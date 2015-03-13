@@ -17,7 +17,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
       return;
     }
 
-    if (!(newProp instanceof String)) {
+    if (!(newProp instanceof String) && typeof newProp !== 'string') {
       // Allow using dropping newProp and using it as the new Object
       newObj = newProp;
       newProp = oldProp;
