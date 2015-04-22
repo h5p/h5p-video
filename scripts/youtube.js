@@ -31,9 +31,13 @@ H5P.VideoYouTube = (function ($) {
      * @private
      */
     var create = function () {
+      var width = $wrapper.width();
+      if (width < 200) {
+        width = 200;
+      }
       player = new YT.Player(id, {
-        width: '640',
-        height: '360',
+        width: width,
+        height: width * (9/16),
         videoId: getId(sources[0].path),
         playerVars: {
           origin: ORIGIN,
@@ -334,11 +338,10 @@ H5P.VideoYouTube = (function ($) {
         height: '100%'
       });
 
-      var height, width = $wrapper.width();
-      if (options.fit) {
-        height = $wrapper.height();
-      }
-      else {
+      var width = $wrapper[0].clientWidth;
+      var height = $wrapper[0].clientHeight;
+
+      if (!options.fit) {
         height = width * (9/16);
       }
 
@@ -348,7 +351,7 @@ H5P.VideoYouTube = (function ($) {
         height: height + 'px'
       });
 
-      player.setSize($wrapper.width(), $wrapper.height());
+      player.setSize(width, height);
     });
   }
 
