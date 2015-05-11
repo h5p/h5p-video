@@ -16,9 +16,7 @@ H5P.VideoYouTube = (function ($) {
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
 
-    var $wrapper = $('<div/>', {
-      'class': 'h5p-video-youtube'
-    });
+    var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
       id: id,
       text: l10n.loading
@@ -107,7 +105,7 @@ H5P.VideoYouTube = (function ($) {
     * @param {jQuery} $container
     */
     self.appendTo = function ($container) {
-      $container.append($wrapper);
+      $container.addClass('h5p-youtube').append($wrapper);
 
       if (player === undefined) {
         if (window.YT === undefined) {
