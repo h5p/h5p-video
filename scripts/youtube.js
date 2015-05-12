@@ -105,7 +105,7 @@ H5P.VideoYouTube = (function ($) {
     * @param {jQuery} $container
     */
     self.appendTo = function ($container) {
-      $container.append($wrapper);
+      $container.addClass('h5p-youtube').append($wrapper);
 
       if (player === undefined) {
         if (window.YT === undefined) {
