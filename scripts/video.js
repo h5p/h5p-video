@@ -102,7 +102,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             controls: parameters.controls,
             autoplay: parameters.autoplay,
             loop: false,
-            fit: parameters.fitToWrapper,
+            fit: parameters.fit,
             poster: null
           }, parameters.l10n);
           return;

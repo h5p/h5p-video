@@ -344,11 +344,7 @@ H5P.VideoYouTube = (function ($) {
       });
 
       var width = $wrapper[0].clientWidth;
-      var height = $wrapper[0].clientHeight;
-
-      if (!options.fit) {
-        height = width * (9/16);
-      }
+      var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
       // Set size
       $wrapper.css({
