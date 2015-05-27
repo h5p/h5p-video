@@ -441,7 +441,14 @@ H5P.VideoHtml5 = (function ($) {
       var $video = $(video);
       $video.parent().css('height', 'auto');
       $video.css('height', '100%'); // Fixes size on ios7.
-      $video.parent().css('height', $video.width() * (video.videoHeight / video.videoWidth));
+
+      var width = $video.width();
+      var parentWidth = $video.parent().width();
+      if (width > parentWidth) {
+        width = parentWidth;
+      }
+
+      $video.parent().css('height', width * (video.videoHeight / video.videoWidth));
     });
 
     // Video controls are ready
