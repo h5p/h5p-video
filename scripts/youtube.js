@@ -31,10 +31,21 @@ H5P.VideoYouTube = (function ($) {
      * @private
      */
     var create = function () {
+      if (!$placeholder.is(':visible') || player !== undefined) {
+        return;
+      }
+
+      if (window.YT === undefined) {
+        // Load API first
+        loadAPI(create);
+        return;
+      }
+
       var width = $wrapper.width();
       if (width < 200) {
         width = 200;
       }
+
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
@@ -105,16 +116,8 @@ H5P.VideoYouTube = (function ($) {
     * @param {jQuery} $container
     */
     self.appendTo = function ($container) {
-      $container.append($wrapper);
-
-      if (player === undefined) {
-        if (window.YT === undefined) {
-          loadAPI(create);
-        }
-        else {
-          create();
-        }
-      }
+      $container.addClass('h5p-youtube').append($wrapper);
+      create();
     };
 
     /**
@@ -329,6 +332,8 @@ H5P.VideoYouTube = (function ($) {
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
       if (!player) {
+        // Player isn't created yet. Try again.
+        create();
         return;
       }
 
@@ -339,11 +344,7 @@ H5P.VideoYouTube = (function ($) {
       });
 
       var width = $wrapper[0].clientWidth;
-      var height = $wrapper[0].clientHeight;
-
-      if (!options.fit) {
-        height = width * (9/16);
-      }
+      var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
       // Set size
       $wrapper.css({
