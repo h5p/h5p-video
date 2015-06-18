@@ -5,6 +5,9 @@
       "description": "Formater som støttes er webm, mp4 og ogv."
     },
     {
+      "label": "Plakat"
+    },
+    {
       "label": "Tilpass størrelse",
       "description": "Forstørr og forminsk avhengig av tilgjengelig størrelse"
     },
