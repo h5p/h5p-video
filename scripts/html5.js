@@ -469,10 +469,9 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {Boolean}
    */
   Html5.canPlay = function (sources) {
-    return false;
     var video = document.createElement('video');
     if (video.canPlayType === undefined) {
-      return; // Not supported
+      return false; // Not supported
     }
 
     // Cycle through sources
@@ -483,6 +482,8 @@ H5P.VideoHtml5 = (function ($) {
         return true;
       }
     }
+
+    return false;
   };
 
   /**
