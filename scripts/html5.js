@@ -70,7 +70,10 @@ H5P.VideoHtml5 = (function ($) {
       video.style.width = '100%';
       video.style.height = '100%';
     }
-
+    // Add poster if provided
+    if (options.poster) {
+      video.poster = options.poster;
+    }
     /**
      * Helps registering events.
      *
@@ -466,6 +469,7 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {Boolean}
    */
   Html5.canPlay = function (sources) {
+    return false;
     var video = document.createElement('video');
     if (video.canPlayType === undefined) {
       return; // Not supported

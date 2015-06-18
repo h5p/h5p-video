@@ -103,7 +103,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             autoplay: parameters.autoplay,
             loop: false,
             fit: parameters.fit,
-            poster: null
+            poster: parameters.poster === undefined ? undefined : H5P.getPath(parameters.poster.path, id)
           }, parameters.l10n);
           return;
         }
