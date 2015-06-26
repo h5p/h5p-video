@@ -83,7 +83,15 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       // Use copyright information from H5P media field
       var info = new ContentCopyrights();
-      info.addMedia(new MediaCopyright(sources[0].copyright));
+
+      // Set media type
+      var newMediaCopyright = new MediaCopyright(sources[0].copyright);
+      newMediaCopyright.setMediaType(H5P.copyrightTypes.video);
+
+      info.addMedia(newMediaCopyright);
+
+      // Remove sublevel
+      info.removeSubLevel();
 
       return info;
     };
