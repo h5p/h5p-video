@@ -2,7 +2,10 @@
   "semantics": [
     {
       "label": "Sources vidéo",
-       "description": "Selectionnez les fichiers vidéo que vous souhaitez utiliser dans votre vidéo interactive. Pour assurer une compatibilité maximum avec les navigateurs, merci d'utiliser des vidéos au format mp4 ou webm."
+      "description": "Selectionnez les fichiers vidéo que vous souhaitez utiliser dans votre vidéo interactive. Pour assurer une compatibilité maximum avec les navigateurs, merci d'utiliser des vidéos au format mp4 ou webm."
+    },
+    {
+      "label": "Affiche"
     },
     {
       "label": "Le lecteur vidéo utilise toute la place disponible",
