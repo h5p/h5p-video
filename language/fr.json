@@ -28,56 +28,43 @@
       "fields": [
         {
           "label": "Nom",
-          "default": "Video",
           "description": "Aide à idntifier le type de contenu."
         },
         {
-          "label": "Chargement",
-          "default": "Le lecteur vidéo se charge..."
+          "label": "Chargement"
         },
         {
-          "label": "Aucun lecteur vidéo trouvé",
-          "default": "Aucun lecteur vidéo trouvé ne supporte ce format."
+          "label": "Aucun lecteur vidéo trouvé"
         },
         {
-          "label": "Aucune source vidéo",
-          "default": "Aucune source vidéo."
+          "label": "Aucune source vidéo"
         },
         {
-          "label": "Abandonné",
-          "default": "Lecture abandonnée."
+          "label": "Abandonné"
         },
         {
-          "label": "Erreur de réseau",
-          "default": "Erreur de réseau."
+          "label": "Erreur de réseau"
         },
         {
-          "label": "Impossible de décoder la vidéo",
-          "default": "Impossible de décoder la vidéo."
+          "label": "Impossible de décoder la vidéo"
         },
         {
-          "label": "Format vidéo non supporté",
-          "default": "Format vidéo non supporté."
+          "label": "Format vidéo non supporté"
         },
         {
-          "label": "Vidéo cryptée",
-          "default": "Vidéo cryptée."
+          "label": "Vidéo cryptée"
         },
         {
-          "label": "Erreur inconnue",
-          "default": "Erreur inconnue."
+          "label": "Erreur inconnue"
         },
         {
-          "label": "ID YouTube invalide",
-          "default": "ID YouTube invalide."
+          "label": "ID YouTube invalide"
         },
         {
-          "label": "ID YouTube inconnue",
-          "default": "ID YouTube inconnue."
+          "label": "ID YouTube inconnue"
         },
         {
-          "label": "Vidéo YouTube à accès restreint",
-          "default": "Le propirétaire de cette vidéo ne souhaite pas qu'elle soit intégrée."
+          "label": "Vidéo YouTube à accès restreint"
         }
       ]
     }
