@@ -72,7 +72,7 @@ H5P.VideoYouTube = (function ($) {
               self.trigger('stateChange', state.data);
             }
           },
-          onPlaybackQualityChange: function (quality) {
+          onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
           },
           onError: function (error) {

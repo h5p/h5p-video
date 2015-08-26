@@ -323,7 +323,7 @@ H5P.VideoFlash = (function ($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  Flash.canPlay = function (sources) {
+  Flash.canPlay = function (sources) {
     // Cycle through sources
     for (var i = 0; i < sources.length; i++) {
       if (sources[i].mime === 'video/mp4' || /\.mp4$/.test(sources[i].mime)) {

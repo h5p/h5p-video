@@ -453,7 +453,7 @@ H5P.VideoHtml5 = (function ($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  Html5.canPlay = function (sources) {
+  Html5.canPlay = function (sources) {
     var video = document.createElement('video');
     if (video.canPlayType === undefined) {
       return false; // Not supported
@@ -478,7 +478,7 @@ H5P.VideoHtml5 = (function ($) {
    * @param {Object} source
    * @returns {String}
    */
-  var getType = function (source) {
+  var getType = function (source) {
     var type = source.mime;
     if (!type) {
       // Try to get type from URL
