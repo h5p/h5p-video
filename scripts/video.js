@@ -52,7 +52,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * Inserts text if no handler is found.
      *
      * @public
-     * @param {jQuery} $container
+     * @param {jQuery} $container
      */
     self.attach = function ($container) {
       $container.addClass('h5p-video').html('');
@@ -89,7 +89,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     };
 
     // Resize the video when we know its aspect ratio
-    self.on('loaded', function () {
+    self.on('loaded', function () {
       self.trigger('resize');
     });
 
@@ -103,7 +103,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             autoplay: parameters.autoplay,
             loop: false,
             fit: parameters.fit,
-            poster: null
+            poster: parameters.poster === undefined ? undefined : H5P.getPath(parameters.poster.path, id)
           }, parameters.l10n);
           return;
         }

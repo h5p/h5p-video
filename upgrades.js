@@ -12,7 +12,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
    * @param {String} newProp The new property name OR the new object.
    * @param {Object} [newObj] The new object for the property.
    */
-  var moveProp = function (oldObj, oldProp, newProp, newObj) {
+  var moveProp = function (oldObj, oldProp, newProp, newObj) {
     if (!oldObj.hasOwnProperty(oldProp)) {
       return;
     }

@@ -65,12 +65,15 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
-    if (!options.fit) {
+    if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
       video.style.height = '100%';
     }
-
+    // Add poster if provided
+    if (options.poster) {
+      video.poster = options.poster;
+    }
     /**
      * Helps registering events.
      *
@@ -435,22 +438,7 @@ H5P.VideoHtml5 = (function ($) {
         $throbber.remove();
       }
     });
-
-    // Resize
-    self.on('resize', function () {
-      var $video = $(video);
-      $video.parent().css('height', 'auto');
-      $video.css('height', '100%'); // Fixes size on ios7.
-
-      var width = $video.width();
-      var parentWidth = $video.parent().width();
-      if (width > parentWidth) {
-        width = parentWidth;
-      }
-
-      $video.parent().css('height', width * (video.videoHeight / video.videoWidth));
-    });
-
+    
     // Video controls are ready
     setTimeout(function () {
       self.trigger('ready');
@@ -465,10 +453,10 @@ H5P.VideoHtml5 = (function ($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  Html5.canPlay = function (sources) {
+  Html5.canPlay = function (sources) {
     var video = document.createElement('video');
     if (video.canPlayType === undefined) {
-      return; // Not supported
+      return false; // Not supported
     }
 
     // Cycle through sources
@@ -479,6 +467,8 @@ H5P.VideoHtml5 = (function ($) {
         return true;
       }
     }
+
+    return false;
   };
 
   /**
@@ -488,7 +478,7 @@ H5P.VideoHtml5 = (function ($) {
    * @param {Object} source
    * @returns {String}
    */
-  var getType = function (source) {
+  var getType = function (source) {
     var type = source.mime;
     if (!type) {
       // Try to get type from URL
