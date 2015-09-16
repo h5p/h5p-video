@@ -101,7 +101,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
           handler.call(self, sources, {
             controls: parameters.controls,
             autoplay: parameters.autoplay,
-            loop: false,
+            loop: parameters.loop,
             fit: parameters.fit,
             poster: parameters.poster === undefined ? undefined : H5P.getPath(parameters.poster.path, id)
           }, parameters.l10n);
