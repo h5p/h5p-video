@@ -5,6 +5,9 @@
       "description": "Format som støttast er webm, mp4 og ogv."
     },
     {
+      "label": "Plakat"
+    },
+    {
       "label": "Tilpass størrelse",
       "description": "Forstørr og forminsk avhengig av tilgjengeleg størrelse"
     },
@@ -17,62 +20,66 @@
       "description": "Med automatisk avspeling startar videoen å spele av seg sjølv med ein gong. Viss automatisk avspeling er slått av må brukaren trykkje for å starte avspelinga. Merk at automatisk avspeling ikkje virkar på mobile einingar."
     },
     {
-      "label": "Informasjon om opphavsrett",
-      "fields": [
-        {
-          "label": "Tittel"
-        },
-        {
-          "label": "Opphavsmann"
-        },
-        {
-          "label": "Kjelde"
-        },
-        {
-          "label": "Lisens",
-          "options": [
-            {
-              "label": "Ukjent"
-            },
-            {
-              "label": "Namngjeving"
-            },
-            {
-              "label": "Namngjeving - Del på same vilkår"
-            },
-            {
-              "label": "Namngjeving - Inga bearbeiding"
-            },
-            {
-              "label": "Namngjeving - Ikkje kommersiell"
-            },
-            {
-              "label": "Namngjeving - Ikkje kommersiell - Del på same vilkår"
-            },
-            {
-              "label": "Namngjeving - Ikkje kommersiell - Inga bearbeiding"
-            },
-            {
-              "label": "Generell offentleg lisens"
-            },
-            {
-              "label": "Offentleg eigedom"
-            },
-            {
-              "label": "Offentleg eigedom engasjement og lisens"
-            },
-            {
-              "label": "Offentleg eigedom merke"
-            },
-            {
-              "label": "Opphavsrett"
-            }
-          ]
-        }
-      ]
+      "label": "Automatisk omstart",
+      "description": "Start videoen på nytt når avspillingen er ferdig."
     },
     {
-      "label": "Innhaldsnamn for video"
+      "label": "Lokalisering av video",
+      "fields": [
+        {
+          "label": "Navn",
+          "default": "Video",
+          "description": "Hjelper med å identifisere innholdstypen."
+        },
+        {
+          "label": "Laster",
+          "default": "Videospilleren laster..."
+        },
+        {
+          "label": "Ingen avspillere funnet",
+          "default": "Fant ingen videoavspillere som støtter gjeldene format."
+        },
+        {
+          "label": "Ingen kilde",
+          "default": "Videoavspilleren mangler kilde."
+        },
+        {
+          "label": "Avbrutt",
+          "default": "Avspillingen ble avbrutt."
+        },
+        {
+          "label": "Nettverksfeil",
+          "default": "Nettverksfeil"
+        },
+        {
+          "label": "Kan ikke dekode videokilde",
+          "default": "Kan ikke dekode videokilde."
+        },
+        {
+          "label": "Format støttes ikke",
+          "default": "Videoformatet støttes ikke."
+        },
+        {
+          "label": "Kryptert media",
+          "default": "Kilden er kryptert."
+        },
+        {
+          "label": "Ukjent feil",
+          "default": "Ukjent feil."
+        },
+        {
+          "label": "Ugyldig YouTube ID",
+          "default": "Ugyldig YouTube ID."
+        },
+        {
+          "label": "Ugyldig YouTube ID",
+          "default": "Finner ikke videoen med gitt YouTube ID."
+        },
+        {
+          "label": "Begrensen tilgang til YouTube video",
+          "default": "Eieren av denne videoen tillater ikke at den bygges inn på andre nettsider."
+        }
+      ]
     }
   ]
 }

@@ -6,6 +6,11 @@
     "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
   },
   {
+    "name": "poster",
+    "type": "image",
+    "label": "Poster image"
+  },
+  {
     "name": "fit",
     "type": "boolean",
     "label": "Fit video player to use all available space",
