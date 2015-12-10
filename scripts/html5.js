@@ -131,6 +131,12 @@ H5P.VideoHtml5 = (function ($) {
      */
     var error = function (code, message) {
       if (code instanceof Event) {
+
+        // No error code
+        if (!code.target.error) {
+          return '';
+        }
+
         switch (code.target.error.code) {
           case MediaError.MEDIA_ERR_ABORTED:
             message = l10n.aborted;
@@ -438,7 +444,7 @@ H5P.VideoHtml5 = (function ($) {
         $throbber.remove();
       }
     });
-    
+
     // Video controls are ready
     setTimeout(function () {
       self.trigger('ready');
