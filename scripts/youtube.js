@@ -186,7 +186,7 @@ H5P.VideoYouTube = (function ($) {
      */
     self.play = function () {
       if (!player || !player.playVideo) {
-        return;
+        return this.on('ready', self.play);
       }
 
       player.playVideo();
