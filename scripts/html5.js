@@ -295,6 +295,11 @@ H5P.VideoHtml5 = (function ($) {
       }
 
       video.play();
+
+      if (self.seekTime !== undefined) {
+        video.currentTime = self.seekTime;
+        delete self.seekTime;
+      }
     };
 
     /**
@@ -304,6 +309,7 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.pause = function () {
       video.pause();
+      delete self.seekTime;
     };
 
     /**
@@ -320,7 +326,7 @@ H5P.VideoHtml5 = (function ($) {
         video.pause();
       }
 
-      video.currentTime = time;
+      video.currentTime = self.seekTime = time;
     };
 
     /**
