@@ -186,7 +186,8 @@ H5P.VideoYouTube = (function ($) {
      */
     self.play = function () {
       if (!player || !player.playVideo) {
-        return this.on('ready', self.play);
+        self.on('ready', self.play);
+        return;
       }
 
       player.playVideo();
@@ -198,10 +199,10 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.pause = function () {
+      self.off('ready', self.play);
       if (!player || !player.pauseVideo) {
         return;
       }
-
       player.pauseVideo();
     };
 
