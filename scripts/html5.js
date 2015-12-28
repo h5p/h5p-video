@@ -89,6 +89,11 @@ H5P.VideoHtml5 = (function ($) {
             if (lastState === arg) {
               return; // Avoid firing event twice.
             }
+
+            if (arg === H5P.Video.PLAYING && options.startAt !== undefined) {
+              video.currentTime = options.startAt;
+              delete options.startAt;
+            }
             break;
 
           case 'loaded':
@@ -295,11 +300,6 @@ H5P.VideoHtml5 = (function ($) {
       }
 
       video.play();
-
-      if (self.seekTime !== undefined) {
-        video.currentTime = self.seekTime;
-        delete self.seekTime;
-      }
     };
 
     /**
@@ -309,7 +309,6 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.pause = function () {
       video.pause();
-      delete self.seekTime;
     };
 
     /**
@@ -326,7 +325,7 @@ H5P.VideoHtml5 = (function ($) {
         video.pause();
       }
 
-      video.currentTime = self.seekTime = time;
+      video.currentTime = time;
     };
 
     /**
