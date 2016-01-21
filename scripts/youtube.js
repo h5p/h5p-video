@@ -60,7 +60,8 @@ H5P.VideoYouTube = (function ($) {
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
-          wmode: "opaque"
+          wmode: "opaque",
+          start: options.startAt
         },
         events: {
           onReady: function () {
@@ -186,6 +187,7 @@ H5P.VideoYouTube = (function ($) {
      */
     self.play = function () {
       if (!player || !player.playVideo) {
+        self.on('ready', self.play);
         return;
       }
 
@@ -198,10 +200,10 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.pause = function () {
+      self.off('ready', self.play);
       if (!player || !player.pauseVideo) {
         return;
       }
-
       player.pauseVideo();
     };
 
