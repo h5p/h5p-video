@@ -90,7 +90,8 @@ H5P.VideoHtml5 = (function ($) {
               return; // Avoid firing event twice.
             }
 
-            if (arg === H5P.Video.PLAYING && options.startAt !== undefined) {
+            var validStartTime = options.startAt && options.startAt > 0;
+            if (arg === H5P.Video.PLAYING && validStartTime) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }
