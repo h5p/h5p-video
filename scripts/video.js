@@ -6,6 +6,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    *
    * @class
    * @param {Object} parameters Options for this library.
+   * @param {Object} parameters.visuals Visual options
+   * @param {Object} parameters.playback Playback options
+   * @param {Object} parameters.a11y Accessibility options
+   * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
    */
   function Video(parameters, id) {
@@ -33,7 +37,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
     });
 
-
     /** @private */
     var sources = [];
     if (parameters.sources) {
@@ -46,6 +49,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         sources.push(source);
       }
     }
+
+    /** @private */
+    var tracks = [];
+    parameters.a11y.forEach(function (track) {
+      // Clone to avoid changing of parameters.
+      var clone = $.extend(true, {}, track);
+
+      // Create working URL without html entities
+      clone.track.path = H5P.getPath($cleaner.html(clone.track.path).text(), id);
+      tracks.push(clone);
+    });
 
     /**
      * Attaches the video handler to the given container.
@@ -99,12 +113,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         var handler = handlers[i];
         if (handler.canPlay !== undefined && handler.canPlay(sources)) {
           handler.call(self, sources, {
-            controls: parameters.controls,
-            autoplay: parameters.autoplay,
-            loop: parameters.loop,
-            fit: parameters.fit,
-            poster: parameters.poster === undefined ? undefined : H5P.getPath(parameters.poster.path, id),
-            startAt: parameters.startAt || 0
+            controls: parameters.visuals.controls,
+            autoplay: parameters.visuals.autoplay,
+            loop: parameters.playback.loop,
+            fit: parameters.playback.fit,
+            poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
+            startAt: parameters.startAt || 0,
+            tracks: tracks
           }, parameters.l10n);
           return;
         }

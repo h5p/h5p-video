@@ -74,6 +74,32 @@ H5P.VideoHtml5 = (function ($) {
     if (options.poster) {
       video.poster = options.poster;
     }
+
+    /**
+     * Register track to video
+     *
+     * @param {Object} trackData Track object
+     * @param {string} trackData.kind Kind of track
+     * @param {Object} trackData.track Source path
+     * @param {string} [trackData.label] Label of track
+     */
+    var addTrack = function (trackData) {
+      var track = document.createElement('track');
+      track.kind = trackData.kind;
+      track.src = trackData.track.path;
+      if (trackData.label) {
+        track.label = trackData.label;
+      }
+
+      return track;
+    };
+
+    // Register tracks
+    options.tracks.forEach(function (track) {
+      var trackElement = addTrack(track);
+      video.appendChild(trackElement);
+    });
+
     /**
      * Helps registering events.
      *
