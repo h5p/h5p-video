@@ -52,6 +52,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     /** @private */
     var tracks = [];
+    parameters.a11y = parameters.a11y || [];
     parameters.a11y.forEach(function (track) {
       // Clone to avoid changing of parameters.
       var clone = $.extend(true, {}, track);
