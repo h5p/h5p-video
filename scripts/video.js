@@ -118,9 +118,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         if (handler.canPlay !== undefined && handler.canPlay(sources)) {
           handler.call(self, sources, {
             controls: parameters.visuals.controls,
-            autoplay: parameters.visuals.autoplay,
+            autoplay: parameters.playback.autoplay,
             loop: parameters.playback.loop,
-            fit: parameters.playback.fit,
+            fit: parameters.visuals.fit,
             poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
             startAt: parameters.startAt || 0,
             tracks: tracks
