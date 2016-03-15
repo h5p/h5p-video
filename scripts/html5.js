@@ -84,6 +84,11 @@ H5P.VideoHtml5 = (function ($) {
      * @param {string} [trackData.label] Label of track
      */
     var addTrack = function (trackData) {
+      // Skip invalid tracks
+      if (!trackData.kind || !trackData.track.path) {
+        return;
+      }
+
       var track = document.createElement('track');
       track.kind = trackData.kind;
       track.src = trackData.track.path;
@@ -97,7 +102,9 @@ H5P.VideoHtml5 = (function ($) {
     // Register tracks
     options.tracks.forEach(function (track) {
       var trackElement = addTrack(track);
-      video.appendChild(trackElement);
+      if (trackElement) {
+        video.appendChild(trackElement);
+      }
     });
 
     /**
