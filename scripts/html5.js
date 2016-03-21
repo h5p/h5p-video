@@ -82,8 +82,14 @@ H5P.VideoHtml5 = (function ($) {
      * @param {string} trackData.kind Kind of track
      * @param {Object} trackData.track Source path
      * @param {string} [trackData.label] Label of track
+     * @param {string} [trackData.srcLang] Language code
      */
     var addTrack = function (trackData) {
+      // Skip invalid tracks
+      if (!trackData.kind || !trackData.track.path) {
+        return;
+      }
+
       var track = document.createElement('track');
       track.kind = trackData.kind;
       track.src = trackData.track.path;
@@ -91,13 +97,22 @@ H5P.VideoHtml5 = (function ($) {
         track.label = trackData.label;
       }
 
+      if (trackData.srcLang) {
+        track.srcLang = trackData.srcLang;
+      }
+
       return track;
     };
 
     // Register tracks
-    options.tracks.forEach(function (track) {
+    options.tracks.forEach(function (track, i) {
       var trackElement = addTrack(track);
-      video.appendChild(trackElement);
+      if (i === 0) {
+        trackElement.default = true;
+      }
+      if (trackElement) {
+        video.appendChild(trackElement);
+      }
     });
 
     /**

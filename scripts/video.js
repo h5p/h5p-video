@@ -61,8 +61,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       var clone = $.extend(true, {}, track);
 
       // Create working URL without html entities
-      clone.track.path = H5P.getPath($cleaner.html(clone.track.path).text(), id);
-      tracks.push(clone);
+      if (clone.track && clone.track.path) {
+        clone.track.path = H5P.getPath($cleaner.html(clone.track.path).text(), id);
+        tracks.push(clone);
+      }
     });
 
     /**
