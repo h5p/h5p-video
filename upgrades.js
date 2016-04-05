@@ -76,6 +76,43 @@ H5PUpgrades['H5P.Video'] = (function ($) {
 
         // Done
         finished(null, parameters);
+      },
+
+      /**
+       * Asynchronous content upgrade hook.
+       * Upgrades content parameters to support Video 1.2.
+       *
+       * Groups visuals, playback and a11y.
+       *
+       * @public
+       * @params {Object} parameters
+       * @params {Function} finished
+       */
+      2: function (parameters, finished) {
+
+        // Regroup to visuals
+        parameters.visuals = {};
+        parameters.visuals.poster = parameters.poster;
+        parameters.visuals.fit = parameters.fit;
+        parameters.visuals.controls = parameters.controls;
+
+        delete parameters.poster;
+        delete parameters.fit;
+        delete parameters.controls;
+
+        // Regroup to playback
+        parameters.playback = {};
+        parameters.playback.autoplay = parameters.autoplay;
+        parameters.playback.loop = parameters.loop;
+
+        delete parameters.autoplay;
+        delete parameters.loop;
+
+        // Placeholder for a11y
+        parameters.a11y = [];
+
+        // Done
+        finished(null, parameters);
       }
     }
   };

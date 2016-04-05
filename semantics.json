@@ -6,37 +6,51 @@
     "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
   },
   {
-    "name": "poster",
-    "type": "image",
-    "label": "Poster image"
+    "name": "visuals",
+    "type": "group",
+    "label": "Visuals",
+    "fields": [
+      {
+        "name": "poster",
+        "type": "image",
+        "label": "Poster image"
+      },
+      {
+        "name": "fit",
+        "type": "boolean",
+        "label": "Fit video player to use all available space",
+        "default": true,
+        "description": "If not set the video player will have the same aspect ratio as the video."
+      },
+      {
+        "name": "controls",
+        "type": "boolean",
+        "label": "Show video player controls",
+        "default": true,
+        "description": "Add controls to the video player. This allows users to play, pause, etc."
+      }
+    ]
   },
   {
-    "name": "fit",
-    "type": "boolean",
-    "label": "Fit video player to use all available space",
-    "default": true,
-    "description": "If not set the video player will have the same aspect ratio as the video."
-  },
-  {
-    "name": "controls",
-    "type": "boolean",
-    "label": "Show video player controls",
-    "default": true,
-    "description": "Add controls to the video player. This allows users to play, pause, etc."
-  },
-  {
-    "name": "autoplay",
-    "type": "boolean",
-    "label": "Auto-play video",
-    "default": false,
-    "description": "Start playing the video automatically. May not work on mobile devices."
-  },
-  {
-    "name": "loop",
-    "type": "boolean",
-    "label": "Loop video",
-    "default": false,
-    "description": "Automatically start the video over again when it ends."
+    "name": "playback",
+    "type": "group",
+    "label": "Playback",
+    "fields": [
+      {
+        "name": "autoplay",
+        "type": "boolean",
+        "label": "Auto-play video",
+        "default": false,
+        "description": "Start playing the video automatically. May not work on mobile devices."
+      },
+      {
+        "name": "loop",
+        "type": "boolean",
+        "label": "Loop video",
+        "default": false,
+        "description": "Automatically start the video over again when it ends."
+      }
+    ]
   },
   {
     "name": "l10n",
@@ -122,6 +136,71 @@
         "type": "text",
         "label": "Restricted YouTube video",
         "default": "The owner of this video does not allow it to be embedded."
+      }
+    ]
+  },
+  {
+    "name": "a11y",
+    "type": "group",
+    "label": "Accessibility",
+    "fields": [
+      {
+        "name": "videoTrack",
+        "type": "list",
+        "label": "Add video track",
+        "optional": true,
+        "entity": "Track",
+        "min": 0,
+        "field": {
+          "name": "track",
+          "type": "group",
+          "label": "Track",
+          "expanded": false,
+          "fields": [
+            {
+              "name": "label",
+              "type": "text",
+              "label": "Track label",
+              "optional": true
+            },
+            {
+              "name": "kind",
+              "type": "select",
+              "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+              "default": "descriptions",
+              "options": [
+                {
+                  "value": "subtitles",
+                  "label": "Subtitles"
+                },
+                {
+                  "value": "captions",
+                  "label": "Captions"
+                },
+                {
+                  "value": "descriptions",
+                  "label": "Descriptions"
+                },
+                {
+                  "value": "chapters",
+                  "label": "Chapters"
+                }
+              ]
+            },
+            {
+              "name": "srcLang",
+              "type": "text",
+              "label": "Source language, must be defined for subtitles",
+              "default": "en",
+              "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+            },
+            {
+              "name": "track",
+              "type": "file",
+              "label": "Track file (WebVTT)"
+            }
+          ]
+        }
       }
     ]
   }

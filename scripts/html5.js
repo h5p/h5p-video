@@ -74,6 +74,47 @@ H5P.VideoHtml5 = (function ($) {
     if (options.poster) {
       video.poster = options.poster;
     }
+
+    /**
+     * Register track to video
+     *
+     * @param {Object} trackData Track object
+     * @param {string} trackData.kind Kind of track
+     * @param {Object} trackData.track Source path
+     * @param {string} [trackData.label] Label of track
+     * @param {string} [trackData.srcLang] Language code
+     */
+    var addTrack = function (trackData) {
+      // Skip invalid tracks
+      if (!trackData.kind || !trackData.track.path) {
+        return;
+      }
+
+      var track = document.createElement('track');
+      track.kind = trackData.kind;
+      track.src = trackData.track.path;
+      if (trackData.label) {
+        track.label = trackData.label;
+      }
+
+      if (trackData.srcLang) {
+        track.srcLang = trackData.srcLang;
+      }
+
+      return track;
+    };
+
+    // Register tracks
+    options.tracks.forEach(function (track, i) {
+      var trackElement = addTrack(track);
+      if (i === 0) {
+        trackElement.default = true;
+      }
+      if (trackElement) {
+        video.appendChild(trackElement);
+      }
+    });
+
     /**
      * Helps registering events.
      *
@@ -90,7 +131,8 @@ H5P.VideoHtml5 = (function ($) {
               return; // Avoid firing event twice.
             }
 
-            if (arg === H5P.Video.PLAYING && options.startAt !== undefined) {
+            var validStartTime = options.startAt && options.startAt > 0;
+            if (arg === H5P.Video.PLAYING && validStartTime) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }

@@ -5,23 +5,35 @@
       "description": "Per assicurarsi che il video sia riproducibile in tutti i browser si dovrebbe aggiungere sia WebM sia MP4 come sorgenti di formattazione."
     },
     {
-      "label": "Poster"
+      "label": "Visuals",
+      "fields": [
+        {
+          "label": "Poster"
+        },
+        {
+          "label": "Adatta il video player per utilizzare tutto lo spazio disponibile",
+          "description": "Se non è impostato il lettore video avrà le stesse proporzioni del video."
+        },
+        {
+          "label": "Mostra controlli del video player",
+          "description": "Aggiungi controlli al video player. Questo consente agli utenti di premere play, pausa, etc."
+        }
+      ]
     },
     {
-      "label": "Adatta il video player per utilizzare tutto lo spazio disponibile",
-      "description": "Se non è impostato il lettore video avrà le stesse proporzioni del video."
-    },
-    {
-      "label": "Mostra controlli del video player",
-      "description": "Aggiungi controlli al video player. Questo consente agli utenti di premere play, pausa, etc."
-    },
-    {
-      "label": "Auto-play video",
-      "description": "Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili."
-    },
-    {
-      "label": "Loop video",
-      "description": "Riavvia il video automaticamente dopo la fine."
+      "name": "playback",
+      "type": "group",
+      "label": "Playback",
+      "fields": [
+        {
+          "label": "Auto-play video",
+          "description": "Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili."
+        },
+        {
+          "label": "Loop video",
+          "description": "Riavvia il video automaticamente dopo la fine."
+        }
+      ]
     },
     {
       "label": "Localizzazione Video",
@@ -65,6 +77,44 @@
         },
         {
           "label": "Video YouTube riproduzione riservata"
+        }
+      ]
+    },
+    {
+      "label": "Accessibility",
+      "fields": [
+        {
+          "label": "Add video track",
+          "entity": "Track",
+          "field": {
+            "label": "Track",
+            "fields": [
+              {
+                "label": "Track label"
+              },
+              {
+                "label": "Type kind, refer to <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "default": "descriptions",
+                "options": [
+                  {
+                    "label": "Subtitles"
+                  },
+                  {
+                    "label": "Captions"
+                  },
+                  {
+                    "label": "Descriptions"
+                  },
+                  {
+                    "label": "Chapters"
+                  }
+                ]
+              },
+              {
+                "label": "Track file (WebVTT)"
+              }
+            ]
+          }
         }
       ]
     }
