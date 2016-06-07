@@ -112,6 +112,42 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.on('loaded', function () {
       self.trigger('resize');
     });
+    
+    // Trigger xAPI events for play and pause
+    self.on('stateChange', function(event) {
+      var verb, start, end;
+      switch(event.data) {
+        case Video.PLAYING:
+          verb = {
+            id: 'http://activitystrea.ms/schema/1.0/play',
+            display: {
+              'en-US': 'Play'
+            }
+          };
+          start = self.getCurrentTime();
+          break;
+        case Video.BUFFERING:
+        case Video.PAUSED:
+          verb = {
+            id: 'http://activitystrea.ms/schema/1.0/paused',
+            display: {
+              'en-US': 'Paused'
+            }
+          };
+          end = self.getCurrentTime();
+          break;
+      }
+      if (verb !== undefined) {
+        var xAPIEvent = self.createXAPIEventTemplate(verb);
+        if (start !== undefined) {
+          xAPIEvent.setVerifiedStatementValue(['context', 'extensions', 'http://id.tincanapi.com/extension/starting-point'], start);
+        }
+        if (end !== undefined) {
+          xAPIEvent.setVerifiedStatementValue(['context', 'extensions', 'http://id.tincanapi.com/extension/ending-point'], end);
+        }
+        self.trigger(xAPIEvent);
+      }
+    });
 
     // Find player for video sources
     if (sources.length) {
