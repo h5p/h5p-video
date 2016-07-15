@@ -76,6 +76,9 @@ H5P.VideoYouTube = (function ($) {
           onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
           },
+          onPlaybackRateChange: function (playbackRate) {
+            self.trigger('playbackRateChange', playbackRate.data);
+          },		  
           onError: function (error) {
             var message;
             switch (error.data) {
@@ -173,11 +176,11 @@ H5P.VideoYouTube = (function ($) {
      * @params {String} [quality]
      */
     self.setQuality = function (quality) {
-      if (!player || !player.setPlaybackQuality) {
+      if (!player || !player.setQuality) {
         return;
       }
 
-      player.setPlaybackQuality(quality);
+      player.setQuality(quality);
     };
 
     /**
@@ -330,6 +333,67 @@ H5P.VideoYouTube = (function ($) {
 
       player.setVolume(level);
     };
+
+    /**
+     * Get list of available playback rates. Not available until after play.
+     *
+     * @public
+     * @returns {Array} available playback rates
+     */
+    self.getPlaybackRates = function () {
+      if (!player || !player.getAvailablePlaybackRates) {
+        return;
+      }
+
+      var playbackRates = player.getAvailablePlaybackRates();
+      if (!playbackRates.length) {
+        return; // No rates
+      }
+
+	  /*
+      // Add labels
+      for (var i = 0; i < playbackRates.length; i++) {
+        var playbackRate = playbackRates[i];
+        var label = (LABELS[playbackRate] !== undefined ? LABELS[playbackRate] : 'Unknown'); // TODO: l10n
+        playbackRates[i] = {
+          name: playbackRate,
+          label: LABELS[playbackRate]
+        };
+      }
+	  */
+
+      return playbackRates;
+    };
+
+    /**
+     * Get current playback rate. Not available until after play.
+     *
+     * @public
+     * @returns {Number} such as 0.25, 0.5, 1, 1.5 and 2
+     */
+    self.getPlaybackRate = function () {
+      if (!player || !player.getPlaybackRate) {
+        return;
+      }
+
+      var playbackRate = player.getPlaybackRate();
+      return playbackRate === 'unknown' ? undefined : playbackRate;
+    };
+
+    /**
+     * Set current playback rate. Not available until after play.
+     * Listen to event "playbackRateChange" to check if successful.
+     *
+     * @public
+     * @params {Number} suggested rate that may be rounded to the next supported value
+     */
+    self.setPlaybackRate = function (playbackRate) {
+      if (!player || !player.setPlaybackRate) {
+        return;
+      }
+
+      player.setPlaybackRate(playbackRate);
+    };	
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
