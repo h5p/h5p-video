@@ -2,7 +2,7 @@ H5P Video
 ==========
 
 A simple library that displays a video.
-Useful when users dynamially add videos to other content.
+Useful when users dynamically add videos to other content.
 
 ## License
 
