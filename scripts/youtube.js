@@ -176,11 +176,11 @@ H5P.VideoYouTube = (function ($) {
      * @params {String} [quality]
      */
     self.setQuality = function (quality) {
-      if (!player || !player.setQuality) {
+      if (!player || !player.setPlaybackQuality) {
         return;
       }
 
-      player.setQuality(quality);
+      player.setPlaybackQuality(quality);
     };
 
     /**
