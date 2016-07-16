@@ -184,7 +184,7 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Starts the video.
+     * Start the video.
      *
      * @public
      */
@@ -198,7 +198,7 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Pauses the video.
+     * Pause the video.
      *
      * @public
      */
@@ -307,7 +307,7 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Returns the video sound level.
+     * Return the video sound level.
      *
      * @public
      * @returns {Number} Between 0 and 100.
@@ -335,7 +335,7 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Get list of available playback rates. Not available until after play.
+     * Get list of available playback rates.
      *
      * @public
      * @returns {Array} available playback rates
@@ -347,29 +347,17 @@ H5P.VideoYouTube = (function ($) {
 
       var playbackRates = player.getAvailablePlaybackRates();
       if (!playbackRates.length) {
-        return; // No rates
+        return; // No rates, but the array should contain at least 1
       }
-
-	  /*
-      // Add labels
-      for (var i = 0; i < playbackRates.length; i++) {
-        var playbackRate = playbackRates[i];
-        var label = (LABELS[playbackRate] !== undefined ? LABELS[playbackRate] : 'Unknown'); // TODO: l10n
-        playbackRates[i] = {
-          name: playbackRate,
-          label: LABELS[playbackRate]
-        };
-      }
-	  */
 
       return playbackRates;
     };
 
     /**
-     * Get current playback rate. Not available until after play.
+     * Get current playback rate.
      *
      * @public
-     * @returns {Number} such as 0.25, 0.5, 1, 1.5 and 2
+     * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
      */
     self.getPlaybackRate = function () {
       if (!player || !player.getPlaybackRate) {
@@ -377,15 +365,15 @@ H5P.VideoYouTube = (function ($) {
       }
 
       var playbackRate = player.getPlaybackRate();
-      return playbackRate === 'unknown' ? undefined : playbackRate;
+	  return playbackRate;
     };
 
     /**
-     * Set current playback rate. Not available until after play.
+     * Set current playback rate.
      * Listen to event "playbackRateChange" to check if successful.
      *
      * @public
-     * @params {Number} suggested rate that may be rounded to the next supported value
+     * @params {Number} suggested rate that may be rounded to supported values
      */
     self.setPlaybackRate = function (playbackRate) {
       if (!player || !player.setPlaybackRate) {
