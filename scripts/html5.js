@@ -65,6 +65,12 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
+    
+    // add ratechangelistener
+    video.onratechange = function() {
+        self.trigger('playbackRateChange', self.getPlaybackRate());
+    }
+    
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
