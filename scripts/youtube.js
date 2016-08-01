@@ -333,6 +333,10 @@ H5P.VideoYouTube = (function ($) {
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
+      if (!$wrapper.is(':visible')) {
+        return;
+      }
+
       if (!player) {
         // Player isn't created yet. Try again.
         create();
