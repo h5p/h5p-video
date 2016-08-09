@@ -217,6 +217,16 @@ H5P.VideoHtml5 = (function ($) {
     };
 
     /**
+     * Returns the name of this video player
+     *
+     * @public
+     * @returns {String}
+     */
+    self.getType = function () {
+      return 'html5';
+    };
+
+    /**
      * Appends the video player to the DOM.
      *
      * @public

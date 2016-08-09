@@ -111,6 +111,16 @@ H5P.VideoYouTube = (function ($) {
     self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
 
     /**
+     * Returns the name of this video player
+     *
+     * @public
+     * @returns {String}
+     */
+    self.getType = function () {
+      return 'youtube';
+    };
+
+    /**
     * Appends the video player to the DOM.
     *
     * @public
