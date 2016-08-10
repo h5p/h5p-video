@@ -15,6 +15,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   function Video(parameters, id) {
     var self = this;
 
+    // Ref youtube.js - ipad & youtube - issue
+    self.pressToPlay = false;
+
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
