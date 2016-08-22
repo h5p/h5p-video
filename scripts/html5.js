@@ -59,6 +59,11 @@ H5P.VideoHtml5 = (function ($) {
     }
     video.src = qualities[currentQuality].source.path;
 
+    // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
+    // inside browser.
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('playsinline', '');
+
     // Set options
     video.controls = (options.controls ? true : false);
     video.autoplay = (options.autoplay ? true : false);
