@@ -70,6 +70,12 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
+    
+    // add ratechangelistener
+    video.onratechange = function() {
+        self.trigger('playbackRateChange', self.getPlaybackRate());
+    }
+    
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
@@ -470,6 +476,43 @@ H5P.VideoHtml5 = (function ($) {
       video.volume = level / 100;
     };
 
+    /**
+     * Get list of available playback rates.
+     *
+     * @public
+     * @returns {Array} available playback rates
+     */
+    self.getPlaybackRates = function () {
+      /*
+       * not sure if there's a common rule about determining good speeds
+       * using Google's standard options via a constant for setting
+       */
+      var playbackRates = PLAYBACK_RATES;
+
+      return playbackRates;
+    };
+    
+    /**
+     * Get current playback rate.
+     *
+     * @public
+     * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
+     */
+    self.getPlaybackRate = function () {
+      return video.playbackRate;
+    };
+
+    /**
+     * Set current playback rate.
+     * Listen to event "playbackRateChange" to check if successful.
+     *
+     * @public
+     * @params {Number} suggested rate that may be rounded to supported values
+     */
+    self.setPlaybackRate = function (playbackRate) {
+      video.playbackRate = playbackRate;
+    };	    
+
     // Register event listeners
     mapEvent('ended', 'stateChange', H5P.Video.ENDED);
     mapEvent('playing', 'stateChange', H5P.Video.PLAYING);
@@ -668,6 +711,9 @@ H5P.VideoHtml5 = (function ($) {
 
   /** @constant {Boolean} */
   var PREFERRED_FORMAT = 'mp4';
+
+  /** @constant {Object} */
+  var PLAYBACK_RATES = [0.25, 0.5, 1, 1.25, 1.5, 2];
 
   if (navigator.userAgent.indexOf('Android') !== -1) {
     // We have Android, check version.
