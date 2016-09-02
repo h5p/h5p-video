@@ -15,6 +15,12 @@
   },
   "preloadedJs": [
     {
+      "path": "scripts/MediasitePlayerIFrameAPI.js"
+    },
+    {
+      "path": "scripts/mediasite.js"
+    },
+    {
       "path": "scripts/youtube.js"
     },
     {

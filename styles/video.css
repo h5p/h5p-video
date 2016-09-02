@@ -28,3 +28,7 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+.h5p-video-wrapper.h5p-mediasite iframe {
+  width: 100%;
+  height: 100%;
+}
