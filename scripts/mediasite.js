@@ -32,8 +32,12 @@ H5P.VideoMediasite = (function ($) {
         return;
       }
 
-      //var url = "http://sofo.mediasite.com/Mediasite/Play/37aab23438114dd595b069351c9509ff1d";
-      var url = "https://mediasite.ntnu.no/Mediasite/Play/39113612851e4ba3a5136837e8aad7661d";
+      // 1 video
+      // var url = "https://mediasite.ntnu.no/Mediasite/Play/96517566bd5f4e989c628563e16959121d";
+      // 2 videos
+      // var url = "https://mediasite.ntnu.no/Mediasite/Play/39113612851e4ba3a5136837e8aad7661d";
+      // 3 videos
+      var url = "https://mediasite.ntnu.no/Mediasite/Play/8b2148aa6b66439a9de5b7e53f74cdbc1d";
 
       var stringToCode = {
         'opening': H5P.Video.BUFFERING,
