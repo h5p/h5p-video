@@ -70,12 +70,12 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
-    
+
     // add ratechangelistener
     video.onratechange = function() {
         self.trigger('playbackRateChange', self.getPlaybackRate());
     }
-    
+
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
@@ -346,13 +346,15 @@ H5P.VideoHtml5 = (function ($) {
      * Starts the video.
      *
      * @public
+     * @return {Promise|undefined} May return a Promise that resolves when
+     * play has been processed.
      */
     self.play = function () {
       if ($error.is(':visible')) {
         return;
       }
 
-      video.play();
+      return video.play();
     };
 
     /**
@@ -491,7 +493,7 @@ H5P.VideoHtml5 = (function ($) {
 
       return playbackRates;
     };
-    
+
     /**
      * Get current playback rate.
      *
@@ -511,7 +513,7 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.setPlaybackRate = function (playbackRate) {
       video.playbackRate = playbackRate;
-    };	    
+    };
 
     // Register event listeners
     mapEvent('ended', 'stateChange', H5P.Video.ENDED);
