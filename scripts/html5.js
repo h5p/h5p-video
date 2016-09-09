@@ -72,9 +72,9 @@ H5P.VideoHtml5 = (function ($) {
     video.style.display = 'block';
 
     // add ratechangelistener
-    video.onratechange = function() {
-        self.trigger('playbackRateChange', self.getPlaybackRate());
-    }
+    video.addEventListener('ratechange', function () {
+      self.trigger('playbackRateChange', self.getPlaybackRate());
+    });
 
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
@@ -404,7 +404,7 @@ H5P.VideoHtml5 = (function ($) {
         return;
       }
 
-      return  video.duration;
+      return video.duration;
     };
 
     /**
