@@ -59,12 +59,23 @@ H5P.VideoHtml5 = (function ($) {
     }
     video.src = qualities[currentQuality].source.path;
 
+    // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
+    // inside browser.
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('playsinline', '');
+
     // Set options
     video.controls = (options.controls ? true : false);
     video.autoplay = (options.autoplay ? true : false);
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
+
+    // add ratechangelistener
+    video.addEventListener('ratechange', function () {
+      self.trigger('playbackRateChange', self.getPlaybackRate());
+    });
+
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
@@ -335,13 +346,15 @@ H5P.VideoHtml5 = (function ($) {
      * Starts the video.
      *
      * @public
+     * @return {Promise|undefined} May return a Promise that resolves when
+     * play has been processed.
      */
     self.play = function () {
       if ($error.is(':visible')) {
         return;
       }
 
-      video.play();
+      return video.play();
     };
 
     /**
@@ -391,7 +404,7 @@ H5P.VideoHtml5 = (function ($) {
         return;
       }
 
-      return  video.duration;
+      return video.duration;
     };
 
     /**
@@ -463,6 +476,43 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.setVolume = function (level) {
       video.volume = level / 100;
+    };
+
+    /**
+     * Get list of available playback rates.
+     *
+     * @public
+     * @returns {Array} available playback rates
+     */
+    self.getPlaybackRates = function () {
+      /*
+       * not sure if there's a common rule about determining good speeds
+       * using Google's standard options via a constant for setting
+       */
+      var playbackRates = PLAYBACK_RATES;
+
+      return playbackRates;
+    };
+
+    /**
+     * Get current playback rate.
+     *
+     * @public
+     * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
+     */
+    self.getPlaybackRate = function () {
+      return video.playbackRate;
+    };
+
+    /**
+     * Set current playback rate.
+     * Listen to event "playbackRateChange" to check if successful.
+     *
+     * @public
+     * @params {Number} suggested rate that may be rounded to supported values
+     */
+    self.setPlaybackRate = function (playbackRate) {
+      video.playbackRate = playbackRate;
     };
 
     // Register event listeners
@@ -663,6 +713,9 @@ H5P.VideoHtml5 = (function ($) {
 
   /** @constant {Boolean} */
   var PREFERRED_FORMAT = 'mp4';
+
+  /** @constant {Object} */
+  var PLAYBACK_RATES = [0.25, 0.5, 1, 1.25, 1.5, 2];
 
   if (navigator.userAgent.indexOf('Android') !== -1) {
     // We have Android, check version.
