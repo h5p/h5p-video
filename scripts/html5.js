@@ -340,6 +340,9 @@ H5P.VideoHtml5 = (function ($) {
 
       // Change source
       video.src = qualities[quality].source.path; // (iPad does not support #t=).
+
+      // Remove poster so it will not show during quality change
+      video.removeAttribute('poster');
     };
 
     /**
