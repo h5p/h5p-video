@@ -15,6 +15,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   function Video(parameters, id) {
     var self = this;
 
+    // Ref youtube.js - ipad & youtube - issue
+    self.pressToPlay = false;
+
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
@@ -146,6 +149,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   Video.PAUSED = 2;
   /** @constant {Number} */
   Video.BUFFERING = 3;
+  /**
+   * When video is queued to start
+   * @constant {Number}
+   */
+  Video.VIDEO_CUED = 5;
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
