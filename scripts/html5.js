@@ -63,6 +63,7 @@ H5P.VideoHtml5 = (function ($) {
     // inside browser.
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'metadata');
 
     // Set options
     video.controls = (options.controls ? true : false);
@@ -150,6 +151,8 @@ H5P.VideoHtml5 = (function ($) {
             break;
 
           case 'loaded':
+            self.isLoaded = true;
+
             if (stateBeforeChangingQuality !== undefined) {
               return; // Avoid loaded event when changing quality.
             }
@@ -355,6 +358,11 @@ H5P.VideoHtml5 = (function ($) {
     self.play = function () {
       if ($error.is(':visible')) {
         return;
+      }
+
+      if (!self.isLoaded) {
+        // Make sure video is loaded before playing
+        video.load();
       }
 
       return video.play();
