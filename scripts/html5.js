@@ -41,6 +41,12 @@ H5P.VideoHtml5 = (function ($) {
      */
     var lastState;
 
+    /**
+     * Keeps track whether or not the video has been loaded.
+     * @private
+     */
+    var isLoaded = false;
+
     // Create player
     var video = document.createElement('video');
 
@@ -151,7 +157,7 @@ H5P.VideoHtml5 = (function ($) {
             break;
 
           case 'loaded':
-            self.isLoaded = true;
+            isLoaded = true;
 
             if (stateBeforeChangingQuality !== undefined) {
               return; // Avoid loaded event when changing quality.
@@ -360,7 +366,7 @@ H5P.VideoHtml5 = (function ($) {
         return;
       }
 
-      if (!self.isLoaded) {
+      if (!isLoaded) {
         // Make sure video is loaded before playing
         video.load();
       }
