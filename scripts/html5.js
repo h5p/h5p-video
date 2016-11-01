@@ -41,6 +41,12 @@ H5P.VideoHtml5 = (function ($) {
      */
     var lastState;
 
+    /**
+     * Keeps track whether or not the video has been loaded.
+     * @private
+     */
+    var isLoaded = false;
+
     // Create player
     var video = document.createElement('video');
 
@@ -63,6 +69,7 @@ H5P.VideoHtml5 = (function ($) {
     // inside browser.
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'metadata');
 
     // Set options
     video.controls = (options.controls ? true : false);
@@ -70,12 +77,12 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
-    
+
     // add ratechangelistener
-    video.onratechange = function() {
-        self.trigger('playbackRateChange', self.getPlaybackRate());
-    }
-    
+    video.addEventListener('ratechange', function () {
+      self.trigger('playbackRateChange', self.getPlaybackRate());
+    });
+
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
@@ -150,6 +157,8 @@ H5P.VideoHtml5 = (function ($) {
             break;
 
           case 'loaded':
+            isLoaded = true;
+
             if (stateBeforeChangingQuality !== undefined) {
               return; // Avoid loaded event when changing quality.
             }
@@ -340,19 +349,29 @@ H5P.VideoHtml5 = (function ($) {
 
       // Change source
       video.src = qualities[quality].source.path; // (iPad does not support #t=).
+
+      // Remove poster so it will not show during quality change
+      video.removeAttribute('poster');
     };
 
     /**
      * Starts the video.
      *
      * @public
+     * @return {Promise|undefined} May return a Promise that resolves when
+     * play has been processed.
      */
     self.play = function () {
       if ($error.is(':visible')) {
         return;
       }
 
-      video.play();
+      if (!isLoaded) {
+        // Make sure video is loaded before playing
+        video.load();
+      }
+
+      return video.play();
     };
 
     /**
@@ -402,7 +421,7 @@ H5P.VideoHtml5 = (function ($) {
         return;
       }
 
-      return  video.duration;
+      return video.duration;
     };
 
     /**
@@ -491,7 +510,7 @@ H5P.VideoHtml5 = (function ($) {
 
       return playbackRates;
     };
-    
+
     /**
      * Get current playback rate.
      *
@@ -511,7 +530,7 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.setPlaybackRate = function (playbackRate) {
       video.playbackRate = playbackRate;
-    };	    
+    };
 
     // Register event listeners
     mapEvent('ended', 'stateChange', H5P.Video.ENDED);
