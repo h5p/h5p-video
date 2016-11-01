@@ -79,7 +79,10 @@ H5P.VideoYouTube = (function ($) {
           },
           onPlaybackRateChange: function (playbackRate) {
             self.trigger('playbackRateChange', playbackRate.data);
-          },		  
+          },
+	      onApiChange: function (api) {
+			self.trigger('apiChange', api.data);
+		  },
           onError: function (error) {
             var message;
             switch (error.data) {
@@ -374,7 +377,7 @@ H5P.VideoYouTube = (function ($) {
      * Listen to event "playbackRateChange" to check if successful.
      *
      * @public
-     * @params {Number} suggested rate that may be rounded to supported values
+     * @param {Number} suggested rate that may be rounded to supported values
      */
     self.setPlaybackRate = function (playbackRate) {
       if (!player || !player.setPlaybackRate) {
@@ -385,45 +388,79 @@ H5P.VideoYouTube = (function ($) {
     };	
 
     /**
-     * Get list of available languages.
-     *
-     * @public
-     * @returns {Array} available languages
-     */
-    self.getLanguages = function () {
-	  	
-      return ['a', 'b'];
-    };
-
-    /**
-     * Get current language.
-     *
-     * @public
-     * @returns {string}
-     */
-    self.getLanguage = function () {
-      if (!player || !player.getLanguage) {
+	 * Load YouTube module
+	 * Allows us to (hopefully) load the captions module even if they're
+	 * not yet activated on YouTube
+	 *
+	 * @public
+	 * @param {String} module name
+	 */
+    self.initCaptions = function (params) {
+	  if (!player || !player.loadModule) {
         return;
       }
-
-      var language = player.getLanguage();
-	  return language;
-    };
+	  if (params.captions) {
+	    player.loadModule(params.captions);
+	  }
+	}
 
     /**
-     * Set current language.
-     * Listen to event "languageChange" to check if successful.
-     *
-     * @public
-     * @params {string} suggested language
-     */
-    self.setLanguage = function (language) {
-      if (!player || !player.setLanguage) {
+	 * Get all options for a YouTube module
+	 *
+	 * @public
+	 * @param {String} module name
+	 * @returns {Array} of strings, options for the module, especially ['captions']
+	 */
+    self.getOptions = function(module) {
+      if (!player || !player.getOptions) {
         return;
       }
+	  return player.getOptions(module);
+	}
 
-      player.setLanguage(language);
-    };
+    /**
+	 * Get particulas option information
+	 *
+	 * @public
+	 * @param {String} module name
+	 * @param {String} option name
+	 * @returns {Object} with information
+	 */
+    self.getOption = function(module, option) {
+      if (!player || !player.getOption) {
+        return;
+      }
+	  return player.getOption(module, option);
+	}
+
+    /**
+	 * Set a modue option to a value
+	 *
+	 * @public
+	 * @param {String} module name
+	 * @param {String} option name
+	 * @param {Object} value
+	 */
+    self.setOption = function(module, option, value) {
+      if (!player || !player.setOption) {
+        return;
+      }
+	  player.setOption(module, option, value);
+	}
+
+	// TODO: get system language first or make it a parameter
+    self.showCaptions = function () {
+	  self.setOption('captions', 'track', self.getOption('captions', 'tracklist')[0]);
+	}
+
+    /**
+	 * Hide the captions
+	 *
+	 * @public
+	 */
+    self.hideCaptions = function () {
+      self.setOption('captions', 'track', {});
+	}
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
