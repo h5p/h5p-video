@@ -384,6 +384,47 @@ H5P.VideoYouTube = (function ($) {
       player.setPlaybackRate(playbackRate);
     };	
 
+    /**
+     * Get list of available languages.
+     *
+     * @public
+     * @returns {Array} available languages
+     */
+    self.getLanguages = function () {
+	  	
+      return ['a', 'b'];
+    };
+
+    /**
+     * Get current language.
+     *
+     * @public
+     * @returns {string}
+     */
+    self.getLanguage = function () {
+      if (!player || !player.getLanguage) {
+        return;
+      }
+
+      var language = player.getLanguage();
+	  return language;
+    };
+
+    /**
+     * Set current language.
+     * Listen to event "languageChange" to check if successful.
+     *
+     * @public
+     * @params {string} suggested language
+     */
+    self.setLanguage = function (language) {
+      if (!player || !player.setLanguage) {
+        return;
+      }
+
+      player.setLanguage(language);
+    };
+
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
       if (!$wrapper.is(':visible')) {
