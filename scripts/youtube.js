@@ -25,6 +25,8 @@ H5P.VideoYouTube = (function ($) {
     // Optional placeholder
     // var $placeholder = $('<iframe id="' + id + '" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/' + getId(sources[0].path) + '?enablejsapi=1&origin=' + encodeURIComponent(ORIGIN) + '&autoplay=' + (options.autoplay ? 1 : 0) + '&controls=' + (options.controls ? 1 : 0) + '&disabledkb=' + (options.controls ? 0 : 1) + '&fs=0&loop=' + (options.loop ? 1 : 0) + '&rel=0&showinfo=0&iv_load_policy=3" frameborder="0"></iframe>').appendTo($wrapper);
 
+    var language = '';
+
     /**
      * Use the YouTube API to create a new player
      *
@@ -80,6 +82,9 @@ H5P.VideoYouTube = (function ($) {
           onPlaybackRateChange: function (playbackRate) {
             self.trigger('playbackRateChange', playbackRate.data);
           },
+          onLanguageChange: function (language) {
+            self.trigger('languageChange', language.data);
+          },		  
 	      onApiChange: function (api) {
 			self.trigger('apiChange', api.data);
 		  },
@@ -448,18 +453,27 @@ H5P.VideoYouTube = (function ($) {
 	  player.setOption(module, option, value);
 	}
 
-	// TODO: get system language first or make it a parameter
-    self.showCaptions = function () {
-	  self.setOption('captions', 'track', self.getOption('captions', 'tracklist')[0]);
+     self.getLanguages = function () {
+      var languages = self.getOption('captions', 'tracklist');
+      if (!languages) {
+        return; // no languages
+      }
+      return languages;
 	}
 
-    /**
-	 * Hide the captions
-	 *
-	 * @public
-	 */
-    self.hideCaptions = function () {
-      self.setOption('captions', 'track', {});
+	self.getLanguage = function() {
+		return language; // there's no way to get the current caption language from YouTube
+	}
+
+    self.setLanguage = function(newLanguage) {
+		language = newLanguage;
+		if (language) {
+		  self.setOption('captions', 'track', {'languageCode': newLanguage});
+	    }
+		else {
+		  // This seems to unload the whole captions module!?
+		  //self.setOption('captions', 'track', {});
+		}
 	}
 
     // Respond to resize events by setting the YT player size.
