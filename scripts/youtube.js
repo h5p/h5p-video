@@ -393,21 +393,44 @@ H5P.VideoYouTube = (function ($) {
     };	
 
     /**
-	 * Load YouTube module
-	 * Allows us to (hopefully) load the captions module even if they're
-	 * not yet activated on YouTube
-	 *
-	 * @public
-	 * @param {String} module name
-	 */
+     * Load YouTube module
+     * Allows us to (hopefully) load the captions module even if they're
+     * not yet activated on YouTube
+     *
+     * @public
+     * @param {String} module name
+     */
     self.initCaptions = function (params) {
-	  if (!player || !player.loadModule) {
+      /*
+       * Totally rewrite this part... ;-)
+       *
+       * Looking at the API from YouTube, the logic her and in IV should be
+       * something like...
+       *
+       * 1. Wait for triggering of 'onStateChange'
+       * 
+       * 2. Get all languages and store them in a variable if not set already (so just do it once)
+       * 2.1 loadModule('captions') if not already loaded (someone might have activated them already here or on YouTube), we'll use a promise here
+       * 2.2 get languages, add option "no captions",  and activate languageButton if promise was fulfilled
+       *
+       * 3. React to 'languageChooser'
+       * 3.1 Choose a language
+       * 3.1.1 loadModule('captions') if not already loaded (someone might have activated them already here or on YouTube), we'll use a promise here
+       * 3.1.2 set Language if promise was fulfilled
+       * 3.2 Deactivate Captions
+       * 3.2.1 unloadModule('captions') - best effort is probably OK
+       */
+      if (!player || !player.loadModule) {
         return;
       }
-	  if (params.captions) {
-	    player.loadModule(params.captions);
-	  }
-	}
+      if (params.captions) {
+        // TODO: use a promise for loadModule that gives the function
+        // a certain amount in time to trigger onApiChange that
+        // we can use to check for 'captions' and see if it was
+        // successful
+        player.loadModule(params.captions);
+      }
+    }
 
     /**
 	 * Get all options for a YouTube module
@@ -462,7 +485,7 @@ H5P.VideoYouTube = (function ($) {
 	}
 
 	self.getLanguage = function() {
-		return language; // there's no way to get the current caption language from YouTube
+          return language; // there's no way to get the current caption language from YouTube
 	}
 
     self.setLanguage = function(newLanguage) {
