@@ -25,7 +25,8 @@ H5P.VideoYouTube = (function ($) {
     // Optional placeholder
     // var $placeholder = $('<iframe id="' + id + '" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/' + getId(sources[0].path) + '?enablejsapi=1&origin=' + encodeURIComponent(ORIGIN) + '&autoplay=' + (options.autoplay ? 1 : 0) + '&controls=' + (options.controls ? 1 : 0) + '&disabledkb=' + (options.controls ? 0 : 1) + '&fs=0&loop=' + (options.loop ? 1 : 0) + '&rel=0&showinfo=0&iv_load_policy=3" frameborder="0"></iframe>').appendTo($wrapper);
 
-    var language = '';
+    var languages;
+	var language = '';
 
     /**
      * Use the YouTube API to create a new player
@@ -86,6 +87,12 @@ H5P.VideoYouTube = (function ($) {
             self.trigger('languageChange', language.data);
           },		  
 	      onApiChange: function (api) {
+			if (!languages) {
+              if (self.getOptions().indexOf('captions', 0, 1) > 0) {
+			    languages = self.getOption('captions', 'tracklist');
+				self.trigger('languageChange');
+			  }
+			}
 			self.trigger('apiChange', api.data);
 		  },
           onError: function (error) {
@@ -400,36 +407,12 @@ H5P.VideoYouTube = (function ($) {
      * @public
      * @param {String} module name
      */
-    self.initCaptions = function (params) {
-      /*
-       * Totally rewrite this part... ;-)
-       *
-       * Looking at the API from YouTube, the logic her and in IV should be
-       * something like...
-       *
-       * 1. Wait for triggering of 'onStateChange'
-       * 
-       * 2. Get all languages and store them in a variable if not set already (so just do it once)
-       * 2.1 loadModule('captions') if not already loaded (someone might have activated them already here or on YouTube), we'll use a promise here
-       * 2.2 get languages, add option "no captions",  and activate languageButton if promise was fulfilled
-       *
-       * 3. React to 'languageChooser'
-       * 3.1 Choose a language
-       * 3.1.1 loadModule('captions') if not already loaded (someone might have activated them already here or on YouTube), we'll use a promise here
-       * 3.1.2 set Language if promise was fulfilled
-       * 3.2 Deactivate Captions
-       * 3.2.1 unloadModule('captions') - best effort is probably OK
-       */
+    self.initCaptions = function () {
       if (!player || !player.loadModule) {
         return;
       }
-      if (params.captions) {
-        // TODO: use a promise for loadModule that gives the function
-        // a certain amount in time to trigger onApiChange that
-        // we can use to check for 'captions' and see if it was
-        // successful
-        player.loadModule(params.captions);
-      }
+	  // will trigger ApiChange that will then try to load languages
+      player.loadModule('captions');
     }
 
     /**
@@ -476,26 +459,40 @@ H5P.VideoYouTube = (function ($) {
 	  player.setOption(module, option, value);
 	}
 
-     self.getLanguages = function () {
-      var languages = self.getOption('captions', 'tracklist');
-      if (!languages) {
-        return; // no languages
-      }
+    /**
+	 * Get Languages
+	 *
+	 * @public
+	 * @return {Object} languages
+	 */
+    self.getLanguages = function () {
       return languages;
 	}
 
+    /**
+	 * Get current language code
+	 *
+	 * @public
+	 * @return {String} two char representation of the language or empty
+	 */
 	self.getLanguage = function() {
-          return language; // there's no way to get the current caption language from YouTube
+      return language; // there's no way to get the current caption language from YouTube
 	}
 
+    /**
+	 * Set language code
+	 *
+	 * @public
+	 * @param {String} newLanguage - two char representation of the language or empty
+	 */
     self.setLanguage = function(newLanguage) {
 		language = newLanguage;
 		if (language) {
+          player.loadModule('captions'); // TODO: See if best effort is feasible
 		  self.setOption('captions', 'track', {'languageCode': newLanguage});
 	    }
 		else {
-		  // This seems to unload the whole captions module!?
-		  //self.setOption('captions', 'track', {});
+		  player.unloadModule('captions');
 		}
 	}
 
