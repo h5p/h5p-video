@@ -88,8 +88,8 @@ H5P.VideoYouTube = (function($) {
           },
           onApiChange: function(api) {
             if (!languages) {
-              if (self.getOptions().indexOf('captions', 0, 1) > 0) {
-                languages = self.getOption('captions', 'tracklist');
+              if (getOptions().indexOf('captions', 0, 1) > 0) {
+                languages = getOption('captions', 'tracklist');
                 self.trigger('languageChange');
               }
             }
@@ -422,7 +422,7 @@ H5P.VideoYouTube = (function($) {
      * @param {String} module name
      * @returns {Array} of strings, options for the module, especially ['captions']
      */
-    self.getOptions = function(module) {
+    var getOptions = function(module) {
       if (!player || !player.getOptions) {
         return;
       }
@@ -437,7 +437,7 @@ H5P.VideoYouTube = (function($) {
      * @param {String} option name
      * @returns {Object} with information
      */
-    self.getOption = function(module, option) {
+    var getOption = function(module, option) {
       if (!player || !player.getOption) {
         return;
       }
@@ -452,7 +452,7 @@ H5P.VideoYouTube = (function($) {
      * @param {String} option name
      * @param {Object} value
      */
-    self.setOption = function(module, option, value) {
+    var setOption = function(module, option, value) {
       if (!player || !player.setOption) {
         return;
       }
@@ -489,7 +489,7 @@ H5P.VideoYouTube = (function($) {
       language = newLanguage;
       if (language) {
         player.loadModule('captions'); // TODO: See if best effort is feasible
-        self.setOption('captions', 'track', {
+        setOption('captions', 'track', {
           'languageCode': newLanguage
         });
       }
