@@ -1,5 +1,5 @@
 /** @namespace H5P */
-H5P.VideoYouTube = (function($) {
+H5P.VideoYouTube = (function ($) {
 
   /**
    * YouTube video player for H5P.
@@ -33,7 +33,7 @@ H5P.VideoYouTube = (function($) {
      *
      * @private
      */
-    var create = function() {
+    var create = function () {
       if (!$placeholder.is(':visible') || player !== undefined) {
         return;
       }
@@ -51,7 +51,7 @@ H5P.VideoYouTube = (function($) {
 
       player = new YT.Player(id, {
         width: width,
-        height: width * (9 / 16),
+        height: width * (9/16),
         videoId: getId(sources[0].path),
         playerVars: {
           origin: ORIGIN,
@@ -68,19 +68,19 @@ H5P.VideoYouTube = (function($) {
           playsinline: 1
         },
         events: {
-          onReady: function() {
+          onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
           },
-          onStateChange: function(state) {
+          onStateChange: function (state) {
             if (state.data > -1 && state.data < 4) {
               self.trigger('stateChange', state.data);
             }
           },
-          onPlaybackQualityChange: function(quality) {
+          onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
           },
-          onPlaybackRateChange: function(playbackRate) {
+          onPlaybackRateChange: function (playbackRate) {
             self.trigger('playbackRateChange', playbackRate.data);
           },
           onLanguageChange: function(language) {
@@ -95,7 +95,7 @@ H5P.VideoYouTube = (function($) {
             }
             self.trigger('apiChange', api.data);
           },
-          onError: function(error) {
+          onError: function (error) {
             var message;
             switch (error.data) {
               case 2:
@@ -130,12 +130,12 @@ H5P.VideoYouTube = (function($) {
     self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
 
     /**
-     * Appends the video player to the DOM.
-     *
-     * @public
-     * @param {jQuery} $container
-     */
-    self.appendTo = function($container) {
+    * Appends the video player to the DOM.
+    *
+    * @public
+    * @param {jQuery} $container
+    */
+    self.appendTo = function ($container) {
       $container.addClass('h5p-youtube').append($wrapper);
       create();
     };
@@ -146,7 +146,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Array}
      */
-    self.getQualities = function() {
+    self.getQualities = function () {
       if (!player || !player.getAvailableQualityLevels) {
         return;
       }
@@ -175,7 +175,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {String}
      */
-    self.getQuality = function() {
+    self.getQuality = function () {
       if (!player || !player.getPlaybackQuality) {
         return;
       }
@@ -191,7 +191,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @params {String} [quality]
      */
-    self.setQuality = function(quality) {
+    self.setQuality = function (quality) {
       if (!player || !player.setPlaybackQuality) {
         return;
       }
@@ -204,7 +204,7 @@ H5P.VideoYouTube = (function($) {
      *
      * @public
      */
-    self.play = function() {
+    self.play = function () {
       if (!player || !player.playVideo) {
         self.on('ready', self.play);
         return;
@@ -218,7 +218,7 @@ H5P.VideoYouTube = (function($) {
      *
      * @public
      */
-    self.pause = function() {
+    self.pause = function () {
       self.off('ready', self.play);
       if (!player || !player.pauseVideo) {
         return;
@@ -232,7 +232,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @param {Number} time
      */
-    self.seek = function(time) {
+    self.seek = function (time) {
       if (!player || !player.seekTo) {
         return;
       }
@@ -246,7 +246,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Number}
      */
-    self.getCurrentTime = function() {
+    self.getCurrentTime = function () {
       if (!player || !player.getCurrentTime) {
         return;
       }
@@ -260,7 +260,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Number}
      */
-    self.getDuration = function() {
+    self.getDuration = function () {
       if (!player || !player.getDuration) {
         return;
       }
@@ -274,7 +274,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Number} Between 0 and 100
      */
-    self.getBuffered = function() {
+    self.getBuffered = function () {
       if (!player || !player.getVideoLoadedFraction) {
         return;
       }
@@ -287,7 +287,7 @@ H5P.VideoYouTube = (function($) {
      *
      * @public
      */
-    self.mute = function() {
+    self.mute = function () {
       if (!player || !player.mute) {
         return;
       }
@@ -300,7 +300,7 @@ H5P.VideoYouTube = (function($) {
      *
      * @public
      */
-    self.unMute = function() {
+    self.unMute = function () {
       if (!player || !player.unMute) {
         return;
       }
@@ -314,7 +314,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Boolean}
      */
-    self.isMuted = function() {
+    self.isMuted = function () {
       if (!player || !player.isMuted) {
         return;
       }
@@ -328,7 +328,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Number} Between 0 and 100.
      */
-    self.getVolume = function() {
+    self.getVolume = function () {
       if (!player || !player.getVolume) {
         return;
       }
@@ -342,7 +342,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @param {Number} level Between 0 and 100.
      */
-    self.setVolume = function(level) {
+    self.setVolume = function (level) {
       if (!player || !player.setVolume) {
         return;
       }
@@ -356,7 +356,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Array} available playback rates
      */
-    self.getPlaybackRates = function() {
+    self.getPlaybackRates = function () {
       if (!player || !player.getAvailablePlaybackRates) {
         return;
       }
@@ -375,13 +375,13 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
      */
-    self.getPlaybackRate = function() {
+    self.getPlaybackRate = function () {
       if (!player || !player.getPlaybackRate) {
         return;
       }
 
       var playbackRate = player.getPlaybackRate();
-      return playbackRate;
+	  return playbackRate;
     };
 
     /**
@@ -389,13 +389,12 @@ H5P.VideoYouTube = (function($) {
      * Listen to event "playbackRateChange" to check if successful.
      *
      * @public
-     * @param {Number} suggested rate that may be rounded to supported values
+     * @params {Number} suggested rate that may be rounded to supported values
      */
-    self.setPlaybackRate = function(playbackRate) {
+    self.setPlaybackRate = function (playbackRate) {
       if (!player || !player.setPlaybackRate) {
         return;
       }
-
       player.setPlaybackRate(playbackRate);
     };
 
@@ -407,7 +406,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @param {String} module name
      */
-    self.initCaptions = function() {
+    self.initCaptions = function () {
       if (!player || !player.loadModule) {
         return;
       }
@@ -422,13 +421,12 @@ H5P.VideoYouTube = (function($) {
      * @param {String} module name
      * @returns {Array} of strings, options for the module, especially ['captions']
      */
-    var getOptions = function(module) {
+    var getOptions = function (module) {
       if (!player || !player.getOptions) {
         return;
       }
       return player.getOptions(module);
     }
-
     /**
      * Get particulas option information
      *
@@ -437,7 +435,7 @@ H5P.VideoYouTube = (function($) {
      * @param {String} option name
      * @returns {Object} with information
      */
-    var getOption = function(module, option) {
+    var getOption = function (module, option) {
       if (!player || !player.getOption) {
         return;
       }
@@ -452,7 +450,7 @@ H5P.VideoYouTube = (function($) {
      * @param {String} option name
      * @param {Object} value
      */
-    var setOption = function(module, option, value) {
+    var setOption = function (module, option, value) {
       if (!player || !player.setOption) {
         return;
       }
@@ -465,7 +463,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @return {Object} languages
      */
-    self.getLanguages = function() {
+    self.getLanguages = function () {
       return languages;
     }
 
@@ -475,7 +473,7 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @return {String} two char representation of the language or empty
      */
-    self.getLanguage = function() {
+    self.getLanguage = function () {
       return language; // there's no way to get the current caption language from YouTube
     }
 
@@ -485,21 +483,21 @@ H5P.VideoYouTube = (function($) {
      * @public
      * @param {String} newLanguage - two char representation of the language or empty
      */
-    self.setLanguage = function(newLanguage) {
+    self.setLanguage = function (newLanguage) {
       language = newLanguage;
       if (language) {
-        player.loadModule('captions'); // TODO: See if best effort is feasible
+        player.loadModule('captions');
         setOption('captions', 'track', {
           'languageCode': newLanguage
         });
       }
-	  else {
+      else {
         player.unloadModule('captions');
       }
     }
 
     // Respond to resize events by setting the YT player size.
-    self.on('resize', function() {
+    self.on('resize', function () {
       if (!$wrapper.is(':visible')) {
         return;
       }
@@ -517,7 +515,7 @@ H5P.VideoYouTube = (function($) {
       });
 
       var width = $wrapper[0].clientWidth;
-      var height = options.fit ? $wrapper[0].clientHeight : (width * (9 / 16));
+      var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
       // Set size
       $wrapper.css({
@@ -537,7 +535,7 @@ H5P.VideoYouTube = (function($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  YouTube.canPlay = function(sources) {
+  YouTube.canPlay = function (sources) {
     return getId(sources[0].path);
   };
 
@@ -548,7 +546,7 @@ H5P.VideoYouTube = (function($) {
    * @param {String} url
    * @returns {String} YouTube video identifier
    */
-  var getId = function(url) {
+  var getId = function (url) {
     var matches = url.match(/^https?:\/\/(www.youtube.com|youtu.be|y2u.be)\/(.+=)?(\S+)$/i);
     if (matches && matches[3]) {
       return matches[3];
@@ -558,16 +556,16 @@ H5P.VideoYouTube = (function($) {
   /**
    * Load the IFrame Player API asynchronously.
    */
-  var loadAPI = function(loaded) {
+  var loadAPI = function (loaded) {
     if (window.onYouTubeIframeAPIReady !== undefined) {
       // Someone else is loading, hook in
       var original = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = function(id) {
+      window.onYouTubeIframeAPIReady = function (id) {
         loaded(id);
         original(id);
       };
     }
-	else {
+    else {
       // Load the API our self
       var tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";

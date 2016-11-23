@@ -41,6 +41,12 @@ H5P.VideoHtml5 = (function ($) {
      */
     var lastState;
 
+    /**
+     * Keeps track whether or not the video has been loaded.
+     * @private
+     */
+    var isLoaded = false;
+
     // Create player
     var video = document.createElement('video');
 
@@ -63,6 +69,7 @@ H5P.VideoHtml5 = (function ($) {
     // inside browser.
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'metadata');
 
     // Set options
     video.controls = (options.controls ? true : false);
@@ -150,6 +157,8 @@ H5P.VideoHtml5 = (function ($) {
             break;
 
           case 'loaded':
+            isLoaded = true;
+
             if (stateBeforeChangingQuality !== undefined) {
               return; // Avoid loaded event when changing quality.
             }
@@ -355,6 +364,11 @@ H5P.VideoHtml5 = (function ($) {
     self.play = function () {
       if ($error.is(':visible')) {
         return;
+      }
+
+      if (!isLoaded) {
+        // Make sure video is loaded before playing
+        video.load();
       }
 
       return video.play();
@@ -711,19 +725,16 @@ H5P.VideoHtml5 = (function ($) {
     return quality;
   };
 
-  // dummy functions for captions in HTML5 video just like YouTube
-  self.initCaptions = function() {
+ // dummy functions for captions in HTML5 video just like YouTube
+  self.initCaptions = function () {
   }
-
-  self.getLanguages = function() {
+  self.getLanguages = function () {
     return;
   }
-
-  self.getLanguage = function() {
+  self.getLanguage = function () {
     return;
   }
-
-  self.setLanguage = function(newLanguage) {
+  self.setLanguage = function (newLanguage) {
   }
 
   /** @constant {Boolean} */
