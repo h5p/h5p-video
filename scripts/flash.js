@@ -130,6 +130,7 @@ H5P.VideoFlash = (function ($) {
     self.getQualities = function () {
       return;
       // Create reverse list
+      /*
       var options = [];
       for (var q in qualities) {
         if (qualities.hasOwnProperty(q)) {
@@ -139,6 +140,7 @@ H5P.VideoFlash = (function ($) {
           });
         }
       }
+      */
 
       if (options.length < 2) {
         // Do not return if only one quality.
