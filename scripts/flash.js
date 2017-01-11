@@ -129,23 +129,6 @@ H5P.VideoFlash = (function ($) {
      */
     self.getQualities = function () {
       return;
-      // Create reverse list
-      var options = [];
-      for (var q in qualities) {
-        if (qualities.hasOwnProperty(q)) {
-          options.splice(0, 0, {
-            name: q,
-            label: qualities[q].label
-          });
-        }
-      }
-
-      if (options.length < 2) {
-        // Do not return if only one quality.
-        return;
-      }
-
-      return options;
     };
 
     /**
