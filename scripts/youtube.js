@@ -79,7 +79,7 @@ H5P.VideoYouTube = (function ($) {
           },
           onPlaybackRateChange: function (playbackRate) {
             self.trigger('playbackRateChange', playbackRate.data);
-          },		  
+          },
           onError: function (error) {
             var message;
             switch (error.data) {
@@ -382,7 +382,7 @@ H5P.VideoYouTube = (function ($) {
       }
 
       player.setPlaybackRate(playbackRate);
-    };	
+    };
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
@@ -435,7 +435,7 @@ H5P.VideoYouTube = (function ($) {
    * @returns {String} YouTube video identifier
    */
   var getId = function (url) {
-    var matches = url.match(/^https?:\/\/(www.youtube.com|youtu.be|y2u.be)\/(.+=)?(\S+)$/i);
+    var matches = url.match(/^https?:\/\/(youtube.com|www.youtube.com|m.youtube.com|youtu.be|y2u.be)\/(.+=)?(\S+)$/i);
     if (matches && matches[3]) {
       return matches[3];
     }
