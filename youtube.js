@@ -87,6 +87,17 @@ H5P.VideoYouTube = (function ($) {
             self.trigger('languageChange', language.data);
           },
           onApiChange: function(api) {
+
+            console.log('languages: ' + languages);
+            console.log('options(captions): ' + getOptions('captions'));
+            // reload,fontSize,track,tracklist,translationLanguages,displaySettings,sampleSubtitle
+            console.log(getOption('captions', 'tracklist'));
+
+            /*
+             * It seems that Google changed something with the API. The option 'tracklist' is still
+             * available, but it returns an empty array.
+             */
+
             if (!languages) {
               if (getOptions().indexOf('captions', 0, 1) > 0) {
                 languages = getOption('captions', 'tracklist');

@@ -725,6 +725,18 @@ H5P.VideoHtml5 = (function ($) {
     return quality;
   };
 
+ // dummy functions for captions in HTML5 video just like YouTube
+  self.initCaptions = function () {
+  }
+  self.getLanguages = function () {
+    return;
+  }
+  self.getLanguage = function () {
+    return;
+  }
+  self.setLanguage = function (newLanguage) {
+  }
+
   /** @constant {Boolean} */
   var OLD_ANDROID_FIX = false;
 
