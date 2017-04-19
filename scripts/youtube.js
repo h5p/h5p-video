@@ -46,6 +46,8 @@ H5P.VideoYouTube = (function ($) {
         width = 200;
       }
 
+      var loadCaptionsModule = true;
+
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
@@ -68,6 +70,28 @@ H5P.VideoYouTube = (function ($) {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
+          },
+          onApiChange: function () {
+            if (loadCaptionsModule) {
+              loadCaptionsModule = false;
+
+              // Always load captions
+              player.loadModule('captions');
+            }
+
+            // Grab tracklist from player
+            var trackList = player.getOption('captions', 'tracklist');
+            if (trackList && trackList.length) {
+
+              // Format track list into valid track options
+              var trackOptions = [];
+              for (var i = 0; i < trackList.length; i++) {
+                trackOptions.push(new H5P.Video.LabelValue(trackList[i].displayName, trackList[i].languageCode));
+              }
+
+              // Captions are ready for loading
+              self.trigger('captions', trackOptions);
+            }
           },
           onStateChange: function (state) {
             if (state.data > -1 && state.data < 4) {
@@ -382,6 +406,25 @@ H5P.VideoYouTube = (function ($) {
       }
 
       player.setPlaybackRate(playbackRate);
+    };
+
+    /**
+     * Set current captions track.
+     *
+     * @param {H5P.Video.LabelValue} Captions track to show during playback
+     */
+    self.setCaptionsTrack = function (track) {
+      player.setOption('captions', 'track', track ? {languageCode: track.value} : {});
+    };
+
+    /**
+     * Figure out which captions track is currently used.
+     *
+     * @return {H5P.Video.LabelValue} Captions track
+     */
+    self.getCaptionsTrack = function () {
+      var track = player.getOption('captions', 'track');
+      return (track.languageCode ? new H5P.Video.LabelValue(track.displayName, track.languageCode) : null);
     };
 
     // Respond to resize events by setting the YT player size.

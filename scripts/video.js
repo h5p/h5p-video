@@ -158,5 +158,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
 
+  /**
+   * Help keep track of key value pairs used by the UI.
+   *
+   * @class
+   * @param {string} label
+   * @param {string} value
+   */
+  Video.LabelValue = function (label, value) {
+    this.label = label;
+    this.value = value;
+  };
+
   return Video;
 })(H5P.jQuery, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);
