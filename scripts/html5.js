@@ -650,7 +650,7 @@ H5P.VideoHtml5 = (function ($) {
           // Create a new quality tag
           source.quality = {
             name: 'q' + qualityIndex,
-            label: 'Quality ' + qualityIndex // TODO: l10n
+            label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
           };
           qualityIndex++;
         }
@@ -706,7 +706,7 @@ H5P.VideoHtml5 = (function ($) {
   };
 
   /**
-   * Set preferred video quality.
+   * Get preferred video quality.
    *
    * @private
    * @static
