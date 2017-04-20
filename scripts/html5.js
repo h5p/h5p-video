@@ -532,6 +532,32 @@ H5P.VideoHtml5 = (function ($) {
       video.playbackRate = playbackRate;
     };
 
+    /**
+     * Set current captions track.
+     *
+     * @param {H5P.Video.LabelValue} Captions track to show during playback
+     */
+    self.setCaptionsTrack = function (track) {
+      for (var i = 0; i < video.textTracks.length; i++) {
+        video.textTracks[i].mode = (track && track.value === i ? 'showing' : 'disabled');
+      }
+    };
+
+    /**
+     * Figure out which captions track is currently used.
+     *
+     * @return {H5P.Video.LabelValue} Captions track
+     */
+    self.getCaptionsTrack = function () {
+      for (var i = 0; i < video.textTracks.length; i++) {
+        if (video.textTracks[i].mode === 'showing') {
+          return new H5P.Video.LabelValue(video.textTracks[i].label, i);
+        }
+      }
+
+      return null;
+    };
+
     // Register event listeners
     mapEvent('ended', 'stateChange', H5P.Video.ENDED);
     mapEvent('playing', 'stateChange', H5P.Video.PLAYING);
@@ -559,10 +585,21 @@ H5P.VideoHtml5 = (function ($) {
       }
     });
 
+    // Load captions after the video is loaded
+    self.on('loaded', function () {
+      nextTick(function () {
+        var textTracks = [];
+        for (var i = 0; i < video.textTracks.length; i++) {
+          textTracks.push(new H5P.Video.LabelValue(video.textTracks[i].label, i));
+        }
+        self.trigger('captions', textTracks);
+      });
+    });
+
     // Video controls are ready
-    setTimeout(function () {
+    nextTick(function () {
       self.trigger('ready');
-    }, 0);
+    });
   }
 
   /**
@@ -723,6 +760,14 @@ H5P.VideoHtml5 = (function ($) {
     }
 
     return quality;
+  };
+
+  /**
+   * Helps schedule a task for the next tick.
+   * @param {function} task
+   */
+  var nextTick = function (task) {
+    setTimeout(task, 0);
   };
 
   /** @constant {Boolean} */
