@@ -592,7 +592,9 @@ H5P.VideoHtml5 = (function ($) {
         for (var i = 0; i < video.textTracks.length; i++) {
           textTracks.push(new H5P.Video.LabelValue(video.textTracks[i].label, i));
         }
-        self.trigger('captions', textTracks);
+        if (textTracks.length) {
+          self.trigger('captions', textTracks);
+        }
       });
     });
 
