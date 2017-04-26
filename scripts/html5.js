@@ -71,6 +71,9 @@ H5P.VideoHtml5 = (function ($) {
     video.setAttribute('playsinline', '');
     video.setAttribute('preload', 'metadata');
 
+    // This is needed to ensure that external video sources work with WebGL
+    video.setAttribute('crossorigin', 'anonymous');
+
     // Set options
     video.controls = (options.controls ? true : false);
     video.autoplay = (options.autoplay ? true : false);
