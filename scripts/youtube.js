@@ -40,6 +40,9 @@ H5P.VideoYouTube = (function ($) {
         loadAPI(create);
         return;
       }
+      if (YT.Player === undefined) {
+        return;
+      }
 
       var width = $wrapper.width();
       if (width < 200) {
@@ -47,7 +50,6 @@ H5P.VideoYouTube = (function ($) {
       }
 
       var loadCaptionsModule = true;
-
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
@@ -79,8 +81,12 @@ H5P.VideoYouTube = (function ($) {
               player.loadModule('captions');
             }
 
-            // Grab tracklist from player
-            var trackList = player.getOption('captions', 'tracklist');
+            var trackList;
+            try {
+              // Grab tracklist from player
+              trackList = player.getOption('captions', 'tracklist');
+            }
+            catch (err) {}
             if (trackList && trackList.length) {
 
               // Format track list into valid track options
