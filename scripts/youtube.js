@@ -483,12 +483,10 @@ H5P.VideoYouTube = (function ($) {
    * @param {String} url
    * @returns {String} YouTube video identifier
    */
-
   var getId = function (url) {
-    // Has some false positives, but should cover all regular URLs that people can find
-    var matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
-    if (matches && matches[1]) {
-      return matches[1];
+    var matches = url.match(/^https?:\/\/(youtube.com|www.youtube.com|m.youtube.com|youtu.be|y2u.be)\/(.+=)?(\S+)$/i);
+    if (matches && matches[3]) {
+      return matches[3];
     }
   };
 
