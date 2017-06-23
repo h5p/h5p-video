@@ -105,7 +105,6 @@
               },
               {
                 "label":"Typ \"kind\", verweisen auf <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default":"descriptions",
                 "options":[
                   {
                     "label":"Untertitel"
@@ -123,7 +122,6 @@
               },
               {
                 "label":"Quellensprache muss für Untertitel definitert werden",
-                "default":"en",
                 "description":"Muss ein gültiger BCP 47 Sprach-Tag sein. Wenn das \"kind\"-Attribut auf Untertitel gestellt wird, muss die Quellensprache definiert werden."
               },
               {
