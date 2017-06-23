@@ -1,131 +1,133 @@
 {
-  "Semantics": [
+  "semantics":[
     {
-      "Label": "מקורות וידאו",
-      "Description": "כדי לוודא שהסרט יוצג בדפדפנים שונים, יש להזין מספר ערוצי וידאו בתסדירים שונים, כגון: WebM וגם MP4."
+      "label":"Video sources",
+      "description":"To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
     },
     {
-      "Label": "תמונה",
-      "Fields": [
+      "label":"Visuals",
+      "fields":[
         {
-          "Label": "תמונת פתיח"
+          "label":"Poster image"
         },
         {
-          "Label": "התאמת גודל ממשק נגן הוידאו לרוחב הדפדפן,",
-          "Description": "אי בחירה של מאפיין זה, תציג את נגן הוידאו בגודל זהה לוידאו."
+          "label":"Fit video player to use all available space",
+          "description":"If not set the video player will have the same aspect ratio as the video."
         },
         {
-          "Label": "תצוגת כפתורי נגן הוידאו",
-          "Description": "הוספת סרגל כפתורים לנגן הוידאו, כגון: הפעלה, עצירה, וכדומה...."
+          "label":"Show video player controls",
+          "description":"Add controls to the video player. This allows users to play, pause, etc."
         }
       ]
     },
     {
-      "Label": "הפעלת וידאו",
-      "Fields": [
+      "label":"Playback",
+      "fields":[
         {
-          "Label": "תצוגת הוידאו באופן אוטומטי",
-          "Description": "תצוגת הוידאו באופן אוטומטי. לא זמין במכשירים ניידים."
+          "label":"Auto-play video",
+          "description":"Start playing the video automatically. May not work on mobile devices."
         },
         {
-          "Label": "תצוגה מחזורית",
-          "Description": "התחלת תצוגת הוידאו מייד כאשר הוא מסתיים."
+          "label":"Loop video",
+          "description":"Automatically start the video over again when it ends."
         }
       ]
     },
     {
-      "Label": "תרגום לרכיב הוידאו",
-      "Fields": [
+      "label":"Video localization",
+      "fields":[
         {
-          "Label": "שם",
-          "Default": "וידאו",
-          "Description": "מסייע להגדיר תוכן מסוג זה."
+          "label":"Name",
+          "default":"Video",
+          "description":"Helps identify content of this type."
         },
         {
-          "Label": "מתחיל לנגן",
-          "Default": "נגן הוידאו מתחיל..."
+          "label":"Loading",
+          "default":"Video player loading..."
         },
         {
-          "Label": "לא נמצא נגן וידאו מתאים",
-          "Default": "נגני הוידאו הקיימים אינם מסוגלים להציג את תסדיר ערוץ הוידאו של הסרט."
+          "label":"No players found",
+          "default":"Found no video players that supports the given video format."
         },
         {
-          "Label": "לא הוזנו ערוצים",
-          "Default": "הסרט איננו מכיל מידע אודות ערוצי וידאו."
+          "label":"No sources",
+          "default":"Video is missing sources."
         },
         {
-          "Label": "הסרט נעצר",
-          "Default": "הצפיה בסרט נעצרה."
+          "label":"Aborted",
+          "default":"Media playback has been aborted."
         },
         {
-          "Label": "תקלת תקשורת",
-          "Default": "תקלת תקשורת."
+          "label":"Network failure",
+          "default":"Network failure."
         },
         {
-          "Label": "לא ניתן לפענח את תוכן הוידאו",
-          "Default": "לא ניתן לפענח את תוכן הוידאו."
+          "label":"Cannot decode video source",
+          "default":"Unable to decode media."
         },
         {
-          "Label": "תסדיר הוידאו אינו נתמך",
-          "Default": "תסדיר הוידאו אינו נתמך."
+          "label":"Format not supported",
+          "default":"Video format not supported."
         },
         {
-          "Label": "התוכן מוצפן",
-          "Default": "התוכן מוצפן."
+          "label":"Media encrypted",
+          "default":"Media encrypted."
         },
         {
-          "Label": "התרחשה שגיאה לא ברורה",
-          "Default": "התרחשה שגיאה לא ברורה."
+          "label":"Unknown error",
+          "default":"Unknown error."
         },
         {
-          "Label": "קוד סרט יוטיוב לא תקין",
-          "Default": "קוד סרט יוטיוב לא תקין."
+          "label":"Invalid YouTube ID",
+          "default":"Invalid YouTube ID."
         },
         {
-          "Label": "קוד זיהוי סרט יוטיוב אינו ידוע",
-          "Default": "לא ניתן למצוא את סרט היוטיוב לפי הקוד שהוזן."
+          "label":"Unkown YouTube ID",
+          "default":"Unable to find video with the given YouTube ID."
         },
         {
-          "Label": "רשיון יוטיוב מוגבל",
-          "Default": "הבעלים של הסרט אינו מרשה שיבוץ."
+          "label":"Restricted YouTube video",
+          "default":"The owner of this video does not allow it to be embedded."
         }
       ]
     },
     {
-      "Label": "נגישות",
-      "Fields": [
+      "label":"Accessibility",
+      "fields":[
         {
-          "Label": "הוספת ערוץ וידאו",
-          "Entity": "ערוץ",
-          "Field": {
-            "Label": "ערוץ",
-            "Fields": [
+          "label":"Add video track",
+          "entity":"Track",
+          "field":{
+            "label":"Track",
+            "fields":[
               {
-                "Label": "שם הערוץ"
+                "label":"Track label"
               },
               {
-                "Label": " מאפיין לפי סוג, מתייחס ל<a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element> HTML תקן </a> ",
-                "Options": [
+                "label":"Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "default":"descriptions",
+                "options":[
                   {
-                    "Label": "כתוביות"
+                    "label":"Subtitles"
                   },
                   {
-                    "Label": "כיתובים"
+                    "label":"Captions"
                   },
                   {
-                    "Label": "תאורים"
+                    "label":"Descriptions"
                   },
                   {
-                    "Label": "פרק"
+                    "label":"Chapters"
                   }
                 ]
               },
               {
-                "Label": "יש להגדיר שפה עבור כתוביות",
-                "Description": "יש להגדיר תג שפה לפי תקן BCP 47. אם המאפיין 'סוג' מוגדר כ'כתוביות', אזי יש להוסיף כתוביות "
+                "label":"Source language, must be defined for subtitles",
+                "default":"en",
+                "description":"Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
               },
               {
-                "Label": "קובץ כתוביות (WebVTT)"
+                "label":"Track file (WebVTT)"
               }
             ]
           }
