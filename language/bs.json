@@ -105,7 +105,6 @@
               },
               {
                 "label":"Tip \"vrsta\", se odnosi na <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default":"descriptions",
                 "options":[
                   {
                     "label":"Prijevod"
@@ -123,7 +122,6 @@
               },
               {
                 "label":"Za prijevod se mora navesti izvorni jezik",
-                "default":"en",
                 "description":"Mora biti ispravan jezički tag BCP 47. Kada \"vrsta\" odredi vrsta prijevoda, onda se mora izvorni jezik odrediti."
               },
               {
