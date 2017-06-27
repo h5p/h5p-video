@@ -454,6 +454,14 @@ H5P.VideoYouTube = (function ($) {
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
+      if (!width) {
+        width = 1;
+
+        setTimeout(function() {
+          self.trigger('resize');
+        }, 500);
+      }
+      
       // Set size
       $wrapper.css({
         width: width + 'px',
