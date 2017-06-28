@@ -45,9 +45,9 @@ H5P.VideoYouTube = (function ($) {
       }
 
       var width = $wrapper.width();
-      if (width < 200) {
-        width = 200;
-      }
+      //if (width < 200) {
+      //  width = 200;
+      //}
 
       var loadCaptionsModule = true;
       player = new YT.Player(id, {
@@ -446,10 +446,13 @@ H5P.VideoYouTube = (function ($) {
       }
 
       // Use as much space as possible
-      $wrapper.css({
+      var defaultSize = {
         width: '100%',
         height: '100%'
-      });
+      };
+
+      $wrapper.css(defaultSize);
+      $('iframe', $wrapper).css(defaultSize);
 
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
