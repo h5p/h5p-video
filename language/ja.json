@@ -46,8 +46,8 @@
           "default":"ビデオプレーヤーの読み込み中..."
         },
         {
-          "label":"No players found",
-          "default":"Found no video players that supports the given video format."
+          "label":"プレイヤーが見つかりませんでした",
+          "default":"指定されたビデオ形式をサポートするビデオプレーヤーが見つかりませんでした。"
         },
         {
           "label":"No sources",
