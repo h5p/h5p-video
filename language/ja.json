@@ -15,35 +15,35 @@
           "description":"設定されていない場合、ビデオプレイヤーのアスペクト比はビデオと同じになります。"
         },
         {
-          "label":"Show video player controls",
-          "description":"Add controls to the video player. This allows users to play, pause, etc."
+          "label":"ビデオプレーヤのコントロールを表示します。",
+          "description":"ビデオプレーヤーにコントロールを追加します。 これにより、ユーザーは再生、一時停止などが可能になります。"
         }
       ]
     },
     {
-      "label":"Playback",
+      "label":"再生",
       "fields":[
         {
-          "label":"Auto-play video",
-          "description":"Start playing the video automatically. May not work on mobile devices."
+          "label":"ビデオの自動再生",
+          "description":"自動的にビデオの再生を開始します。 モバイルデバイスでは動作しない可能性があります。"
         },
         {
-          "label":"Loop video",
-          "description":"Automatically start the video over again when it ends."
+          "label":"ビデオをループ",
+          "description":"ビデオが終了すると自動的にビデオを再び開始します。"
         }
       ]
     },
     {
-      "label":"Video localization",
+      "label":"ビデオローカリゼーション",
       "fields":[
         {
-          "label":"Name",
-          "default":"Video",
-          "description":"Helps identify content of this type."
+          "label":"名前",
+          "default":"ビデオ",
+          "description":"このタイプのコンテンツを識別するのに役立ちます。"
         },
         {
-          "label":"Loading",
-          "default":"Video player loading..."
+          "label":"読み込み中",
+          "default":"ビデオプレーヤーの読み込み中..."
         },
         {
           "label":"No players found",
