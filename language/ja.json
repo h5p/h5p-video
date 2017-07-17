@@ -2,17 +2,17 @@
   "semantics":[
     {
       "label":"ビデオソース",
-      "description":"To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "description":"ビデオがすべてのブラウザで動作するようにするには、WebMとMP4の両方の形式のソースを追加する必要があります。"
     },
     {
-      "label":"Visuals",
+      "label":"外観",
       "fields":[
         {
-          "label":"Poster image"
+          "label":"ポスター画像"
         },
         {
-          "label":"Fit video player to use all available space",
-          "description":"If not set the video player will have the same aspect ratio as the video."
+          "label":"利用可能なすべてのスペースを使用するようにビデオプレーヤーを合わせる",
+          "description":"設定されていない場合、ビデオプレイヤーのアスペクト比はビデオと同じになります。"
         },
         {
           "label":"Show video player controls",
