@@ -50,16 +50,16 @@
           "default":"指定されたビデオ形式をサポートするビデオプレーヤーが見つかりませんでした。"
         },
         {
-          "label":"No sources",
-          "default":"Video is missing sources."
+          "label":"ソース無し",
+          "default":"ビデオにソースがありません。"
         },
         {
-          "label":"Aborted",
-          "default":"Media playback has been aborted."
+          "label":"中止しました",
+          "default":"メディアの再生が中止されました。"
         },
         {
-          "label":"Network failure",
-          "default":"Network failure."
+          "label":"ネットワーク障害",
+          "default":"ネットワーク障害"
         },
         {
           "label":"Cannot decode video source",
