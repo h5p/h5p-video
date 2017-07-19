@@ -78,8 +78,8 @@
           "default":"不明なエラー"
         },
         {
-          "label":"不正なYouTube ID",
-          "default":"Invalid YouTube ID."
+          "label":"無効なYouTube ID。",
+          "default":"無効なYouTube ID。"
         },
         {
           "label":"Unkown YouTube ID",
