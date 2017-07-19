@@ -62,23 +62,23 @@
           "default":"ネットワーク障害"
         },
         {
-          "label":"Cannot decode video source",
-          "default":"Unable to decode media."
+          "label":"ビデオソースをでコードできません",
+          "default":"メディアをデコードできないようにする"
         },
         {
-          "label":"Format not supported",
-          "default":"Video format not supported."
+          "label":"この形式に対応していません",
+          "default":"このビデオ形式に対応していません。"
         },
         {
-          "label":"Media encrypted",
-          "default":"Media encrypted."
+          "label":"メディア暗号化",
+          "default":"メディア暗号化"
         },
         {
-          "label":"Unknown error",
-          "default":"Unknown error."
+          "label":"不明なエラー",
+          "default":"不明なエラー"
         },
         {
-          "label":"Invalid YouTube ID",
+          "label":"不正なYouTube ID",
           "default":"Invalid YouTube ID."
         },
         {
