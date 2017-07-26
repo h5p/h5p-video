@@ -82,26 +82,26 @@
           "default":"無効なYouTube ID。"
         },
         {
-          "label":"Unkown YouTube ID",
-          "default":"Unable to find video with the given YouTube ID."
+          "label":"不明な YouTube ID",
+          "default":"指定された YouTube ID でビデオを見つけることができません。"
         },
         {
-          "label":"Restricted YouTube video",
-          "default":"The owner of this video does not allow it to be embedded."
+          "label":"制限された YouTube のビデオ",
+          "default":"このビデオの所有者は、埋め込むことを許可していません。"
         }
       ]
     },
     {
-      "label":"Accessibility",
+      "label":"アクセシビリティ",
       "fields":[
         {
-          "label":"Add video track",
-          "entity":"Track",
+          "label":"ビデオ トラックを追加",
+          "entity":"トラック",
           "field":{
-            "label":"Track",
+            "label":"トラック",
             "fields":[
               {
-                "label":"Track label"
+                "label":"トラックラベル"
               },
               {
                 "label":"Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
