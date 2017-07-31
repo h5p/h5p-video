@@ -13,6 +13,7 @@ H5P.VideoYouTube = (function ($) {
     var self = this;
 
     var player;
+    var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
 
@@ -101,6 +102,14 @@ H5P.VideoYouTube = (function ($) {
           },
           onStateChange: function (state) {
             if (state.data > -1 && state.data < 4) {
+
+              // Fix for keeping playback rate in IE11
+              if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
+                player.setPlaybackRate(1);
+                player.setPlaybackRate(playbackRate);
+              }
+              // End IE11 fix
+
               self.trigger('stateChange', state.data);
             }
           },
@@ -406,12 +415,13 @@ H5P.VideoYouTube = (function ($) {
      * @public
      * @params {Number} suggested rate that may be rounded to supported values
      */
-    self.setPlaybackRate = function (playbackRate) {
+    self.setPlaybackRate = function (newPlaybackRate) {
       if (!player || !player.setPlaybackRate) {
         return;
       }
 
-      player.setPlaybackRate(playbackRate);
+      playbackRate = newPlaybackRate;
+      player.setPlaybackRate(newPlaybackRate);
     };
 
     /**
