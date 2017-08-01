@@ -105,6 +105,7 @@ H5P.VideoYouTube = (function ($) {
 
               // Fix for keeping playback rate in IE11
               if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
+                // YT doesn't know that IE11 changed the rate so it must be reset before it's set to the correct value
                 player.setPlaybackRate(1);
                 player.setPlaybackRate(playbackRate);
               }
