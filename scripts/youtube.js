@@ -13,6 +13,7 @@ H5P.VideoYouTube = (function ($) {
     var self = this;
 
     var player;
+    var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
 
@@ -101,6 +102,15 @@ H5P.VideoYouTube = (function ($) {
           },
           onStateChange: function (state) {
             if (state.data > -1 && state.data < 4) {
+
+              // Fix for keeping playback rate in IE11
+              if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
+                // YT doesn't know that IE11 changed the rate so it must be reset before it's set to the correct value
+                player.setPlaybackRate(1);
+                player.setPlaybackRate(playbackRate);
+              }
+              // End IE11 fix
+
               self.trigger('stateChange', state.data);
             }
           },
@@ -406,12 +416,13 @@ H5P.VideoYouTube = (function ($) {
      * @public
      * @params {Number} suggested rate that may be rounded to supported values
      */
-    self.setPlaybackRate = function (playbackRate) {
+    self.setPlaybackRate = function (newPlaybackRate) {
       if (!player || !player.setPlaybackRate) {
         return;
       }
 
-      player.setPlaybackRate(playbackRate);
+      playbackRate = newPlaybackRate;
+      player.setPlaybackRate(newPlaybackRate);
     };
 
     /**
@@ -483,10 +494,12 @@ H5P.VideoYouTube = (function ($) {
    * @param {String} url
    * @returns {String} YouTube video identifier
    */
+
   var getId = function (url) {
-    var matches = url.match(/^https?:\/\/(youtube.com|www.youtube.com|m.youtube.com|youtu.be|y2u.be)\/(.+=)?(\S+)$/i);
-    if (matches && matches[3]) {
-      return matches[3];
+    // Has some false positives, but should cover all regular URLs that people can find
+    var matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
+    if (matches && matches[1]) {
+      return matches[1];
     }
   };
 

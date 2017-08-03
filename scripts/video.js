@@ -170,5 +170,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     this.value = value;
   };
 
+  /** @constant {Boolean} */
+  Video.IE11_PLAYBACK_RATE_FIX = (navigator.userAgent.match(/Trident.*rv[ :]*11\./) ? true : false);
+
   return Video;
 })(H5P.jQuery, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);
