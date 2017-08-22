@@ -40,6 +40,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
     });
 
+    this.disableRemotePlayback = (parameters.visuals.disableRemotePlayback || false);
+
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
     parameters.visuals = parameters.visuals || {};
