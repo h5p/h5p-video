@@ -16,7 +16,7 @@
         },
         {
           "label":"Mostra i controlli del video player",
-          "description":"Aggiungi controlli al video player. Questo consente agli utenti di premere play, pausa, etc."
+          "description":"Aggiungi i controlli al lettore video. Ciò permette agli utenti di avviare il video, metterlo in pausa ecc."
         }
       ]
     },
@@ -25,36 +25,36 @@
       "fields":[
         {
           "label":"Esecuzione automatica del video",
-          "description":"Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili."
+          "description":"Avvia automaticamente l'esecuzione video. Questa funzione potrebbe non funzionare sui dispositivi mobili."
         },
         {
           "label":"Riproduci ciclicamente il video",
-          "description":"Riavvia il video automaticamente dopo la fine."
+          "description":"Riavvia automaticamente il video dopo che è terminato."
         }
       ]
     },
     {
-      "label":"Localizzazione Video",
+      "label":"Localizzazione del video",
       "fields":[
         {
           "label":"Nome",
           "default":"Video",
-          "description":"Consente di identificare il tipo di contenuto."
+          "description":"Aiuta a identificare contenuti di questo tipo."
         },
         {
           "label":"Caricamento",
           "default":"Caricamento del lettore video in corso..."
         },
         {
-          "label":"Nessun player trovato",
+          "label":"Nessun lettore trovato",
           "default":"Nessun lettore video supporta questo formato video."
         },
         {
-          "label":"Nessun sorgente",
+          "label":"Nessuna sorgente",
           "default":"Il video è privo di fonti."
         },
         {
-          "label":"Bloccato",
+          "label":"Interrotto",
           "default":"La riproduzione multimediale è stata interrotta."
         },
         {
