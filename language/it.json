@@ -70,7 +70,7 @@
           "default":"Formato video non supportato."
         },
         {
-          "label":"Supporto cifrato",
+          "label":"Media crittografato",
           "default":"Media crittografato."
         },
         {
@@ -122,7 +122,7 @@
                 ]
               },
               {
-                "label":"Track file (WebVTT)",
+                "label":"La lingua di origine deve essere definita per i sottotitoli",
                 "default":"en",
                 "description":"Deve essere un tag di lingua BCP 47 valido. Se l'attributo \"kind\" è impostato su sottotitoli, allora \"srclang\" deve essere definito."
               },
