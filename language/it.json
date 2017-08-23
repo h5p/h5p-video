@@ -5,7 +5,7 @@
       "description":"Per assicurarsi che il video sia riproducibile in tutti i browser si dovrebbe aggiungere sia WebM sia MP4 come sorgenti di formattazione."
     },
     {
-      "label":"Visuals",
+      "label":"Effetti visivi",
       "fields":[
         {
           "label":"Poster"
@@ -21,14 +21,14 @@
       ]
     },
     {
-      "label":"Playback",
+      "label":"Riproduci",
       "fields":[
         {
-          "label":"Auto-play video",
+          "label":"Esecuzione automatica del video",
           "description":"Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili."
         },
         {
-          "label":"Loop video",
+          "label":"Riproduci ciclicamente il video",
           "description":"Riavvia il video automaticamente dopo la fine."
         }
       ]
@@ -43,19 +43,19 @@
         },
         {
           "label":"Caricamento",
-          "default":"Video player loading..."
+          "default":"Caricamento del lettore video in corso..."
         },
         {
           "label":"Nessun player trovato",
-          "default":"Found no video players that supports the given video format."
+          "default":"Nessun lettore video supporta questo formato video."
         },
         {
           "label":"Nessun sorgente",
-          "default":"Video is missing sources."
+          "default":"Il video è privo di fonti."
         },
         {
           "label":"Bloccato",
-          "default":"Media playback has been aborted."
+          "default":"La riproduzione multimediale è stata interrotta."
         },
         {
           "label":"Errore di rete",
