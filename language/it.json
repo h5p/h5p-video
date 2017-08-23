@@ -1,7 +1,7 @@
 {
   "semantics":[
     {
-      "label":"Sorgenti Video",
+      "label":"Sorgenti video",
       "description":"Per assicurarsi che il video sia riproducibile in tutti i browser si dovrebbe aggiungere sia WebM sia MP4 come sorgenti di formattazione."
     },
     {
@@ -59,75 +59,75 @@
         },
         {
           "label":"Errore di rete",
-          "default":"Network failure."
+          "default":"Errore di rete."
         },
         {
           "label":"Impossibile decodificare il sorgente video",
-          "default":"Unable to decode media."
+          "default":"Impossibile decodificare media."
         },
         {
           "label":"Formato non supportato",
-          "default":"Video format not supported."
+          "default":"Formato video non supportato."
         },
         {
           "label":"Supporto cifrato",
-          "default":"Media encrypted."
+          "default":"Media crittografato."
         },
         {
           "label":"Errore sconosciuto",
-          "default":"Unknown error."
+          "default":"Errore sconosciuto."
         },
         {
           "label":"ID YouTube non valido",
-          "default":"Invalid YouTube ID."
+          "default":"ID YouTube non valido."
         },
         {
           "label":"ID YouTube sconosciuto",
-          "default":"Unable to find video with the given YouTube ID."
+          "default":"Impossibile trovare il video in YouTube con l'ID specificato."
         },
         {
           "label":"Video YouTube riproduzione riservata",
-          "default":"The owner of this video does not allow it to be embedded."
+          "default":"Il proprietario di questo video non ne consente l'incorporazione."
         }
       ]
     },
     {
-      "label":"Accessibility",
+      "label":"Accessibilità",
       "fields":[
         {
-          "label":"Add video track",
-          "entity":"Track",
+          "label":"Aggiungi traccia video",
+          "entity":"Traccia",
           "field":{
-            "label":"Track",
+            "label":"Traccia",
             "fields":[
               {
-                "label":"Track label"
+                "label":"Etichetta della traccia"
               },
               {
                 "label":"Type kind, refer to <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default":"descriptions",
+                "default":"descrizioni",
                 "options":[
                   {
-                    "label":"Subtitles"
+                    "label":"Sottotitoli"
                   },
                   {
-                    "label":"Captions"
+                    "label":"Didascalie"
                   },
                   {
-                    "label":"Descriptions"
+                    "label":"Descrizioni"
                   },
                   {
-                    "label":"Chapters"
+                    "label":"Capitoli"
                   }
                 ]
               },
               {
                 "label":"Track file (WebVTT)",
                 "default":"en",
-                "description":"Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "description":"Deve essere un tag di lingua BCP 47 valido. Se l'attributo \"kind\" è impostato su sottotitoli, allora \"srclang\" deve essere definito."
               },
               {
-                "label":"Track file (WebVTT)"
+                "label":"File di traccia (WebVTT)"
               }
             ]
           }
