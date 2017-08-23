@@ -2,20 +2,20 @@
   "semantics":[
     {
       "label":"Sorgenti video",
-      "description":"Per assicurarsi che il video sia riproducibile in tutti i browser si dovrebbe aggiungere sia WebM sia MP4 come sorgenti di formattazione."
+      "description":"Per assicurarsi che il video funzioni con tutti i browser dovresti includere file sorgenti formattati sia per WebM che per MP4."
     },
     {
       "label":"Effetti visivi",
       "fields":[
         {
-          "label":"Poster"
+          "label":"Immagine poster"
         },
         {
-          "label":"Adatta il video player per utilizzare tutto lo spazio disponibile",
-          "description":"Se non è impostato il lettore video avrà le stesse proporzioni del video."
+          "label":"Adatta il lettore video per utilizzare tutto lo spazio disponibile",
+          "description":"Se non è stato impostato, il lettore video avrà le stesse proporzioni del video."
         },
         {
-          "label":"Mostra controlli del video player",
+          "label":"Mostra i controlli del video player",
           "description":"Aggiungi controlli al video player. Questo consente agli utenti di premere play, pausa, etc."
         }
       ]
