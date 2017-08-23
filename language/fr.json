@@ -1,117 +1,133 @@
 {
-  "semantics": [
+  "semantics":[
     {
-      "label": "Sources vidéo",
-      "description": "Selectionnez les fichiers vidéo que vous souhaitez utiliser dans votre vidéo interactive. Pour assurer une compatibilité maximum avec les navigateurs, merci d'utiliser des vidéos au format mp4 ou webm."
+      "label":"Sources vidéo",
+      "description":"Selectionnez les fichiers vidéo que vous souhaitez utiliser dans votre vidéo interactive. Pour assurer une compatibilité maximum avec les navigateurs, merci d'utiliser des vidéos au format mp4 ou webm."
     },
     {
-      "label": "Visuals",
-      "fields": [
+      "label":"Visuals",
+      "fields":[
         {
-          "label": "Affiche"
+          "label":"Affiche"
         },
         {
-          "label": "Le lecteur vidéo utilise toute la place disponible",
-          "description": "Si non précisé, le lecteur aura la même taille que la vidéo."
+          "label":"Le lecteur vidéo utilise toute la place disponible",
+          "description":"Si non précisé, le lecteur aura la même taille que la vidéo."
         },
         {
-          "label": "Montrer les boutons de contrôle de la vidéo",
-          "description": "Montre les boutons de contrôle de la vidéo: lecture, pause..."
+          "label":"Montrer les boutons de contrôle de la vidéo",
+          "description":"Montre les boutons de contrôle de la vidéo: lecture, pause..."
         }
       ]
     },
     {
-      "name": "playback",
-      "type": "group",
-      "label": "Playback",
-      "fields": [
+      "label":"Playback",
+      "fields":[
         {
-          "label": "Démarrage automatique",
-          "description": "La vidéo démarre automatiquement. Peut ne pas fonctionner sur certains appareils mobiles."
+          "label":"Démarrage automatique",
+          "description":"La vidéo démarre automatiquement. Peut ne pas fonctionner sur certains appareils mobiles."
         },
         {
-          "label": "Rejouer la vidéo",
-          "description": "La vidéo est rejouée quand elle est terminée."
+          "label":"Rejouer la vidéo",
+          "description":"La vidéo est rejouée quand elle est terminée."
         }
       ]
     },
     {
-      "label": "Localisation de la vidéo",
-      "fields": [
+      "label":"Localisation de la vidéo",
+      "fields":[
         {
-          "label": "Nom",
-          "description": "Aide à idntifier le type de contenu."
+          "label":"Nom",
+          "default":"Video",
+          "description":"Aide à idntifier le type de contenu."
         },
         {
-          "label": "Chargement"
+          "label":"Chargement",
+          "default":"Video player loading..."
         },
         {
-          "label": "Aucun lecteur vidéo trouvé"
+          "label":"Aucun lecteur vidéo trouvé",
+          "default":"Found no video players that supports the given video format."
         },
         {
-          "label": "Aucune source vidéo"
+          "label":"Aucune source vidéo",
+          "default":"Video is missing sources."
         },
         {
-          "label": "Abandonné"
+          "label":"Abandonné",
+          "default":"Media playback has been aborted."
         },
         {
-          "label": "Erreur de réseau"
+          "label":"Erreur de réseau",
+          "default":"Network failure."
         },
         {
-          "label": "Impossible de décoder la vidéo"
+          "label":"Impossible de décoder la vidéo",
+          "default":"Unable to decode media."
         },
         {
-          "label": "Format vidéo non supporté"
+          "label":"Format vidéo non supporté",
+          "default":"Video format not supported."
         },
         {
-          "label": "Vidéo cryptée"
+          "label":"Vidéo cryptée",
+          "default":"Media encrypted."
         },
         {
-          "label": "Erreur inconnue"
+          "label":"Erreur inconnue",
+          "default":"Unknown error."
         },
         {
-          "label": "ID YouTube invalide"
+          "label":"ID YouTube invalide",
+          "default":"Invalid YouTube ID."
         },
         {
-          "label": "ID YouTube inconnue"
+          "label":"ID YouTube inconnue",
+          "default":"Unable to find video with the given YouTube ID."
         },
         {
-          "label": "Vidéo YouTube à accès restreint"
+          "label":"Vidéo YouTube à accès restreint",
+          "default":"The owner of this video does not allow it to be embedded."
         }
       ]
     },
     {
-      "label": "Accessibility",
-      "fields": [
+      "label":"Accessibility",
+      "fields":[
         {
-          "label": "Add video track",
-          "entity": "Track",
-          "field": {
-            "label": "Track",
-            "fields": [
+          "label":"Add video track",
+          "entity":"Track",
+          "field":{
+            "label":"Track",
+            "fields":[
               {
-                "label": "Track label"
+                "label":"Track label"
               },
               {
-                "label": "Type kind, refer to <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default": "descriptions",
-                "options": [
+                "label":"Type kind, refer to <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "default":"descriptions",
+                "options":[
                   {
-                    "label": "Subtitles"
+                    "label":"Subtitles"
                   },
                   {
-                    "label": "Captions"
+                    "label":"Captions"
                   },
                   {
-                    "label": "Descriptions"
+                    "label":"Descriptions"
                   },
                   {
-                    "label": "Chapters"
+                    "label":"Chapters"
                   }
                 ]
               },
               {
-                "label": "Track file (WebVTT)"
+                "label":"Track file (WebVTT)",
+                "default":"en",
+                "description":"Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+              },
+              {
+                "label":"Track file (WebVTT)"
               }
             ]
           }
