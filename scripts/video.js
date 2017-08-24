@@ -40,8 +40,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
     });
 
-    this.disableRemotePlayback = (parameters.visuals.disableRemotePlayback || false);
-
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
     parameters.visuals = parameters.visuals || {};
@@ -130,7 +128,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             fit: parameters.visuals.fit,
             poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
             startAt: parameters.startAt || 0,
-            tracks: tracks
+            tracks: tracks,
+            disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
           }, parameters.l10n);
           return;
         }
