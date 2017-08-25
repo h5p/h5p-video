@@ -51,10 +51,13 @@ H5P.VideoYouTube = (function ($) {
       }
 
       var loadCaptionsModule = true;
+
+      var videoId = getId(sources[0].path);
+
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
-        videoId: getId(sources[0].path),
+        videoId: videoId,
         playerVars: {
           origin: ORIGIN,
           autoplay: options.autoplay ? 1 : 0,
@@ -67,7 +70,8 @@ H5P.VideoYouTube = (function ($) {
           iv_load_policy: 3,
           wmode: "opaque",
           start: options.startAt,
-          playsinline: 1
+          playsinline: 1,
+          playlist: videoId // Setting the playlist so that looping works
         },
         events: {
           onReady: function () {
