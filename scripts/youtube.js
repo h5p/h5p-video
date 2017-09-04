@@ -452,7 +452,6 @@ H5P.VideoYouTube = (function ($) {
       };
 
       $wrapper.css(defaultSize);
-      $('iframe', $wrapper).css(defaultSize);
 
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
@@ -470,6 +469,8 @@ H5P.VideoYouTube = (function ($) {
         width: width + 'px',
         height: height + 'px'
       });
+
+      $('iframe', $wrapper).css(defaultSize);
 
       player.setSize(width, height);
     });
