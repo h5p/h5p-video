@@ -128,7 +128,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             fit: parameters.visuals.fit,
             poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
             startAt: parameters.startAt || 0,
-            tracks: tracks
+            tracks: tracks,
+            disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
           }, parameters.l10n);
           return;
         }
@@ -169,6 +170,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     this.label = label;
     this.value = value;
   };
+
+  /** @constant {Boolean} */
+  Video.IE11_PLAYBACK_RATE_FIX = (navigator.userAgent.match(/Trident.*rv[ :]*11\./) ? true : false);
 
   return Video;
 })(H5P.jQuery, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);
