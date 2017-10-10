@@ -70,8 +70,7 @@ H5P.VideoYouTube = (function ($) {
           iv_load_policy: 3,
           wmode: "opaque",
           start: options.startAt,
-          playsinline: 1,
-          playlist: videoId // Setting the playlist so that looping works
+          playsinline: 1
         },
         events: {
           onReady: function () {
