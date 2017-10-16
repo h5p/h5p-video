@@ -64,7 +64,7 @@ H5P.VideoYouTube = (function ($) {
           controls: options.controls ? 1 : 0,
           disablekb: options.controls ? 0 : 1,
           fs: 0,
-          loop: options.loop ? 1 : 0,
+          playlist: options.loop ? videoId : undefined,
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
