@@ -79,6 +79,7 @@ H5P.VideoHtml5 = (function ($) {
     video.setAttribute('preload', 'metadata');
 
     // Set options
+    video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);
     video.controls = (options.controls ? true : false);
     video.autoplay = (options.autoplay ? true : false);
     video.loop = (options.loop ? true : false);
