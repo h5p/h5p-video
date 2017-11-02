@@ -118,6 +118,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     // Find player for video sources
     if (sources.length) {
+      var html5Handler;
       for (var i = 0; i < handlers.length; i++) {
         var handler = handlers[i];
         if (handler.canPlay !== undefined && handler.canPlay(sources)) {
@@ -133,6 +134,24 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
           }, parameters.l10n);
           return;
         }
+
+        if (handler === H5P.VideoHtml5) {
+          html5Handler = handler;
+        }
+      }
+
+      // Fallback to trying HTML5 player
+      if (html5Handler) {
+        html5Handler.call(self, sources, {
+          controls: parameters.visuals.controls,
+          autoplay: parameters.playback.autoplay,
+          loop: parameters.playback.loop,
+          fit: parameters.visuals.fit,
+          poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
+          startAt: parameters.startAt || 0,
+          tracks: tracks,
+          disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
+        }, parameters.l10n);
       }
     }
   }
