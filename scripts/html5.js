@@ -701,26 +701,18 @@ H5P.VideoHtml5 = (function ($) {
       var type = source.type = getType(source);
 
       // Check if we support this type
-      if (!type || video.canPlayType(type) === '') {
+      var isPlayable = type && (type === 'video/unknown' || video.canPlayType(type) !== '');
+      if (!isPlayable) {
         continue; // We cannot play this source
       }
 
       if (source.quality === undefined) {
-        /* No quality metadata. Create a dummy tag to seperate multiple
-        sources of the same type, e.g. if two mp4 files have been uploaded. */
-
-        if (lastQuality === undefined || qualities[lastQuality].source.type === type) {
-          // Create a new quality tag
-          source.quality = {
-            name: 'q' + qualityIndex,
-            label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
-          };
-          qualityIndex++;
-        }
-        else {
-          // Tag as the same quality as the last source
-          source.quality = qualities[lastQuality].source.quality;
-        }
+        // No quality metadata. Create a tag to separate sources.
+        source.quality = {
+          name: 'q' + qualityIndex,
+          label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
+        };
+        qualityIndex++;
       }
 
       // Log last quality
