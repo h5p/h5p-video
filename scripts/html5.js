@@ -707,12 +707,26 @@ H5P.VideoHtml5 = (function ($) {
       }
 
       if (source.quality === undefined) {
-        // No quality metadata. Create a tag to separate sources.
-        source.quality = {
-          name: 'q' + qualityIndex,
-          label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
-        };
-        qualityIndex++;
+        /**
+         * No quality metadata. Create a quality tag to separate multiple sources of the same type,
+         * e.g. if two mp4 files with different quality has been uploaded
+         */
+
+        if (lastQuality === undefined || qualities[lastQuality].source.type === type) {
+          // Create a new quality tag
+          source.quality = {
+            name: 'q' + qualityIndex,
+            label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
+          };
+          qualityIndex++;
+        }
+        else {
+          /**
+           * Assumes quality already exists in a different format.
+           * Uses existing label for this quality.
+           */
+          source.quality = qualities[lastQuality].source.quality;
+        }
       }
 
       // Log last quality
