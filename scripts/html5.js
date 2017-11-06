@@ -34,7 +34,19 @@ H5P.VideoHtml5 = (function ($) {
      */
     var stateBeforeChangingQuality;
     var currentTimeBeforeChangingQuality;
-
+    
+    /*
+     * tracks last time when paused used for completing seeked action
+     * also variables for tracking played segments
+     * @type private
+     */
+    var previousTime = null;
+    var seekStart = null;
+    var dateTime;
+    var timeStamp;
+    var played_segments = [];
+    var played_segments_segment_start;
+    var played_segments_segment_end;
     /**
      * Avoids firing the same event twice.
      * @private
@@ -135,6 +147,22 @@ H5P.VideoHtml5 = (function ($) {
         video.appendChild(trackElement);
       }
     });
+    
+    // common math functions
+    function formatFloat(number) {
+        if(number == null)
+            return null;
+
+        return +(parseFloat(number).toFixed(3));
+    }
+    function end_played_segment(end_time) {
+        var arr;
+        arr = (played_segments == "")? []:played_segments.split("[,]");
+        arr.push(played_segments_segment_start + "[.]" + end_time);
+        played_segments = arr.join("[,]");
+        played_segments_segment_end = end_time;
+        played_segments_segment_start = null;
+    }   
 
     /**
      * Helps registering events.
@@ -157,9 +185,44 @@ H5P.VideoHtml5 = (function ($) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }
-
+            if( arg === H5P.Video.PLAYING ){
+                played_segments_segment_start = video.currentTime;
+            }
+            if( arg === H5P.Video.PAUSED ){
+                previousTime = video.currentTime;
+            }
             break;
-
+          case 'seeking':
+            if ( lastState == arg ){
+                return;
+            }
+            previousTime = formatFloat(video.currentTime);
+            return; //just need to store current time for seeked event
+            break;
+         case 'seeked':
+            if ( lastState == arg ){
+                return;
+            }
+            seekStart = formatFloat(video.currentTime);
+            if ( Math.abs( seekStart - previousTime ) < 1 ) {
+                seekStart = null;
+                return; //don't send for seeks less than a second
+            }
+            dateTime = new Date();
+            timeStamp = dateTime.toISOString();
+            end_played_segment(previousTime);
+            played_segments_segment_start = seekStart;
+             //put together data for xAPI statement to be sent with event
+             arg = {
+                 "result": {
+                     "extensions" : {
+                         "https://w3id.org/xapi/video/extensions/time-from": previousTime,
+                         "https://w3id.org/xapi/video/extensions/time-to": seekStart
+                     }
+                 },
+                 "timestamp" : timeStamp
+             }
+             break;
           case 'loaded':
             isLoaded = true;
 
@@ -589,6 +652,8 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('loadedmetadata', 'loaded');
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
+    mapEvent('seeking','seekeing', H5P.Video.PAUSED);
+    mapEvent('seeked', 'seeked', H5P.Video.PLAYING);
 
     if (!video.controls) {
       // Disable context menu(right click) to prevent controls.
@@ -596,6 +661,12 @@ H5P.VideoHtml5 = (function ($) {
         event.preventDefault();
       }, false);
     }
+    
+    //catch for seeked event
+    self.on('seeked', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('seeked', statement);
+    });
 
     // Display throbber when buffering/loading video.
     self.on('stateChange', function (event) {
