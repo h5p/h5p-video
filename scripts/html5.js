@@ -39,7 +39,7 @@ H5P.VideoHtml5 = (function ($) {
      * variables to track add extra xAPI statements for video
      * @type private
      */
-    var previousTime = null;
+    var previousTime = 0;
     var seekStart = null;
     var dateTime;
     var timeStamp;
@@ -275,7 +275,7 @@ H5P.VideoHtml5 = (function ($) {
         played_segments_segment_start = seekStart;
         seeking = false;
          //put together data for xAPI statement to be sent with event
-         return {
+         var arg =  {
              "result": {
                  "extensions" : {
                      "https://w3id.org/xapi/video/extensions/time-from": previousTime,
@@ -284,6 +284,7 @@ H5P.VideoHtml5 = (function ($) {
              },
              "timestamp" : timeStamp
          };
+         return arg;
     }
     function getVolumeChangeParams() {
         var dateTime = new Date();
@@ -369,14 +370,12 @@ H5P.VideoHtml5 = (function ($) {
               delete options.startAt;
             }
             if( arg === H5P.Video.PLAYING ){
-                played_segments_segment_start = video.currentTime;
+                previousTime = video.currentTime;
             }
             if( arg === H5P.Video.PAUSED ){
-                previousTime = video.currentTime;
                 //put together extraArg for sending to xAPI statement
                 
                 if( ! video.seeking ) {
-                    
                     extraTrigger = "paused";
                     extraArg = getPausedParams();
                 }
@@ -386,6 +385,7 @@ H5P.VideoHtml5 = (function ($) {
                 var length = video.duration;
                 if ( length > 0 ) {
                     var progress = get_progress();
+                    var resultExtTime = formatFloat(video.currentTime);
                     
                     if (progress >= 1 ){
                         //send statement
@@ -403,19 +403,32 @@ H5P.VideoHtml5 = (function ($) {
                 }
             }
             break;
+          case 'timeupdate' :
+              if((Math.abs( previousTime - video.currentTime) > 2)  ){
+                  h5p = 'seeked';
+                  arg = getSeekedParams();
+                  played_segments_segment_start = video.currentTime;
+              } else {
+                  previousTime = video.currentTime;
+              }
+            break;
+          case 'seeked':
+              return; //seek is tracked differently based on time difference in timeupdate
+            break;
           case 'seeking':
-            previousTime = formatFloat(video.currentTime);
             return; //just need to store current time for seeked event
             break;
-         case 'seeked':
-             //put together data for xAPI statement to be sent with event
-             arg = getSeekedParams();
-             break;
           case 'volumechange' :
             arg = getVolumeChangeParams();
             break;
          case 'play':
+             if ( Math.abs(previousTime - video.currentTime) > 2 ){
+                 h5p = 'seeked';
+                 arg = getSeekedParams();
+                 played_segments_segment_start = video.currentTime;
+             } else {
                 arg = getPlayParams();
+            }
             break;
           case 'fullscreen':
             arg = getFullScreenParams();
@@ -859,7 +872,7 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
     mapEvent('seeking','seeking', H5P.Video.PAUSED);
-    mapEvent('seeked', 'seeked', H5P.Video.PLAYING);
+    mapEvent('timeupdate', 'timeupdate', H5P.Video.PLAYING);
     mapEvent('volumechange', 'volumechange');
     mapEvent('play', 'play', H5P.Video.PLAYING);
     //fuscreen events

@@ -161,7 +161,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * variables to track add extra xAPI statements for video
      * @type private
      */
-    var previousTime = null;
+    var previousTime = 0;
     var seekStart = null;
     var dateTime;
     var timeStamp;
@@ -248,7 +248,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         var dateTime = new Date();
         var timeStamp = dateTime.toISOString();
         var resultExtTime = formatFloat(Video.currentTime());
-        previousTime = resultExtTime;
         end_played_segment(resultExtTime);
         var progress = get_progress();
         var arg = {
@@ -465,7 +464,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
          
          if (skipPlayEvent !== true) {
              self.trigger('play',getPlayParams());
-         } else {
+         } else if ( Math.abs(previousTime - Video.currentTime()) > 1 ){
              skipPlayEvent = false;
              self.trigger('seeked',getSeekParams());
          }
