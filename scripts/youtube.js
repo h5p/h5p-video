@@ -16,6 +16,21 @@ H5P.VideoYouTube = (function ($) {
     var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
+     /*
+     * variables to track add extra xAPI statements for video
+     * @type private
+     */
+    var previousTime = null;
+    var seekStart = null;
+    var dateTime;
+    var timeStamp;
+    var played_segments = [];
+    var played_segments_segment_start;
+    var played_segments_segment_end;
+    var volume_changed_on = null;
+    var volume_changed_at = 0;
+    var seeking = false;
+    var lastState;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -77,6 +92,7 @@ H5P.VideoYouTube = (function ($) {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
+            self.trigger('xAPIloaded',getLoadedParams())
           },
           onApiChange: function () {
             if (loadCaptionsModule) {
@@ -116,6 +132,54 @@ H5P.VideoYouTube = (function ($) {
               // End IE11 fix
 
               self.trigger('stateChange', state.data);
+              
+              //calls for xAPI events
+              if ( state.data == 1 ){
+                  if ( seeking ){
+                      //call from a seek we run seek command not play
+                      self.trigger('seeked', getSeekParams());
+                      seeking = false;
+                  } else {
+                     //get and send play call
+                     self.trigger('play', getPlayParams());
+                  }
+              }
+              if ( lastState == 2  && state.data == 3 ){
+                  seeking = true;
+              }
+              
+              if ( state.data == 2 ) {
+                  //trigger call for xAPI paused but not seek
+                  previousTime = player.getCurrentTime();
+                  if( ! seeking  ) {
+                     //this is a paused event
+                        seeking = false;
+                      // execute your code here for paused state
+                        self.trigger('paused', getPausedParams());
+                        
+                    }
+              } else if ( state.data == 0 ) {
+                  //send xapi trigger if video progress indicates completed
+                  var length = player.getDuration();
+                  if ( length > 0){
+                      var progress = get_progress();
+                      var resultExtTime = formatFloat(player.getCurrentTime());
+                      if ( progress >= 1 ){
+                          var arg = {
+                                "result": {
+                                    "extensions": {
+                                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+                                    "https://w3id.org/xapi/video/extensions/progress": progress
+                                    }
+                                },
+                                "timestamp" : timeStamp
+                            };
+                            self.trigger('completed',arg);
+                      }
+                  }
+              }
+              
+              lastState = state.data;
             }
           },
           onPlaybackQualityChange: function (quality) {
@@ -149,7 +213,228 @@ H5P.VideoYouTube = (function ($) {
         }
       });
     };
+    
+    //function used when putting together object to send for xAPI calls
+    function getWidthOrHeight ( returnType ){
+        var quality = player.getPlaybackQuality();
+        var width;
+        var height;
+        switch (quality) {
+            case 'small':
+                width: '320';
+                height: '240';
+                break;
+            case 'medium':
+                width: '640';
+                height: '360';
+                break;
+            case 'large':
+                width: '853';
+                height: '480';
+                break;
+            case 'hd720':
+                width: '640';
+                height: '360';
+                break;
+            case 'hd1080':
+                width: '1920';
+                height: '1080';
+                break;
+            case 'highres':
+                width: '1920';
+                height: '1080';
+                break;
+        }
+        
+        return (returnType.toLowerCase().trim()=='width')? width : height;
+    }
+    
+    function getLoadedParams(){
+        var dateTime = new Date();
+        var timeStamp = dateTime.toISOString();
+        var resultExtTime = formatFloat(player.getCurrentTime());
+        var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+        var screenSize = screen.width + "x" + screen.height;
+        var quality = player.getPlaybackQuality();
+        var height = getWidthOrHeight('height');
+        var width = getWidthOrHeight('width');
+        var playbackSize = ( width !== undefined )? width + 'x' + height : "undetermined";
+        var volume = player.getVolume();
+        var ccEnabled = ( player.getOptions().indexOf("cc") !== -1) ? true : false;
+        var ccLanguage;
+        if ( ccEnabled ) {
+            ccLanguage = player.getOptions('cc', 'track').languageCode;
+        }
+        var userAgent = navigator.userAgent;
+        var playbackRate = player.getPlaybackRate();
+        
+        var arg = {
+                "result" : {
+                    "extensions": {
+	                        "https://w3id.org/xapi/video/extensions/full-screen": state,
+	                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+	                        "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
+	                        "https://w3id.org/xapi/video/extensions/quality": quality,
+	                        "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
+	                        "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
+	                        "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
+	                        "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
+	                        "https://w3id.org/xapi/video/extensions/volume": volume
 
+                    }
+                },
+                "timestamp": timeStamp
+            };
+        return arg;
+    }
+    function getPlayParams(){
+        var dateTime = new Date();
+        var timeStamp = dateTime.toISOString();
+        var resultExtTime = formatFloat(player.getCurrentTime());
+        played_segments_segment_start = resultExtTime;
+        seekStart = null;
+        played_segments_segment_start = resultExtTime;
+        var arg = {
+                "result": {
+    	                "extensions": {
+    	                    "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+    	                }
+                },
+                "timestamp": timeStamp
+            };
+        return arg;
+    }
+    //paused Params called on pause statement used by xAPI event
+    function getPausedParams() {
+        var dateTime = new Date();
+        var timeStamp = dateTime.toISOString();
+        var resultExtTime = formatFloat(player.getCurrentTime());
+        previousTime = resultExtTime;
+        end_played_segment(resultExtTime);
+        var progress = get_progress();
+        var arg = {
+                "result": {
+                    "extensions": {
+                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+                        "https://w3id.org/xapi/video/extensions/progress": progress,
+                        "https://w3id.org/xapi/video/extensions/played-segments": played_segments
+                    }
+                },
+                "timestamp" : timeStamp
+            };
+            return arg;
+    }
+    function getSeekParams() {
+        var dateTime = new Date();
+        var timeStamp = dateTime.toISOString();
+        var resultExtTime = formatFloat(player.getCurrentTime());
+        seekStart = resultExtTime;
+        end_played_segment(previousTime);
+        played_segments_segment_start = seekStart;
+        //put together data for xAPI statement to be sent with event
+         var arg = {
+            "result": {
+                "extensions" : {
+                    "https://w3id.org/xapi/video/extensions/time-from": previousTime,
+                    "https://w3id.org/xapi/video/extensions/time-to": seekStart
+                }
+            },
+            "timestamp" : timeStamp
+        }
+        
+        return arg;
+    }
+    // common math functions
+    function formatFloat(number) {
+        if(number == null)
+            return null;
+
+        return +(parseFloat(number).toFixed(3));
+    }
+    //determine video progress
+    function get_progress() {
+        var arr, arr2;
+
+        //get played segments array
+        arr = (played_segments == "")? []:played_segments.split("[,]");
+                if(played_segments_segment_start != null){
+                        arr.push(played_segments_segment_start + "[.]" + formatFloat(player.getCurrentTime()));
+                }
+
+                arr2 = [];
+                arr.forEach(function(v,i) {
+                        arr2[i] = v.split("[.]");
+                        arr2[i][0] *= 1;
+                        arr2[i][1] *= 1;
+                });
+
+                //sort the array
+                arr2.sort(function(a,b) { return a[0] - b[0];});
+
+                //normalize the segments
+                arr2.forEach(function(v,i) {
+                        if(i > 0) {
+                                if(arr2[i][0] < arr2[i-1][1]) { 	//overlapping segments: this segment's starting point is less than last segment's end point.
+                                        //console.log(arr2[i][0] + " < " + arr2[i-1][1] + " : " + arr2[i][0] +" = " +arr2[i-1][1] );
+                                        arr2[i][0] = arr2[i-1][1];
+                                        if(arr2[i][0] > arr2[i][1])
+                                                arr2[i][1] = arr2[i][0];
+                                }
+                        }
+                });
+
+                //calculate progress_length
+                var progress_length = 0;
+                arr2.forEach(function(v,i) {
+                        if(v[1] > v[0])
+                        progress_length += v[1] - v[0]; 
+                });
+
+                var progress = 1 * (progress_length / player.getDuration()).toFixed(2);
+                return progress;
+    }
+    function end_played_segment(end_time) {
+        var arr;
+        arr = (played_segments == "")? []:played_segments.split("[,]");
+        arr.push(played_segments_segment_start + "[.]" + end_time);
+        played_segments = arr.join("[,]");
+        played_segments_segment_end = end_time;
+        played_segments_segment_start = null;
+    } 
+    ////////xAPI extension events for video/////
+    //catch for seeked event
+    self.on('seeked', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('seeked', statement);
+    });
+    //catch volumeChanged Event
+    self.on('volumechange', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('interacted', statement);
+    });
+    self.on('completed', function(event){
+        var statement = event.data;
+        this.triggerXAPI('completed', statement);
+    })
+    //catch fullscreen Event
+    self.on('fullscreen', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('interacted', statement);
+    });
+    //catch play Event
+    self.on('play', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('played', statement);
+    });
+    self.on('xAPIloaded', function(event){
+        var statement = event.data;
+        this.triggerXAPI('initialized',statement);
+    });
+    //catch play Event
+    self.on('paused', function(event) {
+        var statement = event.data;
+        this.triggerXAPI('paused', statement);
+    });
     /**
      * Indicates if the video must be clicked for it to start playing.
      * For instance YouTube videos on iPad must be pressed to start playing.
