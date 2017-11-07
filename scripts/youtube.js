@@ -92,7 +92,7 @@ H5P.VideoYouTube = (function ($) {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
-            self.trigger('xAPIloaded',getLoadedParams())
+            self.trigger('xAPIloaded',getLoadedParams());
           },
           onApiChange: function () {
             if (loadCaptionsModule) {
