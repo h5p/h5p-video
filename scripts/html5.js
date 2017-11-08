@@ -41,8 +41,6 @@ H5P.VideoHtml5 = (function ($) {
      */
     var previousTime = 0;
     var seekStart = null;
-    var dateTime;
-    var timeStamp;
     var played_segments = [];
     var played_segments_segment_start;
     var played_segments_segment_end;
@@ -50,6 +48,7 @@ H5P.VideoHtml5 = (function ($) {
     var volume_changed_at = 0;
     var seeking = false;
     var sessionID = guid();
+    var lastSend = null;
     /**
      * Avoids firing the same event twice.
      * @private
@@ -453,6 +452,11 @@ H5P.VideoHtml5 = (function ($) {
             }
             if( arg === H5P.Video.PLAYING ){
                 previousTime = video.currentTime;
+                if( lastSend != 'play' ){
+                    extraTrigger = 'play';
+                    extraArg = getPlayParams();
+                    lastSend = 'play';
+                }
             }
             if( arg === H5P.Video.PAUSED ){
                 //put together extraArg for sending to xAPI statement
@@ -460,6 +464,7 @@ H5P.VideoHtml5 = (function ($) {
                 if( ! video.seeking ) {
                     extraTrigger = "paused";
                     extraArg = getPausedParams();
+                    lastSend = 'paused';
                 }
             }
             //send extra trigger for giving progress on ended call to xAPI
@@ -470,6 +475,8 @@ H5P.VideoHtml5 = (function ($) {
                     var resultExtTime = formatFloat(video.currentTime);
                     
                     if (progress >= 1 ){
+                        var dateTime = new Date();
+                        var timeStamp = dateTime.toISOString();
                         //send statement
                         extraTrigger = "completed";
                         extraArg = {
@@ -481,6 +488,7 @@ H5P.VideoHtml5 = (function ($) {
                             },
                             "timestamp" : timeStamp
                         };
+                        lastSend = 'completed';
                     }
                 }
             }
@@ -490,6 +498,7 @@ H5P.VideoHtml5 = (function ($) {
                   h5p = 'seeked';
                   arg = getSeekedParams();
                   played_segments_segment_start = video.currentTime;
+                  lastSend = 'seeked';
               } else {
                   previousTime = video.currentTime;
               }
@@ -502,18 +511,22 @@ H5P.VideoHtml5 = (function ($) {
             break;
           case 'volumechange' :
             arg = getVolumeChangeParams();
+            lastSend = 'volumechange';
             break;
          case 'play':
              if ( Math.abs(previousTime - video.currentTime) > 2 ){
                  h5p = 'seeked';
                  arg = getSeekedParams();
                  played_segments_segment_start = video.currentTime;
+                 lastSend = 'seeked';
              } else {
                 arg = getPlayParams();
+                lastSend = h5p;
             }
             break;
           case 'fullscreen':
             arg = getFullScreenParams();
+            lastSend = h5p;
             break;
           case 'loaded':
             isLoaded = true;
@@ -540,6 +553,7 @@ H5P.VideoHtml5 = (function ($) {
             //send extra xAPI statement
             extraTrigger = 'xAPIloaded';
             extraArg = getLoadedParams();
+            lastSend = 'xAPIloaded';
             
             break;
           case 'error':
