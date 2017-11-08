@@ -32,6 +32,7 @@ H5P.VideoYouTube = (function ($) {
     var seeking = false;
     var lastState;
     var sessionID = guid();
+    var currentTime = 0;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -135,7 +136,8 @@ H5P.VideoYouTube = (function ($) {
               
               //calls for xAPI events
               if ( state.data == 1 ){
-                  if ( Math.abs( previousTime - player.getCurrentTime() ) > 1 ){
+                  
+                  if ( (Math.abs( previousTime - player.getCurrentTime() ) > 1) || seeking ){
                       //call from a seek we run seek command not play
                       self.trigger('seeked', getSeekParams());
                       seeking = false;
@@ -146,7 +148,6 @@ H5P.VideoYouTube = (function ($) {
               }
               if ( state.data == 2 ) {
                 //this is a paused event
-                   seeking = false;
                  // execute your code here for paused state
                    self.trigger('paused', getPausedParams());
               } else if ( state.data == 0 ) {
@@ -206,7 +207,15 @@ H5P.VideoYouTube = (function ($) {
     };
     
     //Youtube player has no timeupdate event so need to use setInterval
-    setInterval(function(){ previousTime = player.getCurrentTime(); }, 1000);
+    setInterval(function(){ 
+        if( typeof player !== undefined ){
+            previousTime = currentTime;
+            currentTime = formatFloat(player.getCurrentTime());
+            if( Math.abs(previousTime - currentTime) > 1){
+                seeking = true;
+            }
+        }
+    }, 1000);
     //function used when putting together object to send for xAPI calls
     function getWidthOrHeight ( returnType ){
         var quality = player.getPlaybackQuality();
