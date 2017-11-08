@@ -49,6 +49,7 @@ H5P.VideoHtml5 = (function ($) {
     var volume_changed_on = null;
     var volume_changed_at = 0;
     var seeking = false;
+    var sessionID = guid();
     /**
      * Avoids firing the same event twice.
      * @private
@@ -157,6 +158,15 @@ H5P.VideoHtml5 = (function ($) {
 
         return +(parseFloat(number).toFixed(3));
     }
+    function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+      }
     //determine video progress
     function get_progress() {
         var arr, arr2;
@@ -232,22 +242,30 @@ H5P.VideoHtml5 = (function ($) {
         var quality = (video.videoHeight < video.videoWidth ) ? video.videoHeight : video.videoWidth;
         var userAgent = navigator.userAgent;
         return {
-            "result" : {
-                "extensions": {
-                            "https://w3id.org/xapi/video/extensions/full-screen": state,
-                            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-                            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
-                            "https://w3id.org/xapi/video/extensions/quality": quality,
-                            "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
-                            "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
-                            "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
-                            "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-                            "https://w3id.org/xapi/video/extensions/volume": volume
+                "context" : {
+                    "contextActivities": {
+	                    "category": [
+	                       {
+	                          "id": "https://w3id.org/xapi/video"
+	                       }
+	                    ]
+                    },
+                    "extensions": {
+	                        "https://w3id.org/xapi/video/extensions/full-screen": state,
+	                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+	                        "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
+	                        "https://w3id.org/xapi/video/extensions/quality": quality,
+	                        "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
+	                        "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
+	                        "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
+	                        "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
+	                        "https://w3id.org/xapi/video/extensions/volume": volume,
+                                "https://w3id.org/xapi/video/extensions/session-id": sessionID
 
-                }
-            },
-            "timestamp": timeStamp
-        };
+                    }
+                },
+                "timestamp": timeStamp
+            };
     }
     function getPausedParams() {
         var dateTime = new Date();
@@ -262,6 +280,19 @@ H5P.VideoHtml5 = (function ($) {
                     "https://w3id.org/xapi/video/extensions/time": resultExtTime,
                     "https://w3id.org/xapi/video/extensions/progress": progress,
                     "https://w3id.org/xapi/video/extensions/played-segments": played_segments
+                }
+            },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
                 }
             },
             "timestamp" : timeStamp
@@ -282,6 +313,19 @@ H5P.VideoHtml5 = (function ($) {
                      "https://w3id.org/xapi/video/extensions/time-to": seekStart
                  }
              },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
+                }
+            },
              "timestamp" : timeStamp
          };
          return arg;
@@ -300,8 +344,21 @@ H5P.VideoHtml5 = (function ($) {
         return {
             "result" : {
                 "extensions": {
-                    "https://w3id.org/xapi/video/extensions/time": volume_changed_at,
-                    "https://w3id.org/xapi/video/extensions/volume": volumeChange
+                    "https://w3id.org/xapi/video/extensions/time": volume_changed_at
+                }
+            },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID,
+                        "https://w3id.org/xapi/video/extensions/volume": volumeChange
+
                 }
             },
             "timestamp" : timeStamp
@@ -318,6 +375,19 @@ H5P.VideoHtml5 = (function ($) {
                     "extensions": {
                         "https://w3id.org/xapi/video/extensions/time": resultExtTime,
                     }
+            },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
+                }
             },
             "timestamp": timeStamp
         }
@@ -337,10 +407,23 @@ H5P.VideoHtml5 = (function ($) {
         return {
             "result": {
                 "extensions": {
-                    "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                    "https://w3id.org/xapi/video/extensions/full-screen": state,
-                    "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-                    "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
+                    "https://w3id.org/xapi/video/extensions/time": resultExtTime
+                }
+            },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID,
+                        "https://w3id.org/xapi/video/extensions/full-screen": state,
+                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+                        "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
+
                 }
             },
             "timestamp" : timeStamp
