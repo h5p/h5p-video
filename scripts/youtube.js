@@ -22,15 +22,12 @@ H5P.VideoYouTube = (function ($) {
      */
     var previousTime = 0;
     var seekStart = null;
-    var dateTime;
-    var timeStamp;
     var played_segments = [];
     var played_segments_segment_start;
     var played_segments_segment_end;
     var volume_changed_on = null;
     var volume_changed_at = 0;
     var seeking = false;
-    var lastState;
     var sessionID = guid();
     var currentTime = 0;
 
@@ -170,8 +167,6 @@ H5P.VideoYouTube = (function ($) {
                       }
                   }
               }
-              
-              lastState = state.data;
             }
           },
           onPlaybackQualityChange: function (quality) {
