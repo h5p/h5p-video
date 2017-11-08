@@ -206,7 +206,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 	                        "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
 	                        "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
 	                        "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-	                        "https://w3id.org/xapi/video/extensions/volume": volume
+	                        "https://w3id.org/xapi/video/extensions/volume": volume,
+                                "https://w3id.org/xapi/video/extensions/session-id": sessionID
 
                     }
                 },
