@@ -20,7 +20,7 @@ H5P.VideoYouTube = (function ($) {
      * variables to track add extra xAPI statements for video
      * @type private
      */
-    var previousTime = null;
+    var previousTime = 0;
     var seekStart = null;
     var dateTime;
     var timeStamp;
@@ -135,7 +135,7 @@ H5P.VideoYouTube = (function ($) {
               
               //calls for xAPI events
               if ( state.data == 1 ){
-                  if ( seeking ){
+                  if ( Math.abs( previousTime - player.getCurrentTime() ) > 1 ){
                       //call from a seek we run seek command not play
                       self.trigger('seeked', getSeekParams());
                       seeking = false;
@@ -144,20 +144,11 @@ H5P.VideoYouTube = (function ($) {
                      self.trigger('play', getPlayParams());
                   }
               }
-              if ( lastState == 2  && state.data == 3 ){
-                  seeking = true;
-              }
-              
               if ( state.data == 2 ) {
-                  //trigger call for xAPI paused but not seek
-                  previousTime = player.getCurrentTime();
-                  if( ! seeking  ) {
-                     //this is a paused event
-                        seeking = false;
-                      // execute your code here for paused state
-                        self.trigger('paused', getPausedParams());
-                        
-                    }
+                //this is a paused event
+                   seeking = false;
+                 // execute your code here for paused state
+                   self.trigger('paused', getPausedParams());
               } else if ( state.data == 0 ) {
                   //send xapi trigger if video progress indicates completed
                   var length = player.getDuration();
@@ -214,6 +205,8 @@ H5P.VideoYouTube = (function ($) {
       });
     };
     
+    //Youtube player has no timeupdate event so need to use setInterval
+    setInterval(function(){ previousTime = player.getCurrentTime(); }, 1000);
     //function used when putting together object to send for xAPI calls
     function getWidthOrHeight ( returnType ){
         var quality = player.getPlaybackQuality();
