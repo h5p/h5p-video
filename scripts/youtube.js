@@ -31,6 +31,7 @@ H5P.VideoYouTube = (function ($) {
     var volume_changed_at = 0;
     var seeking = false;
     var lastState;
+    var sessionID = guid();
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -262,7 +263,14 @@ H5P.VideoYouTube = (function ($) {
         var playbackRate = player.getPlaybackRate();
         
         var arg = {
-                "result" : {
+                "context" : {
+                    "contextActivities": {
+	                    "category": [
+	                       {
+	                          "id": "https://w3id.org/xapi/video"
+	                       }
+	                    ]
+                    },
                     "extensions": {
 	                        "https://w3id.org/xapi/video/extensions/full-screen": state,
 	                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
@@ -293,6 +301,19 @@ H5P.VideoYouTube = (function ($) {
     	                    "https://w3id.org/xapi/video/extensions/time": resultExtTime,
     	                }
                 },
+                "context": {
+                    "contextActivities": {
+                        "category": [
+                           {
+                              "id": "https://w3id.org/xapi/video"
+                           }
+                        ]
+                    },
+                    "extensions": {
+                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
+                    }
+                },
                 "timestamp": timeStamp
             };
         return arg;
@@ -313,6 +334,19 @@ H5P.VideoYouTube = (function ($) {
                         "https://w3id.org/xapi/video/extensions/played-segments": played_segments
                     }
                 },
+                "context": {
+                    "contextActivities": {
+                        "category": [
+                           {
+                              "id": "https://w3id.org/xapi/video"
+                           }
+                        ]
+                    },
+                    "extensions": {
+                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
+                    }
+                },
                 "timestamp" : timeStamp
             };
             return arg;
@@ -330,6 +364,19 @@ H5P.VideoYouTube = (function ($) {
                 "extensions" : {
                     "https://w3id.org/xapi/video/extensions/time-from": previousTime,
                     "https://w3id.org/xapi/video/extensions/time-to": seekStart
+                }
+            },
+            "context": {
+                "contextActivities": {
+                    "category": [
+                       {
+                          "id": "https://w3id.org/xapi/video"
+                       }
+                    ]
+                },
+                "extensions": {
+                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
                 }
             },
             "timestamp" : timeStamp
@@ -393,7 +440,16 @@ H5P.VideoYouTube = (function ($) {
         played_segments = arr.join("[,]");
         played_segments_segment_end = end_time;
         played_segments_segment_start = null;
-    } 
+    }
+    function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+      } 
     ////////xAPI extension events for video/////
     //catch for seeked event
     self.on('seeked', function(event) {
