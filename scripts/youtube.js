@@ -23,7 +23,7 @@ H5P.VideoYouTube = (function ($) {
     var previousTime = 0;
     var seekStart = null;
     var played_segments = [];
-    var played_segments_segment_start;
+    var played_segments_segment_start =0;
     var played_segments_segment_end;
     var volume_changed_on = null;
     var volume_changed_at = 0;
@@ -153,18 +153,8 @@ H5P.VideoYouTube = (function ($) {
                   var length = player.getDuration();
                   if ( length > 0){
                       var progress = get_progress();
-                      var resultExtTime = formatFloat(player.getCurrentTime());
                       if ( progress >= 1 ){
-                          var arg = {
-                                "result": {
-                                    "extensions": {
-                                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                                    "https://w3id.org/xapi/video/extensions/progress": progress
-                                    }
-                                },
-                                "timestamp" : timeStamp
-                            };
-                            self.trigger('completed',arg);
+                          var arg = getCompletedParams();
                       }
                   }
               }
@@ -298,7 +288,6 @@ H5P.VideoYouTube = (function ($) {
         var resultExtTime = formatFloat(player.getCurrentTime());
         played_segments_segment_start = resultExtTime;
         seekStart = null;
-        played_segments_segment_start = resultExtTime;
         var arg = {
                 "result": {
     	                "extensions": {
@@ -329,6 +318,7 @@ H5P.VideoYouTube = (function ($) {
         var resultExtTime = formatFloat(player.getCurrentTime());
         previousTime = resultExtTime;
         end_played_segment(resultExtTime);
+        played_segments_segment_start = resultExtTime;
         var progress = get_progress();
         var arg = {
                 "result": {
@@ -388,6 +378,34 @@ H5P.VideoYouTube = (function ($) {
         
         return arg;
     }
+    function getCompletedParams() {
+        var progress = get_progress();
+        var resultExtTime = formatFloat(player.getCurrentTime());
+        var dateTime = new Date();
+        var timeStamp = dateTime.toISOString();
+        return {
+                "result": {
+                    "extensions": {
+                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+                        "https://w3id.org/xapi/video/extensions/progress": progress
+                    }
+                },
+                "context": {
+                    "contextActivities": {
+                        "category": [
+                           {
+                              "id": "https://w3id.org/xapi/video"
+                           }
+                        ]
+                    },
+                    "extensions": {
+                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+
+                    }
+                },
+                "timestamp" : timeStamp
+            };
+    }
     // common math functions
     function formatFloat(number) {
         if(number == null)
@@ -439,11 +457,14 @@ H5P.VideoYouTube = (function ($) {
     }
     function end_played_segment(end_time) {
         var arr;
-        arr = (played_segments == "")? []:played_segments.split("[,]");
-        arr.push(played_segments_segment_start + "[.]" + end_time);
-        played_segments = arr.join("[,]");
-        played_segments_segment_end = end_time;
-        played_segments_segment_start = null;
+        if (end_time !== played_segments_segment_start){
+            //don't run if called too closely to each other
+            arr = (played_segments == "")? []:played_segments.split("[,]");
+            arr.push(played_segments_segment_start + "[.]" + end_time);
+            played_segments = arr.join("[,]");
+            played_segments_segment_end = end_time;
+            played_segments_segment_start = null;
+        }
     }
     function guid() {
         function s4() {
