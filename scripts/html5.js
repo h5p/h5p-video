@@ -216,7 +216,7 @@ H5P.VideoHtml5 = (function ($) {
         if ( (end_time !== played_segments_segment_start) && (Math.abs(end_time - played_segments_segment_start) > 1 ) ){
             //don't run if called too closely to each other
             arr = (played_segments == "")? []:played_segments.split("[,]");
-            arr.push(played_segments_segment_start + "[.]" + end_time);
+            arr.push(formatFloat(played_segments_segment_start) + "[.]" + formatFloat(end_time));
             played_segments = arr.join("[,]");
             played_segments_segment_end = end_time;
             played_segments_segment_start = null;
