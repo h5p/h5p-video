@@ -30,7 +30,7 @@ H5P.VideoYouTube = (function ($) {
     var seeking = false;
     var sessionID = guid();
     var currentTime = 0;
-    var lastSeekedEvent = { seek_from: null, seek_to: null };
+    var seekedTo = 0;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -138,8 +138,10 @@ H5P.VideoYouTube = (function ($) {
                 //get and send play call when not seeking
                 if ( seeking === false ) {
                     self.trigger('play', getPlayParams());
+                } else {
+                    self.trigger('seeked', getSeekedParams( seekedTo ));
+                    seeking = false;
                 }
-                seeking = false;
               }
               if ( state.data == 2 ) {
                 //this is a paused event
@@ -333,15 +335,7 @@ H5P.VideoYouTube = (function ($) {
             };
             return arg;
     }
-    function sendSeeked( time ) {
-        
-        //only trigger if first time running or if the last event is different
-        //this prevents multiple runs of seek when user is scrubbing
-        if ( (lastSeekedEvent.seek_from == null  && lastSeekedEvent.seek_to == null) || 
-             (( Math.abs(time - lastSeekedEvent.seek_to) > 1 && Math.abs(previousTime - lastSeekedEvent.seek_from) > 1) &&
-             Math.abs(previousTime - time) > 1) ){
-            lastSeekedEvent.seek_from = previousTime;
-            lastSeekedEvent.seek_to = time;
+    function getSeekedParams( time ) {
            var dateTime = new Date();
             var timeStamp = dateTime.toISOString();
             var resultExtTime = formatFloat( time );
@@ -371,10 +365,7 @@ H5P.VideoYouTube = (function ($) {
                 },
                 "timestamp" : timeStamp
             }
-
-            self.trigger('seeked',arg);
-        }
-        
+            return arg;
     }
     function getCompletedParams() {
         var progress = get_progress();
@@ -626,9 +617,11 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
       
-      previousTime = player.getCurrentTime();
+      if( seeking === false ){
+        previousTime = player.getCurrentTime();
+       }
       player.seekTo(time, true);
-      sendSeeked( time );
+      seekedTo = time;
       seeking = true;
     };
 

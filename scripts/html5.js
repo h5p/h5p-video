@@ -49,7 +49,6 @@ H5P.VideoHtml5 = (function ($) {
     var seeking = false;
     var sessionID = guid();
     var lastSend = null;
-    var lastSeekedEvent = { seek_from: null, seek_to: null };
     var seekedTo = 0;
     /**
      * Avoids firing the same event twice.
