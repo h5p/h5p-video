@@ -49,6 +49,8 @@ H5P.VideoHtml5 = (function ($) {
     var seeking = false;
     var sessionID = guid();
     var lastSend = null;
+    var lastSeekedEvent = { seek_from: null, seek_to: null };
+    var seekedTo = 0;
     /**
      * Avoids firing the same event twice.
      * @private
@@ -207,9 +209,11 @@ H5P.VideoHtml5 = (function ($) {
                 var progress = 1 * (progress_length / video.duration).toFixed(2);
                 return progress;
     }
+    
     function end_played_segment(end_time) {
         var arr;
-        if (end_time !== played_segments_segment_start){
+        //need to not push in segments that happen from multiple triggers during scrubbing
+        if ( (end_time !== played_segments_segment_start) && (Math.abs(end_time - played_segments_segment_start) > 1 ) ){
             //don't run if called too closely to each other
             arr = (played_segments == "")? []:played_segments.split("[,]");
             arr.push(played_segments_segment_start + "[.]" + end_time);
@@ -217,7 +221,7 @@ H5P.VideoHtml5 = (function ($) {
             played_segments_segment_end = end_time;
             played_segments_segment_start = null;
         }
-} 
+    } 
     function getLoadedParams() {
         //variables used in compiling xAPI results
         var dateTime = new Date();
@@ -273,7 +277,7 @@ H5P.VideoHtml5 = (function ($) {
         var timeStamp = dateTime.toISOString();
         var resultExtTime = formatFloat(video.currentTime);
         end_played_segment(resultExtTime);
-        played_segments_segment_start == resultExtTime;
+        played_segments_segment_start = resultExtTime;
         var progress = get_progress();
         return {
             "result": {
@@ -299,37 +303,38 @@ H5P.VideoHtml5 = (function ($) {
             "timestamp" : timeStamp
         };
     }
-    function getSeekedParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        seekStart = formatFloat(video.currentTime);
-        end_played_segment(previousTime);
-        played_segments_segment_start = seekStart;
-        seeking = false;
-         //put together data for xAPI statement to be sent with event
-         var arg =  {
-             "result": {
-                 "extensions" : {
-                     "https://w3id.org/xapi/video/extensions/time-from": previousTime,
-                     "https://w3id.org/xapi/video/extensions/time-to": seekStart
-                 }
-             },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
+    function getSeekedParams( time ) {
+           var dateTime = new Date();
+            var timeStamp = dateTime.toISOString();
+            var resultExtTime = formatFloat( time );
+            seekStart = resultExtTime;
+            end_played_segment(previousTime);
+            played_segments_segment_start = seekStart;
+            
+            //put together data for xAPI statement to be sent with event
+             var arg = {
+                "result": {
+                    "extensions" : {
+                        "https://w3id.org/xapi/video/extensions/time-from": previousTime,
+                        "https://w3id.org/xapi/video/extensions/time-to": seekStart
+                    }
                 },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+                "context": {
+                    "contextActivities": {
+                        "category": [
+                           {
+                              "id": "https://w3id.org/xapi/video"
+                           }
+                        ]
+                    },
+                    "extensions": {
+                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
 
-                }
-            },
-             "timestamp" : timeStamp
-         };
-         return arg;
+                    }
+                },
+                "timestamp" : timeStamp
+            }
+            return arg; 
     }
     function getVolumeChangeParams() {
         var dateTime = new Date();
@@ -434,12 +439,14 @@ H5P.VideoHtml5 = (function ($) {
         var progress = get_progress();
         var resultExtTime = formatFloat(video.currentTime);
         var dateTime = new Date();
+        end_played_segment(resultExtTime);
         var timeStamp = dateTime.toISOString();
         return {
                 "result": {
                     "extensions": {
                         "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                        "https://w3id.org/xapi/video/extensions/progress": progress
+                        "https://w3id.org/xapi/video/extensions/progress": progress,
+                        "https://w3id.org/xapi/video/extensions/played-segments": played_segments
                     }
                 },
                 "context": {
@@ -482,17 +489,23 @@ H5P.VideoHtml5 = (function ($) {
               delete options.startAt;
             }
             if( arg === H5P.Video.PLAYING ){
-                previousTime = video.currentTime;
-                if( lastSend != 'play' ){
-                    extraTrigger = 'play';
+                if ( seeking === true ){
+                    extraArg = getSeekedParams( seekedTo );
+                    extraTrigger = 'seeked';
+                    lastSend = 'seeked';
+                    seeking = false;
+                    seeking = false;
+                } else if ( lastSend !== 'play' ){
                     extraArg = getPlayParams();
+                    extraTrigger = 'play';
                     lastSend = 'play';
                 }
+                
             }
             if( arg === H5P.Video.PAUSED ){
                 //put together extraArg for sending to xAPI statement
                 
-                if( ! video.seeking ) {
+                if( ! video.seeking  && seeking === false) {
                     extraTrigger = "paused";
                     extraArg = getPausedParams();
                     lastSend = 'paused';
@@ -512,16 +525,6 @@ H5P.VideoHtml5 = (function ($) {
                 }
             }
             break;
-          case 'timeupdate' :
-              if((Math.abs( previousTime - video.currentTime) > 2)  ){
-                  h5p = 'seeked';
-                  arg = getSeekedParams();
-                  played_segments_segment_start = video.currentTime;
-                  lastSend = 'seeked';
-              } else {
-                  previousTime = video.currentTime;
-              }
-            break;
           case 'seeked':
               return; //seek is tracked differently based on time difference in timeupdate
             break;
@@ -533,14 +536,15 @@ H5P.VideoHtml5 = (function ($) {
             lastSend = 'volumechange';
             break;
          case 'play':
-             if ( Math.abs(previousTime - video.currentTime) > 2 ){
-                 h5p = 'seeked';
-                 arg = getSeekedParams();
-                 played_segments_segment_start = video.currentTime;
-                 lastSend = 'seeked';
-             } else {
+             if ( seeking === false && lastSend != h5p ){
+                 
                 arg = getPlayParams();
                 lastSend = h5p;
+            } else {
+                arg = getSeekedParams( seekedTo );
+                lastSend = 'seeked';
+                seeking = false;
+                h5p = 'seeked';
             }
             break;
           case 'fullscreen':
@@ -815,8 +819,12 @@ H5P.VideoHtml5 = (function ($) {
         video.play();
         video.pause();
       }
-
+      if(seeking === false) {
+        previousTime = video.currentTime;
+      }
       video.currentTime = time;
+      seeking = true;
+      seekedTo = time;
     };
 
     /**

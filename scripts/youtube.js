@@ -30,6 +30,7 @@ H5P.VideoYouTube = (function ($) {
     var seeking = false;
     var sessionID = guid();
     var currentTime = 0;
+    var lastSeekedEvent = { seek_from: null, seek_to: null };
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -135,19 +136,18 @@ H5P.VideoYouTube = (function ($) {
               //calls for xAPI events
               if ( state.data == 1 ){
                   
-                  if ( (Math.abs( previousTime - player.getCurrentTime() ) > 1) || seeking ){
-                      //call from a seek we run seek command not play
-                      self.trigger('seeked', getSeekParams());
-                      seeking = false;
-                  } else {
-                     //get and send play call
-                     self.trigger('play', getPlayParams());
-                  }
+                //get and send play call when not seeking
+                if ( seeking === false ) {
+                    self.trigger('play', getPlayParams());
+                }
+                seeking = false;
               }
               if ( state.data == 2 ) {
                 //this is a paused event
                  // execute your code here for paused state
+                 if(seeking === false){
                    self.trigger('paused', getPausedParams());
+                }
               } else if ( state.data == 0 ) {
                   //send xapi trigger if video progress indicates completed
                   var length = player.getDuration();
@@ -191,17 +191,6 @@ H5P.VideoYouTube = (function ($) {
         }
       });
     };
-    
-    //Youtube player has no timeupdate event so need to use setInterval
-    setInterval(function(){ 
-        if( typeof player !== undefined ){
-            previousTime = currentTime;
-            currentTime = formatFloat(player.getCurrentTime());
-            if( Math.abs(previousTime - currentTime) > 1){
-                seeking = true;
-            }
-        }
-    }, 1000);
     //function used when putting together object to send for xAPI calls
     function getWidthOrHeight ( returnType ){
         var quality = player.getPlaybackQuality();
@@ -345,49 +334,61 @@ H5P.VideoYouTube = (function ($) {
             };
             return arg;
     }
-    function getSeekParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        var resultExtTime = formatFloat(player.getCurrentTime());
-        seekStart = resultExtTime;
-        end_played_segment(previousTime);
-        played_segments_segment_start = seekStart;
-        //put together data for xAPI statement to be sent with event
-         var arg = {
-            "result": {
-                "extensions" : {
-                    "https://w3id.org/xapi/video/extensions/time-from": previousTime,
-                    "https://w3id.org/xapi/video/extensions/time-to": seekStart
-                }
-            },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
+    function sendSeeked( time ) {
+        
+        //only trigger if first time running or if the last event is different
+        //this prevents multiple runs of seek when user is scrubbing
+        if ( (lastSeekedEvent.seek_from == null  && lastSeekedEvent.seek_to == null) || 
+             (( Math.abs(time - lastSeekedEvent.seek_to) > 1 && Math.abs(previousTime - lastSeekedEvent.seek_from) > 1) &&
+             Math.abs(previousTime - time) > 1) ){
+            lastSeekedEvent.seek_from = previousTime;
+            lastSeekedEvent.seek_to = time;
+           var dateTime = new Date();
+            var timeStamp = dateTime.toISOString();
+            var resultExtTime = formatFloat( time );
+            seekStart = resultExtTime;
+            end_played_segment(previousTime);
+            played_segments_segment_start = seekStart;
+            //put together data for xAPI statement to be sent with event
+             var arg = {
+                "result": {
+                    "extensions" : {
+                        "https://w3id.org/xapi/video/extensions/time-from": previousTime,
+                        "https://w3id.org/xapi/video/extensions/time-to": seekStart
+                    }
                 },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
+                "context": {
+                    "contextActivities": {
+                        "category": [
+                           {
+                              "id": "https://w3id.org/xapi/video"
+                           }
+                        ]
+                    },
+                    "extensions": {
+                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
 
-                }
-            },
-            "timestamp" : timeStamp
+                    }
+                },
+                "timestamp" : timeStamp
+            }
+
+            self.trigger('seeked',arg);
         }
         
-        return arg;
     }
     function getCompletedParams() {
         var progress = get_progress();
         var resultExtTime = formatFloat(player.getCurrentTime());
         var dateTime = new Date();
+        end_played_segment(resultExtTime);
         var timeStamp = dateTime.toISOString();
         return {
                 "result": {
                     "extensions": {
                         "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                        "https://w3id.org/xapi/video/extensions/progress": progress
+                        "https://w3id.org/xapi/video/extensions/progress": progress,
+                        "https://w3id.org/xapi/video/extensions/played-segments": played_segments
                     }
                 },
                 "context": {
@@ -457,7 +458,8 @@ H5P.VideoYouTube = (function ($) {
     }
     function end_played_segment(end_time) {
         var arr;
-        if (end_time !== played_segments_segment_start){
+        //need to not push in segments that happen from multiple triggers during scrubbing
+        if ( (end_time !== played_segments_segment_start) && (Math.abs(end_time - played_segments_segment_start) > 1 ) ){
             //don't run if called too closely to each other
             arr = (played_segments == "")? []:played_segments.split("[,]");
             arr.push(played_segments_segment_start + "[.]" + end_time);
@@ -624,8 +626,11 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
-
+      
+      previousTime = player.getCurrentTime();
       player.seekTo(time, true);
+      sendSeeked( time );
+      seeking = true;
     };
 
     /**
