@@ -34,10 +34,10 @@ H5P.VideoHtml5 = (function ($) {
      */
     var stateBeforeChangingQuality;
     var currentTimeBeforeChangingQuality;
-    
-    /*
-     * variables to track add extra xAPI statements for video
-     * @type private
+
+    /**
+     * Track xAPI statement data for video events.
+     * @private
      */
     var previousTime = 0;
     var seekStart = null;
@@ -50,6 +50,7 @@ H5P.VideoHtml5 = (function ($) {
     var sessionID = guid();
     var lastSend = null;
     var seekedTo = 0;
+
     /**
      * Avoids firing the same event twice.
      * @private
@@ -149,321 +150,313 @@ H5P.VideoHtml5 = (function ($) {
         video.appendChild(trackElement);
       }
     });
-    
-    // common math functions
-    function formatFloat(number) {
-        if(number == null)
-            return null;
 
-        return +(parseFloat(number).toFixed(3));
-    }
-    function guid() {
-        function s4() {
-          return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-        }
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-          s4() + '-' + s4() + s4() + s4();
+    // Format parameter as float (or null if invalid).
+    var formatFloat = function (number) {
+      if (number == null) {
+        return null;
       }
-    //determine video progress
-    function get_progress() {
-        var arr, arr2;
+      return +(parseFloat(number).toFixed(3));
+    };
 
-        //get played segments array
-        arr = (played_segments == "")? []:played_segments.split("[,]");
-                if(played_segments_segment_start != null){
-                        arr.push(played_segments_segment_start + "[.]" + formatFloat(video.currentTime));
-                }
+    // Generate a random GUID string.
+    var guid = function () {
+      var s4 = function () {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+      };
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
 
-                arr2 = [];
-                arr.forEach(function(v,i) {
-                        arr2[i] = v.split("[.]");
-                        arr2[i][0] *= 1;
-                        arr2[i][1] *= 1;
-                });
+    // Calculate video progress.
+    var get_progress = function () {
+      var arr, arr2;
 
-                //sort the array
-                arr2.sort(function(a,b) { return a[0] - b[0];});
+      // Get played segments array.
+      arr = played_segments == "" ? [] : played_segments.split("[,]");
+      if (played_segments_segment_start != null) {
+        arr.push(played_segments_segment_start + "[.]" + formatFloat(video.currentTime));
+      }
 
-                //normalize the segments
-                arr2.forEach(function(v,i) {
-                        if(i > 0) {
-                                if(arr2[i][0] < arr2[i-1][1]) { 	//overlapping segments: this segment's starting point is less than last segment's end point.
-                                        //console.log(arr2[i][0] + " < " + arr2[i-1][1] + " : " + arr2[i][0] +" = " +arr2[i-1][1] );
-                                        arr2[i][0] = arr2[i-1][1];
-                                        if(arr2[i][0] > arr2[i][1])
-                                                arr2[i][1] = arr2[i][0];
-                                }
-                        }
-                });
+      arr2 = [];
+      arr.forEach(function (v,i) {
+        arr2[i] = v.split("[.]");
+        arr2[i][0] *= 1;
+        arr2[i][1] *= 1;
+      });
 
-                //calculate progress_length
-                var progress_length = 0;
-                arr2.forEach(function(v,i) {
-                        if(v[1] > v[0])
-                        progress_length += v[1] - v[0]; 
-                });
+      // Sort the array.
+      arr2.sort(function (a,b) {
+        return a[0] - b[0];
+      });
 
-                var progress = 1 * (progress_length / video.duration).toFixed(2);
-                return progress;
-    }
-    
+      // Normalize the segments.
+      arr2.forEach(function (v,i) {
+        if (i > 0) {
+          // Overlapping segments: this segment's starting point is less than last segment's end point.
+          if (arr2[i][0] < arr2[i-1][1]) {
+            arr2[i][0] = arr2[i-1][1];
+            if (arr2[i][0] > arr2[i][1]) {
+              arr2[i][1] = arr2[i][0];
+            }
+          }
+        }
+      });
+
+      // Calculate progress_length.
+      var progress_length = 0;
+      arr2.forEach(function (v,i) {
+        if (v[1] > v[0]) {
+          progress_length += v[1] - v[0];
+        }
+      });
+
+      var progress = 1 * (progress_length / video.duration).toFixed(2);
+
+      return progress;
+    };
+
     function end_played_segment(end_time) {
-        var arr;
-        //need to not push in segments that happen from multiple triggers during scrubbing
-        if ( (end_time !== played_segments_segment_start) && (Math.abs(end_time - played_segments_segment_start) > 1 ) ){
-            //don't run if called too closely to each other
-            arr = (played_segments == "")? []:played_segments.split("[,]");
-            arr.push(formatFloat(played_segments_segment_start) + "[.]" + formatFloat(end_time));
-            played_segments = arr.join("[,]");
-            played_segments_segment_end = end_time;
-            played_segments_segment_start = null;
-        }
-    } 
+      var arr;
+      //need to not push in segments that happen from multiple triggers during scrubbing
+      if ( (end_time !== played_segments_segment_start) && (Math.abs(end_time - played_segments_segment_start) > 1 ) ){
+        //don't run if called too closely to each other
+        arr = (played_segments == "")? []:played_segments.split("[,]");
+        arr.push(formatFloat(played_segments_segment_start) + "[.]" + formatFloat(end_time));
+        played_segments = arr.join("[,]");
+        played_segments_segment_end = end_time;
+        played_segments_segment_start = null;
+      }
+    }
+
     function getLoadedParams() {
-        //variables used in compiling xAPI results
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        var resultExtTime = formatFloat(video.currentTime);
-        
-        var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-        var screenSize = screen.width + "x" + screen.height;
-        //playback size
-        var playbackSize = video.videoWidth + "x" + video.videoHeight;
+      //variables used in compiling xAPI results
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      var resultExtTime = formatFloat(video.currentTime);
 
-        var ccEnabled = false;
-        var ccLanguage;
+      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+      var screenSize = screen.width + "x" + screen.height;
+      //playback size
+      var playbackSize = video.videoWidth + "x" + video.videoHeight;
 
-        for( var i = 0; i < video.textTracks.length; i++ ){
-            if( video.textTracks[i].mode === 'showing' ){
-                ccEnabled = true;
-                ccLanguage = video.textTracks[i].language;
-            }
+      var ccEnabled = false;
+      var ccLanguage;
+
+      for( var i = 0; i < video.textTracks.length; i++ ){
+        if( video.textTracks[i].mode === 'showing' ){
+          ccEnabled = true;
+          ccLanguage = video.textTracks[i].language;
         }
-        var playbackRate = video.playbackRate;
-        var volume = formatFloat(video.volume);
-        var quality = (video.videoHeight < video.videoWidth ) ? video.videoHeight : video.videoWidth;
-        var userAgent = navigator.userAgent;
-        return {
-                "context" : {
-                    "contextActivities": {
-	                    "category": [
-	                       {
-	                          "id": "https://w3id.org/xapi/video"
-	                       }
-	                    ]
-                    },
-                    "extensions": {
-	                        "https://w3id.org/xapi/video/extensions/full-screen": state,
-	                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-	                        "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
-	                        "https://w3id.org/xapi/video/extensions/quality": quality,
-	                        "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
-	                        "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
-	                        "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
-	                        "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-	                        "https://w3id.org/xapi/video/extensions/volume": volume,
-                                "https://w3id.org/xapi/video/extensions/session-id": sessionID
-
-                    }
-                },
-                "timestamp": timeStamp
-            };
+      }
+      var playbackRate = video.playbackRate;
+      var volume = formatFloat(video.volume);
+      var quality = (video.videoHeight < video.videoWidth ) ? video.videoHeight : video.videoWidth;
+      var userAgent = navigator.userAgent;
+      return {
+        "context" : {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/full-screen": state,
+            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
+            "https://w3id.org/xapi/video/extensions/quality": quality,
+            "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
+            "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
+            "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
+            "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
+            "https://w3id.org/xapi/video/extensions/volume": volume,
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          }
+        },
+        "timestamp": timeStamp
+      };
     }
+
     function getPausedParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        var resultExtTime = formatFloat(video.currentTime);
-        end_played_segment(resultExtTime);
-        played_segments_segment_start = resultExtTime;
-        var progress = get_progress();
-        return {
-            "result": {
-                "extensions": {
-                    "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                    "https://w3id.org/xapi/video/extensions/progress": progress,
-                    "https://w3id.org/xapi/video/extensions/played-segments": played_segments
-                }
-            },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
-                },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
-
-                }
-            },
-            "timestamp" : timeStamp
-        };
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      var resultExtTime = formatFloat(video.currentTime);
+      end_played_segment(resultExtTime);
+      played_segments_segment_start = resultExtTime;
+      var progress = get_progress();
+      return {
+        "result": {
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+            "https://w3id.org/xapi/video/extensions/progress": progress,
+            "https://w3id.org/xapi/video/extensions/played-segments": played_segments
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          }
+        },
+        "timestamp" : timeStamp
+      };
     }
+
     function getSeekedParams( time ) {
-           var dateTime = new Date();
-            var timeStamp = dateTime.toISOString();
-            var resultExtTime = formatFloat( time );
-            seekStart = resultExtTime;
-            end_played_segment(previousTime);
-            played_segments_segment_start = seekStart;
-            
-            //put together data for xAPI statement to be sent with event
-             var arg = {
-                "result": {
-                    "extensions" : {
-                        "https://w3id.org/xapi/video/extensions/time-from": previousTime,
-                        "https://w3id.org/xapi/video/extensions/time-to": seekStart
-                    }
-                },
-                "context": {
-                    "contextActivities": {
-                        "category": [
-                           {
-                              "id": "https://w3id.org/xapi/video"
-                           }
-                        ]
-                    },
-                    "extensions": {
-                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      var resultExtTime = formatFloat( time );
+      seekStart = resultExtTime;
+      end_played_segment(previousTime);
+      played_segments_segment_start = seekStart;
 
-                    }
-                },
-                "timestamp" : timeStamp
-            }
-            return arg; 
+      //put together data for xAPI statement to be sent with event
+      var arg = {
+        "result": {
+          "extensions" : {
+            "https://w3id.org/xapi/video/extensions/time-from": previousTime,
+            "https://w3id.org/xapi/video/extensions/time-to": seekStart
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          }
+        },
+        "timestamp" : timeStamp
+      }
+      return arg;
     }
+
     function getVolumeChangeParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        volume_changed_at = video.currentTime;
-        var isMuted = video.muted;
-        var volumeChange;
-        if ( isMuted === true ){
-            volumeChange = 0;
-        } else {
-            volumeChange = formatFloat(video.volume);
-        }
-        return {
-            "result" : {
-                "extensions": {
-                    "https://w3id.org/xapi/video/extensions/time": volume_changed_at
-                }
-            },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
-                },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-                        "https://w3id.org/xapi/video/extensions/volume": volumeChange
-
-                }
-            },
-            "timestamp" : timeStamp
-        };
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      volume_changed_at = video.currentTime;
+      var isMuted = video.muted;
+      var volumeChange;
+      if ( isMuted === true ){
+        volumeChange = 0;
+      } else {
+        volumeChange = formatFloat(video.volume);
+      }
+      return {
+        "result" : {
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/time": volume_changed_at
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID,
+            "https://w3id.org/xapi/video/extensions/volume": volumeChange
+          }
+        },
+        "timestamp" : timeStamp
+      };
     }
+
     function getPlayParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        seekStart = null;
-        var resultExtTime = formatFloat(video.currentTime);
-        played_segments_segment_start = resultExtTime;
-        return {
-            "result": {
-                    "extensions": {
-                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                    }
-            },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
-                },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID
-
-                }
-            },
-            "timestamp": timeStamp
-        }
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      seekStart = null;
+      var resultExtTime = formatFloat(video.currentTime);
+      played_segments_segment_start = resultExtTime;
+      return {
+        "result": {
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          }
+        },
+        "timestamp": timeStamp
+      }
     }
+
     function getFullScreenParams() {
-        var dateTime = new Date();
-        var timeStamp = dateTime.toISOString();
-        var resultExtTime = formatFloat(video.currentTime);
-        var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-            
-        //sed xapi statement
-        var screenSize = screen.width + "x" + screen.height;
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+      var resultExtTime = formatFloat(video.currentTime);
+      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
 
-        //playback size
-        var playbackSize = video.videoWidth + "x" + video.videoHeight;
+      //sed xapi statement
+      var screenSize = screen.width + "x" + screen.height;
 
-        return {
-            "result": {
-                "extensions": {
-                    "https://w3id.org/xapi/video/extensions/time": resultExtTime
-                }
-            },
-            "context": {
-                "contextActivities": {
-                    "category": [
-                       {
-                          "id": "https://w3id.org/xapi/video"
-                       }
-                    ]
-                },
-                "extensions": {
-                        "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-                        "https://w3id.org/xapi/video/extensions/full-screen": state,
-                        "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-                        "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
+      //playback size
+      var playbackSize = video.videoWidth + "x" + video.videoHeight;
 
-                }
-            },
-            "timestamp" : timeStamp
-        };
+      return {
+        "result": {
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/time": resultExtTime
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID,
+            "https://w3id.org/xapi/video/extensions/full-screen": state,
+            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
+          }
+        },
+        "timestamp" : timeStamp
+      };
     }
+
     function getCompletedParams() {
-        var progress = get_progress();
-        var resultExtTime = formatFloat(video.currentTime);
-        var dateTime = new Date();
-        end_played_segment(resultExtTime);
-        var timeStamp = dateTime.toISOString();
-        return {
-                "result": {
-                    "extensions": {
-                        "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                        "https://w3id.org/xapi/video/extensions/progress": progress,
-                        "https://w3id.org/xapi/video/extensions/played-segments": played_segments
-                    }
-                },
-                "context": {
-                    "contextActivities": {
-                        "category": [
-                           {
-                              "id": "https://w3id.org/xapi/video"
-                           }
-                        ]
-                    },
-                    "extensions": {
-                            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-
-                    }
-                },
-                "timestamp" : timeStamp
-            };
+      var progress = get_progress();
+      var resultExtTime = formatFloat(video.currentTime);
+      var dateTime = new Date();
+      end_played_segment(resultExtTime);
+      var timeStamp = dateTime.toISOString();
+      return {
+        "result": {
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+            "https://w3id.org/xapi/video/extensions/progress": progress,
+            "https://w3id.org/xapi/video/extensions/played-segments": played_segments
+          }
+        },
+        "context": {
+          "contextActivities": {
+            "category": [{
+              "id": "https://w3id.org/xapi/video"
+            }]
+          },
+          "extensions": {
+            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          }
+        },
+        "timestamp" : timeStamp
+      };
     }
+
     /**
      * Helps registering events.
      *
@@ -474,8 +467,8 @@ H5P.VideoHtml5 = (function ($) {
      */
     var mapEvent = function (native, h5p, arg) {
       video.addEventListener(native, function () {
-          var extraArg = null;
-          var extraTrigger = null;
+        var extraArg = null;
+        var extraTrigger = null;
         switch (h5p) {
           case 'stateChange':
             if (lastState === arg) {
@@ -487,63 +480,63 @@ H5P.VideoHtml5 = (function ($) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }
-            if( arg === H5P.Video.PLAYING ){
-                if ( seeking === true ){
-                    extraArg = getSeekedParams( seekedTo );
-                    extraTrigger = 'seeked';
-                    lastSend = 'seeked';
-                    seeking = false;
-                    seeking = false;
-                } else if ( lastSend !== 'play' ){
-                    extraArg = getPlayParams();
-                    extraTrigger = 'play';
-                    lastSend = 'play';
-                }
-                
+
+            if (arg === H5P.Video.PLAYING) {
+              if (seeking === true) {
+                extraArg = getSeekedParams(seekedTo);
+                extraTrigger = 'seeked';
+                lastSend = 'seeked';
+                seeking = false;
+                seeking = false;
+              } else if (lastSend !== 'play') {
+                extraArg = getPlayParams();
+                extraTrigger = 'play';
+                lastSend = 'play';
+              }
             }
-            if( arg === H5P.Video.PAUSED ){
-                //put together extraArg for sending to xAPI statement
-                
-                if( ! video.seeking  && seeking === false) {
-                    extraTrigger = "paused";
-                    extraArg = getPausedParams();
-                    lastSend = 'paused';
-                }
+
+            if (arg === H5P.Video.PAUSED) {
+              // Put together extraArg for sending to xAPI statement.
+              if (!video.seeking && seeking === false) {
+                extraTrigger = "paused";
+                extraArg = getPausedParams();
+                lastSend = 'paused';
+              }
             }
-            //send extra trigger for giving progress on ended call to xAPI
-            if ( arg === H5P.Video.ENDED ){
-                var length = video.duration;
-                if ( length > 0 ) {
-                    var progress = get_progress();
-                    if (progress >= 1 ){
-                        //send statement
-                        extraTrigger = "completed";
-                        extraArg = getCompletedParams();
-                        lastSend = 'completed';
-                    }
+
+            // Send extra trigger for giving progress on ended call to xAPI.
+            if (arg === H5P.Video.ENDED) {
+              var length = video.duration;
+              if (length > 0) {
+                var progress = get_progress();
+                if (progress >= 1) {
+                  // Send statement.
+                  extraTrigger = "completed";
+                  extraArg = getCompletedParams();
+                  lastSend = 'completed';
                 }
+              }
             }
             break;
           case 'seeked':
-              return; //seek is tracked differently based on time difference in timeupdate
+            return; // Seek is tracked differently based on time difference in timeupdate.
             break;
           case 'seeking':
-            return; //just need to store current time for seeked event
+            return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
             arg = getVolumeChangeParams();
             lastSend = 'volumechange';
             break;
-         case 'play':
-             if ( seeking === false && lastSend != h5p ){
-                 
-                arg = getPlayParams();
-                lastSend = h5p;
+          case 'play':
+            if (seeking === false && lastSend != h5p) {
+              arg = getPlayParams();
+              lastSend = h5p;
             } else {
-                arg = getSeekedParams( seekedTo );
-                lastSend = 'seeked';
-                seeking = false;
-                h5p = 'seeked';
+              arg = getSeekedParams(seekedTo);
+              lastSend = 'seeked';
+              seeking = false;
+              h5p = 'seeked';
             }
             break;
           case 'fullscreen':
@@ -571,12 +564,12 @@ H5P.VideoHtml5 = (function ($) {
               video.addEventListener('durationchange', andLoaded, false);
               return;
             }
-            
-            //send extra xAPI statement
+
+            // Send extra xAPI statement.
             extraTrigger = 'xAPIloaded';
             extraArg = getLoadedParams();
             lastSend = 'xAPIloaded';
-            
+
             break;
           case 'error':
             // Handle error and get message.
@@ -602,10 +595,10 @@ H5P.VideoHtml5 = (function ($) {
             break;
         }
         self.trigger(h5p, arg);
-        
-        //make extra calls for events with needed values for xAPI statement
-        if( extraTrigger != null && extraArg != null ){
-            self.trigger(extraTrigger, extraArg);
+
+        // Make extra calls for events with needed values for xAPI statement.
+        if (extraTrigger != null && extraArg != null) {
+          self.trigger(extraTrigger, extraArg);
         }
       }, false);
     };
@@ -818,7 +811,7 @@ H5P.VideoHtml5 = (function ($) {
         video.play();
         video.pause();
       }
-      if(seeking === false) {
+      if (seeking === false) {
         previousTime = video.currentTime;
       }
       video.currentTime = time;
@@ -997,7 +990,6 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('timeupdate', 'timeupdate', H5P.Video.PLAYING);
     mapEvent('volumechange', 'volumechange');
     mapEvent('play', 'play', H5P.Video.PLAYING);
-    //fuscreen events
     mapEvent('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', 'fullscreen');
 
     if (!video.controls) {
@@ -1030,40 +1022,28 @@ H5P.VideoHtml5 = (function ($) {
         }
       });
     });
-   
-    ////////xAPI extension events for video/////
-    //catch for seeked event
-    self.on('seeked', function(event) {
-        var statement = event.data;
-        this.triggerXAPI('seeked', statement);
+
+    // xAPI extension events for video.
+    self.on('seeked', function (event) {
+      this.triggerXAPI('seeked', event.data);
     });
-    //catch volumeChanged Event
-    self.on('volumechange', function(event) {
-        var statement = event.data;
-        this.triggerXAPI('interacted', statement);
+    self.on('volumechange', function (event) {
+      this.triggerXAPI('interacted', event.data);
     });
-    self.on('completed', function(event){
-        var statement = event.data;
-        this.triggerXAPI('completed', statement);
+    self.on('completed', function (event) {
+      this.triggerXAPI('completed', event.data);
     })
-    //catch fullscreen Event
-    self.on('fullscreen', function(event) {
-        var statement = event.data;
-        this.triggerXAPI('interacted', statement);
+    self.on('fullscreen', function (event) {
+      this.triggerXAPI('interacted', event.data);
     });
-    //catch play Event
-    self.on('play', function(event) {
-        var statement = event.data;
-        this.triggerXAPI('played', statement);
+    self.on('play', function (event) {
+      this.triggerXAPI('played', event.data);
     });
-    self.on('xAPIloaded', function(event){
-        var statement = event.data;
-        this.triggerXAPI('initialized',statement);
+    self.on('xAPIloaded', function (event) {
+      this.triggerXAPI('initialized',event.data);
     })
-    //catch play Event
-    self.on('paused', function(event) {
-        var statement = event.data;
-        this.triggerXAPI('paused', statement);
+    self.on('paused', function (event) {
+      this.triggerXAPI('paused', event.data);
     });
 
     // Video controls are ready
