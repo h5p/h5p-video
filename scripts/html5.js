@@ -39,17 +39,7 @@ H5P.VideoHtml5 = (function ($) {
      * Track xAPI statement data for video events.
      * @private
      */
-    var previousTime = 0;
-    var seekStart = null;
-    var played_segments = [];
-    var played_segments_segment_start = 0;
-    var played_segments_segment_end;
-    var volume_changed_on = null;
-    var volume_changed_at = 0;
-    var seeking = false;
-    var sessionID = guid();
     var lastSend = null;
-    var seekedTo = 0;
 
     /**
      * Avoids firing the same event twice.
@@ -153,110 +143,10 @@ H5P.VideoHtml5 = (function ($) {
     });
 
     /**
-     * Format parameter as float (or null if invalid).
-     *
-     * @param {string} number Number to convert to float
-     */
-    var formatFloat = function (number) {
-      if (number == null) {
-        return null;
-      }
-      return +(parseFloat(number).toFixed(3));
-    };
-
-    /**
-     * Generate a random GUID string.
-     */
-    var guid = function () {
-      var s4 = function () {
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-      };
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    };
-
-    /**
-     * Calculate video progress.
-     */
-    var get_progress = function () {
-      var arr, arr2;
-
-      // Get played segments array.
-      arr = played_segments == "" ? [] : played_segments.split("[,]");
-      if (played_segments_segment_start != null) {
-        arr.push(played_segments_segment_start + "[.]" + formatFloat(video.currentTime));
-      }
-
-      arr2 = [];
-      arr.forEach(function (v,i) {
-        arr2[i] = v.split("[.]");
-        arr2[i][0] *= 1;
-        arr2[i][1] *= 1;
-      });
-
-      // Sort the array.
-      arr2.sort(function (a,b) {
-        return a[0] - b[0];
-      });
-
-      // Normalize the segments.
-      arr2.forEach(function (v,i) {
-        if (i > 0) {
-          // Overlapping segments: this segment's starting point is less than last segment's end point.
-          if (arr2[i][0] < arr2[i-1][1]) {
-            arr2[i][0] = arr2[i-1][1];
-            if (arr2[i][0] > arr2[i][1]) {
-              arr2[i][1] = arr2[i][0];
-            }
-          }
-        }
-      });
-
-      // Calculate progress_length.
-      var progress_length = 0;
-      arr2.forEach(function (v,i) {
-        if (v[1] > v[0]) {
-          progress_length += v[1] - v[0];
-        }
-      });
-
-      var progress = 1 * (progress_length / video.duration).toFixed(2);
-
-      return progress;
-    };
-
-    /**
-     * Add a played segment to the array of already played segments.
-     *
-     * @param {int} end_time When the current played segment ended
-     */
-    var end_played_segment = function (end_time) {
-      var arr;
-      // Need to not push in segments that happen from multiple triggers during scrubbing
-      if (end_time !== played_segments_segment_start && Math.abs(end_time - played_segments_segment_start) > 1 ) {
-        // Don't run if called too closely to each other.
-        arr = played_segments == "" ? [] : played_segments.split("[,]");
-        arr.push(formatFloat(played_segments_segment_start) + "[.]" + formatFloat(end_time));
-        played_segments = arr.join("[,]");
-        played_segments_segment_end = end_time;
-        played_segments_segment_start = null;
-      }
-    };
-
-    /**
      * Create the xAPI object for the 'Loaded' event.
      */
     var getLoadedParams = function () {
-      // Variables used in compiling xAPI results.
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(video.currentTime);
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = video.videoWidth + "x" + video.videoHeight;
-      var playbackRate = video.playbackRate;
-      var volume = formatFloat(video.volume);
-      var quality = video.videoHeight < video.videoWidth ? video.videoHeight : video.videoWidth;
-      var userAgent = navigator.userAgent;
+     
       var ccEnabled = false;
       var ccLanguage;
 
@@ -266,229 +156,18 @@ H5P.VideoHtml5 = (function ($) {
           ccLanguage = video.textTracks[i].language;
         }
       }
-
-      return {
-        "context" : {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/full-screen": state,
-            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
-            "https://w3id.org/xapi/video/extensions/quality": quality,
-            "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
-            "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
-            "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
-            "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-            "https://w3id.org/xapi/video/extensions/volume": volume,
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-          }
-        },
-        "timestamp": timeStamp
-      };
-    };
-
-    /**
-     * Create xAPI object for the 'Play' event.
-     */
-    var getPlayParams = function () {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(video.currentTime);
-      played_segments_segment_start = resultExtTime;
-      seekStart = null;
-
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-          }
-        },
-        "timestamp": timeStamp
-      };
-    };
-
-    /**
-     * Create the xAPI object for the 'Paused' event.
-     */
-    var getPausedParams = function () {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(video.currentTime);
-      end_played_segment(resultExtTime);
-      played_segments_segment_start = resultExtTime;
-      var progress = get_progress();
-
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-            "https://w3id.org/xapi/video/extensions/progress": progress,
-            "https://w3id.org/xapi/video/extensions/played-segments": played_segments
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-    };
-
-    /**
-     * Create the xAPI object for the 'Seeked' event.
-     *
-     * @param {int} time Time we are seeking to
-     */
-    var getSeekedParams = function (time) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(time);
-      seekStart = resultExtTime;
-      end_played_segment(previousTime);
-      played_segments_segment_start = seekStart;
-
-      return {
-        "result": {
-          "extensions" : {
-            "https://w3id.org/xapi/video/extensions/time-from": previousTime,
-            "https://w3id.org/xapi/video/extensions/time-to": seekStart
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-    };
-
-    /**
-     * Create xAPI object for the 'VolumeChange' event.
-     */
-    var getVolumeChangeParams = function () {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      volume_changed_at = video.currentTime;
-      var isMuted = video.muted;
-      var volumeChange;
-      if (isMuted === true) {
-        volumeChange = 0;
-      } else {
-        volumeChange = formatFloat(video.volume);
+      
+      var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+      if ( isFullScreen === undefined ){
+          isFullScreen = false;
       }
+      
+      return H5P.Video.getxAPIInitializedObject( video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage );
 
-      return {
-        "result" : {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": volume_changed_at
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-            "https://w3id.org/xapi/video/extensions/volume": volumeChange
-          }
-        },
-        "timestamp" : timeStamp
-      };
     };
-
-    /**
-     * Create xAPI object for the 'FullScreen' event.
-     */
-    var getFullScreenParams = function () {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(video.currentTime);
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = video.videoWidth + "x" + video.videoHeight;
-
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-            "https://w3id.org/xapi/video/extensions/full-screen": state,
-            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
-          }
-        },
-        "timestamp" : timeStamp
-      };
-    };
-
-    /**
-     * Create xAPI object for the 'Completed' event.
-     */
-    var getCompletedParams = function () {
-      var progress = get_progress();
-      var resultExtTime = formatFloat(video.currentTime);
-      var dateTime = new Date();
-      end_played_segment(resultExtTime);
-      var timeStamp = dateTime.toISOString();
-
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-            "https://w3id.org/xapi/video/extensions/progress": progress,
-            "https://w3id.org/xapi/video/extensions/played-segments": played_segments
-          }
-        },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-    };
+    
+    //set duration used for xAPI statements
+    H5P.Video.duration = video.duration;
 
     /**
      * Helps registering events.
@@ -515,14 +194,14 @@ H5P.VideoHtml5 = (function ($) {
             }
 
             if (arg === H5P.Video.PLAYING) {
-              if (seeking === true) {
-                extraArg = getSeekedParams(seekedTo);
+              if ( H5P.Video.seeking === true) {
+                extraArg = H5P.Video.getxAPISeekedObject( H5P.Video.seekedTo);
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
-                seeking = false;
-                seeking = false;
+                 H5P.Video.seeking = false;
+                 H5P.Video.seeking = false;
               } else if (lastSend !== 'play') {
-                extraArg = getPlayParams();
+                extraArg = H5P.Video.getxAPIPlayObject( video.currentTime );
                 extraTrigger = 'play';
                 lastSend = 'play';
               }
@@ -530,9 +209,9 @@ H5P.VideoHtml5 = (function ($) {
 
             if (arg === H5P.Video.PAUSED) {
               // Put together extraArg for sending to xAPI statement.
-              if (!video.seeking && seeking === false) {
+              if (!video.seeking &&  H5P.Video.seeking === false) {
                 extraTrigger = "paused";
-                extraArg = getPausedParams();
+                extraArg = H5P.Video.getxAPIPauseObject( video.currentTime, video.duration );
                 lastSend = 'paused';
               }
             }
@@ -541,10 +220,10 @@ H5P.VideoHtml5 = (function ($) {
               // Send extra trigger for giving progress on ended call to xAPI.
               var length = video.duration;
               if (length > 0) {
-                var progress = get_progress();
+                var progress = H5P.Video.get_progress( video.current_time, video.duration );
                 if (progress >= 1) {
                   extraTrigger = "completed";
-                  extraArg = getCompletedParams();
+                  extraArg = H5P.Video.getxAPICompleteObject( video.currentTime, video.duration );
                   lastSend = 'completed';
                 }
               }
@@ -557,22 +236,22 @@ H5P.VideoHtml5 = (function ($) {
             return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
-            arg = getVolumeChangeParams();
+            arg = H5P.Video.getxAPIVolumeChangeObject( video.currentTime, video.muted, video.volume );
             lastSend = 'volumechange';
             break;
           case 'play':
-            if (seeking === false && lastSend != h5p) {
-              arg = getPlayParams();
+            if ( H5P.Video.seeking === false && lastSend != h5p) {
+              arg = H5P.Video.getxAPIPlayObject( video.currentTime );
               lastSend = h5p;
             } else {
-              arg = getSeekedParams(seekedTo);
+              arg = H5P.Video.getxAPISeekedObject( H5P.Video.seekedTo);
               lastSend = 'seeked';
-              seeking = false;
+               H5P.Video.seeking = false;
               h5p = 'seeked';
             }
             break;
           case 'fullscreen':
-            arg = getFullScreenParams();
+            arg = H5P.Video.getxAPIFullScreenObject( video.currentTime, video.videoWidth, video.videoHeight );
             lastSend = h5p;
             break;
           case 'loaded':
@@ -842,12 +521,12 @@ H5P.VideoHtml5 = (function ($) {
         video.play();
         video.pause();
       }
-      if (seeking === false) {
-        previousTime = video.currentTime;
+      if ( H5P.Video.seeking === false) {
+        H5P.Video.previousTime = video.currentTime;
       }
       video.currentTime = time;
-      seeking = true;
-      seekedTo = time;
+       H5P.Video.seeking = true;
+      H5P.Video.seekedTo = time;
     };
 
     /**
