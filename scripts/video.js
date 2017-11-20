@@ -264,12 +264,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
 
   /**
-   * Video.getArgsXAPIPause
+   * Video.getArgsXAPIPaused
    *
    * @param {type} current_time
    * @returns {json object}
    */
-  Video.getArgsXAPIPause = function (current_time, duration) {
+  Video.getArgsXAPIPaused = function (current_time, duration) {
     var dateTime = new Date();
     var timeStamp = dateTime.toISOString();
     var resultExtTime = Video.formatFloat(current_time);
@@ -300,13 +300,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
 
   /**
-   * Video.getArgsXAPIPlay
+   * Video.getArgsXAPIPlayed
    *
    * @param { float } current_time time of the video currently
    *
    * used to retun json object sent with event to be triggered by xAPI event
    */
-  Video.getArgsXAPIPlay = function (current_time) {
+  Video.getArgsXAPIPlayed = function (current_time) {
     var dateTime = new Date();
     var timeStamp = dateTime.toISOString();
     var resultExtTime = Video.formatFloat(current_time);
@@ -370,13 +370,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
 
   /**
-   * Video.getArgsXAPIVolumeChange
+   * Video.getArgsXAPIVolumeChanged
    *
    * @param { float } current_time time of the video currently
    *
    * used to retun json object sent with volume change event to be triggered by xAPI event
    */
-  Video.getArgsXAPIVolumeChange = function (current_time, muted, volume) {
+  Video.getArgsXAPIVolumeChanged = function (current_time, muted, volume) {
    var dateTime = new Date();
     var timeStamp = dateTime.toISOString();
     Video.volume_changed_at = Video.formatFloat(current_time);
@@ -410,13 +410,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
 
   /**
-   * Video.getArgsXAPIComplete
+   * Video.getArgsXAPICompleted
    *
    * @param { float } current_time time of the video currently
    *
    * used to retun json object sent with complete event to be triggered by xAPI event
    */
-  Video.getArgsXAPIComplete = function (current_time, duration) {
+  Video.getArgsXAPICompleted = function (current_time, duration) {
     var progress = Video.get_progress(current_time, duration);
     var resultExtTime = Video.formatFloat(current_time);
     var dateTime = new Date();
