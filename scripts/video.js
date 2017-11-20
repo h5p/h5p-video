@@ -490,7 +490,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    *
    * used to retun json object sent with full screen change event to be triggered by xAPI event
    */
-  Video.getArgsXAPIInitialized = function (currentTime, width, height, rate, volume, ccEnabled, ccLanguage, quality = false) {
+  Video.getArgsXAPIInitialized = function (currentTime, width, height, rate, volume, ccEnabled, ccLanguage, quality) {
+    // Set default value for quality.
+    quality = typeof quality !== 'undefined' ? quality : Math.min(width, height);
+
     // Variables used in compiling xAPI results.
     var dateTime = new Date();
     var timeStamp = dateTime.toISOString();
@@ -499,7 +502,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     var playbackSize = (width !== undefined && width !== '' ) ? width + "x" + height : "undetermined";
     var playbackRate = rate;
     var volume = Video.formatFloat(volume);
-    var quality = (quality === false )? (height < width ? height : width) : quality;
     var userAgent = navigator.userAgent;
     var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
 
