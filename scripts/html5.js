@@ -196,7 +196,7 @@ H5P.VideoHtml5 = (function ($) {
                 H5P.Video.seeking = false;
                 H5P.Video.seeking = false;
               } else if (lastSend !== 'play') {
-                extraArg = H5P.Video.getArgsXAPIPlay(video.currentTime);
+                extraArg = H5P.Video.getArgsXAPIPlayed(video.currentTime);
                 extraTrigger = 'play';
                 lastSend = 'play';
               }
@@ -206,7 +206,7 @@ H5P.VideoHtml5 = (function ($) {
               // Put together extraArg for sending to xAPI statement.
               if (!video.seeking &&  H5P.Video.seeking === false) {
                 extraTrigger = "paused";
-                extraArg = H5P.Video.getArgsXAPIPause(video.currentTime, video.duration);
+                extraArg = H5P.Video.getArgsXAPIPaused(video.currentTime, video.duration);
                 lastSend = 'paused';
               }
             }
@@ -218,7 +218,7 @@ H5P.VideoHtml5 = (function ($) {
                 var progress = H5P.Video.get_progress(video.current_time, video.duration);
                 if (progress >= 1) {
                   extraTrigger = "completed";
-                  extraArg = H5P.Video.getArgsXAPIComplete(video.currentTime, video.duration);
+                  extraArg = H5P.Video.getArgsXAPICompleted(video.currentTime, video.duration);
                   lastSend = 'completed';
                 }
               }
@@ -231,12 +231,12 @@ H5P.VideoHtml5 = (function ($) {
             return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
-            arg = H5P.Video.getArgsXAPIVolumeChange(video.currentTime, video.muted, video.volume);
+            arg = H5P.Video.getArgsXAPIVolumeChanged(video.currentTime, video.muted, video.volume);
             lastSend = 'volumechange';
             break;
           case 'play':
             if (H5P.Video.seeking === false && lastSend != h5p) {
-              arg = H5P.Video.getArgsXAPIPlay(video.currentTime);
+              arg = H5P.Video.getArgsXAPIPlayed(video.currentTime);
               lastSend = h5p;
             } else {
               arg = H5P.Video.getArgsXAPISeeked(H5P.Video.seekedTo);
