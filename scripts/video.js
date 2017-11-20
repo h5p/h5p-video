@@ -155,7 +155,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
     }
   }
-  
+
   /**
   * Generate a random GUID string used for seesionID with video xAPI statements.
   */
@@ -165,7 +165,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     };
    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   };
-  
+
   /**
    * Format parameter as float (or null if invalid).
    *
@@ -178,7 +178,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     }
     return +(parseFloat(number).toFixed(3));
   };
-  
+
   /**
   * Track xAPI statement data for video events.
   * @private
@@ -198,7 +198,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
  /**
   * Calculate video progress.
   */
- Video.get_progress = function (current_time, duration ) {
+ Video.get_progress = function (current_time, duration) {
    var arr, arr2;
 
    // Get played segments array.
@@ -264,17 +264,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
   /**
    * Video.getxAPIPauseObject
-   * 
+   *
    * @param {type} current_time
    * @returns {json object}
    */
-  Video.getxAPIPauseObject = function ( current_time, duration ) {
+  Video.getxAPIPauseObject = function (current_time, duration) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = Video.formatFloat(current_time);
       Video.end_played_segment(resultExtTime);
       Video.played_segments_segment_start = resultExtTime;
-      var progress = Video.get_progress( current_time, duration );
+      var progress = Video.get_progress(current_time, duration);
 
       return {
         "result": {
@@ -299,13 +299,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   }
   /**
    * Video.getxAPIPlayObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with event to be triggered by xAPI event
    */
-  Video.getxAPIPlayObject = function ( current_time ){
-      
+  Video.getxAPIPlayObject = function (current_time) {
+
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = Video.formatFloat(current_time);
@@ -331,15 +331,15 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         "timestamp": timeStamp
       };
   }
-  
+
    /**
    * Video.getxAPIPlayObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with seeked event to be triggered by xAPI event
    */
-  Video.getxAPISeekedObject = function ( current_time ){
+  Video.getxAPISeekedObject = function (current_time) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = Video.formatFloat(current_time);
@@ -367,18 +367,18 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         "timestamp" : timeStamp
       };
   }
-  
+
   /**
    * Video.getxAPIVolumeChangeObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with volume change event to be triggered by xAPI event
    */
-  Video.getxAPIVolumeChangeObject = function ( current_time, muted, volume ){
+  Video.getxAPIVolumeChangeObject = function (current_time, muted, volume) {
      var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
-      Video.volume_changed_at = Video.formatFloat( current_time );
+      Video.volume_changed_at = Video.formatFloat(current_time);
       var isMuted = muted;
       var volumeChange;
       if (isMuted === true) {
@@ -407,16 +407,16 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         "timestamp" : timeStamp
       };
   }
-  
+
   /**
    * Video.getxAPICompleteObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with complete event to be triggered by xAPI event
    */
-  Video.getxAPICompleteObject = function ( current_time, duration ){
-      var progress = Video.get_progress( current_time, duration );
+  Video.getxAPICompleteObject = function (current_time, duration) {
+      var progress = Video.get_progress(current_time, duration);
       var resultExtTime = Video.formatFloat(current_time);
       var dateTime = new Date();
       Video.end_played_segment(resultExtTime);
@@ -442,19 +442,19 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         },
         "timestamp" : timeStamp
       };
-  } 
-  
+  }
+
   /**
    * Video.getxAPIFullScreenObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with full screen change event to be triggered by xAPI event
    */
-  Video.getxAPIFullScreenObject = function ( current_time, width, height, fullscreen = false ){
+  Video.getxAPIFullScreenObject = function (current_time, width, height, fullscreen = false) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat( current_time );
+      var resultExtTime = Video.formatFloat(current_time);
       var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
       if (state == undefined ){
           state = fullscreen;
@@ -484,15 +484,15 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         "timestamp" : timeStamp
       };
   }
-  
+
   /**
    * Video.getxAPIInitializedObject
-   * 
+   *
    * @param { float } current_time time of the video currently
-   * 
+   *
    * used to retun json object sent with full screen change event to be triggered by xAPI event
    */
-  Video.getxAPIInitializedObject = function ( current_time, width, height, rate, volume, ccEnabled, ccLanguage, quality = false ){
+  Video.getxAPIInitializedObject = function (current_time, width, height, rate, volume, ccEnabled, ccLanguage, quality = false) {
       // Variables used in compiling xAPI results.
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
@@ -500,7 +500,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       var screenSize = screen.width + "x" + screen.height;
       var playbackSize = (width !== undefined && width !== '' ) ? width + "x" + height : "undetermined";
       var playbackRate = rate;
-      var volume = Video.formatFloat( volume );
+      var volume = Video.formatFloat(volume);
       var quality = (quality === false )? (height < width ? height : width) : quality;
       var userAgent = navigator.userAgent;
       var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
@@ -532,7 +532,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         "timestamp": timeStamp
       };
   }
-  
+
   // Extends the event dispatcher
   Video.prototype = Object.create(H5P.EventDispatcher.prototype);
   Video.prototype.constructor = Video;

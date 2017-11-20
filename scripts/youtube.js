@@ -121,23 +121,23 @@ H5P.VideoYouTube = (function ($) {
               if (state.data == 1) {
                 // Get and send play call when not seeking.
                 if (H5P.Video.seeking === false) {
-                  self.trigger('play', H5P.Video.getxAPIPlayObject( player.getCurrentTime()) );
+                  self.trigger('play', H5P.Video.getxAPIPlayObject(player.getCurrentTime()));
                 } else {
-                  self.trigger('seeked',H5P.Video.getxAPISeekedObject( H5P.Video.seekedTo) );
+                  self.trigger('seeked',H5P.Video.getxAPISeekedObject(H5P.Video.seekedTo));
                   H5P.Video.seeking = false;
                 }
               } else if (state.data == 2) {
                 // This is a paused event.
                 if (H5P.Video.seeking === false) {
-                  self.trigger('paused', H5P.Video.getxAPIPauseObject( player.getCurrentTime(), player.getDuration()) );
+                  self.trigger('paused', H5P.Video.getxAPIPauseObject(player.getCurrentTime(), player.getDuration()));
                 }
               } else if (state.data == 0) {
                 // Send xapi trigger if video progress indicates completed.
                 var length = player.getDuration();
                 if (length > 0) {
-                  var progress = H5P.Video.get_progress( player.getCurrentTime(), player.getDuration() );
+                  var progress = H5P.Video.get_progress(player.getCurrentTime(), player.getDuration());
                   if (progress >= 1) {
-                    var arg = H5P.Video.getxAPICompleteObject( player.getCurrentTime(), player.getDuration() );;
+                    var arg = H5P.Video.getxAPICompleteObject(player.getCurrentTime(), player.getDuration());
                   }
                 }
               }
@@ -224,8 +224,8 @@ H5P.VideoYouTube = (function ($) {
       if (ccEnabled) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
-      
-      return H5P.Video.getxAPIInitializedObject( player.getCurrentTime() , width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
+
+      return H5P.Video.getxAPIInitializedObject(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
 
     };
 
