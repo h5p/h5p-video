@@ -262,6 +262,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       Video.played_segments_segment_start = null;
     }
   };
+
   /**
    * Video.getxAPIPauseObject
    *
@@ -269,34 +270,35 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @returns {json object}
    */
   Video.getxAPIPauseObject = function (current_time, duration) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat(current_time);
-      Video.end_played_segment(resultExtTime);
-      Video.played_segments_segment_start = resultExtTime;
-      var progress = Video.get_progress(current_time, duration);
+    var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    var resultExtTime = Video.formatFloat(current_time);
+    Video.end_played_segment(resultExtTime);
+    Video.played_segments_segment_start = resultExtTime;
+    var progress = Video.get_progress(current_time, duration);
 
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-            "https://w3id.org/xapi/video/extensions/progress": progress,
-            "https://w3id.org/xapi/video/extensions/played-segments": Video.played_segments
-          }
+    return {
+      "result": {
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+          "https://w3id.org/xapi/video/extensions/progress": progress,
+          "https://w3id.org/xapi/video/extensions/played-segments": Video.played_segments
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
+        }
+      },
+      "timestamp" : timeStamp
+    };
+  };
+
   /**
    * Video.getxAPIPlayObject
    *
@@ -305,32 +307,31 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with event to be triggered by xAPI event
    */
   Video.getxAPIPlayObject = function (current_time) {
+    var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    var resultExtTime = Video.formatFloat(current_time);
+    Video.played_segments_segment_start = resultExtTime;
+    Video.seekStart = null;
 
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat(current_time);
-      Video.played_segments_segment_start = resultExtTime;
-      Video.seekStart = null;
-
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-          }
+    return {
+      "result": {
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
-          }
-        },
-        "timestamp": timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
+        }
+      },
+      "timestamp": timeStamp
+    };
+  };
 
    /**
    * Video.getxAPIPlayObject
@@ -340,33 +341,33 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with seeked event to be triggered by xAPI event
    */
   Video.getxAPISeekedObject = function (current_time) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat(current_time);
-      Video.seekStart = resultExtTime;
-      Video.end_played_segment(Video.previousTime);
-      Video.played_segments_segment_start = Video.seekStart;
+    var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    var resultExtTime = Video.formatFloat(current_time);
+    Video.seekStart = resultExtTime;
+    Video.end_played_segment(Video.previousTime);
+    Video.played_segments_segment_start = Video.seekStart;
 
-      return {
-        "result": {
-          "extensions" : {
-            "https://w3id.org/xapi/video/extensions/time-from": Video.previousTime,
-            "https://w3id.org/xapi/video/extensions/time-to": Video.seekStart
-          }
+    return {
+      "result": {
+        "extensions" : {
+          "https://w3id.org/xapi/video/extensions/time-from": Video.previousTime,
+          "https://w3id.org/xapi/video/extensions/time-to": Video.seekStart
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
+        }
+      },
+      "timestamp" : timeStamp
+    };
+  };
 
   /**
    * Video.getxAPIVolumeChangeObject
@@ -376,37 +377,37 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with volume change event to be triggered by xAPI event
    */
   Video.getxAPIVolumeChangeObject = function (current_time, muted, volume) {
-     var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      Video.volume_changed_at = Video.formatFloat(current_time);
-      var isMuted = muted;
-      var volumeChange;
-      if (isMuted === true) {
-        volumeChange = 0;
-      } else {
-        volumeChange = Video.formatFloat(volume);
-      }
+   var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    Video.volume_changed_at = Video.formatFloat(current_time);
+    var isMuted = muted;
+    var volumeChange;
+    if (isMuted === true) {
+      volumeChange = 0;
+    } else {
+      volumeChange = Video.formatFloat(volume);
+    }
 
-      return {
-        "result" : {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": Video.volume_changed_at
-          }
+    return {
+      "result" : {
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/time": Video.volume_changed_at
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID,
-            "https://w3id.org/xapi/video/extensions/volume": volumeChange
-          }
-        },
-        "timestamp" : timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID,
+          "https://w3id.org/xapi/video/extensions/volume": volumeChange
+        }
+      },
+      "timestamp" : timeStamp
+    };
+  };
 
   /**
    * Video.getxAPICompleteObject
@@ -416,33 +417,33 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with complete event to be triggered by xAPI event
    */
   Video.getxAPICompleteObject = function (current_time, duration) {
-      var progress = Video.get_progress(current_time, duration);
-      var resultExtTime = Video.formatFloat(current_time);
-      var dateTime = new Date();
-      Video.end_played_segment(resultExtTime);
-      var timeStamp = dateTime.toISOString();
+    var progress = Video.get_progress(current_time, duration);
+    var resultExtTime = Video.formatFloat(current_time);
+    var dateTime = new Date();
+    Video.end_played_segment(resultExtTime);
+    var timeStamp = dateTime.toISOString();
 
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-            "https://w3id.org/xapi/video/extensions/progress": progress,
-            "https://w3id.org/xapi/video/extensions/played-segments": Video.played_segments
-          }
+    return {
+      "result": {
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+          "https://w3id.org/xapi/video/extensions/progress": progress,
+          "https://w3id.org/xapi/video/extensions/played-segments": Video.played_segments
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
-          }
-        },
-        "timestamp" : timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
+        }
+      },
+      "timestamp" : timeStamp
+    };
+  };
 
   /**
    * Video.getxAPIFullScreenObject
@@ -452,35 +453,35 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with full screen change event to be triggered by xAPI event
    */
   Video.getxAPIFullScreenObject = function (current_time, width, height, fullscreen = false) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat(current_time);
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = width + "x" + height;
+    var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    var resultExtTime = Video.formatFloat(current_time);
+    var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
+    var screenSize = screen.width + "x" + screen.height;
+    var playbackSize = width + "x" + height;
 
-      return {
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime
-          }
+    return {
+      "result": {
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/time": resultExtTime
+        }
+      },
+      "context": {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID,
-            "https://w3id.org/xapi/video/extensions/full-screen": state,
-            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
-          }
-        },
-        "timestamp" : timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID,
+          "https://w3id.org/xapi/video/extensions/full-screen": state,
+          "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+          "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
+        }
+      },
+      "timestamp" : timeStamp
+    };
+  };
 
   /**
    * Video.getxAPIInitializedObject
@@ -490,41 +491,41 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * used to retun json object sent with full screen change event to be triggered by xAPI event
    */
   Video.getxAPIInitializedObject = function (current_time, width, height, rate, volume, ccEnabled, ccLanguage, quality = false) {
-      // Variables used in compiling xAPI results.
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = Video.formatFloat(current_time);
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = (width !== undefined && width !== '' ) ? width + "x" + height : "undetermined";
-      var playbackRate = rate;
-      var volume = Video.formatFloat(volume);
-      var quality = (quality === false )? (height < width ? height : width) : quality;
-      var userAgent = navigator.userAgent;
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
+    // Variables used in compiling xAPI results.
+    var dateTime = new Date();
+    var timeStamp = dateTime.toISOString();
+    var resultExtTime = Video.formatFloat(current_time);
+    var screenSize = screen.width + "x" + screen.height;
+    var playbackSize = (width !== undefined && width !== '' ) ? width + "x" + height : "undetermined";
+    var playbackRate = rate;
+    var volume = Video.formatFloat(volume);
+    var quality = (quality === false )? (height < width ? height : width) : quality;
+    var userAgent = navigator.userAgent;
+    var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
 
-      return {
-        "context" : {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
-            }]
-          },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/full-screen": state,
-            "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-            "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
-            "https://w3id.org/xapi/video/extensions/quality": quality,
-            "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
-            "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
-            "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
-            "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-            "https://w3id.org/xapi/video/extensions/volume": volume,
-            "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
-          }
+    return {
+      "context" : {
+        "contextActivities": {
+          "category": [{
+            "id": "https://w3id.org/xapi/video"
+          }]
         },
-        "timestamp": timeStamp
-      };
-  }
+        "extensions": {
+          "https://w3id.org/xapi/video/extensions/full-screen": state,
+          "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
+          "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
+          "https://w3id.org/xapi/video/extensions/quality": quality,
+          "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
+          "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
+          "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
+          "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
+          "https://w3id.org/xapi/video/extensions/volume": volume,
+          "https://w3id.org/xapi/video/extensions/session-id": Video.sessionID
+        }
+      },
+      "timestamp": timeStamp
+    };
+  };
 
   // Extends the event dispatcher
   Video.prototype = Object.create(H5P.EventDispatcher.prototype);
