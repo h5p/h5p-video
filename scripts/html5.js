@@ -158,7 +158,7 @@ H5P.VideoHtml5 = (function ($) {
 
       var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
 
-      return H5P.Video.getxAPIInitializedObject(video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
+      return H5P.Video.getArgsXAPIInitialized(video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
 
     };
 
@@ -191,13 +191,13 @@ H5P.VideoHtml5 = (function ($) {
 
             if (arg === H5P.Video.PLAYING) {
               if (H5P.Video.seeking === true) {
-                extraArg = H5P.Video.getxAPISeekedObject(H5P.Video.seekedTo);
+                extraArg = H5P.Video.getArgsXAPISeeked(H5P.Video.seekedTo);
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
                 H5P.Video.seeking = false;
                 H5P.Video.seeking = false;
               } else if (lastSend !== 'play') {
-                extraArg = H5P.Video.getxAPIPlayObject(video.currentTime);
+                extraArg = H5P.Video.getArgsXAPIPlay(video.currentTime);
                 extraTrigger = 'play';
                 lastSend = 'play';
               }
@@ -207,7 +207,7 @@ H5P.VideoHtml5 = (function ($) {
               // Put together extraArg for sending to xAPI statement.
               if (!video.seeking &&  H5P.Video.seeking === false) {
                 extraTrigger = "paused";
-                extraArg = H5P.Video.getxAPIPauseObject(video.currentTime, video.duration);
+                extraArg = H5P.Video.getArgsXAPIPause(video.currentTime, video.duration);
                 lastSend = 'paused';
               }
             }
@@ -219,7 +219,7 @@ H5P.VideoHtml5 = (function ($) {
                 var progress = H5P.Video.get_progress(video.current_time, video.duration);
                 if (progress >= 1) {
                   extraTrigger = "completed";
-                  extraArg = H5P.Video.getxAPICompleteObject(video.currentTime, video.duration);
+                  extraArg = H5P.Video.getArgsXAPIComplete(video.currentTime, video.duration);
                   lastSend = 'completed';
                 }
               }
@@ -232,22 +232,22 @@ H5P.VideoHtml5 = (function ($) {
             return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
-            arg = H5P.Video.getxAPIVolumeChangeObject(video.currentTime, video.muted, video.volume);
+            arg = H5P.Video.getArgsXAPIVolumeChange(video.currentTime, video.muted, video.volume);
             lastSend = 'volumechange';
             break;
           case 'play':
             if (H5P.Video.seeking === false && lastSend != h5p) {
-              arg = H5P.Video.getxAPIPlayObject(video.currentTime);
+              arg = H5P.Video.getArgsXAPIPlay(video.currentTime);
               lastSend = h5p;
             } else {
-              arg = H5P.Video.getxAPISeekedObject(H5P.Video.seekedTo);
+              arg = H5P.Video.getArgsXAPISeeked(H5P.Video.seekedTo);
               lastSend = 'seeked';
                H5P.Video.seeking = false;
               h5p = 'seeked';
             }
             break;
           case 'fullscreen':
-            arg = H5P.Video.getxAPIFullScreenObject(video.currentTime, video.videoWidth, video.videoHeight);
+            arg = H5P.Video.getArgsXAPIFullScreen(video.currentTime, video.videoWidth, video.videoHeight);
             lastSend = h5p;
             break;
           case 'loaded':
