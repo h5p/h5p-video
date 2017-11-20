@@ -145,7 +145,6 @@ H5P.VideoHtml5 = (function ($) {
      * Create the xAPI object for the 'Loaded' event.
      */
     var getLoadedParams = function () {
-     
       var ccEnabled = false;
       var ccLanguage;
 
@@ -161,11 +160,11 @@ H5P.VideoHtml5 = (function ($) {
           isFullScreen = false;
       }
       
-      return H5P.Video.getxAPIInitializedObject( video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage );
+      return H5P.Video.getxAPIInitializedObject(video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
 
     };
-    
-    //set duration used for xAPI statements
+
+    // Set duration used for xAPI statements.
     H5P.Video.duration = video.duration;
 
     /**
@@ -193,14 +192,14 @@ H5P.VideoHtml5 = (function ($) {
             }
 
             if (arg === H5P.Video.PLAYING) {
-              if ( H5P.Video.seeking === true) {
-                extraArg = H5P.Video.getxAPISeekedObject( H5P.Video.seekedTo);
+              if (H5P.Video.seeking === true) {
+                extraArg = H5P.Video.getxAPISeekedObject(H5P.Video.seekedTo);
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
-                 H5P.Video.seeking = false;
-                 H5P.Video.seeking = false;
+                H5P.Video.seeking = false;
+                H5P.Video.seeking = false;
               } else if (lastSend !== 'play') {
-                extraArg = H5P.Video.getxAPIPlayObject( video.currentTime );
+                extraArg = H5P.Video.getxAPIPlayObject(video.currentTime);
                 extraTrigger = 'play';
                 lastSend = 'play';
               }
@@ -210,7 +209,7 @@ H5P.VideoHtml5 = (function ($) {
               // Put together extraArg for sending to xAPI statement.
               if (!video.seeking &&  H5P.Video.seeking === false) {
                 extraTrigger = "paused";
-                extraArg = H5P.Video.getxAPIPauseObject( video.currentTime, video.duration );
+                extraArg = H5P.Video.getxAPIPauseObject(video.currentTime, video.duration);
                 lastSend = 'paused';
               }
             }
@@ -219,10 +218,10 @@ H5P.VideoHtml5 = (function ($) {
               // Send extra trigger for giving progress on ended call to xAPI.
               var length = video.duration;
               if (length > 0) {
-                var progress = H5P.Video.get_progress( video.current_time, video.duration );
+                var progress = H5P.Video.get_progress(video.current_time, video.duration);
                 if (progress >= 1) {
                   extraTrigger = "completed";
-                  extraArg = H5P.Video.getxAPICompleteObject( video.currentTime, video.duration );
+                  extraArg = H5P.Video.getxAPICompleteObject(video.currentTime, video.duration);
                   lastSend = 'completed';
                 }
               }
@@ -235,22 +234,22 @@ H5P.VideoHtml5 = (function ($) {
             return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
-            arg = H5P.Video.getxAPIVolumeChangeObject( video.currentTime, video.muted, video.volume );
+            arg = H5P.Video.getxAPIVolumeChangeObject(video.currentTime, video.muted, video.volume);
             lastSend = 'volumechange';
             break;
           case 'play':
-            if ( H5P.Video.seeking === false && lastSend != h5p) {
-              arg = H5P.Video.getxAPIPlayObject( video.currentTime );
+            if (H5P.Video.seeking === false && lastSend != h5p) {
+              arg = H5P.Video.getxAPIPlayObject(video.currentTime);
               lastSend = h5p;
             } else {
-              arg = H5P.Video.getxAPISeekedObject( H5P.Video.seekedTo);
+              arg = H5P.Video.getxAPISeekedObject(H5P.Video.seekedTo);
               lastSend = 'seeked';
                H5P.Video.seeking = false;
               h5p = 'seeked';
             }
             break;
           case 'fullscreen':
-            arg = H5P.Video.getxAPIFullScreenObject( video.currentTime, video.videoWidth, video.videoHeight );
+            arg = H5P.Video.getxAPIFullScreenObject(video.currentTime, video.videoWidth, video.videoHeight);
             lastSend = h5p;
             break;
           case 'loaded':
@@ -520,11 +519,11 @@ H5P.VideoHtml5 = (function ($) {
         video.play();
         video.pause();
       }
-      if ( H5P.Video.seeking === false) {
+      if (H5P.Video.seeking === false) {
         H5P.Video.previousTime = video.currentTime;
       }
       video.currentTime = time;
-       H5P.Video.seeking = true;
+      H5P.Video.seeking = true;
       H5P.Video.seekedTo = time;
     };
 
