@@ -154,12 +154,9 @@ H5P.VideoHtml5 = (function ($) {
           ccLanguage = video.textTracks[i].language;
         }
       }
-      
-      var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-      if ( isFullScreen === undefined ){
-          isFullScreen = false;
-      }
-      
+
+      var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
+
       return H5P.Video.getxAPIInitializedObject(video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
 
     };

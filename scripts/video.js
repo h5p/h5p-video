@@ -435,10 +435,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = Video.formatFloat(current_time);
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-      if (state == undefined ){
-          state = fullscreen;
-      }
+      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
       var screenSize = screen.width + "x" + screen.height;
       var playbackSize = width + "x" + height;
 
@@ -483,11 +480,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       var volume = Video.formatFloat(volume);
       var quality = (quality === false )? (height < width ? height : width) : quality;
       var userAgent = navigator.userAgent;
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-      if ( state === undefined ){
-          state = false;
-      }
-
+      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
 
       return {
         "context" : {
