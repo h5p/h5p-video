@@ -135,7 +135,7 @@ H5P.VideoYouTube = (function ($) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
-                    //length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
+                  // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
                   var progress = H5P.Video.getProgress( length, length );
                   if (progress >= 1) {
                     var arg = H5P.Video.getArgsXAPIFinished(player.getCurrentTime(), player.getDuration());
@@ -235,12 +235,12 @@ H5P.VideoYouTube = (function ($) {
     self.on('seeked', function (event) {
         this.triggerXAPI('seeked', event.data);
     });
-    self.on('volumechange', function (event) { 
+    self.on('volumechange', function (event) {
         this.triggerXAPI('interacted', event.data);
     });
-    self.on('finished', function (event){
+    self.on('finished', function (event) {
         this.triggerXAPI('finished', event.data);
-    })
+    });
     self.on('fullscreen', function (event) {
         this.triggerXAPI('interacted', event.data);
     });
