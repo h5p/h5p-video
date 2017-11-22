@@ -200,7 +200,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   */
  Video.getProgress = function (currentTime, duration) {
    var arr, arr2;
-
+   Video.endPlayedSegment(currentTime);
+   Video.playedSegmentsSegmentStart = currentTime;
    // Get played segments array.
    arr = Video.playedSegments == "" ? [] : Video.playedSegments.split("[,]");
    if (Video.playedSegmentsSegmentStart != null) {

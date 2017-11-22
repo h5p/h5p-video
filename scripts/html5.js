@@ -216,7 +216,8 @@ H5P.VideoHtml5 = (function ($) {
               // Send extra trigger for giving progress on ended call to xAPI.
               var length = video.duration;
               if (length > 0) {
-                var progress = H5P.Video.getProgress(video.currentTime, video.duration);
+                  //length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
+                var progress = H5P.Video.getProgress(length, length);
                 if (progress >= 1) {
                   extraTrigger = "finished";
                   extraArg = H5P.Video.getArgsXAPIFinished(video.currentTime, video.duration);

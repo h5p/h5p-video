@@ -135,7 +135,8 @@ H5P.VideoYouTube = (function ($) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
-                  var progress = H5P.Video.getProgress(player.getCurrentTime(), player.getDuration());
+                    //length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
+                  var progress = H5P.Video.getProgress( length, length );
                   if (progress >= 1) {
                     var arg = H5P.Video.getArgsXAPIFinished(player.getCurrentTime(), player.getDuration());
                     self.trigger('finished', arg);
