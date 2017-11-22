@@ -132,12 +132,13 @@ H5P.VideoYouTube = (function ($) {
                   self.trigger('paused', H5P.Video.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
                 }
               } else if (state.data == 0) {
-                // Send xapi trigger if video progress indicates completed.
+                // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
                   var progress = H5P.Video.getProgress(player.getCurrentTime(), player.getDuration());
                   if (progress >= 1) {
-                    var arg = H5P.Video.getArgsXAPICompleted(player.getCurrentTime(), player.getDuration());
+                    var arg = H5P.Video.getArgsXAPIFinished(player.getCurrentTime(), player.getDuration());
+                    self.trigger('finished', arg);
                   }
                 }
               }
@@ -233,11 +234,11 @@ H5P.VideoYouTube = (function ($) {
     self.on('seeked', function (event) {
         this.triggerXAPI('seeked', event.data);
     });
-    self.on('volumechange', function (event) {
+    self.on('volumechange', function (event) { 
         this.triggerXAPI('interacted', event.data);
     });
-    self.on('completed', function (event){
-        this.triggerXAPI('completed', event.data);
+    self.on('finished', function (event){
+        this.triggerXAPI('finished', event.data);
     })
     self.on('fullscreen', function (event) {
         this.triggerXAPI('interacted', event.data);

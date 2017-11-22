@@ -218,9 +218,9 @@ H5P.VideoHtml5 = (function ($) {
               if (length > 0) {
                 var progress = H5P.Video.getProgress(video.currentTime, video.duration);
                 if (progress >= 1) {
-                  extraTrigger = "completed";
-                  extraArg = H5P.Video.getArgsXAPICompleted(video.currentTime, video.duration);
-                  lastSend = 'completed';
+                  extraTrigger = "finished";
+                  extraArg = H5P.Video.getArgsXAPIFinished(video.currentTime, video.duration);
+                  lastSend = 'finished';
                 }
               }
             }
@@ -736,8 +736,8 @@ H5P.VideoHtml5 = (function ($) {
     self.on('volumechange', function (event) {
       this.triggerXAPI('interacted', event.data);
     });
-    self.on('completed', function (event) {
-      this.triggerXAPI('completed', event.data);
+    self.on('finished', function (event) {
+      this.triggerXAPI('finished', event.data);
     })
     self.on('fullscreen', function (event) {
       this.triggerXAPI('interacted', event.data);

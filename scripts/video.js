@@ -410,13 +410,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   };
 
   /**
-   * Video.getArgsXAPICompleted
+   * Video.getArgsXAPIFinished
    *
    * @param { float } currentTime time of the video currently
    *
    * used to retun json object sent with complete event to be triggered by xAPI event
    */
-  Video.getArgsXAPICompleted = function (currentTime, duration) {
+  Video.getArgsXAPIFinished = function (currentTime, duration) {
     var progress = Video.getProgress(currentTime, duration);
     var resultExtTime = Video.formatFloat(currentTime);
     var dateTime = new Date();
