@@ -236,12 +236,14 @@ H5P.VideoYouTube = (function ($) {
       this.triggerXAPI('seeked', event.data);
     });
     self.on('volumechange', function (event) {
+      // @todo: Not currently used.
       this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
       this.triggerXAPI('finished', event.data);
     });
     self.on('fullscreen', function (event) {
+      // @todo: Not currently used.
       this.triggerXAPI('interacted', event.data);
     });
     self.on('play', function (event) {

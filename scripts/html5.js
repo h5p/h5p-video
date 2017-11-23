@@ -741,6 +741,7 @@ H5P.VideoHtml5 = (function ($) {
       this.triggerXAPI('finished', event.data);
     })
     self.on('fullscreen', function (event) {
+      // @todo: Not currently used.
       this.triggerXAPI('interacted', event.data);
     });
     self.on('play', function (event) {
