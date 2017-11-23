@@ -233,25 +233,25 @@ H5P.VideoYouTube = (function ($) {
 
     // xAPI extension events for video.
     self.on('seeked', function (event) {
-        this.triggerXAPI('seeked', event.data);
+      this.triggerXAPI('seeked', event.data);
     });
     self.on('volumechange', function (event) {
-        this.triggerXAPI('interacted', event.data);
+      this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
-        this.triggerXAPI('finished', event.data);
+      this.triggerXAPI('finished', event.data);
     });
     self.on('fullscreen', function (event) {
-        this.triggerXAPI('interacted', event.data);
+      this.triggerXAPI('interacted', event.data);
     });
     self.on('play', function (event) {
-        this.triggerXAPI('played', event.data);
+      this.triggerXAPI('played', event.data);
     });
     self.on('xAPIloaded', function (event){
-        this.triggerXAPI('initialized',event.data);
+      this.triggerXAPI('initialized',event.data);
     });
     self.on('paused', function (event) {
-        this.triggerXAPI('paused', event.data);
+      this.triggerXAPI('paused', event.data);
     });
 
     /**

@@ -747,7 +747,7 @@ H5P.VideoHtml5 = (function ($) {
       this.triggerXAPI('played', event.data);
     });
     self.on('xAPIloaded', function (event) {
-      this.triggerXAPI('initialized',event.data);
+      this.triggerXAPI('initialized', event.data);
     })
     self.on('paused', function (event) {
       this.triggerXAPI('paused', event.data);
