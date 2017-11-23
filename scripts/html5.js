@@ -205,7 +205,7 @@ H5P.VideoHtml5 = (function ($) {
 
             if (arg === H5P.Video.PAUSED) {
               // Put together extraArg for sending to xAPI statement.
-              if (!video.seeking &&  H5P.Video.seeking === false) {
+              if (!video.seeking && H5P.Video.seeking === false && video.currentTime !== video.duration) {
                 extraTrigger = "paused";
                 extraArg = H5P.Video.getArgsXAPIPaused(video.currentTime, video.duration);
                 lastSend = 'paused';
