@@ -120,25 +120,25 @@ H5P.VideoYouTube = (function ($) {
               // Calls for xAPI events.
               if (state.data == 1) {
                 // Get and send play call when not seeking.
-                if (H5P.Video.seeking === false) {
-                  self.trigger('play', H5P.Video.getArgsXAPIPlayed(player.getCurrentTime()));
+                if (H5P.VideoXapi.xAPI.seeking === false) {
+                  self.trigger('play', H5P.VideoXapi.xAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 } else {
-                  self.trigger('seeked', H5P.Video.getArgsXAPISeeked(H5P.Video.seekedTo));
-                  H5P.Video.seeking = false;
+                  self.trigger('seeked', H5P.VideoXapi.xAPI.getArgsXAPISeeked(H5P.VideoXapi.xAPI.seekedTo));
+                  H5P.VideoXapi.xAPI.seeking = false;
                 }
               } else if (state.data == 2) {
                 // This is a paused event.
-                if (H5P.Video.seeking === false) {
-                  self.trigger('paused', H5P.Video.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
+                if (H5P.VideoXapi.xAPI.seeking === false) {
+                  self.trigger('paused', H5P.VideoXapi.xAPI.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
                 }
               } else if (state.data == 0) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
                   // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
-                  var progress = H5P.Video.getProgress( length, length );
+                  var progress = H5P.VideoXapi.xAPI.getProgress( length, length );
                   if (progress >= 1) {
-                    var arg = H5P.Video.getArgsXAPIFinished(player.getCurrentTime(), player.getDuration());
+                    var arg = H5P.VideoXapi.xAPI.getArgsXAPIFinished(player.getCurrentTime(), player.getDuration());
                     self.trigger('finished', arg);
                   }
                 }
@@ -227,7 +227,7 @@ H5P.VideoYouTube = (function ($) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
 
-      return H5P.Video.getArgsXAPIInitialized(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
+      return H5P.VideoXapi.xAPI.getArgsXAPIInitialized(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
 
     };
 
@@ -372,12 +372,12 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      if (H5P.Video.seeking === false) {
-        H5P.Video.previousTime = player.getCurrentTime();
+      if (H5P.VideoXapi.xAPI.seeking === false) {
+        H5P.VideoXapi.xAPI.previousTime = player.getCurrentTime();
       }
       player.seekTo(time, true);
-      H5P.Video.seeking = time;
-      H5P.Video.seeking = true;
+      H5P.VideoXapi.xAPI.seeking = time;
+      H5P.VideoXapi.xAPI.seeking = true;
     };
 
     /**
