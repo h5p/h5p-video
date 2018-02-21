@@ -376,7 +376,7 @@ H5P.VideoYouTube = (function ($) {
         H5P.VideoXAPI.previousTime = player.getCurrentTime();
       }
       player.seekTo(time, true);
-      H5P.VideoXAPI.seeking = time;
+      H5P.VideoXAPI.seekedTo = time;
       H5P.VideoXAPI.seeking = true;
     };
 

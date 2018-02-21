@@ -195,7 +195,6 @@ H5P.VideoHtml5 = (function ($) {
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
                 H5P.VideoXAPI.seeking = false;
-                H5P.VideoXAPI.seeking = false;
               } else if (lastSend !== 'play') {
                 extraArg = H5P.VideoXAPI.getArgsXAPIPlayed(video.currentTime);
                 extraTrigger = 'play';
