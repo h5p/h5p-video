@@ -1,13 +1,13 @@
 /** @namespace H5P */
-H5P.VideoXapi = (function ($) {
-    
+H5P.VideoXAPI = (function ($) {
+
     var self = this;
     /**
    * Xapi video statement generator for H5P.
    *
    * @class
    */
-        
+
         /**
         * Generate a random GUID string used for seesionID with video xAPI statements.
         */
@@ -242,7 +242,7 @@ H5P.VideoXapi = (function ($) {
         };
 
         /**
-         * self.getArgsXAPIVolumeChanged    
+         * self.getArgsXAPIVolumeChanged
          *
          * @param { float } currentTime time of the video currently
          *
@@ -424,7 +424,7 @@ H5P.VideoXapi = (function ($) {
             "timestamp": timeStamp
           };
         };
-    
-    
+
+
     return self;
 })(H5P.jQuery );
