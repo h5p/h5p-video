@@ -130,7 +130,16 @@ H5P.VideoXAPI = (function ($) {
           self.endPlayedSegment(resultExtTime);
           self.playedSegmentsSegmentStart = resultExtTime;
           var progress = self.getProgress(currentTime, duration);
-
+          var extensions = {};
+          if ( typeof resultExtTime != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/time"] = resultExtTime
+          }
+          if ( typeof progress != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
+          }
+          if ( typeof self.playedSegments != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/progress"] = self.playedSegments
+          }
           return {
             "verb": {
                 "id": "https://w3id.org/xapi/video/verbs/paused",
@@ -139,11 +148,7 @@ H5P.VideoXAPI = (function ($) {
                 }
             },
             "result": {
-              "extensions": {
-                "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                "https://w3id.org/xapi/video/extensions/progress": progress,
-                "https://w3id.org/xapi/video/extensions/played-segments": self.playedSegments
-              }
+              "extensions": extensions
             },
             "context": {
               "contextActivities": {
@@ -300,6 +305,17 @@ H5P.VideoXAPI = (function ($) {
           var dateTime = new Date();
           self.endPlayedSegment(resultExtTime);
           var timeStamp = dateTime.toISOString();
+          //make sure extensions exist
+          var extensions = {};
+          if ( typeof resultExtTime != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/time"] = resultExtTime
+          }
+          if ( typeof progress != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
+          }
+          if ( typeof self.playedSegments != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/played-segments"] = self.playedSegments
+          }
 
           return {
             "verb": {
@@ -309,11 +325,7 @@ H5P.VideoXAPI = (function ($) {
                 }
             },
             "result": {
-              "extensions": {
-                "https://w3id.org/xapi/video/extensions/time": resultExtTime,
-                "https://w3id.org/xapi/video/extensions/progress": progress,
-                "https://w3id.org/xapi/video/extensions/played-segments": self.playedSegments
-              }
+              "extensions": extensions
             },
             "context": {
               "contextActivities": {
@@ -343,7 +355,20 @@ H5P.VideoXAPI = (function ($) {
           var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
           var screenSize = screen.width + "x" + screen.height;
           var playbackSize = width + "x" + height;
-
+          //make sure extensions exist
+          var extensions = {};
+          if ( typeof self.sessionID != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/session-id"] = self.sessionID
+          }
+          if ( typeof state != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/full-screen"] = state
+          }
+          if ( typeof screenSize != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
+          }
+          if ( typeof playbackSize != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/video-playback-size"] = playbackSize
+          }
           return {
             "verb": {
                 "id": "http://adlnet.gov/expapi/verbs/interacted",
@@ -362,12 +387,7 @@ H5P.VideoXAPI = (function ($) {
                   "id": "https://w3id.org/xapi/video"
                 }]
               },
-              "extensions": {
-                "https://w3id.org/xapi/video/extensions/session-id": self.sessionID,
-                "https://w3id.org/xapi/video/extensions/full-screen": state,
-                "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-                "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize
-              }
+              "extensions": extensions
             },
             "timestamp" : timeStamp
           };
@@ -394,7 +414,35 @@ H5P.VideoXAPI = (function ($) {
           var volume = self.formatFloat(volume);
           var userAgent = navigator.userAgent;
           var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
-
+          //make sure extensions exist
+          var extensions = {};
+          if ( typeof state != "undefined" && state != false){
+              extensions["https://w3id.org/xapi/video/extensions/full-screen"] = state
+          }
+          if ( typeof screenSize != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
+          }
+          if ( typeof playbackSize != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/video-playback-size"] = playbackSize
+          }
+          if ( typeof self.sessionID != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/session-id"] = self.sessionID
+          }
+          if ( typeof quality != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/quality"] = quality
+          }
+          if ( typeof ccEnabled != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/cc-enabled"] = ccEnabled
+          }
+          if ( typeof playbackRate != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/speed"] = playbackRate
+          }
+          if ( typeof userAgent != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/user-agent"] = userAgent
+          }
+          if ( typeof volume != "undefined" ){
+              extensions["https://w3id.org/xapi/video/extensions/volume"] = volume
+          }
           return {
             "verb": {
                       "id": "http://adlnet.gov/expapi/verbs/initialized",
@@ -408,18 +456,7 @@ H5P.VideoXAPI = (function ($) {
                   "id": "https://w3id.org/xapi/video"
                 }]
               },
-              "extensions": {
-                "https://w3id.org/xapi/video/extensions/full-screen": state,
-                "https://w3id.org/xapi/video/extensions/screen-size": screenSize,
-                "https://w3id.org/xapi/video/extensions/video-playback-size": playbackSize,
-                "https://w3id.org/xapi/video/extensions/quality": quality,
-                "https://w3id.org/xapi/video/extensions/cc-enabled": ccEnabled,
-                "https://w3id.org/xapi/video/extensions/cc-subtitle-lang": ccLanguage,
-                "https://w3id.org/xapi/video/extensions/speed": playbackRate + "x",
-                "https://w3id.org/xapi/video/extensions/user-agent": userAgent,
-                "https://w3id.org/xapi/video/extensions/volume": volume,
-                "https://w3id.org/xapi/video/extensions/session-id": self.sessionID
-              }
+              "extensions": extensions
             },
             "timestamp": timeStamp
           };
