@@ -219,7 +219,7 @@ H5P.VideoHtml5 = (function ($) {
                 var progress = H5P.VideoXAPI.getProgress(length, length);
                 if (progress >= 1) {
                   extraTrigger = "finished";
-                  extraArg = H5P.VideoXAPI.getArgsXAPIFinished(video.currentTime, video.duration);
+                  extraArg = H5P.VideoXAPI.getArgsXAPICompleted(video.currentTime, video.duration);
                   lastSend = 'finished';
                 }
               }
@@ -737,7 +737,9 @@ H5P.VideoHtml5 = (function ($) {
       this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
-      this.triggerXAPI('finished', event.data);
+        //triggered as finished to be seperate from H5Ps completed,
+        //but statement is sent as completed and differentiated by object.id
+      this.triggerXAPI('completed', event.data);
     })
     self.on('fullscreen', function (event) {
       // @todo: Not currently used.

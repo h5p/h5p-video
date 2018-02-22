@@ -293,13 +293,13 @@ H5P.VideoXAPI = (function ($) {
         };
 
         /**
-         * self.getArgsXAPIFinished
+         * self.getArgsXAPICompleted
          *
          * @param { float } currentTime time of the video currently
          *
          * used to retun json object sent with complete event to be triggered by xAPI event
          */
-        self.getArgsXAPIFinished = function (currentTime, duration) {
+        self.getArgsXAPICompleted = function (currentTime, duration) {
           var progress = self.getProgress(currentTime, duration);
           var resultExtTime = self.formatFloat(currentTime);
           var dateTime = new Date();
@@ -319,9 +319,9 @@ H5P.VideoXAPI = (function ($) {
 
           return {
             "verb": {
-                "id": "http://adlnet.gov/expapi/verbs/finished",
+                "id": "http://adlnet.gov/expapi/verbs/completed",
                 "display": {
-                    "en-US": "finished"
+                    "en-US": "completed"
                 }
             },
             "result": {
