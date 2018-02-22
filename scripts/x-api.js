@@ -30,6 +30,42 @@ H5P.VideoXAPI = (function ($) {
           }
           return +(parseFloat(number).toFixed(2));
         };
+        /**
+         * Format time to ISO8601 time 
+         *
+         * @param {float} time Number to convert to ISO8601 string
+         */
+        self.time_to_iso8601_duration = function( time ) {
+             var units = {
+                "Y" : (365*24*3600),
+                "D" :    (24*3600),
+                "H" :       3600,
+                "M" :          60,
+                "S" :           1,
+            }
+            var time_names = [ "H", "M", "S" ];
+
+            var str = "P";
+            var istime = false;
+
+            for(var unitName in units ) {
+                if( units.hasOwnProperty(unitName)) {
+                    var unit = units[unitName];
+                    var quot  = parseInt( time / unit);
+                    var time  = time - (quot * unit);
+                    unit  = quot;
+                    if (unit > 0) {
+                        if (!istime && (time_names.indexOf(unitName) > -1) ) { // There may be a better way to do this
+                            str += "T";
+                            istime = true;
+                        }
+                        str += ''+unit+'' + unitName;
+                    }
+                }
+            }
+
+            return str;
+        }
 
         /**
         * Track xAPI statement data for video events.
@@ -327,7 +363,7 @@ H5P.VideoXAPI = (function ($) {
             "result": {
               "extensions": extensions,
               "success" : true,
-              "duration" : duration
+              "duration" : self.time_to_iso8601_duration( duration )
             },
             "context": {
               "contextActivities": {
