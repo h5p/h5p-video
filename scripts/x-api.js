@@ -28,7 +28,7 @@ H5P.VideoXAPI = (function ($) {
           if (number == null) {
             return null;
           }
-          return +(parseFloat(number).toFixed(3));
+          return +(parseFloat(number).toFixed(2));
         };
 
         /**
@@ -138,7 +138,7 @@ H5P.VideoXAPI = (function ($) {
               extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
           }
           if ( typeof self.playedSegments != "undefined" ){
-              extensions["https://w3id.org/xapi/video/extensions/progress"] = self.playedSegments
+              extensions["https://w3id.org/xapi/video/extensions/played-segments"] = self.playedSegments
           }
           return {
             "verb": {
@@ -216,8 +216,8 @@ H5P.VideoXAPI = (function ($) {
           var timeStamp = dateTime.toISOString();
           var resultExtTime = self.formatFloat(currentTime);
           self.seekStart = resultExtTime;
-          self.endPlayedSegment(self.previousTime);
-          self.playedSegmentsSegmentStart = self.seekStart;
+          self.endPlayedSegment(self.previousTime.toFixed(2));
+          self.playedSegmentsSegmentStart = self.seekStart.toFixed(2);
 
           return {
             "verb": {
@@ -228,8 +228,8 @@ H5P.VideoXAPI = (function ($) {
             },
             "result": {
               "extensions" : {
-                "https://w3id.org/xapi/video/extensions/time-from": self.previousTime,
-                "https://w3id.org/xapi/video/extensions/time-to": self.seekStart
+                "https://w3id.org/xapi/video/extensions/time-from": self.previousTime.toFixed(2),
+                "https://w3id.org/xapi/video/extensions/time-to": self.seekStart.toFixed(2)
               }
             },
             "context": {
@@ -325,7 +325,9 @@ H5P.VideoXAPI = (function ($) {
                 }
             },
             "result": {
-              "extensions": extensions
+              "extensions": extensions,
+              "success" : true,
+              "duration" : duration
             },
             "context": {
               "contextActivities": {
