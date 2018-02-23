@@ -12,6 +12,12 @@ H5P.VideoYouTube = (function ($) {
   function YouTube(sources, options, l10n) {
     var self = this;
 
+    /**
+     * xAPI Helper.
+     * @private
+     */
+    var videoXAPI = new H5P.VideoXAPI(self);
+
     var player;
     var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
@@ -120,25 +126,25 @@ H5P.VideoYouTube = (function ($) {
               // Calls for xAPI events.
               if (state.data == 1) {
                 // Get and send play call when not seeking.
-                if (H5P.VideoXAPI.seeking === false) {
-                  self.trigger('play', H5P.VideoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
+                if (videoXAPI.seeking === false) {
+                  self.trigger('play', videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 } else {
-                  self.trigger('seeked', H5P.VideoXAPI.getArgsXAPISeeked(H5P.VideoXAPI.seekedTo));
-                  H5P.VideoXAPI.seeking = false;
+                  self.trigger('seeked', videoXAPI.getArgsXAPISeeked(videoXAPI.seekedTo));
+                  videoXAPI.seeking = false;
                 }
               } else if (state.data == 2) {
                 // This is a paused event.
-                if (H5P.VideoXAPI.seeking === false) {
-                  self.trigger('paused', H5P.VideoXAPI.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
+                if (videoXAPI.seeking === false) {
+                  self.trigger('paused', videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
                 }
               } else if (state.data == 0) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
                   // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
-                  var progress = H5P.VideoXAPI.getProgress( length, length );
+                  var progress = videoXAPI.getProgress( length, length );
                   if (progress >= 1) {
-                    var arg = H5P.VideoXAPI.getArgsXAPICompleted(player.getCurrentTime(), player.getDuration());
+                    var arg = videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), player.getDuration());
                     self.trigger('finished', arg);
                   }
                 }
@@ -180,9 +186,10 @@ H5P.VideoYouTube = (function ($) {
     /**
      * Helper to calculate video dimensions (used in xAPI statements).
      *
+     * @private
      * @param {string} Which dimension to return ('width' or 'height')
      */
-    function getWidthOrHeight (returnType) {
+    var getWidthOrHeight = function (returnType) {
       var quality = player.getPlaybackQuality();
       var width = '';
       var height = '';
@@ -212,11 +219,14 @@ H5P.VideoYouTube = (function ($) {
           height: '1080';
           break;
       }
+
       return (returnType.toLowerCase().trim()=='width') ? width : height;
-    }
+    };
 
     /**
      * Create the xAPI object for the 'Loaded' event.
+     *
+     * @private
      */
     var getLoadedParams = function () {
       var height = getWidthOrHeight('height');
@@ -227,7 +237,7 @@ H5P.VideoYouTube = (function ($) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
 
-      return H5P.VideoXAPI.getArgsXAPIInitialized(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
+      return videoXAPI.getArgsXAPIInitialized(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
 
     };
 
@@ -374,12 +384,12 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      if (H5P.VideoXAPI.seeking === false) {
-        H5P.VideoXAPI.previousTime = player.getCurrentTime();
+      if (videoXAPI.seeking === false) {
+        videoXAPI.previousTime = player.getCurrentTime();
       }
       player.seekTo(time, true);
-      H5P.VideoXAPI.seekedTo = time;
-      H5P.VideoXAPI.seeking = true;
+      videoXAPI.seekedTo = time;
+      videoXAPI.seeking = true;
     };
 
     /**
