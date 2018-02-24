@@ -514,10 +514,12 @@ H5P.VideoXAPI = (function ($) {
       xAPIObject.definition.type = "https://w3id.org/xapi/video/activity-type/video";
 
       // Add definition description (if video has a description).
-      if (H5PIntegration && H5PIntegration.contents && videoInstance.contentId && H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent) {
+      if (videoInstance.contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent) {
         var videoData = JSON.parse(H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent);
-        if (videoData.shortStartDescription) {
-          xAPIObject.description = videoData.shortStartDescription;
+        if (videoData && videoData.interactiveVideo && videoData.interactiveVideo.video && videoData.interactiveVideo.video.startScreenOptions && videoData.interactiveVideo.video.startScreenOptions.shortStartDescription) {
+          xAPIObject.definition.description = {
+            "en-US": videoData.interactiveVideo.video.startScreenOptions.shortStartDescription
+          };
         }
       }
 
