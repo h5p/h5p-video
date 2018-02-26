@@ -43,13 +43,13 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime time of the video currently
-     * @param {Number} width [description]
-     * @param {Number} height [description]
-     * @param {Number} rate [description]
-     * @param {number} volume [description]
-     * @param {Boolean} ccEnabled [description]
-     * @param {String} ccLanguage [description]
-     * @param {String} quality [description]
+     * @param {Number} width width of the current screen
+     * @param {Number} height height of the current video screen
+     * @param {Number} rate playback rate
+     * @param {number} volume level of volume
+     * @param {Boolean} ccEnabled boolean whether closed captions are enabled
+     * @param {String} ccLanguage language of closed captions
+     * @param {String} quality quality rating of resolution
      * @returns {Object} JSON xAPI statement
      *
      */
@@ -167,7 +167,7 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime time of the video currently
-     * @param {Number} duration [description]
+     * @param {Number} duration length of the video in seconds
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIPaused = function (currentTime, duration) {
@@ -267,8 +267,8 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime time of the video currently
-     * @param {Boolean} muted [description]
-     * @param {Number} volume [description]
+     * @param {Boolean} muted indicates whether video is currently muted
+     * @param {Number} volume indicates the volume level
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIVolumeChanged = function (currentTime, muted, volume) {
@@ -317,9 +317,9 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime time of the video currently
-     * @param {Number} width [description]
-     * @param {Number} height [description]
-     * @param {Boolean} fullscreen [description]
+     * @param {Number} width width of the current video screen (pixels)
+     * @param {Number} height height of the current video screen (pixels)
+     * @param {Boolean} fullscreen indicates whether user is watching in full screen mode or not
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen = false) {
@@ -375,7 +375,7 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime time of the video currently
-     * @param {Number} duration [description]
+     * @param {Number} duration length of the current video in seconds
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPICompleted = function (currentTime, duration) {
@@ -427,8 +427,8 @@ H5P.VideoXAPI = (function ($) {
      * Calculate video progress.
      *
      * @public
-     * @param {Number} currentTime [description]
-     * @param {Number} duration [description]
+     * @param {Number} currentTime current time of the video in seconds
+     * @param {Number} duration legnth of the video in seconds
      * @returns {Number} Progress between 0..1
      */
     self.getProgress = function (currentTime, duration) {
