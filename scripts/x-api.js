@@ -576,7 +576,7 @@ H5P.VideoXAPI = (function ($) {
     for (var unitName in units  ) {
       if (units.hasOwnProperty(unitName)) {
         var unit = units[unitName];
-        var quot = parseInt(time / unit);
+        var quot = Math.floor(time / unit);
         var time = time - (quot * unit);
         unit = quot;
         if (unit > 0) {
