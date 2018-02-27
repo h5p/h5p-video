@@ -156,7 +156,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     }
   }
 
-
   // Extends the event dispatcher
   Video.prototype = Object.create(H5P.EventDispatcher.prototype);
   Video.prototype.constructor = Video;
