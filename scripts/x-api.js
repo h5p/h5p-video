@@ -471,6 +471,11 @@ H5P.VideoXAPI = (function ($) {
         }
       });
 
+      // Progress (percentage) is encoded as a decimal between 0.00 and 1.00.
+      // @see: https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2544-progress
+      // Note: We avoid parseInt() here because it fails when the representation
+      // of a number in JavaScript is expressed in exponential notation (used
+      // for very small or very large numbers).
       var progress = 1 * (progressLength / duration ).toFixed(2);
 
       return progress;
