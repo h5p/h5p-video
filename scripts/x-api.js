@@ -27,7 +27,6 @@ H5P.VideoXAPI = (function ($) {
      * @private
      */
     var videoInstance = instance;
-    var seekStart = null;
     var playedSegments = [];
     var playedSegmentsSegmentStart =0;
     var playedSegmentsSegmentEnd;
@@ -132,7 +131,6 @@ H5P.VideoXAPI = (function ($) {
       var resultExtTime = formatFloat(currentTime);
 
       playedSegmentsSegmentStart = resultExtTime;
-      seekStart = null;
 
       return {
         "verb": {
@@ -229,9 +227,8 @@ H5P.VideoXAPI = (function ($) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      seekStart = resultExtTime;
       endPlayedSegment(self.previousTime.toFixed(2));
-      playedSegmentsSegmentStart = seekStart.toFixed(2);
+      playedSegmentsSegmentStart = resultExtTime;
 
       return {
         "verb": {
@@ -244,7 +241,7 @@ H5P.VideoXAPI = (function ($) {
         "result": {
           "extensions" : {
             "https://w3id.org/xapi/video/extensions/time-from": self.previousTime.toFixed(2),
-            "https://w3id.org/xapi/video/extensions/time-to": seekStart.toFixed(2)
+            "https://w3id.org/xapi/video/extensions/time-to": playedSegmentsSegmentStart
           }
         },
         "context": {
