@@ -28,7 +28,7 @@ H5P.VideoXAPI = (function ($) {
      */
     var videoInstance = instance;
     var playedSegments = [];
-    var playedSegmentsSegmentStart =0;
+    var playedSegmentsSegmentStart = 0;
     var playedSegmentsSegmentEnd;
     var volumeChangedOn = null;
     var volumeChangedAt = 0;
