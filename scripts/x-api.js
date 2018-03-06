@@ -488,7 +488,7 @@ H5P.VideoXAPI = (function ($) {
     var endPlayedSegment = function (endTime) {
       var arr;
       // Need to not push in segments that happen from multiple triggers during scrubbing
-      if (endTime !== playedSegmentsSegmentStart && Math.abs(endTime - playedSegmentsSegmentStart) > 1 ) {
+      if (Math.abs(endTime - playedSegmentsSegmentStart) > 1) {
         // Don't run if called too closely to each other.
         arr = playedSegments == "" ? [] : playedSegments.split("[,]");
         arr.push(formatFloat(playedSegmentsSegmentStart) + "[.]" + formatFloat(endTime));
