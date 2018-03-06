@@ -574,18 +574,16 @@ H5P.VideoXAPI = (function ($) {
     var iso8601Duration = "P";
     var isTime = false;
     for (var unitName in units  ) {
-      if (units.hasOwnProperty(unitName)) {
-        var unit = units[unitName];
-        var quot = Math.floor(time / unit);
-        var time = time - (quot * unit);
-        unit = quot;
-        if (unit > 0) {
-          if (!isTime && (timeUnits.indexOf(unitName) > -1)) {
-            iso8601Duration += "T";
-            isTime = true;
-          }
-          iso8601Duration += '' + unit + '' + unitName;
+      var unit = units[unitName];
+      var quot = Math.floor(time / unit);
+      var time = time - (quot * unit);
+      unit = quot;
+      if (unit > 0) {
+        if (!isTime && (timeUnits.indexOf(unitName) > -1)) {
+          iso8601Duration += "T";
+          isTime = true;
         }
+        iso8601Duration += '' + unit + '' + unitName;
       }
     }
 
