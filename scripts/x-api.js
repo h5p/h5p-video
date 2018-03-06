@@ -65,11 +65,11 @@ H5P.VideoXAPI = (function ($) {
       var playbackRate = rate;
       var volume = formatFloat(volume);
       var userAgent = navigator.userAgent;
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
+      var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
 
       var extensions = {};
-      if (typeof state !== "undefined" && state != false) {
-        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = state
+      if (typeof isFullscreen !== "undefined" && isFullscreen) {
+        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = isFullscreen
       }
       if (typeof screenSize !== "undefined") {
         extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
