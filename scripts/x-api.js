@@ -33,7 +33,7 @@ H5P.VideoXAPI = (function ($) {
     var playedSegmentsSegmentEnd;
     var volumeChangedOn = null;
     var volumeChangedAt = 0;
-    var sessionID = guid();
+    var sessionID = H5P.createUUID();
     var currentTime = 0;
 
 
@@ -526,19 +526,6 @@ H5P.VideoXAPI = (function ($) {
       return xAPIObject;
     };
   }
-
-  /**
-  * Generate a random GUID string used for seesionID with video xAPI statements.
-  *
-  * @private
-  */
-  var guid = function () {
-    var s4 = function () {
-      return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    };
-
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-  };
 
   /**
    * Format parameter as float (or null if invalid).
