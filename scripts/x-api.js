@@ -428,7 +428,7 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      * @param {Number} currentTime current time of the video in seconds
-     * @param {Number} duration legnth of the video in seconds
+     * @param {Number} duration length of the video in seconds
      * @returns {Number} Progress between 0..1
      */
     self.getProgress = function (currentTime, duration) {
