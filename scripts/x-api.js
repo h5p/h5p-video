@@ -403,7 +403,7 @@ H5P.VideoXAPI = (function ($) {
         "object": getXAPIObject(),
         "result": {
           "extensions": extensions,
-          "success" : true,
+          "completion" : true,
           "duration" : secondsToISO8601Duration(duration)
         },
         "context": {
