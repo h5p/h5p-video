@@ -174,8 +174,7 @@ H5P.VideoXAPI = (function ($) {
 
       var progress = self.getProgress(currentTime, duration);
 
-      playedSegmentsSegmentStart = resultExtTime;
-      endPlayedSegment(resultExtTime);
+      endPlayingSegment(resultExtTime);
 
       var extensions = {};
       if (typeof resultExtTime !== "undefined") {
@@ -185,7 +184,7 @@ H5P.VideoXAPI = (function ($) {
         extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
       }
       if (typeof playedSegments !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = playedSegments
+        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = stringifyPlayedSegments()
       }
 
       return {
@@ -225,7 +224,7 @@ H5P.VideoXAPI = (function ($) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      endPlayedSegment(formatFloat(self.previousTime));
+      endPlayingSegment(formatFloat(self.previousTime));
       playingSegmentStart = resultExtTime;
 
       return {
@@ -371,7 +370,7 @@ H5P.VideoXAPI = (function ($) {
     self.getArgsXAPICompleted = function (currentTime, duration, progress) {
       var resultExtTime = formatFloat(currentTime);
       var dateTime = new Date();
-      endPlayedSegment(resultExtTime);
+      endPlayingSegment(resultExtTime);
       playingSegmentStart = 0;
       var timeStamp = dateTime.toISOString();
 
@@ -383,7 +382,7 @@ H5P.VideoXAPI = (function ($) {
         extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
       }
       if (typeof playedSegments !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = playedSegments
+        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = stringifyPlayedSegments()
       }
 
       return {
@@ -422,69 +421,74 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Number} Progress between 0..1
      */
     self.getProgress = function (currentTime, duration) {
-      var arr, arr2;
-      endPlayedSegment(currentTime);
-      playedSegmentsSegmentStart = currentTime;
-      // Get played segments array.
-      arr = playedSegments == "" ? [] : playedSegments.split("[,]");
+      // If we're currently playing a segment, end it so it's included in our
+      // calculations below.
+      endPlayingSegment(currentTime);
 
-      arr2 = [];
-      arr.forEach(function (v,i) {
-        arr2[i] = v.split("[.]");
-        arr2[i][0] *= 1;
-        arr2[i][1] *= 1;
+      // Create a copy of the played segments array so we can manipulate it.
+      var parsedPlayedSegments = JSON.parse(JSON.stringify(playedSegments));
+
+      // Sort the array (so we can detect overlapping segments).
+      parsedPlayedSegments.sort(function (a, b) {
+        return a.start - b.start;
       });
 
-      // Sort the array.
-      arr2.sort(function (a,b) {
-        return a[0] - b[0];
-      });
-
-      // Normalize the segments.
-      arr2.forEach(function (v,i) {
-        if (i > 0) {
-          // Overlapping segments: this segment's starting point is less than last segment's end point.
-          if (arr2[i][0] < arr2[i-1][1]) {
-            arr2[i][0] = arr2[i-1][1];
-            if (arr2[i][0] > arr2[i][1]) {
-              arr2[i][1] = arr2[i][0];
-            }
-          }
+      // Calculate total time watched from played segments.
+      var timePlayed = 0;
+      parsedPlayedSegments.forEach(function (currentValue, i, segments) {
+        // If a segment overlaps, discard the overlap (otherwise our progress
+        // count would be artificially inflated).
+        if (i > 0 && segments[i].start < segments[i-1].end) {
+          segments[i].start = segments[i-1].end;
+          // This segment may have been inside the previous segment, so be sure
+          // to update its end timestamp so we don't have a negative range).
+          segments[i].end = Math.max(segments[i].start, segments[i].end);
         }
-      });
-
-      // Calculate progress length.
-      var progressLength = 0;
-      arr2.forEach(function (v,i) {
-        if (v[1] > v[0]) {
-          progressLength += v[1] - v[0];
-        }
+        // Add this segment's length to our cumulative progress counter.
+        timePlayed += segments[i].end - segments[i].start;
       });
 
       // Progress (percentage) is encoded as a decimal between 0.000 and 1.000.
       // @see: https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2544-progress
-      var progress = formatFloat(progressLength / duration);
-
-      return progress;
+      return formatFloat(timePlayed / duration);
     };
 
     /**
-     * Add a played segment to the array of already played segments.
+     * Adds a played segment to the array of already played segments.
      *
      * @private
-     * @param {Number} endTime When the current played segment ended
+     * @param {Number} endTime When the currently playing segment ended
      */
-    var endPlayedSegment = function (endTime) {
-      var arr;
-      // Need to not push in segments that happen from multiple triggers during scrubbing
-      if (Math.abs(endTime - playedSegmentsSegmentStart) > 1) {
-        // Don't run if called too closely to each other.
-        arr = playedSegments == "" ? [] : playedSegments.split("[,]");
-        arr.push(formatFloat(playedSegmentsSegmentStart) + "[.]" + formatFloat(endTime));
-        playedSegments = arr.join("[,]");
-        playedSegmentsSegmentStart = null;
+    var endPlayingSegment = function (endTime) {
+      // Scrubbing the video will fire this function many times, so only record
+      // segments 1 second or longer (ignore any segments less than 1 second).
+      if (Math.abs(endTime - playingSegmentStart) > 1) {
+        playedSegments.push({
+          start: formatFloat(playingSegmentStart),
+          end: formatFloat(endTime)
+        });
+        playingSegmentStart = endTime;
       }
     };
+
+    /**
+     * Converts an array of played segments to the string representation defined
+     * in the xAPI Video Profile spec.
+     * @see  https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2545-played-segments
+     * @return {String} Played segments string, e.g., "0.000[.]12.000[,]14.000[.]21.000"
+     */
+    var stringifyPlayedSegments = function () {
+      var stringPlayedSegments = '';
+      if (playedSegments.length > 0) {
+        stringPlayedSegments = playedSegments.map(function (segment) {
+          return segment.start.toFixed(3) + '[.]' + segment.end.toFixed(3);
+        }).reduce(function (accumulator, segment) {
+          return accumulator + '[,]' + segment;
+        });
+      }
+
+      return stringPlayedSegments;
+    }
 
     /**
      * Append extra data to the XAPI statement's default object definition.
