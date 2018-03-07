@@ -367,10 +367,10 @@ H5P.VideoXAPI = (function ($) {
      * @public
      * @param {Number} currentTime time of the video currently
      * @param {Number} duration length of the current video in seconds
+     * @param {Number} number between 0-1 indicating percentage of video watched
      * @returns {Object} JSON xAPI statement
      */
-    self.getArgsXAPICompleted = function (currentTime, duration) {
-      var progress = self.getProgress(currentTime, duration);
+    self.getArgsXAPICompleted = function (currentTime, duration, progress) {
       var resultExtTime = formatFloat(currentTime);
       var dateTime = new Date();
       endPlayedSegment(resultExtTime);
@@ -428,9 +428,6 @@ H5P.VideoXAPI = (function ($) {
       playedSegmentsSegmentStart = currentTime;
       // Get played segments array.
       arr = playedSegments == "" ? [] : playedSegments.split("[,]");
-      if (playedSegmentsSegmentStart != null) {
-        arr.push(playedSegmentsSegmentStart + "[.]" + formatFloat(currentTime));
-      }
 
       arr2 = [];
       arr.forEach(function (v,i) {

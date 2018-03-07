@@ -225,7 +225,7 @@ H5P.VideoHtml5 = (function ($) {
                 var progress = videoXAPI.getProgress(length, length);
                 if (progress >= 1) {
                   extraTrigger = "finished";
-                  extraArg = videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration);
+                  extraArg = videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
                   lastSend = 'finished';
                 }
               }
