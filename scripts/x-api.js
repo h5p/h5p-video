@@ -317,7 +317,7 @@ H5P.VideoXAPI = (function ($) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
+      var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
       var screenSize = screen.width + "x" + screen.height;
       var playbackSize = width + "x" + height;
 
@@ -325,8 +325,8 @@ H5P.VideoXAPI = (function ($) {
       if (typeof sessionID !== "undefined") {
         extensions["https://w3id.org/xapi/video/extensions/session-id"] = sessionID
       }
-      if (typeof state !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = state
+      if (typeof isFullscreen !== "undefined" && isFullscreen) {
+        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = isFullscreen
       }
       if (typeof screenSize !== "undefined") {
         extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
