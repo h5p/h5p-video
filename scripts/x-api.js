@@ -28,7 +28,7 @@ H5P.VideoXAPI = (function ($) {
      */
     var videoInstance = instance;
     var playedSegments = [];
-    var playedSegmentsSegmentStart = 0;
+    var playingSegmentStart = 0;
     var volumeChangedOn = null;
     var volumeChangedAt = 0;
     var sessionID = H5P.createUUID();
@@ -128,8 +128,7 @@ H5P.VideoXAPI = (function ($) {
       var timeStamp = dateTime.toISOString();
 
       var resultExtTime = formatFloat(currentTime);
-
-      playedSegmentsSegmentStart = resultExtTime;
+      playingSegmentStart = resultExtTime;
 
       return {
         "verb": {
@@ -227,7 +226,7 @@ H5P.VideoXAPI = (function ($) {
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
       endPlayedSegment(formatFloat(self.previousTime));
-      playedSegmentsSegmentStart = resultExtTime;
+      playingSegmentStart = resultExtTime;
 
       return {
         "verb": {
@@ -240,7 +239,7 @@ H5P.VideoXAPI = (function ($) {
         "result": {
           "extensions" : {
             "https://w3id.org/xapi/video/extensions/time-from": formatFloat(self.previousTime),
-            "https://w3id.org/xapi/video/extensions/time-to": playedSegmentsSegmentStart
+            "https://w3id.org/xapi/video/extensions/time-to": playingSegmentStart
           }
         },
         "context": {
@@ -373,6 +372,7 @@ H5P.VideoXAPI = (function ($) {
       var resultExtTime = formatFloat(currentTime);
       var dateTime = new Date();
       endPlayedSegment(resultExtTime);
+      playingSegmentStart = 0;
       var timeStamp = dateTime.toISOString();
 
       var extensions = {};
