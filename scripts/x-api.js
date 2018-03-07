@@ -227,7 +227,7 @@ H5P.VideoXAPI = (function ($) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      endPlayedSegment(self.previousTime.toFixed(2));
+      endPlayedSegment(formatFloat(self.previousTime));
       playedSegmentsSegmentStart = resultExtTime;
 
       return {
@@ -240,7 +240,7 @@ H5P.VideoXAPI = (function ($) {
         "object": getXAPIObject(),
         "result": {
           "extensions" : {
-            "https://w3id.org/xapi/video/extensions/time-from": self.previousTime.toFixed(2),
+            "https://w3id.org/xapi/video/extensions/time-from": formatFloat(self.previousTime),
             "https://w3id.org/xapi/video/extensions/time-to": playedSegmentsSegmentStart
           }
         },
@@ -471,12 +471,9 @@ H5P.VideoXAPI = (function ($) {
         }
       });
 
-      // Progress (percentage) is encoded as a decimal between 0.00 and 1.00.
+      // Progress (percentage) is encoded as a decimal between 0.000 and 1.000.
       // @see: https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2544-progress
-      // Note: We avoid parseInt() here because it fails when the representation
-      // of a number in JavaScript is expressed in exponential notation (used
-      // for very small or very large numbers).
-      var progress = 1 * (progressLength / duration ).toFixed(2);
+      var progress = formatFloat(progressLength / duration);
 
       return progress;
     };
@@ -530,18 +527,19 @@ H5P.VideoXAPI = (function ($) {
   }
 
   /**
-   * Format parameter as float (or null if invalid).
-   * Used when making arguments sent with video xAPI statments.
+   * Returns a floating point value with up to 3 decimals of precision (or null
+   * if invalid). Used when making arguments sent with video xAPI statments.
    *
    * @private
    * @param {string} Number to convert to float
+   * @returns {Number} Floating point with up to 3 decimals of precision
    */
   var formatFloat = function (number) {
     if (number == null) {
       return null;
     }
 
-    return +(parseFloat(number).toFixed(2));
+    return +(parseFloat(number).toFixed(3));
   };
 
   /**
