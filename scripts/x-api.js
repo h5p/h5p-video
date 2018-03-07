@@ -272,13 +272,7 @@ H5P.VideoXAPI = (function ($) {
      var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       volumeChangedAt = formatFloat(currentTime);
-      var isMuted = muted;
-      var volumeChange;
-      if (isMuted === true) {
-        volumeChange = 0;
-      } else {
-        volumeChange = formatFloat(volume);
-      }
+      volume = muted ? 0 : formatFloat(volume);
 
       return {
         "verb": {
@@ -301,7 +295,7 @@ H5P.VideoXAPI = (function ($) {
           },
           "extensions": {
             "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-            "https://w3id.org/xapi/video/extensions/volume": volumeChange
+            "https://w3id.org/xapi/video/extensions/volume": volume
           }
         },
         "timestamp" : timeStamp
