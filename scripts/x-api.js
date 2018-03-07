@@ -29,7 +29,6 @@ H5P.VideoXAPI = (function ($) {
     var videoInstance = instance;
     var playedSegments = [];
     var playedSegmentsSegmentStart = 0;
-    var playedSegmentsSegmentEnd;
     var volumeChangedOn = null;
     var volumeChangedAt = 0;
     var sessionID = H5P.createUUID();
@@ -483,7 +482,6 @@ H5P.VideoXAPI = (function ($) {
         arr = playedSegments == "" ? [] : playedSegments.split("[,]");
         arr.push(formatFloat(playedSegmentsSegmentStart) + "[.]" + formatFloat(endTime));
         playedSegments = arr.join("[,]");
-        playedSegmentsSegmentEnd = endTime;
         playedSegmentsSegmentStart = null;
       }
     };
