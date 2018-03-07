@@ -365,7 +365,7 @@ H5P.VideoXAPI = (function ($) {
      * @public
      * @param {Number} currentTime time of the video currently
      * @param {Number} duration length of the current video in seconds
-     * @param {Number} number between 0-1 indicating percentage of video watched
+     * @param {Number} progress Number between 0.000 and 1.000 indicating percentage of video watched
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPICompleted = function (currentTime, duration, progress) {
