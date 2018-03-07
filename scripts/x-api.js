@@ -269,7 +269,7 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIVolumeChanged = function (currentTime, muted, volume) {
-     var dateTime = new Date();
+      var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       volumeChangedAt = formatFloat(currentTime);
       volume = muted ? 0 : formatFloat(volume);
