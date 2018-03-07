@@ -149,7 +149,7 @@ H5P.VideoHtml5 = (function ($) {
     });
 
     /**
-     * Create the xAPI object for the 'Loaded' event.
+     * Create the xAPI object for the 'Initialized' event.
      */
     var getLoadedParams = function () {
       var ccEnabled = false;
@@ -161,8 +161,6 @@ H5P.VideoHtml5 = (function ($) {
           ccLanguage = video.textTracks[i].language;
         }
       }
-
-      var isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || false;
 
       return videoXAPI.getArgsXAPIInitialized(video.currentTime, video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
 
