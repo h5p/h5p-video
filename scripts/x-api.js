@@ -47,7 +47,7 @@ H5P.VideoXAPI = (function ($) {
      * @param {number} volume level of volume
      * @param {Boolean} ccEnabled boolean whether closed captions are enabled
      * @param {String} ccLanguage language of closed captions
-     * @param {String} quality quality rating of resolution
+     * @param {String} [quality] quality rating of resolution
      * @returns {Object} JSON xAPI statement
      *
      */
@@ -307,7 +307,7 @@ H5P.VideoXAPI = (function ($) {
      * @param {Number} currentTime time of the video currently
      * @param {Number} width width of the current video screen (pixels)
      * @param {Number} height height of the current video screen (pixels)
-     * @param {Boolean} fullscreen indicates whether user is watching in full screen mode or not
+     * @param {Boolean} [fullscreen] indicates whether user is watching in full screen mode or not
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen = false) {
