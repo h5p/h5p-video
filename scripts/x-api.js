@@ -36,7 +36,7 @@ H5P.VideoXAPI = (function ($) {
 
 
     /**
-     * Generates "initialized" xAPI statement (Video Profile).
+     * Generates 'initialized' xAPI statement (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#231-initialized
      *
      * @public
@@ -59,64 +59,64 @@ H5P.VideoXAPI = (function ($) {
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = (width !== undefined && width !== '' ) ? width + "x" + height : "undetermined";
+      var screenSize = screen.width + 'x' + screen.height;
+      var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : 'undetermined';
       var playbackRate = rate;
       var volume = formatFloat(volume);
       var userAgent = navigator.userAgent;
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
 
       var extensions = {};
-      if (typeof isFullscreen !== "undefined" && isFullscreen) {
-        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = isFullscreen
+      if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+        extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
-      if (typeof screenSize !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
+      if (typeof screenSize !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/screen-size'] = screenSize;
       }
-      if (typeof playbackSize !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/video-playback-size"] = playbackSize
+      if (typeof playbackSize !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/video-playback-size'] = playbackSize;
       }
-      if (typeof sessionID !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/session-id"] = sessionID
+      if (typeof sessionID !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/session-id'] = sessionID;
       }
-      if (typeof quality !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/quality"] = quality
+      if (typeof quality !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/quality'] = quality;
       }
-      if (typeof ccEnabled !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/cc-enabled"] = ccEnabled
+      if (typeof ccEnabled !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/cc-enabled'] = ccEnabled;
       }
-      if (typeof playbackRate !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/speed"] = playbackRate
+      if (typeof playbackRate !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/speed'] = playbackRate;
       }
-      if (typeof userAgent !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/user-agent"] = userAgent
+      if (typeof userAgent !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/user-agent'] = userAgent;
       }
-      if (typeof volume !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/volume"] = volume
+      if (typeof volume !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/volume'] = volume;
       }
 
       return {
-        "verb": {
-          "id": "http://adlnet.gov/expapi/verbs/initialized",
-          "display": {
-            "en-US": "initialized"
+        'verb': {
+          'id': 'http://adlnet.gov/expapi/verbs/initialized',
+          'display': {
+            'en-US': 'initialized'
           }
         },
-        "object": getXAPIObject(),
-        "context" : {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'object': getXAPIObject(),
+        'context' : {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": extensions
+          'extensions': extensions
         },
-        "timestamp": timeStamp
+        'timestamp': timeStamp
       };
     };
 
     /**
-     * Generates "played" xAPI statement.
+     * Generates 'played' xAPI statement.
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#232-played
      *
      * @public
@@ -131,34 +131,34 @@ H5P.VideoXAPI = (function ($) {
       playingSegmentStart = resultExtTime;
 
       return {
-        "verb": {
-          "id": "https://w3id.org/xapi/video/verbs/played",
-          "display": {
-            "en-US": "played"
+        'verb': {
+          'id': 'https://w3id.org/xapi/video/verbs/played',
+          'display': {
+            'en-US': 'played'
           }
         },
-        "object": getXAPIObject(),
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime,
+        'object': getXAPIObject(),
+        'result': {
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/time': resultExtTime,
           }
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/session-id': sessionID
           }
         },
-        "timestamp": timeStamp
+        'timestamp': timeStamp
       };
     };
 
     /**
-     * Generates "paused" xAPI statement (Video Profile).
+     * Generates 'paused' xAPI statement (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#233-paused
      *
      * @public
@@ -177,43 +177,43 @@ H5P.VideoXAPI = (function ($) {
       endPlayingSegment(resultExtTime);
 
       var extensions = {};
-      if (typeof resultExtTime !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/time"] = resultExtTime
+      if (typeof resultExtTime !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/time'] = resultExtTime;
       }
-      if (typeof progress !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
+      if (typeof progress !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/progress'] = progress;
       }
-      if (typeof playedSegments !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = stringifyPlayedSegments()
+      if (typeof playedSegments !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/played-segments'] = stringifyPlayedSegments();
       }
 
       return {
-        "verb": {
-          "id": "https://w3id.org/xapi/video/verbs/paused",
-          "display": {
-            "en-US": "paused"
+        'verb': {
+          'id': 'https://w3id.org/xapi/video/verbs/paused',
+          'display': {
+            'en-US': 'paused'
           }
         },
-        "object": getXAPIObject(),
-        "result": {
-          "extensions": extensions
+        'object': getXAPIObject(),
+        'result': {
+          'extensions': extensions
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/session-id': sessionID
           }
         },
-        "timestamp" : timeStamp
+        'timestamp' : timeStamp
       };
     };
 
     /**
-     * Generates "seeked" xAPI statement (Video Profile).
+     * Generates 'seeked' xAPI statement (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#234-seeked
      *
      * @public
@@ -228,35 +228,35 @@ H5P.VideoXAPI = (function ($) {
       playingSegmentStart = resultExtTime;
 
       return {
-        "verb": {
-          "id": "https://w3id.org/xapi/video/verbs/seeked",
-          "display": {
-            "en-US": "seeked"
+        'verb': {
+          'id': 'https://w3id.org/xapi/video/verbs/seeked',
+          'display': {
+            'en-US': 'seeked'
           }
         },
-        "object": getXAPIObject(),
-        "result": {
-          "extensions" : {
-            "https://w3id.org/xapi/video/extensions/time-from": formatFloat(self.previousTime),
-            "https://w3id.org/xapi/video/extensions/time-to": playingSegmentStart
+        'object': getXAPIObject(),
+        'result': {
+          'extensions' : {
+            'https://w3id.org/xapi/video/extensions/time-from': formatFloat(self.previousTime),
+            'https://w3id.org/xapi/video/extensions/time-to': playingSegmentStart
           }
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/session-id': sessionID
           }
         },
-        "timestamp" : timeStamp
+        'timestamp' : timeStamp
       };
     };
 
     /**
-     * Generates "interacted" xAPI statement when volume changes (Video Profile).
+     * Generates 'interacted' xAPI statement when volume changes (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#235-interacted
      *
      * @public
@@ -272,35 +272,35 @@ H5P.VideoXAPI = (function ($) {
       volume = muted ? 0 : formatFloat(volume);
 
       return {
-        "verb": {
-          "id": "http://adlnet.gov/expapi/verbs/interacted",
-          "display": {
-            "en-US": "interacted"
+        'verb': {
+          'id': 'http://adlnet.gov/expapi/verbs/interacted',
+          'display': {
+            'en-US': 'interacted'
           }
         },
-        "object": getXAPIObject(),
-        "result" : {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": volumeChangedAt
+        'object': getXAPIObject(),
+        'result' : {
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/time': volumeChangedAt
           }
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID,
-            "https://w3id.org/xapi/video/extensions/volume": volume
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/session-id': sessionID,
+            'https://w3id.org/xapi/video/extensions/volume': volume
           }
         },
-        "timestamp" : timeStamp
+        'timestamp' : timeStamp
       };
     };
 
     /**
-     * Generates "interacted" xAPI statement when fullscreen entered (Video Profile).
+     * Generates 'interacted' xAPI statement when fullscreen entered (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#235-interacted
      *
      * @public
@@ -315,50 +315,50 @@ H5P.VideoXAPI = (function ($) {
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
-      var screenSize = screen.width + "x" + screen.height;
-      var playbackSize = width + "x" + height;
+      var screenSize = screen.width + 'x' + screen.height;
+      var playbackSize = width + 'x' + height;
 
       var extensions = {};
-      if (typeof sessionID !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/session-id"] = sessionID
+      if (typeof sessionID !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/session-id'] = sessionID;
       }
-      if (typeof isFullscreen !== "undefined" && isFullscreen) {
-        extensions["https://w3id.org/xapi/video/extensions/full-screen"] = isFullscreen
+      if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+        extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
-      if (typeof screenSize !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/screen-size"] = screenSize
+      if (typeof screenSize !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/screen-size'] = screenSize;
       }
-      if (typeof playbackSize !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/video-playback-size"] = playbackSize
+      if (typeof playbackSize !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/video-playback-size'] = playbackSize;
       }
 
       return {
-        "verb": {
-          "id": "http://adlnet.gov/expapi/verbs/interacted",
-          "display": {
-            "en-US": "interacted"
+        'verb': {
+          'id': 'http://adlnet.gov/expapi/verbs/interacted',
+          'display': {
+            'en-US': 'interacted'
           }
         },
-        "object": getXAPIObject(),
-        "result": {
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/time": resultExtTime
+        'object': getXAPIObject(),
+        'result': {
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/time': resultExtTime
           }
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": extensions
+          'extensions': extensions
         },
-        "timestamp" : timeStamp
+        'timestamp' : timeStamp
       };
     };
 
     /**
-     * Generates "completed" xAPI statement (Video Profile).
+     * Generates 'completed' xAPI statement (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#236-completed
      *
      * @public
@@ -375,40 +375,40 @@ H5P.VideoXAPI = (function ($) {
       var timeStamp = dateTime.toISOString();
 
       var extensions = {};
-      if (typeof resultExtTime !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/time"] = resultExtTime
+      if (typeof resultExtTime !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/time'] = resultExtTime;
       }
-      if (typeof progress !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/progress"] = progress
+      if (typeof progress !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/progress'] = progress;
       }
-      if (typeof playedSegments !== "undefined") {
-        extensions["https://w3id.org/xapi/video/extensions/played-segments"] = stringifyPlayedSegments()
+      if (typeof playedSegments !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/played-segments'] = stringifyPlayedSegments();
       }
 
       return {
-        "verb": {
-          "id": "http://adlnet.gov/expapi/verbs/completed",
-          "display": {
-            "en-US": "completed"
+        'verb': {
+          'id': 'http://adlnet.gov/expapi/verbs/completed',
+          'display': {
+            'en-US': 'completed'
           }
         },
-        "object": getXAPIObject(),
-        "result": {
-          "extensions": extensions,
-          "completion" : true,
-          "duration" : secondsToISO8601Duration(duration)
+        'object': getXAPIObject(),
+        'result': {
+          'extensions': extensions,
+          'completion' : true,
+          'duration' : secondsToISO8601Duration(duration)
         },
-        "context": {
-          "contextActivities": {
-            "category": [{
-              "id": "https://w3id.org/xapi/video"
+        'context': {
+          'contextActivities': {
+            'category': [{
+              'id': 'https://w3id.org/xapi/video'
             }]
           },
-          "extensions": {
-            "https://w3id.org/xapi/video/extensions/session-id": sessionID
+          'extensions': {
+            'https://w3id.org/xapi/video/extensions/session-id': sessionID
           }
         },
-        "timestamp" : timeStamp
+        'timestamp' : timeStamp
       };
     };
 
@@ -475,7 +475,7 @@ H5P.VideoXAPI = (function ($) {
      * Converts an array of played segments to the string representation defined
      * in the xAPI Video Profile spec.
      * @see  https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2545-played-segments
-     * @return {String} Played segments string, e.g., "0.000[.]12.000[,]14.000[.]21.000"
+     * @return {String} Played segments string, e.g., '0.000[.]12.000[,]14.000[.]21.000'
      */
     var stringifyPlayedSegments = function () {
       var stringPlayedSegments = '';
@@ -488,13 +488,13 @@ H5P.VideoXAPI = (function ($) {
       }
 
       return stringPlayedSegments;
-    }
+    };
 
     /**
      * Append extra data to the XAPI statement's default object definition.
      *
      * @private
-     * @returns {Object} "Object" portion of JSON xAPI statement
+     * @returns {Object} 'Object' portion of JSON xAPI statement
      */
     var getXAPIObject = function () {
       var event = new H5P.XAPIEvent();
@@ -503,14 +503,14 @@ H5P.VideoXAPI = (function ($) {
 
       // Add definition type (required by xAPI Video Profile).
       // @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#241-definition
-      xAPIObject.definition.type = "https://w3id.org/xapi/video/activity-type/video";
+      xAPIObject.definition.type = 'https://w3id.org/xapi/video/activity-type/video';
 
       // Add definition description (if video has a description).
       if (videoInstance.contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent) {
         var videoData = JSON.parse(H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent);
         if (videoData && videoData.interactiveVideo && videoData.interactiveVideo.video && videoData.interactiveVideo.video.startScreenOptions && videoData.interactiveVideo.video.startScreenOptions.shortStartDescription) {
           xAPIObject.definition.description = {
-            "en-US": videoData.interactiveVideo.video.startScreenOptions.shortStartDescription
+            'en-US': videoData.interactiveVideo.video.startScreenOptions.shortStartDescription
           };
         }
       }
@@ -528,7 +528,7 @@ H5P.VideoXAPI = (function ($) {
    * @returns {Number} Floating point with up to 3 decimals of precision
    */
   var formatFloat = function (number) {
-    if (number == null) {
+    if (number === null) {
       return null;
     }
 
@@ -544,23 +544,23 @@ H5P.VideoXAPI = (function ($) {
    */
   var secondsToISO8601Duration = function (time) {
     var units = {
-      "Y" : (365*24*3600),
-      "D" :     (24*3600),
-      "H" :         3600,
-      "M" :           60,
-      "S" :            1,
-    }
-    var timeUnits = [ "H", "M", "S" ];
-    var iso8601Duration = "P";
+      'Y': (365*24*3600),
+      'D':     (24*3600),
+      'H':         3600,
+      'M':           60,
+      'S':            1,
+    };
+    var timeUnits = ['H', 'M', 'S'];
+    var iso8601Duration = 'P';
     var isTime = false;
-    for (var unitName in units  ) {
+    for (var unitName in units) {
       var unit = units[unitName];
       var quot = Math.floor(time / unit);
       var time = time - (quot * unit);
       unit = quot;
       if (unit > 0) {
         if (!isTime && (timeUnits.indexOf(unitName) > -1)) {
-          iso8601Duration += "T";
+          iso8601Duration += 'T';
           isTime = true;
         }
         iso8601Duration += '' + unit + '' + unitName;

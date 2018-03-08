@@ -199,7 +199,8 @@ H5P.VideoHtml5 = (function ($) {
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
                 videoXAPI.seeking = false;
-              } else if (lastSend !== 'play') {
+              }
+              else if (lastSend !== 'play') {
                 extraArg = videoXAPI.getArgsXAPIPlayed(video.currentTime);
                 extraTrigger = 'play';
                 lastSend = 'play';
@@ -209,7 +210,7 @@ H5P.VideoHtml5 = (function ($) {
             if (arg === H5P.Video.PAUSED) {
               // Put together extraArg for sending to xAPI statement.
               if (!video.seeking && videoXAPI.seeking === false && video.currentTime !== video.duration) {
-                extraTrigger = "paused";
+                extraTrigger = 'paused';
                 extraArg = videoXAPI.getArgsXAPIPaused(video.currentTime, video.duration);
                 lastSend = 'paused';
               }
@@ -222,7 +223,7 @@ H5P.VideoHtml5 = (function ($) {
                 // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
                 var progress = videoXAPI.getProgress(length, length);
                 if (progress >= 1) {
-                  extraTrigger = "finished";
+                  extraTrigger = 'finished';
                   extraArg = videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
                   lastSend = 'finished';
                 }
@@ -240,10 +241,11 @@ H5P.VideoHtml5 = (function ($) {
             lastSend = 'volumechange';
             break;
           case 'play':
-            if (videoXAPI.seeking === false && lastSend != h5p) {
+            if (videoXAPI.seeking === false && lastSend !== h5p) {
               arg = videoXAPI.getArgsXAPIPlayed(video.currentTime);
               lastSend = h5p;
-            } else {
+            }
+            else {
               arg = videoXAPI.getArgsXAPISeeked(videoXAPI.seekedTo);
               lastSend = 'seeked';
                videoXAPI.seeking = false;
@@ -307,7 +309,7 @@ H5P.VideoHtml5 = (function ($) {
         self.trigger(h5p, arg);
 
         // Make extra calls for events with needed values for xAPI statement.
-        if (extraTrigger != null && extraArg != null) {
+        if (extraTrigger !== null && extraArg !== null) {
           self.trigger(extraTrigger, extraArg);
         }
       }, false);

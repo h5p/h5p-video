@@ -124,20 +124,23 @@ H5P.VideoYouTube = (function ($) {
               self.trigger('stateChange', state.data);
 
               // Calls for xAPI events.
-              if (state.data == 1) {
+              if (state.data === 1) {
                 // Get and send play call when not seeking.
                 if (videoXAPI.seeking === false) {
                   self.trigger('play', videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
-                } else {
+                }
+                else {
                   self.trigger('seeked', videoXAPI.getArgsXAPISeeked(videoXAPI.seekedTo));
                   videoXAPI.seeking = false;
                 }
-              } else if (state.data == 2) {
+              }
+              else if (state.data === 2) {
                 // This is a paused event.
                 if (videoXAPI.seeking === false) {
                   self.trigger('paused', videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
                 }
-              } else if (state.data == 0) {
+              }
+              else if (state.data === 0) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = player.getDuration();
                 if (length > 0) {
@@ -231,7 +234,7 @@ H5P.VideoYouTube = (function ($) {
     var getLoadedParams = function () {
       var height = getWidthOrHeight('height');
       var width = getWidthOrHeight('width');
-      var ccEnabled = player.getOptions().indexOf("cc") !== -1;
+      var ccEnabled = player.getOptions().indexOf('cc') !== -1;
       var ccLanguage;
       if (ccEnabled) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
