@@ -62,9 +62,9 @@ H5P.VideoXAPI = (function ($) {
       var screenSize = screen.width + 'x' + screen.height;
       var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : 'undetermined';
       var playbackRate = rate;
-      var volume = formatFloat(volume);
       var userAgent = navigator.userAgent;
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
+      volume = formatFloat(volume);
 
       var extensions = {};
       if (typeof isFullscreen !== 'undefined' && isFullscreen) {
@@ -556,7 +556,7 @@ H5P.VideoXAPI = (function ($) {
     for (var unitName in units) {
       var unit = units[unitName];
       var quot = Math.floor(time / unit);
-      var time = time - (quot * unit);
+      time = time - (quot * unit);
       unit = quot;
       if (unit > 0) {
         if (!isTime && (timeUnits.indexOf(unitName) > -1)) {
