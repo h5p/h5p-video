@@ -746,7 +746,7 @@ H5P.VideoHtml5 = (function ($) {
       // Triggered as finished to be seperate from H5Ps completed,
       // but statement is sent as completed and differentiated by object.id
       this.triggerXAPI('completed', event.data);
-    })
+    });
     self.on('fullscreen', function (event) {
       // @todo: Not currently used.
       this.triggerXAPI('interacted', event.data);
@@ -756,7 +756,7 @@ H5P.VideoHtml5 = (function ($) {
     });
     self.on('xAPIloaded', function (event) {
       this.triggerXAPI('initialized', event.data);
-    })
+    });
     self.on('paused', function (event) {
       this.triggerXAPI('paused', event.data);
     });
