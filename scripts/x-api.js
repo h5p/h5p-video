@@ -310,7 +310,9 @@ H5P.VideoXAPI = (function ($) {
      * @param {Boolean} [fullscreen] indicates whether user is watching in full screen mode or not
      * @returns {Object} JSON xAPI statement
      */
-    self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen = false) {
+    self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen) {
+      fullscreen = typeof fullscreen !== 'undefined' ? fullscreen : false;
+
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
