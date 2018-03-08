@@ -462,7 +462,7 @@ H5P.VideoXAPI = (function ($) {
     var endPlayingSegment = function (endTime) {
       // Scrubbing the video will fire this function many times, so only record
       // segments 1 second or longer (ignore any segments less than 1 second).
-      if (Math.abs(endTime - playingSegmentStart) > 1) {
+      if (Math.abs(endTime - playingSegmentStart) > 0.5) {
         playedSegments.push({
           start: formatFloat(playingSegmentStart),
           end: formatFloat(endTime)
