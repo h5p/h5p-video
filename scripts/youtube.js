@@ -198,28 +198,28 @@ H5P.VideoYouTube = (function ($) {
       var height = '';
       switch (quality) {
         case 'small':
-          width: '320';
-          height: '240';
+          width = '320';
+          height = '240';
           break;
         case 'medium':
-          width: '640';
-          height: '360';
+          width = '640';
+          height = '360';
           break;
         case 'large':
-          width: '853';
-          height: '480';
+          width = '853';
+          height = '480';
           break;
         case 'hd720':
-          width: '640';
-          height: '360';
+          width = '640';
+          height = '360';
           break;
         case 'hd1080':
-          width: '1920';
-          height: '1080';
+          width = '1920';
+          height = '1080';
           break;
         case 'highres':
-          width: '1920';
-          height: '1080';
+          width = '1920';
+          height = '1080';
           break;
       }
 
@@ -253,8 +253,8 @@ H5P.VideoYouTube = (function ($) {
       this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
-        //triggered as finished to be seperate from H5Ps completed,
-        //but statement is sent as completed and differentiated by object.id
+      // Triggered as finished to be seperate from H5Ps completed,
+      // but statement is sent as completed and differentiated by object.id
       this.triggerXAPI('completed', event.data);
     });
     self.on('fullscreen', function (event) {

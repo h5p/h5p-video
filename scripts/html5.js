@@ -248,7 +248,7 @@ H5P.VideoHtml5 = (function ($) {
             else {
               arg = videoXAPI.getArgsXAPISeeked(videoXAPI.seekedTo);
               lastSend = 'seeked';
-               videoXAPI.seeking = false;
+              videoXAPI.seeking = false;
               h5p = 'seeked';
             }
             break;
@@ -743,10 +743,10 @@ H5P.VideoHtml5 = (function ($) {
       this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
-        //triggered as finished to be seperate from H5Ps completed,
-        //but statement is sent as completed and differentiated by object.id
+      // Triggered as finished to be seperate from H5Ps completed,
+      // but statement is sent as completed and differentiated by object.id
       this.triggerXAPI('completed', event.data);
-    })
+    });
     self.on('fullscreen', function (event) {
       // @todo: Not currently used.
       this.triggerXAPI('interacted', event.data);
@@ -756,7 +756,7 @@ H5P.VideoHtml5 = (function ($) {
     });
     self.on('xAPIloaded', function (event) {
       this.triggerXAPI('initialized', event.data);
-    })
+    });
     self.on('paused', function (event) {
       this.triggerXAPI('paused', event.data);
     });
