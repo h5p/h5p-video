@@ -62,9 +62,9 @@ H5P.VideoXAPI = (function ($) {
       var screenSize = screen.width + 'x' + screen.height;
       var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : 'undetermined';
       var playbackRate = rate;
-      var volume = formatFloat(volume);
       var userAgent = navigator.userAgent;
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
+      volume = formatFloat(volume);
 
       var extensions = {};
       if (typeof isFullscreen !== 'undefined' && isFullscreen) {
@@ -310,7 +310,9 @@ H5P.VideoXAPI = (function ($) {
      * @param {Boolean} [fullscreen] indicates whether user is watching in full screen mode or not
      * @returns {Object} JSON xAPI statement
      */
-    self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen = false) {
+    self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen) {
+      fullscreen = typeof fullscreen !== 'undefined' ? fullscreen : false;
+
       var dateTime = new Date();
       var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
@@ -461,8 +463,9 @@ H5P.VideoXAPI = (function ($) {
      */
     var endPlayingSegment = function (endTime) {
       // Scrubbing the video will fire this function many times, so only record
-      // segments 1 second or longer (ignore any segments less than 1 second).
-      if (Math.abs(endTime - playingSegmentStart) > 0.5) {
+      // segments 500ms or longer (ignore any segments less than 500ms and
+      // negative play segments).
+      if (endTime - playingSegmentStart > 0.5) {
         playedSegments.push({
           start: formatFloat(playingSegmentStart),
           end: formatFloat(endTime)
@@ -556,7 +559,7 @@ H5P.VideoXAPI = (function ($) {
     for (var unitName in units) {
       var unit = units[unitName];
       var quot = Math.floor(time / unit);
-      var time = time - (quot * unit);
+      time = time - (quot * unit);
       unit = quot;
       if (unit > 0) {
         if (!isTime && (timeUnits.indexOf(unitName) > -1)) {
@@ -568,7 +571,7 @@ H5P.VideoXAPI = (function ($) {
     }
 
     return iso8601Duration;
-  }
+  };
 
   return XAPI;
 })(H5P.jQuery);
