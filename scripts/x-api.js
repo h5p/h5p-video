@@ -574,4 +574,4 @@ H5P.VideoXAPI = (function ($) {
   };
 
   return XAPI;
-})(H5P.jQuery);
+})(H5P.jQuery); 
