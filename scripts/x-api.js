@@ -52,8 +52,8 @@ H5P.VideoXAPI = (function ($) {
      *
      */
     self.getArgsXAPIInitialized = function (currentTime, width, height, rate, volume, ccEnabled, ccLanguage, quality) {
-      // Set default value for quality.
-      quality = typeof quality !== 'undefined' ? quality : Math.min(width, height);
+      // If quality isn't provided, set it to the height of the video.
+      quality = typeof quality !== 'undefined' ? quality : height;
 
       // Variables used in compiling xAPI results.
       var dateTime = new Date();
