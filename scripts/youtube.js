@@ -253,8 +253,8 @@ H5P.VideoYouTube = (function ($) {
       this.triggerXAPI('interacted', event.data);
     });
     self.on('finished', function (event) {
-        //triggered as finished to be seperate from H5Ps completed,
-        //but statement is sent as completed and differentiated by object.id
+      // Triggered as finished to be seperate from H5Ps completed,
+      // but statement is sent as completed and differentiated by object.id
       this.triggerXAPI('completed', event.data);
     });
     self.on('fullscreen', function (event) {

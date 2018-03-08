@@ -568,7 +568,7 @@ H5P.VideoXAPI = (function ($) {
     }
 
     return iso8601Duration;
-  }
+  };
 
   return XAPI;
 })(H5P.jQuery);
