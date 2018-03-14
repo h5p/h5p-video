@@ -33,7 +33,7 @@ H5P.VideoXAPI = (function ($) {
     var volumeChangedAt = 0;
     var sessionID = H5P.createUUID();
     var currentTime = 0;
-
+    var xAPIBase;
 
     /**
      * Generate common xAPI statement elements (Video Profile).
@@ -405,8 +405,13 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} 'Object' portion of JSON xAPI statement
      */
     var getXAPIObject = function () {
+      if (xAPIBase !== undefined) {
+        return xAPIBase;
+      }
+
       var event = new H5P.XAPIEvent();
       event.setObject(videoInstance);
+
       var xAPIObject = event.data.statement.object;
 
       // Add definition type (required by xAPI Video Profile).
@@ -422,7 +427,7 @@ H5P.VideoXAPI = (function ($) {
           };
         }
       }
-
+      xAPIBase = xAPIObject;
       return xAPIObject;
     };
   }
