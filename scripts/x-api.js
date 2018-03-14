@@ -33,6 +33,7 @@ H5P.VideoXAPI = (function ($) {
     var volumeChangedAt = 0;
     var sessionID = H5P.createUUID();
     var currentTime = 0;
+    var xAPIObject = null;
 
 
     /**
@@ -500,6 +501,10 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} 'Object' portion of JSON xAPI statement
      */
     var getXAPIObject = function () {
+      if (xAPIObject !== null) {
+        return xAPIObject;
+      }
+
       var event = new H5P.XAPIEvent();
 
       if (videoInstance && videoInstance.contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents['cid-' + videoInstance.contentId]) {
