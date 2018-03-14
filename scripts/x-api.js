@@ -94,7 +94,7 @@ H5P.VideoXAPI = (function ($) {
       volume = formatFloat(volume);
 
       var extensions = {};
-      if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+      if (typeof isFullscreen !== 'undefined') {
         extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
       if (typeof screenSize !== 'undefined') {
