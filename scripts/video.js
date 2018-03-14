@@ -18,6 +18,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
+    // Values needed for xAPI triggering
+    self.previousTime = 0;
+    self.seeking = false;
+    self.seekedTo = 0;
+    self.duration = 0;
+
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
@@ -134,7 +140,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.triggerXAPI('played', event.data);
     });
     self.on('xAPIloaded', function (event){
-      self.triggerXAPI('initialized',event.data);
+      self.duration = self.getDuration();
+      self.triggerXAPI('initialized', event.data);
     });
     self.on('paused', function (event) {
       self.triggerXAPI('paused', event.data);

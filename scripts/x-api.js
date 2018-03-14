@@ -16,10 +16,6 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      */
-    self.previousTime = 0;
-    self.seeking = false;
-    self.seekedTo = 0;
-    self.duration = 0;
 
     /**
      * Variables to track internal video state.
@@ -195,14 +191,14 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPISeeked = function (currentTime) {
       var resultExtTime = formatFloat(currentTime);
-      endPlayingSegment(formatFloat(self.previousTime));
+      endPlayingSegment(formatFloat(instance.previousTime));
       playingSegmentStart = resultExtTime;
 
       return self.getArgsXAPI({
         verb: 'seeked',
         result: {
           extensions: {
-            'https://w3id.org/xapi/video/extensions/time-from': formatFloat(self.previousTime),
+            'https://w3id.org/xapi/video/extensions/time-from': formatFloat(instance.previousTime),
             'https://w3id.org/xapi/video/extensions/time-to': playingSegmentStart
           }
         },
