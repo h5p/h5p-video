@@ -48,8 +48,8 @@ H5P.VideoXAPI = (function ($) {
 
       return {
         'verb': {
-          'id': 'http://adlnet.gov/expapi/verbs/' + params.verb,
-          'display': {'en-US': params.verb}
+          'id': params.verb,
+          'display': {'en-US': params.verb.substr(params.verb.lastIndexOf('/') + 1)}
         },
         'object': getXAPIObject(),
         'result': params.result,
@@ -119,7 +119,7 @@ H5P.VideoXAPI = (function ($) {
       }
 
       return self.getArgsXAPI({
-        verb: 'initialized',
+        verb: 'http://adlnet.gov/expapi/verbs/initialized',
         extensionsContext: extensions
       });
     };
@@ -137,7 +137,7 @@ H5P.VideoXAPI = (function ($) {
       playingSegmentStart = resultExtTime;
 
       return self.getArgsXAPI({
-        verb: 'played',
+        verb: 'https://w3id.org/xapi/video/verbs/played',
         result: {extensions: {
           'https://w3id.org/xapi/video/extensions/time': resultExtTime}
         },
@@ -173,7 +173,7 @@ H5P.VideoXAPI = (function ($) {
       }
 
       return self.getArgsXAPI({
-        verb: 'paused',
+        verb: 'https://w3id.org/xapi/video/verbs/paused',
         result: {extensions: extensions},
         extensionsContext: {
           'https://w3id.org/xapi/video/extensions/session-id': sessionID
@@ -195,7 +195,7 @@ H5P.VideoXAPI = (function ($) {
       playingSegmentStart = resultExtTime;
 
       return self.getArgsXAPI({
-        verb: 'seeked',
+        verb: 'https://w3id.org/xapi/video/verbs/seeked',
         result: {
           extensions: {
             'https://w3id.org/xapi/video/extensions/time-from': formatFloat(instance.previousTime),
@@ -223,7 +223,7 @@ H5P.VideoXAPI = (function ($) {
       volume = muted ? 0 : formatFloat(volume);
 
       return self.getArgsXAPI({
-        verb: 'interacted',
+        verb: 'http://adlnet.gov/expapi/verbs/interacted',
         result: {extensions: {
           'https://w3id.org/xapi/video/extensions/time': volumeChangedAt}
         },
@@ -268,7 +268,7 @@ H5P.VideoXAPI = (function ($) {
       }
 
       return self.getArgsXAPI({
-        verb: 'interacted',
+        verb: 'http://adlnet.gov/expapi/verbs/interacted',
         result: {extensions: {
           'https://w3id.org/xapi/video/extensions/time': resultExtTime}
         },
@@ -303,7 +303,7 @@ H5P.VideoXAPI = (function ($) {
       }
 
       return self.getArgsXAPI({
-        verb: 'completed',
+        verb: 'http://adlnet.gov/expapi/verbs/completed',
         result: {
           'extensions': extensions,
           'completion': true,
