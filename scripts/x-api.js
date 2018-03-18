@@ -29,7 +29,7 @@ H5P.VideoXAPI = (function ($) {
     var volumeChangedAt = 0;
     var sessionID = H5P.createUUID();
     var currentTime = 0;
-    var xAPIBase;
+    var xAPIObject = null;
 
     /**
      * Generate common xAPI statement elements (Video Profile).
@@ -401,26 +401,28 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} 'Object' portion of JSON xAPI statement
      */
     var getXAPIObject = function () {
-      if (xAPIBase !== undefined) {
-        return xAPIBase;
+      if (xAPIObject !== null) {
+        return xAPIObject;
       }
 
       var event = new H5P.XAPIEvent();
-      event.setObject(videoInstance);
 
-      var xAPIObject = event.data.statement.object;
+      if (videoInstance && videoInstance.contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents['cid-' + videoInstance.contentId]) {
+        event.setObject(videoInstance);
+        xAPIObject = event.data.statement.object;
 
-      // Add definition type (required by xAPI Video Profile).
-      // @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#241-definition
-      xAPIObject.definition.type = 'https://w3id.org/xapi/video/activity-type/video';
+        // Add definition type (required by xAPI Video Profile).
+        // @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#241-definition
+        xAPIObject.definition.type = 'https://w3id.org/xapi/video/activity-type/video';
 
-      // Add definition description (if video has a description).
-      if (videoInstance.contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent) {
-        var videoData = JSON.parse(H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent);
-        if (videoData && videoData.interactiveVideo && videoData.interactiveVideo.video && videoData.interactiveVideo.video.startScreenOptions && videoData.interactiveVideo.video.startScreenOptions.shortStartDescription) {
-          xAPIObject.definition.description = {
-            'en-US': videoData.interactiveVideo.video.startScreenOptions.shortStartDescription
-          };
+        // Add definition description (if video has a description).
+        if (H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent) {
+          var videoData = JSON.parse(H5PIntegration.contents['cid-' + videoInstance.contentId].jsonContent);
+          if (videoData && videoData.interactiveVideo && videoData.interactiveVideo.video && videoData.interactiveVideo.video.startScreenOptions && videoData.interactiveVideo.video.startScreenOptions.shortStartDescription) {
+            xAPIObject.definition.description = {
+              'en-US': videoData.interactiveVideo.video.startScreenOptions.shortStartDescription
+            };
+          }
         }
       }
       xAPIBase = xAPIObject;
