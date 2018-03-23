@@ -420,6 +420,8 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
+      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), true, player.getVolume()));
+
       player.mute();
     };
 
@@ -432,6 +434,8 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.unMute) {
         return;
       }
+
+      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), false, player.getVolume()));
 
       player.unMute();
     };
@@ -474,6 +478,8 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.setVolume) {
         return;
       }
+
+      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), player.isMuted(), level));
 
       player.setVolume(level);
     };
