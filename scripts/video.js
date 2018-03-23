@@ -134,6 +134,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.triggerXAPI('completed', event.data);
     });
     self.on('fullscreen', function (event) {
+      // Note: youtube.js and html5.js players do not fire this event.
       self.triggerXAPI('interacted', event.data);
     });
     self.on('play', function (event) {
