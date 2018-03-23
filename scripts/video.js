@@ -18,6 +18,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
+    // Values needed for xAPI triggering
+    self.previousTime = 0;
+    self.seeking = false;
+    self.seekedTo = 0;
+    self.duration = 0;
+
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
@@ -114,6 +120,31 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
+    });
+    // xAPI extension events for video.
+    self.on('seeked', function (event) {
+      self.triggerXAPI('seeked', event.data);
+    });
+    self.on('volumechange', function (event) {
+      self.triggerXAPI('interacted', event.data);
+    });
+    self.on('finished', function (event) {
+      // Triggered as finished to be seperate from H5Ps completed,
+      // but statement is sent as completed and differentiated by object.id
+      self.triggerXAPI('completed', event.data);
+    });
+    self.on('fullscreen', function (event) {
+      self.triggerXAPI('interacted', event.data);
+    });
+    self.on('play', function (event) {
+      self.triggerXAPI('played', event.data);
+    });
+    self.on('xAPIloaded', function (event){
+      self.duration = self.getDuration();
+      self.triggerXAPI('initialized', event.data);
+    });
+    self.on('paused', function (event) {
+      self.triggerXAPI('paused', event.data);
     });
 
     // Find player for video sources

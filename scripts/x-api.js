@@ -16,10 +16,6 @@ H5P.VideoXAPI = (function ($) {
      *
      * @public
      */
-    self.previousTime = 0;
-    self.seeking = false;
-    self.seekedTo = 0;
-    self.duration = 0;
 
     /**
      * Variables to track internal video state.
@@ -35,13 +31,41 @@ H5P.VideoXAPI = (function ($) {
     var currentTime = 0;
     var xAPIObject = null;
 
+    /**
+     * Generate common xAPI statement elements (Video Profile).
+
+     * @param {Object} params - Parameters.
+     * @param {string} params.verb - Verb for the xAPI statement.
+     * @param {Object} [params.result] - Extensions for the object.
+     * @param {Object} [params.extensionsContext] - Extensions for the context.
+     * @return {Object} JSON xAPI statement
+     */
+    self.getArgsXAPI = function (params) {
+      params.extensionsContext = params.extensionsContext || {};
+
+      var dateTime = new Date();
+      var timeStamp = dateTime.toISOString();
+
+      return {
+        'verb': {
+          'id': params.verb,
+          'display': {'en-US': params.verb.substr(params.verb.lastIndexOf('/') + 1)}
+        },
+        'object': getXAPIObject(),
+        'result': params.result,
+        'context': {
+          'contextActivities': {'category': [{'id': 'https://w3id.org/xapi/video'}]},
+          'extensions': params.extensionsContext
+        },
+        'timestamp': timeStamp
+      };
+    };
 
     /**
      * Generates 'initialized' xAPI statement (Video Profile).
      * @see https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#231-initialized
      *
      * @public
-     * @param {Number} currentTime time of the video currently
      * @param {Number} width width of the current screen
      * @param {Number} height height of the current video screen
      * @param {Number} rate playback rate
@@ -52,14 +76,12 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      *
      */
-    self.getArgsXAPIInitialized = function (currentTime, width, height, rate, volume, ccEnabled, ccLanguage, quality) {
+    self.getArgsXAPIInitialized = function (width, height, rate, volume, ccEnabled, ccLanguage, quality) {
       // If quality isn't provided, set it to the height of the video.
       quality = typeof quality !== 'undefined' ? quality : height;
 
       // Variables used in compiling xAPI results.
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(currentTime);
+
       var screenSize = screen.width + 'x' + screen.height;
       var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : 'undetermined';
       var playbackRate = rate;
@@ -68,7 +90,7 @@ H5P.VideoXAPI = (function ($) {
       volume = formatFloat(volume);
 
       var extensions = {};
-      if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+      if (typeof isFullscreen !== 'undefined') {
         extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
       if (typeof screenSize !== 'undefined') {
@@ -96,24 +118,10 @@ H5P.VideoXAPI = (function ($) {
         extensions['https://w3id.org/xapi/video/extensions/volume'] = volume;
       }
 
-      return {
-        'verb': {
-          'id': 'http://adlnet.gov/expapi/verbs/initialized',
-          'display': {
-            'en-US': 'initialized'
-          }
-        },
-        'object': getXAPIObject(),
-        'context' : {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': extensions
-        },
-        'timestamp': timeStamp
-      };
+      return self.getArgsXAPI({
+        verb: 'http://adlnet.gov/expapi/verbs/initialized',
+        extensionsContext: extensions
+      });
     };
 
     /**
@@ -125,37 +133,18 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIPlayed = function (currentTime) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-
       var resultExtTime = formatFloat(currentTime);
       playingSegmentStart = resultExtTime;
 
-      return {
-        'verb': {
-          'id': 'https://w3id.org/xapi/video/verbs/played',
-          'display': {
-            'en-US': 'played'
-          }
+      return self.getArgsXAPI({
+        verb: 'https://w3id.org/xapi/video/verbs/played',
+        result: {extensions: {
+          'https://w3id.org/xapi/video/extensions/time': resultExtTime}
         },
-        'object': getXAPIObject(),
-        'result': {
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/time': resultExtTime,
-          }
-        },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/session-id': sessionID
-          }
-        },
-        'timestamp': timeStamp
-      };
+        extensionsContext: {
+          'https://w3id.org/xapi/video/extensions/session-id': sessionID
+        }
+      });
     };
 
     /**
@@ -168,13 +157,8 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIPaused = function (currentTime, duration) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-
       var resultExtTime = formatFloat(currentTime);
-
       var progress = self.getProgress(currentTime, duration);
-
       endPlayingSegment(resultExtTime);
 
       var extensions = {};
@@ -188,29 +172,13 @@ H5P.VideoXAPI = (function ($) {
         extensions['https://w3id.org/xapi/video/extensions/played-segments'] = stringifyPlayedSegments();
       }
 
-      return {
-        'verb': {
-          'id': 'https://w3id.org/xapi/video/verbs/paused',
-          'display': {
-            'en-US': 'paused'
-          }
-        },
-        'object': getXAPIObject(),
-        'result': {
-          'extensions': extensions
-        },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/session-id': sessionID
-          }
-        },
-        'timestamp' : timeStamp
-      };
+      return self.getArgsXAPI({
+        verb: 'https://w3id.org/xapi/video/verbs/paused',
+        result: {extensions: extensions},
+        extensionsContext: {
+          'https://w3id.org/xapi/video/extensions/session-id': sessionID
+        }
+      });
     };
 
     /**
@@ -222,38 +190,22 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPISeeked = function (currentTime) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
       var resultExtTime = formatFloat(currentTime);
-      endPlayingSegment(formatFloat(self.previousTime));
+      endPlayingSegment(formatFloat(instance.previousTime));
       playingSegmentStart = resultExtTime;
 
-      return {
-        'verb': {
-          'id': 'https://w3id.org/xapi/video/verbs/seeked',
-          'display': {
-            'en-US': 'seeked'
-          }
-        },
-        'object': getXAPIObject(),
-        'result': {
-          'extensions' : {
-            'https://w3id.org/xapi/video/extensions/time-from': formatFloat(self.previousTime),
+      return self.getArgsXAPI({
+        verb: 'https://w3id.org/xapi/video/verbs/seeked',
+        result: {
+          extensions: {
+            'https://w3id.org/xapi/video/extensions/time-from': formatFloat(instance.previousTime),
             'https://w3id.org/xapi/video/extensions/time-to': playingSegmentStart
           }
         },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/session-id': sessionID
-          }
-        },
-        'timestamp' : timeStamp
-      };
+        extensionsContext: {
+          'https://w3id.org/xapi/video/extensions/session-id': sessionID
+        }
+      });
     };
 
     /**
@@ -267,37 +219,19 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      */
     self.getArgsXAPIVolumeChanged = function (currentTime, muted, volume) {
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
       volumeChangedAt = formatFloat(currentTime);
       volume = muted ? 0 : formatFloat(volume);
 
-      return {
-        'verb': {
-          'id': 'http://adlnet.gov/expapi/verbs/interacted',
-          'display': {
-            'en-US': 'interacted'
-          }
+      return self.getArgsXAPI({
+        verb: 'http://adlnet.gov/expapi/verbs/interacted',
+        result: {extensions: {
+          'https://w3id.org/xapi/video/extensions/time': volumeChangedAt}
         },
-        'object': getXAPIObject(),
-        'result' : {
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/time': volumeChangedAt
-          }
-        },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/session-id': sessionID,
-            'https://w3id.org/xapi/video/extensions/volume': volume
-          }
-        },
-        'timestamp' : timeStamp
-      };
+        extensionsContext: {
+          'https://w3id.org/xapi/video/extensions/session-id': sessionID,
+          'https://w3id.org/xapi/video/extensions/volume': volume
+        }
+      });
     };
 
     /**
@@ -313,13 +247,11 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen) {
       fullscreen = typeof fullscreen !== 'undefined' ? fullscreen : false;
-
-      var dateTime = new Date();
-      var timeStamp = dateTime.toISOString();
-      var resultExtTime = formatFloat(currentTime);
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
       var screenSize = screen.width + 'x' + screen.height;
       var playbackSize = width + 'x' + height;
+
+      var resultExtTime = formatFloat(currentTime);
 
       var extensions = {};
       if (typeof sessionID !== 'undefined') {
@@ -335,29 +267,13 @@ H5P.VideoXAPI = (function ($) {
         extensions['https://w3id.org/xapi/video/extensions/video-playback-size'] = playbackSize;
       }
 
-      return {
-        'verb': {
-          'id': 'http://adlnet.gov/expapi/verbs/interacted',
-          'display': {
-            'en-US': 'interacted'
-          }
+      return self.getArgsXAPI({
+        verb: 'http://adlnet.gov/expapi/verbs/interacted',
+        result: {extensions: {
+          'https://w3id.org/xapi/video/extensions/time': resultExtTime}
         },
-        'object': getXAPIObject(),
-        'result': {
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/time': resultExtTime
-          }
-        },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': extensions
-        },
-        'timestamp' : timeStamp
-      };
+        extensionsContext: extensions
+      });
     };
 
     /**
@@ -372,10 +288,8 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPICompleted = function (currentTime, duration, progress) {
       var resultExtTime = formatFloat(currentTime);
-      var dateTime = new Date();
       endPlayingSegment(resultExtTime);
       playingSegmentStart = 0;
-      var timeStamp = dateTime.toISOString();
 
       var extensions = {};
       if (typeof resultExtTime !== 'undefined') {
@@ -388,31 +302,17 @@ H5P.VideoXAPI = (function ($) {
         extensions['https://w3id.org/xapi/video/extensions/played-segments'] = stringifyPlayedSegments();
       }
 
-      return {
-        'verb': {
-          'id': 'http://adlnet.gov/expapi/verbs/completed',
-          'display': {
-            'en-US': 'completed'
-          }
-        },
-        'object': getXAPIObject(),
-        'result': {
+      return self.getArgsXAPI({
+        verb: 'http://adlnet.gov/expapi/verbs/completed',
+        result: {
           'extensions': extensions,
-          'completion' : true,
-          'duration' : secondsToISO8601Duration(duration)
+          'completion': true,
+          'duration': secondsToISO8601Duration(duration)
         },
-        'context': {
-          'contextActivities': {
-            'category': [{
-              'id': 'https://w3id.org/xapi/video'
-            }]
-          },
-          'extensions': {
-            'https://w3id.org/xapi/video/extensions/session-id': sessionID
-          }
-        },
-        'timestamp' : timeStamp
-      };
+        extensionsContext: {
+          'https://w3id.org/xapi/video/extensions/session-id': sessionID
+        }
+      });
     };
 
     /**
@@ -525,7 +425,7 @@ H5P.VideoXAPI = (function ($) {
           }
         }
       }
-
+      xAPIBase = xAPIObject;
       return xAPIObject;
     };
   }

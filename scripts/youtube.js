@@ -126,28 +126,28 @@ H5P.VideoYouTube = (function ($) {
               // Calls for xAPI events.
               if (state.data === 1) {
                 // Get and send play call when not seeking.
-                if (videoXAPI.seeking === false) {
+                if (self.seeking === false) {
                   self.trigger('play', videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 }
                 else {
-                  self.trigger('seeked', videoXAPI.getArgsXAPISeeked(videoXAPI.seekedTo));
-                  videoXAPI.seeking = false;
+                  self.trigger('seeked', videoXAPI.getArgsXAPISeeked(self.seekedTo));
+                  self.seeking = false;
                 }
               }
               else if (state.data === 2) {
                 // This is a paused event.
-                if (videoXAPI.seeking === false) {
-                  self.trigger('paused', videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), player.getDuration()));
+                if (self.seeking === false) {
+                  self.trigger('paused', videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), self.duration));
                 }
               }
               else if (state.data === 0) {
                 // Send xapi trigger if video progress indicates finished.
-                var length = player.getDuration();
+                var length = self.duration;
                 if (length > 0) {
                   // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
                   var progress = videoXAPI.getProgress(length, length);
                   if (progress >= 1) {
-                    var arg = videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), player.getDuration(), progress);
+                    var arg = videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), self.duration, progress);
                     self.trigger('finished', arg);
                   }
                 }
@@ -193,7 +193,7 @@ H5P.VideoYouTube = (function ($) {
      * @param {string} Which dimension to return ('width' or 'height')
      */
     var getWidthOrHeight = function (returnType) {
-      var quality = player.getPlaybackQuality();
+      var quality = self.getQuality();
       var width = '';
       var height = '';
       switch (quality) {
@@ -240,36 +240,9 @@ H5P.VideoYouTube = (function ($) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
 
-      return videoXAPI.getArgsXAPIInitialized(player.getCurrentTime(), width, height, player.getPlaybackRate(), player.getVolume(), ccEnabled, ccLanguage, player.getPlaybackQuality());
+      return videoXAPI.getArgsXAPIInitialized(width, height, self.getPlaybackRate(), self.getVolume(), ccEnabled, ccLanguage, self.getQuality());
 
     };
-
-    // xAPI extension events for video.
-    self.on('seeked', function (event) {
-      this.triggerXAPI('seeked', event.data);
-    });
-    self.on('volumechange', function (event) {
-      // @todo: Not currently used.
-      this.triggerXAPI('interacted', event.data);
-    });
-    self.on('finished', function (event) {
-      // Triggered as finished to be seperate from H5Ps completed,
-      // but statement is sent as completed and differentiated by object.id
-      this.triggerXAPI('completed', event.data);
-    });
-    self.on('fullscreen', function (event) {
-      // @todo: Not currently used.
-      this.triggerXAPI('interacted', event.data);
-    });
-    self.on('play', function (event) {
-      this.triggerXAPI('played', event.data);
-    });
-    self.on('xAPIloaded', function (event){
-      this.triggerXAPI('initialized',event.data);
-    });
-    self.on('paused', function (event) {
-      this.triggerXAPI('paused', event.data);
-    });
 
     /**
      * Indicates if the video must be clicked for it to start playing.
@@ -387,12 +360,12 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      if (videoXAPI.seeking === false) {
-        videoXAPI.previousTime = player.getCurrentTime();
+      if (self.seeking === false) {
+        self.previousTime = player.getCurrentTime();
       }
       player.seekTo(time, true);
-      videoXAPI.seekedTo = time;
-      videoXAPI.seeking = true;
+      self.seekedTo = time;
+      self.seeking = true;
     };
 
     /**
