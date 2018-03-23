@@ -139,7 +139,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.on('play', function (event) {
       self.triggerXAPI('played', event.data);
     });
-    self.on('xAPIloaded', function (event){
+    self.on('xAPIloaded', function (event) {
       self.duration = self.getDuration();
       self.triggerXAPI('initialized', event.data);
     });
