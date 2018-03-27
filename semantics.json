@@ -5,7 +5,7 @@
     "label": "Video sources",
     "importance": "high",
     "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources.",
-    "hideCopyright": true
+    "disableCopyright": true
   },
   {
     "name": "visuals",
