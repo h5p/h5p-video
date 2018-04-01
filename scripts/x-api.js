@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoXAPI = (function ($) {
+  'use strict';
 
   /**
    * Xapi video statement generator for H5P.
@@ -425,7 +426,6 @@ H5P.VideoXAPI = (function ($) {
           }
         }
       }
-      xAPIBase = xAPIObject;
       return xAPIObject;
     };
   }
