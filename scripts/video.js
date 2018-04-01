@@ -15,6 +15,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   function Video(parameters, id) {
     var self = this;
 
+    self.videoXAPI = new H5P.VideoXAPI(self);
+
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
