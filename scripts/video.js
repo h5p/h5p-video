@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
+  'use strict';
 
   /**
    * The ultimate H5P video player!

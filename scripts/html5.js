@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoHtml5 = (function ($) {
+  'use strict';
 
   /**
    * HTML5 video player for H5P.
@@ -283,7 +284,7 @@ H5P.VideoHtml5 = (function ($) {
               skipRateChange = false;
               return; // Avoid firing event when changing back
             }
-            if (H5P.Video.IE11_PLAYBACK_RATE_FIX && playbackRate != video.playbackRate) { // Intentional
+            if (H5P.Video.IE11_PLAYBACK_RATE_FIX && playbackRate !== video.playbackRate) { // Intentional
               // Prevent change in playback rate not triggered by the user
               video.playbackRate = playbackRate;
               skipRateChange = true;
