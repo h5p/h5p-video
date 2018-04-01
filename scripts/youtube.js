@@ -123,14 +123,10 @@ H5P.VideoYouTube = (function ($) {
                 if (self.seeking === false) {
                   self.trigger('play', self.videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 }
-                else {
-                  self.trigger('seeked', self.videoXAPI.getArgsXAPISeeked(self.seekedTo));
-                  self.seeking = false;
-                }
               }
               else if (state.data === 2) {
                 // This is a paused event.
-                if (self.seeking === false) {
+                if (self.seeking === false && self.previousState !== 3) {
                   self.trigger('paused', self.videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), self.duration));
                 }
               }
@@ -147,6 +143,7 @@ H5P.VideoYouTube = (function ($) {
                 }
               }
             }
+            self.previousState = state.data;
           },
           onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
