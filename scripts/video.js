@@ -21,6 +21,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
+    self.finishedThreshold = 0.95;
+
     // Values needed for xAPI triggering, set by handlers
     self.previousTime = 0;
     self.seeking = false;
