@@ -113,6 +113,38 @@ H5PUpgrades['H5P.Video'] = (function ($) {
 
         // Done
         finished(null, parameters);
+      },
+      4: function (parameters, finished, extras) {
+        if (parameters.files && parameters.files.length > 0) {
+          var copyright = parameters.files[0].copyright;
+          if (copyright) {
+            // Try to find start and end year
+            var years = copyright.year
+              .replace(' ', '')
+              .replace('--', '-') // Try to check for LaTeX notation
+              .split('-');
+            var yearFrom = new Date(years[0]).getFullYear();
+            var yearTo = (years.length > 0) ? new Date(years[1]).getFullYear() : undefined;
+
+            // Build metadata object
+            var metadata = {
+              title: copyright.title,
+              authors: (copyright.author) ? [{name: copyright.author}] : undefined,
+              source: copyright.source,
+              yearFrom: isNaN(yearFrom) ? undefined : yearFrom,
+              yearTo: isNaN(yearTo) ? undefined : yearTo,
+              license: copyright.license,
+              licenseVersion: copyright.version
+            };
+
+            extras.metadata = metadata;
+
+            delete parameters.files[0].copyright;
+          }
+        }
+
+        // Done
+        finished(null, parameters, extras);
       }
     }
   };
