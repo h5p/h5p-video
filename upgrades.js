@@ -115,8 +115,8 @@ H5PUpgrades['H5P.Video'] = (function ($) {
         finished(null, parameters);
       },
       4: function (parameters, finished, extras) {
-        if (parameters.files && parameters.files.length > 0) {
-          var copyright = parameters.files[0].copyright;
+        if (parameters.sources && parameters.sources.length > 0) {
+          var copyright = parameters.sources[0].copyright;
           if (copyright) {
             // Try to find start and end year
             var years = copyright.year
@@ -139,7 +139,9 @@ H5PUpgrades['H5P.Video'] = (function ($) {
 
             extras.metadata = metadata;
 
-            delete parameters.files[0].copyright;
+            parameters.sources.forEach(function(source) {
+              delete source.copyright;
+            });
           }
         }
 
