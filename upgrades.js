@@ -118,12 +118,15 @@ H5PUpgrades['H5P.Video'] = (function ($) {
         if (parameters.sources && parameters.sources.length > 0) {
           var copyright = parameters.sources[0].copyright;
           if (copyright) {
+            var years = [];
+            if (copyright.year) {
             // Try to find start and end year
-            var years = copyright.year
+            years = copyright.year
               .replace(' ', '')
               .replace('--', '-') // Try to check for LaTeX notation
               .split('-');
-            var yearFrom = new Date(years[0]).getFullYear();
+            }
+            var yearFrom = (years.length > 0) ? new Date(years[0]).getFullYear() : undefined;
             var yearTo = (years.length > 0) ? new Date(years[1]).getFullYear() : undefined;
 
             // Build metadata object
