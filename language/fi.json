@@ -1,133 +1,133 @@
 {
   "semantics":[
     {
-      "label":"Video sources",
-      "description":"To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label":"Videolähteet",
+      "description":"Varmistaaksesi toimivuuden eri selaimissa lataa vähintään mp4- ja webm-versiot videosta."
     },
     {
-      "label":"Visuals",
+      "label":"Ulkoasu",
       "fields":[
         {
-          "label":"Poster image"
+          "label":"Esittelykuva"
         },
         {
-          "label":"Fit video player to use all available space",
-          "description":"If not set the video player will have the same aspect ratio as the video."
+          "label":"Sovita videosoitin kehykseen",
+          "description":"Jos ei ole valittuna, niin videosoitin säilyttää videon kuvasuhteen."
         },
         {
-          "label":"Show video player controls",
-          "description":"Add controls to the video player. This allows users to play, pause, etc."
+          "label":"Näytä videon ohjaimet",
+          "description":"Lisää ohjaimet soittimeen. Mahdollistaa käynnistyksen, keskeytyksen jne..."
         }
       ]
     },
     {
-      "label":"Playback",
+      "label":"Toisto",
       "fields":[
         {
-          "label":"Auto-play video",
-          "description":"Start playing the video automatically. May not work on mobile devices."
+          "label":"Käynnistä video automaattisesti",
+          "description":"Käynnistä video automaattisesti. Ei ehkä toimi mobiililaitteilla."
         },
         {
-          "label":"Loop video",
-          "description":"Automatically start the video over again when it ends."
+          "label":"Toista videota",
+          "description":"Aloittaa videon lopttua sen alusta aina uudestaan."
         }
       ]
     },
     {
-      "label":"Video localization",
+      "label":"Omat tekstit",
       "fields":[
         {
-          "label":"Name",
+          "label":"Nimi",
           "default":"Video",
-          "description":"Helps identify content of this type."
+          "description":"Auttaa tunnistamaan tämän sisältötyypin."
         },
         {
-          "label":"Loading",
-          "default":"Video player loading..."
+          "label":"Lataa",
+          "default":"Lataa soitinta..."
         },
         {
-          "label":"No players found",
-          "default":"Found no video players that supports the given video format."
+          "label":"Soittimia ei löytynyt",
+          "default":"Ei löytänyt soveltuvaa soitinta videomuodolle."
         },
         {
-          "label":"No sources",
-          "default":"Video is missing sources."
+          "label":"Ei lähteitä",
+          "default":"Videolta puuttuu lähde."
         },
         {
-          "label":"Aborted",
-          "default":"Media playback has been aborted."
+          "label":"Keskeytetty",
+          "default":"Median esitys keskeytetty."
         },
         {
-          "label":"Network failure",
-          "default":"Network failure."
+          "label":"Verkkovirhe",
+          "default":"Verkkovirhe."
         },
         {
-          "label":"Cannot decode video source",
-          "default":"Unable to decode media."
+          "label":"Videolähdettä ei saatu purettua",
+          "default":"Mediaa ei saatu purettua."
         },
         {
-          "label":"Format not supported",
-          "default":"Video format not supported."
+          "label":"Muotoa ei tueta",
+          "default":"Videomuotoa ei tueta."
         },
         {
-          "label":"Media encrypted",
-          "default":"Media encrypted."
+          "label":"Media on salattu",
+          "default":"Media on salattu."
         },
         {
-          "label":"Unknown error",
-          "default":"Unknown error."
+          "label":"Tuntematon virhe",
+          "default":"Tuntematon virhe."
         },
         {
-          "label":"Invalid YouTube ID",
-          "default":"Invalid YouTube ID."
+          "label":"Epäkelpo YouTube ID",
+          "default":"Epäkelpo YouTube ID."
         },
         {
-          "label":"Unkown YouTube ID",
-          "default":"Unable to find video with the given YouTube ID."
+          "label":"Tuntematon YouTube ID",
+          "default":"YouTube ID ei vastaa yhtään videota."
         },
         {
-          "label":"Restricted YouTube video",
-          "default":"The owner of this video does not allow it to be embedded."
+          "label":"Rajoitettu YouTube video",
+          "default":"Videon omistaja ei salli sen upottamista."
         }
       ]
     },
     {
-      "label":"Accessibility",
+      "label":"Esteettömyys",
       "fields":[
         {
-          "label":"Add video track",
-          "entity":"Track",
+          "label":"Lisää raita",
+          "entity":"Raita",
           "field":{
-            "label":"Track",
+            "label":"Raita",
             "fields":[
               {
-                "label":"Track label"
+                "label":"Raidan selite"
               },
               {
-                "label":"Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label":"Tyyppi, lisätietoa <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
                 "default":"descriptions",
                 "options":[
                   {
-                    "label":"Subtitles"
+                    "label":"Tekstitykset"
                   },
                   {
-                    "label":"Captions"
+                    "label":"Otsikot"
                   },
                   {
-                    "label":"Descriptions"
+                    "label":"Selitteet"
                   },
                   {
-                    "label":"Chapters"
+                    "label":"Kappaleet"
                   }
                 ]
               },
               {
-                "label":"Source language, must be defined for subtitles",
+                "label":"Lähdekieli, pakollinen tekstityksille",
                 "default":"en",
-                "description":"Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "description":"Täytyy olla BCP 47 -muotoinen, esimerkiksi en,fi,es,sv... Jos Tekstitykset on valittu tekstiraidan tyypiksi, on lähdekieli määriteltävä."
               },
               {
-                "label":"Track file (WebVTT)"
+                "label":"Raidan lähde (WebVTT tiedosto)"
               }
             ]
           }
