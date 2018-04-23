@@ -162,7 +162,7 @@ H5P.VideoHtml5 = (function ($) {
         }
       }
 
-      return videoXAPI.getArgsXAPIInitialized(video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage);
+      return videoXAPI.getArgsXAPIInitialized(video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage, video.videoHeight, video.duration);
 
     };
 

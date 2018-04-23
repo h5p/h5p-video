@@ -76,7 +76,7 @@ H5P.VideoXAPI = (function ($) {
      * @returns {Object} JSON xAPI statement
      *
      */
-    self.getArgsXAPIInitialized = function (width, height, rate, volume, ccEnabled, ccLanguage, quality) {
+    self.getArgsXAPIInitialized = function (width, height, rate, volume, ccEnabled, ccLanguage, quality, videoLength) {
       // If quality isn't provided, set it to the height of the video.
       quality = typeof quality !== 'undefined' ? quality : height;
 
@@ -90,6 +90,7 @@ H5P.VideoXAPI = (function ($) {
       volume = formatFloat(volume);
 
       var extensions = {};
+       extensions['https://w3id.org/xapi/video/extensions/length'] = videoLength;
       if (typeof isFullscreen !== 'undefined') {
         extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
