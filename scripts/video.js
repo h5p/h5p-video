@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
+  'use strict';
 
   /**
    * The ultimate H5P video player!
@@ -15,14 +16,35 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   function Video(parameters, id) {
     var self = this;
 
+    self.videoXAPI = new H5P.VideoXAPI(self);
+
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
-    // Values needed for xAPI triggering
+    self.finishedThreshold = 0.95;
+
+    // Values needed for xAPI triggering, set by handlers
     self.previousTime = 0;
     self.seeking = false;
     self.seekedTo = 0;
     self.duration = 0;
+    self.previousState = -1;
+    self.mousedown = false;
+
+    /*
+     * Used to distinguish seeking from pausing
+     * TODO: This might be much cleaner with refactoring IV, video and the handlers
+     */
+    document.addEventListener('mousedown', function() {
+      self.mousedown = true;
+    });
+    document.addEventListener('mouseup', function() {
+      if (self.seeking) {
+        self.trigger('seeked', self.videoXAPI.getArgsXAPISeeked(self.seekedTo));
+        self.seeking = false;
+      }
+      self.mousedown = false;
+    });
 
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
@@ -145,7 +167,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.triggerXAPI('initialized', event.data);
     });
     self.on('paused', function (event) {
-      self.triggerXAPI('paused', event.data);
+      // if mouse button is down, we're seeking
+      if (self.mousedown === false) {
+        self.triggerXAPI('paused', event.data);
+      }
     });
 
     // Find player for video sources

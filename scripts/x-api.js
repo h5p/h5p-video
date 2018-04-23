@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoXAPI = (function ($) {
+  'use strict';
 
   /**
    * Xapi video statement generator for H5P.
@@ -135,7 +136,7 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPIPlayed = function (currentTime) {
       var resultExtTime = formatFloat(currentTime);
-      playingSegmentStart = resultExtTime;
+      //playingSegmentStart = resultExtTime;
 
       return self.getArgsXAPI({
         verb: 'https://w3id.org/xapi/video/verbs/played',
@@ -426,7 +427,6 @@ H5P.VideoXAPI = (function ($) {
           }
         }
       }
-      xAPIBase = xAPIObject;
       return xAPIObject;
     };
   }
