@@ -80,7 +80,7 @@ H5P.VideoXAPI = (function ($) {
     self.getArgsXAPIInitialized = function (width, height, rate, volume, ccEnabled, ccLanguage, quality, videoLength) {
       // If quality isn't provided, set it to the height of the video.
       quality = typeof quality !== 'undefined' ? quality : height;
-
+      videoLength =  typeof videoLength !== 'undefined' ? parseFloat(videoLength).toFixed(3) : videoLength;
       // Variables used in compiling xAPI results.
 
       var screenSize = screen.width + 'x' + screen.height;

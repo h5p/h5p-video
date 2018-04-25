@@ -240,7 +240,7 @@ H5P.VideoYouTube = (function ($) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
 
-      return videoXAPI.getArgsXAPIInitialized(width, height, self.getPlaybackRate(), self.getVolume(), ccEnabled, ccLanguage, self.getQuality(), self.duration);
+      return videoXAPI.getArgsXAPIInitialized(width, height, self.getPlaybackRate(), self.getVolume(), ccEnabled, ccLanguage, self.getQuality(), self.getDuration());
 
     };
 
