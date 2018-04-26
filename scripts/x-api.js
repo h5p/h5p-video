@@ -87,7 +87,7 @@ H5P.VideoXAPI = (function ($) {
       var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : undefined;
       var playbackRate = rate;
       var userAgent = navigator.userAgent;
-      var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
+      var isFullscreen = document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen || false;
       volume = formatFloat(volume);
 
       var extensions = {};
@@ -249,7 +249,7 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPIFullScreen = function (currentTime, width, height, fullscreen) {
       fullscreen = typeof fullscreen !== 'undefined' ? fullscreen : false;
-      var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
+      var isFullscreen = document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen || fullscreen;
       var screenSize = screen.width + 'x' + screen.height;
       var playbackSize = width + 'x' + height;
 
