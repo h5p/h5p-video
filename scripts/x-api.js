@@ -91,8 +91,11 @@ H5P.VideoXAPI = (function ($) {
       volume = formatFloat(volume);
 
       var extensions = {};
-       extensions['https://w3id.org/xapi/video/extensions/length'] = videoLength;
-      if (typeof isFullscreen !== 'undefined') {
+
+      if (typeof videoLength !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/length'] = videoLength;
+      }
+      if (typeof isFullscreen !== 'undefined' && isFullscreen) {
         extensions['https://w3id.org/xapi/video/extensions/full-screen'] = isFullscreen;
       }
       if (typeof screenSize !== 'undefined') {
