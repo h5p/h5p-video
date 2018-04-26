@@ -194,8 +194,9 @@ H5P.VideoYouTube = (function ($) {
      */
     var getWidthOrHeight = function (returnType) {
       var quality = self.getQuality();
-      var width = '';
-      var height = '';
+      var width;
+      var height;
+
       switch (quality) {
         case 'small':
           width = '320';

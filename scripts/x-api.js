@@ -84,7 +84,7 @@ H5P.VideoXAPI = (function ($) {
       // Variables used in compiling xAPI results.
 
       var screenSize = screen.width + 'x' + screen.height;
-      var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : 'undetermined';
+      var playbackSize = (width !== undefined && width !== '') ? width + 'x' + height : undefined;
       var playbackRate = rate;
       var userAgent = navigator.userAgent;
       var isFullscreen = Document.fullscreenElement !== null || document.mozFullScreen || document.webkitIsFullScreen || false;
