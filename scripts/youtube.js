@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoYouTube = (function ($) {
+  'use strict';
 
   /**
    * YouTube video player for H5P.
@@ -105,7 +106,7 @@ H5P.VideoYouTube = (function ($) {
             }
           },
           onStateChange: function (state) {
-            if (state.data > -1 && state.data < 4) {
+            if (state.data >= H5P.Video.ENDED && state.data <= H5P.Video.BUFFERING) {
 
               // Fix for keeping playback rate in IE11
               if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
@@ -118,19 +119,19 @@ H5P.VideoYouTube = (function ($) {
               self.trigger('stateChange', state.data);
 
               // Calls for xAPI events.
-              if (state.data === 1) {
+              if (state.data === H5P.Video.PLAYING) {
                 // Get and send play call when not seeking.
                 if (self.seeking === false) {
                   self.trigger('play', self.videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 }
               }
-              else if (state.data === 2) {
+              else if (state.data === H5P.Video.PAUSED) {
                 // This is a paused event.
-                if (self.seeking === false && self.previousState !== 3) {
+                if (self.seeking === false && self.previousState !== H5P.Video.BUFFERING) {
                   self.trigger('paused', self.videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), self.duration));
                 }
               }
-              else if (state.data === 0) {
+              else if (state.data === H5P.Video.ENDED) {
                 // Send xapi trigger if video progress indicates finished.
                 var length = self.duration;
                 if (length > 0) {
@@ -215,7 +216,7 @@ H5P.VideoYouTube = (function ($) {
           break;
       }
 
-      return (returnType.toLowerCase().trim()=='width') ? width : height;
+      return (returnType.toLowerCase().trim() === 'width') ? width : height;
     };
 
     /**

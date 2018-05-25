@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoHtml5 = (function ($) {
+  'use strict';
 
   /**
    * HTML5 video player for H5P.
