@@ -387,6 +387,8 @@ H5P.VideoXAPI = (function ($) {
      * Converts an array of played segments to the string representation defined
      * in the xAPI Video Profile spec.
      * @see  https://liveaspankaj.gitbooks.io/xapi-video-profile/content/statement_data_model.html#2545-played-segments
+     *
+     * @private
      * @return {String} Played segments string, e.g., '0.000[.]12.000[,]14.000[.]21.000'
      */
     var stringifyPlayedSegments = function () {
