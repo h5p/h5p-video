@@ -142,7 +142,7 @@ H5P.VideoXAPI = (function ($) {
      */
     self.getArgsXAPIPlayed = function (currentTime) {
       var resultExtTime = formatFloat(currentTime);
-      //playingSegmentStart = resultExtTime;
+      playingSegmentStart = resultExtTime;
 
       return self.getArgsXAPI({
         verb: 'https://w3id.org/xapi/video/verbs/played',
