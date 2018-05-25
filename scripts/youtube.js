@@ -137,7 +137,7 @@ H5P.VideoYouTube = (function ($) {
                 if (length > 0) {
                   // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
                   var progress = self.videoXAPI.getProgress(length, length);
-                  if (progress >= 0.95) {
+                  if (progress >= self.finishedThreshold) {
                     var arg = self.videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), self.duration, progress);
                     self.trigger('finished', arg);
                   }

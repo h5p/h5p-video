@@ -211,7 +211,7 @@ H5P.VideoHtml5 = (function ($) {
               if (length > 0) {
                 // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
                 var progress = self.videoXAPI.getProgress(length, length);
-                if (progress >= 0.95) {
+                if (progress >= self.finishedThreshold) {
                   extraTrigger = 'finished';
                   extraArg = self.videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
                   lastSend = 'finished';
