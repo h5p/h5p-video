@@ -46,6 +46,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.mousedown = false;
     });
 
+    // Reference to the handler
+    var handlerName = '';
+
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
@@ -139,6 +142,16 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       return info;
     };
 
+    /**
+     * Get name of the video handler
+     *
+     * @public
+     * @returns {string}
+     */
+    self.getHandlerName = function() {
+      return handlerName;
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
@@ -189,11 +202,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             tracks: tracks,
             disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
           }, parameters.l10n);
+          handlerName = handler.name;
           return;
         }
 
         if (handler === H5P.VideoHtml5) {
           html5Handler = handler;
+          handlerName = handler.name;
         }
       }
 
