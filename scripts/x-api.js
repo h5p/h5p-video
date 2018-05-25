@@ -122,7 +122,10 @@ H5P.VideoXAPI = (function ($) {
       if (typeof volume !== 'undefined') {
         extensions['https://w3id.org/xapi/video/extensions/volume'] = volume;
       }
-      extensions['https://w3id.org/xapi/video/extensions/completion-threshold'] = instance.finishedThreshold;
+      if (typeof instance.finishedThreshold !== 'undefined') {
+        extensions['https://w3id.org/xapi/video/extensions/completion-threshold'] = instance.finishedThreshold;
+      }
+
       return self.getArgsXAPI({
         verb: 'http://adlnet.gov/expapi/verbs/initialized',
         extensionsContext: extensions
