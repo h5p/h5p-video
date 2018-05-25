@@ -12,12 +12,6 @@ H5P.VideoYouTube = (function ($) {
   function YouTube(sources, options, l10n) {
     var self = this;
 
-    /**
-     * xAPI Helper.
-     * @private
-     */
-    var videoXAPI = new H5P.VideoXAPI(self);
-
     var player;
     var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
@@ -127,17 +121,17 @@ H5P.VideoYouTube = (function ($) {
               if (state.data === 1) {
                 // Get and send play call when not seeking.
                 if (self.seeking === false) {
-                  self.trigger('play', videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
+                  self.trigger('play', self.videoXAPI.getArgsXAPIPlayed(player.getCurrentTime()));
                 }
                 else {
-                  self.trigger('seeked', videoXAPI.getArgsXAPISeeked(self.seekedTo));
+                  self.trigger('seeked', self.videoXAPI.getArgsXAPISeeked(self.seekedTo));
                   self.seeking = false;
                 }
               }
               else if (state.data === 2) {
                 // This is a paused event.
                 if (self.seeking === false) {
-                  self.trigger('paused', videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), self.duration));
+                  self.trigger('paused', self.videoXAPI.getArgsXAPIPaused(player.getCurrentTime(), self.duration));
                 }
               }
               else if (state.data === 0) {
@@ -145,9 +139,9 @@ H5P.VideoYouTube = (function ($) {
                 var length = self.duration;
                 if (length > 0) {
                   // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
-                  var progress = videoXAPI.getProgress(length, length);
+                  var progress = self.videoXAPI.getProgress(length, length);
                   if (progress >= 0.95) {
-                    var arg = videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), self.duration, progress);
+                    var arg = self.videoXAPI.getArgsXAPICompleted(player.getCurrentTime(), self.duration, progress);
                     self.trigger('finished', arg);
                   }
                 }
@@ -241,7 +235,7 @@ H5P.VideoYouTube = (function ($) {
         ccLanguage = player.getOptions('cc', 'track').languageCode;
       }
 
-      return videoXAPI.getArgsXAPIInitialized(width, height, self.getPlaybackRate(), self.getVolume(), ccEnabled, ccLanguage, self.getQuality(), self.getDuration());
+      return self.videoXAPI.getArgsXAPIInitialized(width, height, self.getPlaybackRate(), self.getVolume(), ccEnabled, ccLanguage, self.getQuality(), self.getDuration());
 
     };
 
@@ -421,7 +415,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), true, player.getVolume()));
+      self.trigger('volumechange', self.videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), true, player.getVolume()));
 
       player.mute();
     };
@@ -436,7 +430,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), false, player.getVolume()));
+      self.trigger('volumechange', self.videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), false, player.getVolume()));
 
       player.unMute();
     };
@@ -480,7 +474,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      self.trigger('volumechange', videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), player.isMuted(), level));
+      self.trigger('volumechange', self.videoXAPI.getArgsXAPIVolumeChanged(player.getCurrentTime(), player.isMuted(), level));
 
       player.setVolume(level);
     };

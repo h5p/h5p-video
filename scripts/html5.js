@@ -13,12 +13,6 @@ H5P.VideoHtml5 = (function ($) {
     var self = this;
 
     /**
-     * xAPI Helper.
-     * @private
-     */
-    var videoXAPI = new H5P.VideoXAPI(self);
-
-    /**
      * Displayed when the video is buffering
      * @private
      */
@@ -162,7 +156,7 @@ H5P.VideoHtml5 = (function ($) {
         }
       }
 
-      return videoXAPI.getArgsXAPIInitialized(video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage, video.videoHeight, video.duration);
+      return self.videoXAPI.getArgsXAPIInitialized(video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage, video.videoHeight, video.duration);
 
     };
 
@@ -195,13 +189,13 @@ H5P.VideoHtml5 = (function ($) {
 
             if (arg === H5P.Video.PLAYING) {
               if (self.seeking === true) {
-                extraArg = videoXAPI.getArgsXAPISeeked(self.seekedTo);
+                extraArg = self.videoXAPI.getArgsXAPISeeked(self.seekedTo);
                 extraTrigger = 'seeked';
                 lastSend = 'seeked';
                 self.seeking = false;
               }
               else if (lastSend !== 'play') {
-                extraArg = videoXAPI.getArgsXAPIPlayed(video.currentTime);
+                extraArg = self.videoXAPI.getArgsXAPIPlayed(video.currentTime);
                 extraTrigger = 'play';
                 lastSend = 'play';
               }
@@ -211,7 +205,7 @@ H5P.VideoHtml5 = (function ($) {
               // Put together extraArg for sending to xAPI statement.
               if (!video.seeking && self.seeking === false && video.currentTime !== video.duration) {
                 extraTrigger = 'paused';
-                extraArg = videoXAPI.getArgsXAPIPaused(video.currentTime, video.duration);
+                extraArg = self.videoXAPI.getArgsXAPIPaused(video.currentTime, video.duration);
                 lastSend = 'paused';
               }
             }
@@ -221,10 +215,10 @@ H5P.VideoHtml5 = (function ($) {
               var length = video.duration;
               if (length > 0) {
                 // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
-                var progress = videoXAPI.getProgress(length, length);
+                var progress = self.videoXAPI.getProgress(length, length);
                 if (progress >= 0.95) {
                   extraTrigger = 'finished';
-                  extraArg = videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
+                  extraArg = self.videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
                   lastSend = 'finished';
                 }
               }
@@ -237,23 +231,23 @@ H5P.VideoHtml5 = (function ($) {
             return; // Just need to store current time for seeked event.
             break;
           case 'volumechange' :
-            arg = videoXAPI.getArgsXAPIVolumeChanged(video.currentTime, video.muted, video.volume);
+            arg = self.videoXAPI.getArgsXAPIVolumeChanged(video.currentTime, video.muted, video.volume);
             lastSend = 'volumechange';
             break;
           case 'play':
             if (self.seeking === false && lastSend !== h5p) {
-              arg = videoXAPI.getArgsXAPIPlayed(video.currentTime);
+              arg = self.videoXAPI.getArgsXAPIPlayed(video.currentTime);
               lastSend = h5p;
             }
             else {
-              arg = videoXAPI.getArgsXAPISeeked(self.seekedTo);
+              arg = self.videoXAPI.getArgsXAPISeeked(self.seekedTo);
               lastSend = 'seeked';
               self.seeking = false;
               h5p = 'seeked';
             }
             break;
           case 'fullscreen':
-            arg = videoXAPI.getArgsXAPIFullScreen(video.currentTime, video.videoWidth, video.videoHeight);
+            arg = self.videoXAPI.getArgsXAPIFullScreen(video.currentTime, video.videoWidth, video.videoHeight);
             lastSend = h5p;
             break;
           case 'loaded':
