@@ -105,7 +105,6 @@
               },
               {
                 "label": "格式請參考 <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML 現況標準</a>",
-                "default": "說明",
                 "options": [
                   {
                     "label": "字幕"

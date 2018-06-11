@@ -105,7 +105,6 @@
               },
               {
                 "label": "Type de piste, voir <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>standard HTML actuel</a>",
-                "default": "descriptions",
                 "options": [
                   {
                     "label": "Sous-titres"
