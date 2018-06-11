@@ -1,133 +1,132 @@
 {
-  "semantics":[
+  "semantics": [
     {
-      "label":"Videoquellen",
-      "description":"Um sicher zu stellen, dass das Video in allen Browsern funktioniert, sollten Quellen im Format WebM und MP4 hinzugefügt werden."
+      "label": "Videoquellen",
+      "description": "Um sicher zu stellen, dass das Video in allen Browsern funktioniert, sollten Quellen im Format WebM und MP4 hinzugefügt werden."
     },
     {
-      "label":"Grafisches",
-      "fields":[
+      "label": "Grafisches",
+      "fields": [
         {
-          "label":"Posterbild"
+          "label": "Posterbild"
         },
         {
-          "label":"Den Videoplayer so anpassen, dass er den insgesamt verfügbaren Platz verwendet",
-          "description":"Wird dies nicht ausgewählt, hat der Videoplayer das gleiche Seitenverhältnis wie das Video."
+          "label": "Den Videoplayer so anpassen, dass er den insgesamt verfügbaren Platz verwendet",
+          "description": "Wird dies nicht ausgewählt, hat der Videoplayer das gleiche Seitenverhältnis wie das Video."
         },
         {
-          "label":"Videoplayer-Steuerung anzeigen",
-          "description":"Steuerung zum Videoplayer hinzufügen. Dies ermöglicht dem Benutzer das Abspielen, Pausieren, etc."
+          "label": "Videoplayer-Steuerung anzeigen",
+          "description": "Steuerung zum Videoplayer hinzufügen. Dies ermöglicht dem Benutzer das Abspielen, Pausieren, etc."
         }
       ]
     },
     {
-      "label":"Abspielen",
-      "fields":[
+      "label": "Abspielen",
+      "fields": [
         {
-          "label":"Video automatisch abspielen",
-          "description":"Lässt das Video automatisch abspielen. Funktioniert auf mobilen Geräten evtl. nicht."
+          "label": "Video automatisch abspielen",
+          "description": "Lässt das Video automatisch abspielen. Funktioniert auf mobilen Geräten evtl. nicht."
         },
         {
-          "label":"Videoschleife",
-          "description":"Startet das Video erneut, sobald es vorbei ist."
+          "label": "Videoschleife",
+          "description": "Startet das Video erneut, sobald es vorbei ist."
         }
       ]
     },
     {
-      "label":"Videolokalisation",
-      "fields":[
+      "label": "Videolokalisation",
+      "fields": [
         {
-          "label":"Name",
-          "default":"Video",
-          "description":"Hilft dabei, den Inhalte dieses Typs zu identifizieren."
+          "label": "Name",
+          "default": "Video",
+          "description": "Hilft dabei, den Inhalte dieses Typs zu identifizieren."
         },
         {
-          "label":"Lädt",
-          "default":"Videoplayer lädt..."
+          "label": "Lädt",
+          "default": "Videoplayer lädt..."
         },
         {
-          "label":"Keine Player gefunden",
-          "default":"Keine Videoplayer gefunden, die das gegebene Videoformat unterstützen."
+          "label": "Keine Player gefunden",
+          "default": "Keine Videoplayer gefunden, die das gegebene Videoformat unterstützen."
         },
         {
-          "label":"Keine Quellen",
-          "default":"Dem Video fehlen Quellen."
+          "label": "Keine Quellen",
+          "default": "Dem Video fehlen Quellen."
         },
         {
-          "label":"Abgebrochen",
-          "default":"Das Abspielen des Videos wurde abgebrochen."
+          "label": "Abgebrochen",
+          "default": "Das Abspielen des Videos wurde abgebrochen."
         },
         {
-          "label":"Netzwerkfehler",
-          "default":"Netzwerkfehler."
+          "label": "Netzwerkfehler",
+          "default": "Netzwerkfehler."
         },
         {
-          "label":"Videoquelle kann nicht dekodiert werden",
-          "default":"Dekodierung des Mediums nicht möglich."
+          "label": "Videoquelle kann nicht dekodiert werden",
+          "default": "Dekodierung des Mediums nicht möglich."
         },
         {
-          "label":"Format wird nicht unterstützt",
-          "default":"Videoformat wird nicht unterstützt."
+          "label": "Format wird nicht unterstützt",
+          "default": "Videoformat wird nicht unterstützt."
         },
         {
-          "label":"Medien verschlüsselt",
-          "default":"Medien verschlüsselt."
+          "label": "Medien verschlüsselt",
+          "default": "Medien verschlüsselt."
         },
         {
-          "label":"Unbekannter Fehler",
-          "default":"Unbekannter Fehler."
+          "label": "Unbekannter Fehler",
+          "default": "Unbekannter Fehler."
         },
         {
-          "label":"Ungültige YouTube-ID",
-          "default":"Ungültige YouTube-ID."
+          "label": "Ungültige YouTube-ID",
+          "default": "Ungültige YouTube-ID."
         },
         {
-          "label":"Unbekannte YouTube-ID",
-          "default":"Video mit der YouTube-ID konnte nicht gefunden werden."
+          "label": "Unbekannte YouTube-ID",
+          "default": "Video mit der YouTube-ID konnte nicht gefunden werden."
         },
         {
-          "label":"Eingeschränktes YouTube Video",
-          "default":"Der Besitzer dieses Videos erlaubt kein Einbetten."
+          "label": "Eingeschränktes YouTube Video",
+          "default": "Der Besitzer dieses Videos erlaubt kein Einbetten."
         }
       ]
     },
     {
-      "label":"Zugänglichkeit",
-      "fields":[
+      "label": "Zugänglichkeit",
+      "fields": [
         {
-          "label":"Videospur hinzufügen",
-          "entity":"Track",
-          "field":{
-            "label":"Spur",
-            "fields":[
+          "label": "Videospur hinzufügen",
+          "entity": "Track",
+          "field": {
+            "label": "Spur",
+            "fields": [
               {
-                "label":"Spurbeschriftung"
+                "label": "Spurbeschriftung"
               },
               {
-                "label":"Typ \"kind\", verweisen auf <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default":"descriptions",
-                "options":[
+                "label": "Typ \"kind\", verweisen auf <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "options": [
                   {
-                    "label":"Untertitel"
+                    "label": "Untertitel"
                   },
                   {
-                    "label":"Bildunterschriften"
+                    "label": "Bildunterschriften"
                   },
                   {
-                    "label":"Beschreibungen"
+                    "label": "Beschreibungen"
                   },
                   {
-                    "label":"Kapitel"
+                    "label": "Kapitel"
                   }
                 ]
               },
               {
-                "label":"Quellensprache muss für Untertitel definitert werden",
-                "default":"en",
-                "description":"Muss ein gültiger BCP 47 Sprach-Tag sein. Wenn das \"kind\"-Attribut auf Untertitel gestellt wird, muss die Quellensprache definiert werden."
+                "label": "Quellensprache muss für Untertitel definitert werden",
+                "default": "en",
+                "description": "Muss ein gültiger BCP 47 Sprach-Tag sein. Wenn das \"kind\"-Attribut auf Untertitel gestellt wird, muss die Quellensprache definiert werden."
               },
               {
-                "label":"Spurdatei (WebVTT)"
+                "label": "Spurdatei (WebVTT)"
               }
             ]
           }

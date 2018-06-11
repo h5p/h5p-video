@@ -105,7 +105,6 @@
               },
               {
                 "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "default": "descriptions",
                 "options": [
                   {
                     "label": "Subtitles"
