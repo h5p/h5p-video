@@ -86,9 +86,11 @@ H5P.VideoHtml5 = (function ($) {
     video.className = 'h5p-video';
     video.style.display = 'block';
 
-    var crossOrigin = H5P.getCrossOrigin();
-    if (crossOrigin) {
-      video.setAttribute('crossorigin', crossOrigin);
+    if (H5P.getCrossOrigin !== undefined) {
+      var crossOrigin = H5P.getCrossOrigin();
+      if (crossOrigin !== null) {
+        video.setAttribute('crossorigin', crossOrigin);
+      }
     }
 
     if (options.fit) {
