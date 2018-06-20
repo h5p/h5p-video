@@ -92,6 +92,13 @@ H5P.VideoHtml5 = (function ($) {
     video.className = 'h5p-video';
     video.style.display = 'block';
 
+    if (H5P.getCrossOrigin !== undefined) {
+      var crossOrigin = H5P.getCrossOrigin();
+      if (crossOrigin !== null) {
+        video.setAttribute('crossorigin', crossOrigin);
+      }
+    }
+
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
       video.style.width = '100%';
