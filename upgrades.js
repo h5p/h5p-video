@@ -115,7 +115,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
         finished(null, parameters);
       },
       5: function (parameters, finished, extras) {
-        if (parameters && parameters.sources && parameters.sources.length > 0) {
+        if (parameters.sources && parameters.sources.length > 0) {
           var copyright = parameters.sources[0].copyright;
           if (copyright) {
             var years = [];
