@@ -115,7 +115,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
         finished(null, parameters);
       },
       4: function (parameters, finished, extras) {
-        if (parameters.sources && parameters.sources.length > 0) {
+        if (parameters && parameters.sources && parameters.sources.length > 0) {
           var copyright = parameters.sources[0].copyright;
           if (copyright) {
             var years = [];
@@ -132,7 +132,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
             // Build metadata object
             var metadata = {
               title: copyright.title,
-              authors: (copyright.author) ? [{name: copyright.author}] : undefined,
+              authors: (copyright.author) ? [{name: copyright.author, role: ''}] : undefined,
               source: copyright.source,
               yearFrom: isNaN(yearFrom) ? undefined : yearFrom,
               yearTo: isNaN(yearTo) ? undefined : yearTo,
@@ -140,6 +140,7 @@ H5PUpgrades['H5P.Video'] = (function ($) {
               licenseVersion: copyright.version
             };
 
+            extras = extras || {};
             extras.metadata = metadata;
 
             parameters.sources.forEach(function(source) {
