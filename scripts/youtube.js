@@ -644,7 +644,9 @@ H5P.VideoYouTube = (function ($) {
   var numInstances = 0;
 
   // Extract the current origin (used for security)
-  var ORIGIN = window.location.href.match(/http[s]?:\/\/[^\/]+/)[0];
+  var ORIGIN = window.location.href.match(/http[s]?:\/\/[^\/]+/);
+  ORIGIN = !ORIGIN || ORIGIN[0] === undefined ? undefined : ORIGIN[0];
+  // ORIGIN = undefined is needed to support fetching file from device local storage
 
   return YouTube;
 })(H5P.jQuery);
