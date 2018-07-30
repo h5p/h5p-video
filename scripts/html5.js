@@ -70,6 +70,17 @@ H5P.VideoHtml5 = (function ($) {
         }
       }
     }
+
+    if (H5P.getCrossOrigin !== undefined) {
+      var crossOrigin = H5P.getCrossOrigin(qualities[currentQuality].source.path);
+      if (crossOrigin !== null) {
+        video.setAttribute('crossorigin', crossOrigin);
+      }
+      else {
+        video.removeAttribute('crossorigin');
+      }
+    }
+
     video.src = qualities[currentQuality].source.path;
 
     // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
@@ -85,13 +96,6 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
-
-    if (H5P.getCrossOrigin !== undefined) {
-      var crossOrigin = H5P.getCrossOrigin();
-      if (crossOrigin !== null) {
-        video.setAttribute('crossorigin', crossOrigin);
-      }
-    }
 
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
