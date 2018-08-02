@@ -73,12 +73,7 @@ H5P.VideoHtml5 = (function ($) {
 
     if (H5P.getCrossOrigin !== undefined) {
       var crossOrigin = H5P.getCrossOrigin(qualities[currentQuality].source.path);
-      if (crossOrigin !== null) {
-        video.setAttribute('crossorigin', crossOrigin);
-      }
-      else {
-        video.removeAttribute('crossorigin');
-      }
+      video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
     }
 
     video.src = qualities[currentQuality].source.path;
