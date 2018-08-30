@@ -121,11 +121,11 @@ H5PUpgrades['H5P.Video'] = (function () {
           if (copyright) {
             var years = [];
             if (copyright.year) {
-            // Try to find start and end year
-            years = copyright.year
-              .replace(' ', '')
-              .replace('--', '-') // Try to check for LaTeX notation
-              .split('-');
+              // Try to find start and end year
+              years = copyright.year
+                .replace(' ', '')
+                .replace('--', '-') // Try to check for LaTeX notation
+                .split('-');
             }
             var yearFrom = (years.length > 0) ? new Date(years[0]).getFullYear() : undefined;
             var yearTo = (years.length > 0) ? new Date(years[1]).getFullYear() : undefined;
