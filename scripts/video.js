@@ -97,24 +97,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     };
 
     /**
-     * Gather copyright information for the current video.
-     *
-     * @public
-     * @returns {ContentCopyrights}
-     */
-    self.getCopyrights = function () {
-      if (!sources[0] || !sources[0].copyright) {
-        return;
-      }
-
-      // Use copyright information from H5P media field
-      var info = new ContentCopyrights();
-      info.addMedia(new MediaCopyright(sources[0].copyright));
-
-      return info;
-    };
-
-    /**
      * Get name of the video handler
      *
      * @public
