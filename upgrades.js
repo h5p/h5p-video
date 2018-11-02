@@ -1,7 +1,7 @@
 /** @namespace H5PUpgrades */
 var H5PUpgrades = H5PUpgrades || {};
 
-H5PUpgrades['H5P.Video'] = (function ($) {
+H5PUpgrades['H5P.Video'] = (function () {
 
   /**
    * Help move and rename object properties.
@@ -113,7 +113,46 @@ H5PUpgrades['H5P.Video'] = (function ($) {
 
         // Done
         finished(null, parameters);
+      },
+
+      5: function (parameters, finished, extras) {
+        if (parameters.sources && parameters.sources.length > 0) {
+          var copyright = parameters.sources[0].copyright;
+          if (copyright) {
+            var years = [];
+            if (copyright.year) {
+              // Try to find start and end year
+              years = copyright.year
+                .replace(' ', '')
+                .replace('--', '-') // Try to check for LaTeX notation
+                .split('-');
+            }
+            var yearFrom = (years.length > 0) ? new Date(years[0]).getFullYear() : undefined;
+            var yearTo = (years.length > 0) ? new Date(years[1]).getFullYear() : undefined;
+
+            // Build metadata object
+            var metadata = {
+              title: copyright.title,
+              authors: (copyright.author) ? [{name: copyright.author, role: 'Author'}] : undefined,
+              source: copyright.source,
+              yearFrom: isNaN(yearFrom) ? undefined : yearFrom,
+              yearTo: isNaN(yearTo) ? undefined : yearTo,
+              license: copyright.license,
+              licenseVersion: copyright.version
+            };
+
+            extras = extras || {};
+            extras.metadata = metadata;
+
+            parameters.sources.forEach(function(source) {
+              delete source.copyright;
+            });
+          }
+        }
+
+        // Done
+        finished(null, parameters, extras);
       }
     }
   };
-})(H5P.jQuery);
+})();
