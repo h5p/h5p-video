@@ -133,7 +133,7 @@ H5PUpgrades['H5P.Video'] = (function () {
             // Build metadata object
             var metadata = {
               title: copyright.title,
-              authors: (copyright.author) ? [{name: copyright.author, role: ''}] : undefined,
+              authors: (copyright.author) ? [{name: copyright.author, role: 'Author'}] : undefined,
               source: copyright.source,
               yearFrom: isNaN(yearFrom) ? undefined : yearFrom,
               yearTo: isNaN(yearTo) ? undefined : yearTo,
