@@ -30,7 +30,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         name: 'Video',
         loading: 'Video player loading...',
         noPlayers: 'Found no video players that supports the given video format.',
-        noSources: 'Video is missing sources.',
+        noSources: 'Video source is missing.',
         aborted: 'Media playback has been aborted.',
         networkFailure: 'Network failure.',
         cannotDecode: 'Unable to decode media.',
