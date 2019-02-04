@@ -73,12 +73,14 @@ H5P.VideoHtml5 = (function ($) {
 
     if (H5P.getCrossOrigin !== undefined) {
       var crossOrigin = H5P.getCrossOrigin(qualities[currentQuality].source.path);
-      video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+      if (crossOrigin !== 'null') {
+        video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+      }
     }
 
     video.src = qualities[currentQuality].source.path;
 
-    // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
+    // Setting webkit-playsinline, which makes iOS 10 being able to play video
     // inside browser.
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('playsinline', '');
