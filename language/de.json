@@ -34,7 +34,7 @@
       ]
     },
     {
-      "label": "Videolokalisation",
+      "label": "Übersetzungen der Videobibliothek",
       "fields": [
         {
           "label": "Name",
@@ -51,7 +51,7 @@
         },
         {
           "label": "Keine Quellen",
-          "default": "Dem Video fehlen Quellen."
+          "default": "Es wurden für das Video keine Quellen angegeben."
         },
         {
           "label": "Abgebrochen",
@@ -95,7 +95,7 @@
       "label": "Barrierefreiheit",
       "fields": [
         {
-          "label": "Untertitel hinzufügen",
+          "label": "(Text-)Spur hinzufügen",
           "entity": "Spur",
           "field": {
             "label": "Spur",
