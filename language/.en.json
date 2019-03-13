@@ -82,7 +82,7 @@
           "default": "Invalid YouTube ID."
         },
         {
-          "label": "Unkown YouTube ID",
+          "label": "Unknown YouTube ID",
           "default": "Unable to find video with the given YouTube ID."
         },
         {
