@@ -11,8 +11,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Object} parameters.a11y Accessibility options
    * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
+   * @param {object} extras Extras such as previousState and metadata
    */
-  function Video(parameters, id) {
+  function Video(parameters, id, extras) {
     var self = this;
 
     // Ref youtube.js - ipad & youtube - issue
@@ -46,6 +47,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
     parameters.visuals = parameters.visuals || {};
+    parameters.startAt = parameters.startAt ||
+      (extras.previousState && extras.previousState.time) ? extras.previousState.time : 0;
 
     /** @private */
     var sources = [];
@@ -106,6 +109,16 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       return handlerName;
     };
 
+    /**
+     * Retrieve current state.
+     * @return {object} CurrentState.
+     */
+    self.getCurrentState = function () {
+      return {
+        time: self.getCurrentTime()
+      };
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
@@ -123,7 +136,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             loop: parameters.playback.loop,
             fit: parameters.visuals.fit,
             poster: parameters.visuals.poster === undefined ? undefined : H5P.getPath(parameters.visuals.poster.path, id),
-            startAt: parameters.startAt || 0,
+            startAt: parameters.startAt,
             tracks: tracks,
             disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
           }, parameters.l10n);

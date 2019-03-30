@@ -91,6 +91,7 @@ H5P.VideoHtml5 = (function ($) {
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
+    video.currentTime = options.startAt;
 
     if (options.fit) {
       // Style is used since attributes with relative sizes aren't supported by IE9.
