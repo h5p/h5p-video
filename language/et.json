@@ -1,132 +1,132 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Video allikad",
+      "description": "Tagamaks, et video töötab kõigis brausereid, tuleks video lisada nii WebM kui ka MP4 formaadis."
     },
     {
-      "label": "Visuals",
+      "label": "Visuaalid",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Postripilt"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Täida videomängijaga kogu võimalik ala",
+          "description": "Kui ei ole märgitud, siis videomängija järgib sama kuvasuhet, mis on videol."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Näita videomängija juhtnuppe",
+          "description": "Lisa videomängijale juhtnupud. Nii saab kasutaja videot mängima panna, pausida jne."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Taasesitus",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Video automaatne mängimine",
+          "description": "Alustab video mängimist automaatselt. Ei pruugi töötada mobiilseadmeis."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Esita videot korduses",
+          "description": "Käivita video lõppu jõudmisel automaatselt uuesti."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Video kohandamine",
       "fields": [
         {
-          "label": "Name",
+          "label": "Nimi",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Aitab määrata selle tüübi sisu."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Laadimine",
+          "default": "Videomängija laadib..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Videomängijaid ei leitud",
+          "default": "Ei leitud antud videoformaati toetavaid videomängijaid."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Allikaid ei ole",
+          "default": "Lähtevideo puudub."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Katkestatud",
+          "default": "Meedia taasesitus on katkestatud."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Võrgu viga",
+          "default": "Võrgu viga."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Ei saa lähtevideot dekodeerida",
+          "default": "Ei saa meediat dekodeerida."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Formaat ei ole toetatud",
+          "default": "Videoformaat ei ole toetatud."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Krüpteeritud meedia",
+          "default": "Meedia on krüpteeritud."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Tundmatu viga",
+          "default": "Tundmatu viga."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Mittetoimiv YouTube ID",
+          "default": "Mittetoimiv YouTube ID."
         },
         {
-          "label": "Unkown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Tundmatu YouTube ID",
+          "default": "Ei leia antud YouTube ID-le vastavat videot."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Piiratud õigustega YouTube video",
+          "default": "Selle video omanik ei luba videot esitada teistel lehtedel."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Vaegkasutus",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Lisa videoriba",
+          "entity": "Riba",
           "field": {
-            "label": "Track",
+            "label": "Riba",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Riba silt"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Liik, viide: <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element> HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Subtiitrid"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Tiitrid"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Kirjeldused"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Pealkirjad"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
+                "label": "Algkeel, peab olema määratletud subtiitride puhul",
                 "default": "en",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "description": "Peab olema kehtiv BCP 47 keelesilt. Kui liigi-atribuut on seatud subtiitriks, siis peab srclang olema määratud."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Ribafail (WebVTT)"
               }
             ]
           }
