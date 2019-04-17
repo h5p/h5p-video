@@ -149,7 +149,7 @@
       {
         "name": "unknownYtId",
         "type": "text",
-        "label": "Unkown YouTube ID",
+        "label": "Unknown YouTube ID",
         "importance": "low",
         "default": "Unable to find video with the given YouTube ID."
       },
