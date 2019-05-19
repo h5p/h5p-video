@@ -5,7 +5,7 @@
       "description": "Formater som støttes er webm, mp4 og ogv."
     },
     {
-      "label": "Visuelt",
+      "label": "Visuelle egenskaper",
       "fields": [
         {
           "label": "Plakat"
@@ -82,7 +82,7 @@
           "default": "Ugyldig YouTube ID."
         },
         {
-          "label": "Ugyldig YouTube ID",
+          "label": "Ukjent YouTube ID",
           "default": "Finner ikke videoen med gitt YouTube ID."
         },
         {
