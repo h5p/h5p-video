@@ -71,12 +71,18 @@ H5P.VideoHtml5 = (function ($) {
       }
     }
 
-    if (H5P.getCrossOrigin !== undefined) {
-      var crossOrigin = H5P.getCrossOrigin(qualities[currentQuality].source.path);
-      video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+    if (H5P.setSource !== undefined) {
+      H5P.setSource(video, qualities[currentQuality].source, self.contentId)
     }
-
-    video.src = qualities[currentQuality].source.path;
+    else {
+      // Backwards compatibility (H5P < v1.22)
+      const srcPath = H5P.getPath(qualities[currentQuality].source.path, self.contentId);
+      if (H5P.getCrossOrigin !== undefined) {
+        var crossOrigin = H5P.getCrossOrigin(srcPath);
+        video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+      }
+      video.src = srcPath;
+    }
 
     // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
     // inside browser.
@@ -99,7 +105,7 @@ H5P.VideoHtml5 = (function ($) {
     }
     // Add poster if provided
     if (options.poster) {
-      video.poster = options.poster;
+      video.poster = H5P.getPath(options.poster.path, self.contentId); // Uses same crossOrigin as parent. You cannot mix.
     }
 
     /**
@@ -119,7 +125,7 @@ H5P.VideoHtml5 = (function ($) {
 
       var track = document.createElement('track');
       track.kind = trackData.kind;
-      track.src = trackData.track.path;
+      track.src = H5P.getPath(trackData.track.path, self.contentId); // Uses same crossOrigin as parent. You cannot mix.
       if (trackData.label) {
         track.label = trackData.label;
       }
@@ -376,7 +382,8 @@ H5P.VideoHtml5 = (function ($) {
       self.trigger('stateChange', H5P.Video.BUFFERING);
 
       // Change source
-      video.src = qualities[quality].source.path; // (iPad does not support #t=).
+      video.src = H5P.getPath(qualities[quality].source.path, self.contentId); // (iPad does not support #t=).
+      // Note: Optional tracks use same crossOrigin as the original. You cannot mix.
 
       // Remove poster so it will not show during quality change
       video.removeAttribute('poster');
