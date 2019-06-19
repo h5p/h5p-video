@@ -13,6 +13,21 @@ H5P.VideoHtml5 = (function ($) {
     var self = this;
 
     /**
+     * Small helper to ensure all video sources get the same cache buster.
+     *
+     * @private
+     * @param {Object} source
+     * @return {string}
+     */
+    const getCrossOriginPath = function (source) {
+      let path = H5P.getPath(source.path, self.contentId);
+      if (video.crossOrigin !== null && H5P.addQueryParameter && H5PIntegration.crossoriginCacheBuster) {
+        path = H5P.addQueryParameter(path, H5PIntegration.crossoriginCacheBuster);
+      }
+      return path
+    };
+
+    /**
      * Displayed when the video is buffering
      * @private
      */
@@ -105,7 +120,7 @@ H5P.VideoHtml5 = (function ($) {
     }
     // Add poster if provided
     if (options.poster) {
-      video.poster = H5P.getPath(options.poster.path, self.contentId); // Uses same crossOrigin as parent. You cannot mix.
+      video.poster = getCrossOriginPath(options.poster); // Uses same crossOrigin as parent. You cannot mix.
     }
 
     /**
@@ -125,7 +140,7 @@ H5P.VideoHtml5 = (function ($) {
 
       var track = document.createElement('track');
       track.kind = trackData.kind;
-      track.src = H5P.getPath(trackData.track.path, self.contentId); // Uses same crossOrigin as parent. You cannot mix.
+      track.src = getCrossOriginPath(trackData.track); // Uses same crossOrigin as parent. You cannot mix.
       if (trackData.label) {
         track.label = trackData.label;
       }
@@ -382,7 +397,7 @@ H5P.VideoHtml5 = (function ($) {
       self.trigger('stateChange', H5P.Video.BUFFERING);
 
       // Change source
-      video.src = H5P.getPath(qualities[quality].source.path, self.contentId); // (iPad does not support #t=).
+      track.src = getCrossOriginPath(qualities[quality].source); // (iPad does not support #t=).
       // Note: Optional tracks use same crossOrigin as the original. You cannot mix.
 
       // Remove poster so it will not show during quality change
