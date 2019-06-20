@@ -27,6 +27,75 @@ H5P.VideoHtml5 = (function ($) {
       return path
     };
 
+
+    /**
+     * Register track to video
+     *
+     * @param {Object} trackData Track object
+     * @param {string} trackData.kind Kind of track
+     * @param {Object} trackData.track Source path
+     * @param {string} [trackData.label] Label of track
+     * @param {string} [trackData.srcLang] Language code
+     */
+    const addTrack = function (trackData) {
+      // Skip invalid tracks
+      if (!trackData.kind || !trackData.track.path) {
+        return;
+      }
+
+      var track = document.createElement('track');
+      track.kind = trackData.kind;
+      track.src = getCrossOriginPath(trackData.track); // Uses same crossOrigin as parent. You cannot mix.
+      if (trackData.label) {
+        track.label = trackData.label;
+      }
+
+      if (trackData.srcLang) {
+        track.srcLang = trackData.srcLang;
+      }
+
+      return track;
+    };
+
+    /**
+     * Small helper to set the inital video source.
+     * Useful if some of the loading happens asynchronously.
+     * NOTE: Setting the crossOrigin must happen before any of the
+     * sources(poster, tracks etc.) are loaded
+     *
+     * @private
+     */
+    const setInitialSource = function () {
+      if (H5P.setSource !== undefined) {
+        H5P.setSource(video, qualities[currentQuality].source, self.contentId)
+      }
+      else {
+        // Backwards compatibility (H5P < v1.22)
+        const srcPath = H5P.getPath(qualities[currentQuality].source.path, self.contentId);
+        if (H5P.getCrossOrigin !== undefined) {
+          var crossOrigin = H5P.getCrossOrigin(srcPath);
+          video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+        }
+        video.src = srcPath;
+      }
+
+      // Add poster if provided
+      if (options.poster) {
+        video.poster = getCrossOriginPath(options.poster); // Uses same crossOrigin as parent. You cannot mix.
+      }
+
+      // Register tracks
+      options.tracks.forEach(function (track, i) {
+        var trackElement = addTrack(track);
+        if (i === 0) {
+          trackElement.default = true;
+        }
+        if (trackElement) {
+          video.appendChild(trackElement);
+        }
+      });
+    };
+
     /**
      * Displayed when the video is buffering
      * @private
@@ -74,29 +143,33 @@ H5P.VideoHtml5 = (function ($) {
 
     // Sort sources into qualities
     var qualities = getQualities(sources, video);
+    var currentQuality;
 
-    // Select quality and source
-    var currentQuality = getPreferredQuality();
-    if (currentQuality === undefined || qualities[currentQuality] === undefined) {
-      // No preferred quality, pick the first.
-      for (currentQuality in qualities) {
-        if (qualities.hasOwnProperty(currentQuality)) {
-          break;
-        }
-      }
+    numQualities = 0;
+    for (let quality in qualities) {
+      numQualities++;
     }
 
-    if (H5P.setSource !== undefined) {
-      H5P.setSource(video, qualities[currentQuality].source, self.contentId)
+    if (numQualities > 1 && H5P.VideoHtml5.getExternalQuality !== undefined) {
+      H5P.VideoHtml5.getExternalQuality(sources, function (chosenQuality) {
+        if (qualities[chosenQuality] !== undefined) {
+          currentQuality = chosenQuality;
+        }
+        setInitialSource();
+      });
     }
     else {
-      // Backwards compatibility (H5P < v1.22)
-      const srcPath = H5P.getPath(qualities[currentQuality].source.path, self.contentId);
-      if (H5P.getCrossOrigin !== undefined) {
-        var crossOrigin = H5P.getCrossOrigin(srcPath);
-        video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
+      // Select quality and source
+      currentQuality = getPreferredQuality();
+      if (currentQuality === undefined || qualities[currentQuality] === undefined) {
+        // No preferred quality, pick the first.
+        for (currentQuality in qualities) {
+          if (qualities.hasOwnProperty(currentQuality)) {
+            break;
+          }
+        }
       }
-      video.src = srcPath;
+      setInitialSource();
     }
 
     // Setting webkit-playsinline, which makes iOS 10 beeing able to play video
@@ -118,50 +191,6 @@ H5P.VideoHtml5 = (function ($) {
       video.style.width = '100%';
       video.style.height = '100%';
     }
-    // Add poster if provided
-    if (options.poster) {
-      video.poster = getCrossOriginPath(options.poster); // Uses same crossOrigin as parent. You cannot mix.
-    }
-
-    /**
-     * Register track to video
-     *
-     * @param {Object} trackData Track object
-     * @param {string} trackData.kind Kind of track
-     * @param {Object} trackData.track Source path
-     * @param {string} [trackData.label] Label of track
-     * @param {string} [trackData.srcLang] Language code
-     */
-    var addTrack = function (trackData) {
-      // Skip invalid tracks
-      if (!trackData.kind || !trackData.track.path) {
-        return;
-      }
-
-      var track = document.createElement('track');
-      track.kind = trackData.kind;
-      track.src = getCrossOriginPath(trackData.track); // Uses same crossOrigin as parent. You cannot mix.
-      if (trackData.label) {
-        track.label = trackData.label;
-      }
-
-      if (trackData.srcLang) {
-        track.srcLang = trackData.srcLang;
-      }
-
-      return track;
-    };
-
-    // Register tracks
-    options.tracks.forEach(function (track, i) {
-      var trackElement = addTrack(track);
-      if (i === 0) {
-        trackElement.default = true;
-      }
-      if (trackElement) {
-        video.appendChild(trackElement);
-      }
-    });
 
     /**
      * Helps registering events.
