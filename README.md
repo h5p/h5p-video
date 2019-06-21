@@ -20,6 +20,35 @@ playbackRateChange | Triggered when the video playback speed changes. This is si
 captions | Triggered when captions become available, i.e. may not be trigger until after _play()_.<br>`event.data` contains a list of valid text tracks that the user may choose from.
 qualityChange | Triggered to confirm that the quality was successfully changed. I.e. choosing a different quality does not guarantee it will play.<br>Useful for updating the UI with which quality is currently active.
 
+Here's an example of how you can use these events to react when a user interacts with an Interactive Video.
+You'll want to be adding this third-party script through your H5P plugin's _scripts_alter_ hook.
+
+```js
+H5P.jQuery(document).on('ready', function () {
+  if (H5P && H5P.instances[0] && H5P.instances[0].libraryInfo.machineName === 'H5P.InteractiveVideo') {
+    H5P.instances[0].video.on('stateChange', function (e) {
+      switch (e.data) {
+        case H5P.Video.BUFFERING:
+          console.log('Loading');
+          break;
+
+        case H5P.Video.PLAYING:
+          console.log('Playing');
+          break;
+
+        case H5P.Video.PAUSED:
+          console.log('Paused');
+          break;
+
+        case H5P.Video.ENDED:
+          console.log('Finished');
+          break;
+      }
+    });
+  }
+});
+```
+
 ## License
 
 (The MIT License)
