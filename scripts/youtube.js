@@ -530,7 +530,8 @@ H5P.VideoYouTube = (function ($) {
 
   /** @constant {Object} */
   var LABELS = {
-    highres: '2160p',
+    highres: '2160p', // Old API support
+    hd2160: '2160p', // (New API)
     hd1440: '1440p',
     hd1080: '1080p',
     hd720: '720p',
