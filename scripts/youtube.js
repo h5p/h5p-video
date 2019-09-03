@@ -408,8 +408,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      var playbackRate = player.getPlaybackRate();
-	  return playbackRate;
+      return player.getPlaybackRate();
     };
 
     /**
@@ -424,8 +423,8 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      playbackRate = newPlaybackRate;
-      player.setPlaybackRate(newPlaybackRate);
+      playbackRate = Number(newPlaybackRate);
+      player.setPlaybackRate(playbackRate);
     };
 
     /**
