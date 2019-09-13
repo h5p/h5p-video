@@ -293,7 +293,38 @@ H5P.VideoHtml5 = (function ($) {
             message = l10n.cannotDecode;
             break;
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            message = l10n.formatNotSupported;
+            let request = new XMLHttpRequest();
+            request.open('HEAD', code.target.getAttribute('src'), false);
+            request.send(null);
+            switch (request.status) {
+              case 403:
+                message = request.statusText;
+                if (code.target.parentNode.querySelector('video.h5p-video ~ iframe.panoptoLogin') === null) {
+                  let iframe = document.createElement('iframe');
+                  let panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
+                  let matches = code.target.src.match(panoptoRegex);
+                  if (matches !== null) {
+                    let url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
+                    code.target.addEventListener('canplay', function () {
+                      iframe.parentNode.removeChild(iframe);
+                    }, {
+                      once: true
+                    });
+                    iframe.classList.add('panoptoLogin');
+                    iframe.src = url;
+                    iframe.style.cssText = 'position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; boxSizing: border-box; background-color: #ffffff;';
+                    iframe.addEventListener('load', function () {
+                      code.target.src = code.target.src;
+                      code.target.load();
+                    });
+                    code.target.parentNode.insertBefore(iframe, code.target.nextElementSibling);
+                  }
+                }
+                break;
+              default:
+                message = l10n.formatNotSupported;
+                break;
+            }
             break;
           case MediaError.MEDIA_ERR_ENCRYPTED:
             message = l10n.mediaEncrypted;
