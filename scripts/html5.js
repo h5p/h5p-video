@@ -293,23 +293,36 @@ H5P.VideoHtml5 = (function ($) {
             message = l10n.cannotDecode;
             break;
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            // Request the video source file again using HEAD to determine the response code
             let request = new XMLHttpRequest();
             request.open('HEAD', code.target.getAttribute('src'), false);
             request.send(null);
+
+            // Check the status code
             switch (request.status) {
-              case 403:
+              case 403: // FORBIDDEN
                 message = request.statusText;
+
+                // Only run this if the iframe does not already exist
                 if (code.target.parentNode.querySelector('video.h5p-video ~ iframe.panoptoLogin') === null) {
                   let iframe = document.createElement('iframe');
+
+                  // Check if it is a Panopto URL
                   let panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
                   let matches = code.target.src.match(panoptoRegex);
+
                   if (matches !== null) {
+                    // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
                     let url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
+
+                    // Remove the login screen when the video can be loaded
                     code.target.addEventListener('canplay', function () {
                       iframe.parentNode.removeChild(iframe);
                     }, {
                       once: true
                     });
+
+                    // Build the Panopto login iframe
                     iframe.classList.add('panoptoLogin');
                     iframe.src = url;
                     iframe.style.cssText = 'position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; boxSizing: border-box; background-color: #ffffff;';
@@ -317,6 +330,8 @@ H5P.VideoHtml5 = (function ($) {
                       code.target.src = code.target.src;
                       code.target.load();
                     });
+
+                    // Insert the login iframe in the document
                     code.target.parentNode.insertBefore(iframe, code.target.nextElementSibling);
                   }
                 }
