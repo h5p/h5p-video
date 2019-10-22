@@ -49,6 +49,22 @@ H5P.jQuery(document).on('ready', function () {
 });
 ```
 
+## Changing Video Quality
+
+The following example illustrates how you may change video quality using JS:
+
+```js
+if (H5P && H5P.Video) {
+  H5P.VideoHtml5.getExternalQuality = function (sources, set) {
+    setTimeout(function () {
+      set(sources[0].quality.name);
+    }, 3000);
+  };
+}
+
+```
+
+
 ## License
 
 (The MIT License)
