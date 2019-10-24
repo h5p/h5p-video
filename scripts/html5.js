@@ -266,6 +266,9 @@ H5P.VideoHtml5 = (function ($) {
       }, false);
     };
 
+    // Login popup window
+    var loginWindow;
+
     /**
      * Handle errors from the video player.
      *
@@ -295,15 +298,15 @@ H5P.VideoHtml5 = (function ($) {
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
             // Request the video source file again using HEAD to determine the response code
             let request = new XMLHttpRequest();
-            request.addEventListener('load', () => {
+            let loadHandler = function () {
+
               // Check the status code
               switch (request.status) {
                 case 403: // FORBIDDEN
                   message = request.statusText;
 
                   // Only run this if the iframe does not already exist
-                  if (code.target.parentNode.querySelector('video.h5p-video ~ iframe.panoptoLogin') === null) {
-                    let iframe = document.createElement('iframe');
+                  if (loginWindow === undefined) {
 
                     // Check if it is a Panopto URL
                     let panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
@@ -313,24 +316,47 @@ H5P.VideoHtml5 = (function ($) {
                       // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
                       let url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
 
-                      // Remove the login screen when the video can be loaded
-                      code.target.addEventListener('canplay', function () {
-                        iframe.parentNode.removeChild(iframe);
-                      }, {
-                        once: true
+                      let button = document.createElement('button');
+
+                      button.textContent = 'Panopto';
+                      button.style.cssText = 'position: absolute; top: 0; left: 0';
+                      button.addEventListener('click', function () {
+
+                        console.info('Login button clicked');
+
+                        let width = 800;
+                        let height = 600;
+                        let left = (window.screen.width - 800) / 2;
+                        let top = (window.screen.height - 600) / 2;
+
+                        // Remove button
+                        button.parentNode.removeChild(button);
+
+                        // Open login pop-up window
+                        loginWindow = window.open(url, 'test', 'top=' + top + ',left=' + left + ',outerWidth=' + width + ',outerHeight=' + height);
+
+                        let intervalID = setInterval(function () {
+
+                          console.info('Reloading video URL...');
+
+                          code.target.src = code.target.src;
+                          code.target.load();
+                        }, 1000);
+
+                        // Remove the login screen when the video can be loaded
+                        code.target.addEventListener('canplay', function () {
+
+                          console.info('Video can be played!');
+
+                          loginWindow.close();
+                          loginWindow = undefined;
+
+                          clearInterval(intervalID);
+                        }, { once: true });
                       });
 
-                      // Build the Panopto login iframe
-                      iframe.classList.add('panoptoLogin');
-                      iframe.src = url;
-                      iframe.style.cssText = 'position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; boxSizing: border-box; background-color: #ffffff;';
-                      iframe.addEventListener('load', function () {
-                        code.target.src = code.target.src;
-                        code.target.load();
-                      });
-
-                      // Insert the login iframe in the document
-                      code.target.parentNode.insertBefore(iframe, code.target.nextElementSibling);
+                      // Insert the login button in the document
+                      code.target.parentNode.insertBefore(button, code.target.nextElementSibling);
                     }
                   }
                   break;
@@ -340,11 +366,14 @@ H5P.VideoHtml5 = (function ($) {
               }
 
               // Display error message to user
-              $error.text(message).insertAfter(video);
-            });
+              $error.text(message).insertAfter(code.target);
+            };
+
+            request.addEventListener('load', loadHandler);
             request.open('HEAD', code.target.getAttribute('src'));
             request.send();
             break;
+
           case MediaError.MEDIA_ERR_ENCRYPTED:
             message = l10n.mediaEncrypted;
             break;
@@ -358,7 +387,7 @@ H5P.VideoHtml5 = (function ($) {
       $throbber.remove();
 
       // Display error message to user
-      $error.text(message).insertAfter(video);
+      $error.text(message).insertAfter(code.target);
 
       // Pass message to our error event
       return message;
