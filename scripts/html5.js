@@ -285,67 +285,6 @@ H5P.VideoHtml5 = (function ($) {
           return '';
         }
 
-        function openLoginWindow(url) {
-          var width = 800;
-          var height = 600;
-          var top = (window.screen.height - height) / 2;
-          var left = (window.screen.width - width) / 2;
-
-          // Open login pop-up window
-          return window.open(url, 'test', 'top=' + top + ',left=' + left + ',outerWidth=' + width + ',outerHeight=' + height);
-        }
-
-        function doPanoptoCheck() {
-          var panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
-          var matches = code.target.src.match(panoptoRegex);
-
-          if (matches === null) return;
-
-          let button = document.createElement('button');
-          button.textContent = 'Panopto';
-          button.style.cssText = 'position: absolute; top: 0; left: 0';
-          button.addEventListener('click', function () {
-
-            // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
-            var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
-            var loginWindow = openLoginWindow(url);
-            var videoTest = document.createElement('video');
-            var intervalID;
-
-            function reloadVideo() {
-              clearInterval(intervalID);
-
-              // Reload the video
-              code.target.src = code.target.src;
-              code.target.load();
-            }
-
-            videoTest.addEventListener('canplay', function () {
-              reloadVideo();
-
-              if (!loginWindow.closed) {
-                loginWindow.close();
-              }
-            });
-
-            intervalID = setInterval(function () {
-              // Test video url
-              videoTest.src = code.target.getAttribute('src');
-
-              if (loginWindow.closed) {
-                reloadVideo();
-              }
-            }, 1000);
-
-            // Remove button
-            button.parentNode.removeChild(button);
-
-          });
-
-          // Insert the login button in the document
-          code.target.parentNode.insertBefore(button, code.target.nextElementSibling);
-        }
-
         switch (code.target.error.code) {
           case MediaError.MEDIA_ERR_ABORTED:
             message = l10n.aborted;
@@ -360,12 +299,7 @@ H5P.VideoHtml5 = (function ($) {
             break;
 
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            //TODO Better message
             message = l10n.formatNotSupported;
-
-            // Check if it is a Panopto URL
-            doPanoptoCheck();
-
             break;
 
           case MediaError.MEDIA_ERR_ENCRYPTED:
@@ -386,7 +320,64 @@ H5P.VideoHtml5 = (function ($) {
       $throbber.remove();
 
       // Display error message to user
-      $error.html(message).insertAfter(code.target);
+      $error.html('<div>' + message + '</div>').insertAfter(code.target);
+
+      // Check if it is a Panopto URL
+      if (code.target.error.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+        var panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
+        var matches = code.target.src.match(panoptoRegex);
+
+        if (matches === null) return;
+
+        let button = document.createElement('button');
+        //TODO Translations
+        button.textContent = 'Log in to Panopto';
+        button.className = 'h5p-joubelui-button';
+        //button.style.cssText = 'position: absolute; top: 70%; left: 50%; transform: translate(-50%, -50%);';
+        button.addEventListener('click', function () {
+          // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
+          var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
+          var width = 800;
+          var height = 600;
+          var top = (window.screen.height - height) / 2;
+          var left = (window.screen.width - width) / 2;
+          // Open login pop-up window
+          var loginWindow = window.open(url, 'test', 'top=' + top + ',left=' + left + ',outerWidth=' + width + ',outerHeight=' + height);
+          var videoTest = document.createElement('video');
+          var intervalID;
+
+          function reloadVideo() {
+            clearInterval(intervalID);
+
+            // Reload the video
+            code.target.src = code.target.src;
+            code.target.load();
+          }
+
+          videoTest.addEventListener('canplay', function () {
+            reloadVideo();
+
+            if (!loginWindow.closed) {
+              loginWindow.close();
+            }
+          });
+
+          intervalID = setInterval(function () {
+            // Test video url
+            videoTest.src = code.target.getAttribute('src');
+
+            if (loginWindow.closed) {
+              reloadVideo();
+            }
+          }, 1000);
+
+          // Disable button
+          button.setAttribute('disabled', 'disabled');
+        });
+
+        // Insert the login button in the document
+        $error.append('<br />', button);
+      }
 
       // Pass message to our error event
       return message;
