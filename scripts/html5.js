@@ -285,98 +285,97 @@ H5P.VideoHtml5 = (function ($) {
           return '';
         }
 
+        function openLoginWindow(url) {
+          var width = 800;
+          var height = 600;
+          var top = (window.screen.height - height) / 2;
+          var left = (window.screen.width - width) / 2;
+
+          // Open login pop-up window
+          return window.open(url, 'test', 'top=' + top + ',left=' + left + ',outerWidth=' + width + ',outerHeight=' + height);
+        }
+
+        function doPanoptoCheck() {
+          var panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
+          var matches = code.target.src.match(panoptoRegex);
+
+          if (matches === null) return;
+
+          let button = document.createElement('button');
+          button.textContent = 'Panopto';
+          button.style.cssText = 'position: absolute; top: 0; left: 0';
+          button.addEventListener('click', function () {
+
+            // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
+            var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
+            var loginWindow = openLoginWindow(url);
+            var videoTest = document.createElement('video');
+            var intervalID;
+
+            function reloadVideo() {
+              clearInterval(intervalID);
+
+              // Reload the video
+              code.target.src = code.target.src;
+              code.target.load();
+            }
+
+            videoTest.addEventListener('canplay', function () {
+              reloadVideo();
+
+              if (!loginWindow.closed) {
+                loginWindow.close();
+              }
+            });
+
+            intervalID = setInterval(function () {
+              // Test video url
+              videoTest.src = code.target.getAttribute('src');
+
+              if (loginWindow.closed) {
+                reloadVideo();
+              }
+            }, 1000);
+
+            // Remove button
+            button.parentNode.removeChild(button);
+
+          });
+
+          // Insert the login button in the document
+          code.target.parentNode.insertBefore(button, code.target.nextElementSibling);
+        }
+
         switch (code.target.error.code) {
           case MediaError.MEDIA_ERR_ABORTED:
             message = l10n.aborted;
             break;
+
           case MediaError.MEDIA_ERR_NETWORK:
             message = l10n.networkFailure;
             break;
+
           case MediaError.MEDIA_ERR_DECODE:
             message = l10n.cannotDecode;
             break;
+
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            // Request the video source file again using HEAD to determine the response code
-            let request = new XMLHttpRequest();
-            let loadHandler = function () {
+            //TODO Better message
+            message = l10n.formatNotSupported;
 
-              // Check the status code
-              switch (request.status) {
-                case 403: // FORBIDDEN
-                  message = request.statusText;
+            // Check if it is a Panopto URL
+            doPanoptoCheck();
 
-                  // Only run this if the iframe does not already exist
-                  if (loginWindow === undefined) {
-
-                    // Check if it is a Panopto URL
-                    let panoptoRegex = /((?:https?:\/\/)?.+\.cloud\.panopto\..+)\/Panopto\/(?:Pages\/Viewer\.aspx\?id=|Podcast\/StreamInBrowser\/|Podcast\/Download\/)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})/;
-                    let matches = code.target.src.match(panoptoRegex);
-
-                    if (matches !== null) {
-                      // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
-                      let url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
-
-                      let button = document.createElement('button');
-
-                      button.textContent = 'Panopto';
-                      button.style.cssText = 'position: absolute; top: 0; left: 0';
-                      button.addEventListener('click', function () {
-
-                        console.info('Login button clicked');
-
-                        let width = 800;
-                        let height = 600;
-                        let left = (window.screen.width - 800) / 2;
-                        let top = (window.screen.height - 600) / 2;
-
-                        // Remove button
-                        button.parentNode.removeChild(button);
-
-                        // Open login pop-up window
-                        loginWindow = window.open(url, 'test', 'top=' + top + ',left=' + left + ',outerWidth=' + width + ',outerHeight=' + height);
-
-                        let intervalID = setInterval(function () {
-
-                          console.info('Reloading video URL...');
-
-                          code.target.src = code.target.src;
-                          code.target.load();
-                        }, 1000);
-
-                        // Remove the login screen when the video can be loaded
-                        code.target.addEventListener('canplay', function () {
-
-                          console.info('Video can be played!');
-
-                          loginWindow.close();
-                          loginWindow = undefined;
-
-                          clearInterval(intervalID);
-                        }, { once: true });
-                      });
-
-                      // Insert the login button in the document
-                      code.target.parentNode.insertBefore(button, code.target.nextElementSibling);
-                    }
-                  }
-                  break;
-                default:
-                  message = l10n.formatNotSupported;
-                  break;
-              }
-
-              // Display error message to user
-              $error.text(message).insertAfter(code.target);
-            };
-
-            request.addEventListener('load', loadHandler);
-            request.open('HEAD', code.target.getAttribute('src'));
-            request.send();
             break;
 
           case MediaError.MEDIA_ERR_ENCRYPTED:
             message = l10n.mediaEncrypted;
             break;
+        }
+
+        // Add specific reason to message
+        if (code.target.error.message !== undefined && code.target.error.message.length > 0) {
+          message += '<br />' + code.target.error.message;
         }
       }
       if (!message) {
@@ -387,7 +386,7 @@ H5P.VideoHtml5 = (function ($) {
       $throbber.remove();
 
       // Display error message to user
-      $error.text(message).insertAfter(code.target);
+      $error.html(message).insertAfter(code.target);
 
       // Pass message to our error event
       return message;
