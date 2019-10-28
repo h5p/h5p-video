@@ -333,7 +333,7 @@ H5P.VideoHtml5 = (function ($) {
         //TODO Translations
         button.textContent = 'Log in to Panopto';
         button.className = 'h5p-joubelui-button';
-        //button.style.cssText = 'position: absolute; top: 70%; left: 50%; transform: translate(-50%, -50%);';
+        button.style.cssText = 'margin: 0; line-height: normal';
         button.addEventListener('click', function () {
           // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
           var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
