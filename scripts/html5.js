@@ -336,7 +336,7 @@ H5P.VideoHtml5 = (function ($) {
         button.style.cssText = 'margin: 0; line-height: normal';
         button.addEventListener('click', function () {
           // Build the Panopto login URL (setting the Panopto logo as return URL to prevent going to the home screen)
-          var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Styles/Less/Application/Images/Header/icon_panopto_16.png';
+          var url = matches[1] + '/Panopto/Pages/Auth/Login.aspx?ReturnURL=' + matches[1] + '/Panopto/Images/panopto_logo.png';
           var width = 800;
           var height = 600;
           var top = (window.screen.height - height) / 2;
