@@ -426,7 +426,7 @@ H5P.VideoHtml5 = (function ($) {
       self.trigger('stateChange', H5P.Video.BUFFERING);
 
       // Change source
-      track.src = getCrossOriginPath(qualities[quality].source); // (iPad does not support #t=).
+      video.src = getCrossOriginPath(qualities[quality].source); // (iPad does not support #t=).
       // Note: Optional tracks use same crossOrigin as the original. You cannot mix.
 
       // Remove poster so it will not show during quality change
