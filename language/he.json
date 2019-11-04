@@ -122,7 +122,6 @@
               },
               {
                 "label": "שפת המקור חייבת להיות מוגדרת לשם הצגת כתוביות",
-                "default": "en",
                 "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
               },
               {

@@ -122,7 +122,6 @@
               },
               {
                 "label": "Algkeel, peab olema määratletud subtiitride puhul",
-                "default": "en",
                 "description": "Peab olema kehtiv BCP 47 keelesilt. Kui liigi-atribuut on seatud subtiitriks, siis peab srclang olema määratud."
               },
               {

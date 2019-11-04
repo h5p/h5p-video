@@ -122,7 +122,6 @@
               },
               {
                 "label": "Za prijevod se mora navesti izvorni jezik",
-                "default": "en",
                 "description": "Mora biti ispravan jezički tag BCP 47. Kada \"vrsta\" odredi vrsta prijevoda, onda se mora izvorni jezik odrediti."
               },
               {

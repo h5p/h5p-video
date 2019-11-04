@@ -122,7 +122,6 @@
               },
               {
                 "label": "Za podnapise mora biti določen jezik vira",
-                "default": "sl",
                 "description": "Veljavne so oznake jezikov po BCP 47."
               },
               {

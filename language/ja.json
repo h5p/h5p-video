@@ -122,7 +122,6 @@
               },
               {
                 "label": "字幕のソース言語を定義する必要があります。",
-                "default": "en",
                 "description": "有効な BCP 47 言語タグでなければなりません。kind 属性に subtitles を設定した場合は、srclang 属性を定義しなければなりません。"
               },
               {
