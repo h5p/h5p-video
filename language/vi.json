@@ -82,7 +82,7 @@
           "default": "Invalid YouTube ID."
         },
         {
-          "label": "Unkown YouTube ID",
+          "label": "Unknown YouTube ID",
           "default": "Unable to find video with the given YouTube ID."
         },
         {
@@ -122,7 +122,6 @@
               },
               {
                 "label": "Source language, must be defined for subtitles",
-                "default": "en",
                 "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
               },
               {

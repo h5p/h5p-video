@@ -122,7 +122,6 @@
               },
               {
                 "label": "Fichier de la piste (format WebVTT)",
-                "default": "en",
                 "description": "Doit être un code langage conforme à la norme BCP 47. Si le type de piste est défini à \"Sous-titres\", alors la langue doit être définie."
               },
               {
