@@ -122,7 +122,6 @@
               },
               {
                 "label": "Jatorrizko hizkuntza, azpitituluetarako definitu behar dena",
-                "default": "eu",
                 "description": "BCP 47 hizkuntza-etiketa baliogarria izan behar du. Atributuan azpitituluak ezarri badira, srclang definitu beharra dago."
               },
               {
