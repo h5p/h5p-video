@@ -817,18 +817,7 @@ H5P.VideoHtml5 = (function ($) {
    * @param {String} quality Index of preferred quality
    */
   var setPreferredQuality = function (quality) {
-    var settings = document.cookie.split(';');
-    for (var i = 0; i < settings.length; i++) {
-      var setting = settings[i].split('=');
-      if (setting[0] === 'H5PVideoQuality') {
-        setting[1] = quality;
-        settings[i] = setting.join('=');
-        document.cookie = settings.join(';');
-        return;
-      }
-    }
-
-    document.cookie = 'H5PVideoQuality=' + quality + '; ' + document.cookie;
+    localStorage.setItem('h5pVideoQuality', quality);
   };
 
   /**
@@ -839,6 +828,7 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {String} Index of preferred quality
    */
   var getPreferredQuality = function () {
+    // Try getting preferred quality from cookie first
     var quality, settings = document.cookie.split(';');
     for (var i = 0; i < settings.length; i++) {
       var setting = settings[i].split('=');
@@ -848,6 +838,10 @@ H5P.VideoHtml5 = (function ($) {
       }
     }
 
+    if (!quality) {
+      // The cookie did not deliver, use localStorage instead
+      quality = localStorage.getItem('h5pVideoQuality');
+    }
     return quality;
   };
 
