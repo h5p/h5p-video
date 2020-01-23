@@ -828,19 +828,18 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {String} Index of preferred quality
    */
   var getPreferredQuality = function () {
-    // Try getting preferred quality from cookie first
-    var quality, settings = document.cookie.split(';');
-    for (var i = 0; i < settings.length; i++) {
-      var setting = settings[i].split('=');
-      if (setting[0] === 'H5PVideoQuality') {
-        quality = setting[1];
-        break;
-      }
-    }
-
+    // First check localStorage
+    let quality = localStorage.getItem('h5pVideoQuality');
     if (!quality) {
-      // The cookie did not deliver, use localStorage instead
-      quality = localStorage.getItem('h5pVideoQuality');
+      // The fallback to old cookie solution
+      var settings = document.cookie.split(';');
+      for (var i = 0; i < settings.length; i++) {
+        var setting = settings[i].split('=');
+        if (setting[0] === 'H5PVideoQuality') {
+          quality = setting[1];
+          break;
+        }
+      }
     }
     return quality;
   };
