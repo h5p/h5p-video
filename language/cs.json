@@ -1,131 +1,131 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Zdroje videa",
+      "description": "Chcete-li zajistit, aby video fungovalo ve všech prohlížečích, měli byste přidat zdroje ve formátu WebM a MP4."
     },
     {
-      "label": "Visuals",
+      "label": "Vizuální",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Plakát"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Umístit přehrávač videa tak, aby využíval veškerý dostupný prostor",
+          "description": "Pokud není nastaven, bude mít přehrávač videa stejný poměr stran jako video."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Zobrazit ovládací prvky přehrávače videa",
+          "description": "Přidejte do přehrávače videa ovládací prvky. To umožňuje uživatelům spustit, pozastavit atd."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Přehrávání",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Automatické přehrávání videa",
+          "description": "Spustit přehrávání videa automaticky. Na mobilních zařízeních nemusí fungovat."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Video ve smyčce",
+          "description": "Po skončení se video automaticky spustí znovu."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Lokalizace videa",
       "fields": [
         {
-          "label": "Name",
+          "label": "Název",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Pomáhá identifikovat obsah tohoto typu."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Načítání",
+          "default": "Načítání video přehrávače..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Nebyly nalezeny žádné přehrávače",
+          "default": "Nebyly nalezeny žádné přehrávače videa, které daný formát videa podporují."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Žádné zdroje",
+          "default": "Ve videu chybí zdroje."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Selhání",
+          "default": "Přehrávání médií selhalo."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Chyba sítě",
+          "default": "Chyba sítě."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Nelze dekódovat zdroj videa",
+          "default": "Nelze dekódovat média."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Formát není podporován",
+          "default": "Formát videa není podporován."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Šifrováná média",
+          "default": "Šifrováná média."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Neznámá chyba",
+          "default": "Neznámá chyba."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Neplatné ID YouTube",
+          "default": "Neplatné ID YouTube."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Neznámé ID YouTube",
+          "default": "Video s daným ID YouTube nelze najít."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Video YouTube s omezením",
+          "default": "Vlastník tohoto videa neumožňuje jeho vložení."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Přístupnost",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Přidat video stopu",
+          "entity": "Stopa",
           "field": {
-            "label": "Track",
+            "label": "Stopa",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Popisek stopy"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Typ druhu, viz <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Titulky"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Nadpis"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Popis"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Kapitoly"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Pro titulky musí být definován zdrojový jazyk",
+                "description": "Musí to být platná jazyková značka BCP 47. Pokud je atribut druh nastaven na titulky, musí být definován srclang."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Sledovat soubor (WebVTT)"
               }
             ]
           }
