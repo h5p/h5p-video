@@ -20,7 +20,7 @@ H5P.VideoPanopto = (function ($) {
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
       id: id,
-      text: l10n.loading
+      html: '<div>' + l10n.loading + '</div>'
     }).appendTo($wrapper);
 
     /**
@@ -56,35 +56,30 @@ H5P.VideoPanopto = (function ($) {
           showtitle: false,
           autohide: true,
           offerviewer: false,
-          autoplay: false,
+          autoplay: !!options.autoplay,
           showbrand: false,
           start: 0
         },
         events: {
           onIframeReady: function () {
-            console.log('onIframeReady');
-            //player.loadVideo();
+            $placeholder.children(0).text('');
+            player.loadVideo();
           },
           onReady: function () {
-            console.log('onReady');
-            //self.trigger('ready');
-            //self.trigger('loaded');
+            player.pauseVideo();
+            self.trigger('loaded');
           },
           onStateChange: function (state) {
-            console.log('onStateChange', state);
             // TODO: Playback rate fix for IE11?
-            /*
-            if (state.data > -1 && state.data < 4) {
-              self.trigger('stateChange', state.data);
+            if (state > -1 && state < 4) {
+              self.trigger('stateChange', state);
             }
-            */
-            console.log(window.PlayerState);
           },
           onPlaybackRateChange: function () {
-            console.log('onPlaybackRateChange', arguments);
+            self.trigger('playbackRateChange', self.getPlaybackRate());
           },
           onError: function () {
-            console.log('onError', arguments);
+            self.trigger('error', l10n.unknownError);
           }
         }
       });
@@ -147,10 +142,8 @@ H5P.VideoPanopto = (function ($) {
      */
     self.play = function () {
       if (!player || !player.playVideo) {
-        //self.on('ready', self.play); // TODO: Figure out if this will work
         return;
       }
-
       player.playVideo();
     };
 
@@ -160,7 +153,6 @@ H5P.VideoPanopto = (function ($) {
      * @public
      */
     self.pause = function () {
-      //self.off('ready', self.play); // TODO: Figure out if this will work
       if (!player || !player.pauseVideo) {
         return;
       }
@@ -284,7 +276,7 @@ H5P.VideoPanopto = (function ($) {
         return;
       }
 
-      player.setVolume(level);
+      player.setVolume(level/100);
     };
 
     /**
@@ -385,7 +377,9 @@ H5P.VideoPanopto = (function ($) {
     ];
 
     self.on('loaded', function () {
-      self.trigger('captions', captions);
+      setTimeout(function () {
+        self.trigger('captions', captions);
+      }, 0);
     });
   }
 
