@@ -11,7 +11,7 @@
           "label": "Imagen de Poster"
         },
         {
-          "label": "Se ajusta el rereproductor de video para usar todo el espacio disponible",
+          "label": "Se ajusta el reproductor de video para usar todo el espacio disponible",
           "description": "Si no se configura, el reproductor de video tendrá la misma proporción de aspecto que el video."
         },
         {
@@ -28,7 +28,7 @@
           "description": "Comenzar a reproducir el video automáticamente. Podría no funcionar en dispositivos móviles."
         },
         {
-          "label": "Lazo de video",
+          "label": "Bucle de video",
           "description": "Automáticamente iniciar el video una y otra vez cuando se termine."
         }
       ]
@@ -55,15 +55,15 @@
         },
         {
           "label": "Abortado",
-          "default": "MEl reproductor de medios ha sido abortado."
+          "default": "El reproductor de medios ha sido abortado."
         },
         {
           "label": "Falla de la red",
           "default": "Falla de la red."
         },
         {
-          "label": "No se puede descodificar la fuente de video",
-          "default": "No se puede descodificar los medios."
+          "label": "No se puede decodificar la fuente de video",
+          "default": "No se puede decodificar los medios."
         },
         {
           "label": "Formato no soportado",
@@ -101,7 +101,7 @@
             "label": "Pista",
             "fields": [
               {
-                "label": "etiqueta de pista"
+                "label": "Etiqueta de pista"
               },
               {
                 "label": "Tipo, refiérase a <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
@@ -122,7 +122,7 @@
               },
               {
                 "label": "Idioma de la fuente, debe estar definido para los subtítulos",
-                "description": "Debe ser una marca (tag) de idioma BCP 47 válida. Si el tipo de atributoestá configurado a subtítulos, entonces srclang debe estar definido."
+                "description": "Debe ser una marca (tag) de idioma BCP 47 válida. Si el tipo de atributo está configurado a subtítulos, entonces srclang debe estar definido."
               },
               {
                 "label": "Archivo de pista (WebVTT)"
