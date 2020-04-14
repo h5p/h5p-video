@@ -105,7 +105,7 @@
               },
               {
                 "label": "Ange typ, se <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
-                "inställningar": [
+                "options": [
                   {
                     "label": "Undertexter"
                   },
