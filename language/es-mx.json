@@ -11,7 +11,7 @@
           "label": "Imagen de Poster"
         },
         {
-          "label": "Se ajusta el reproductor de video para usar todo el espacio disponible",
+          "label": "Se ajusta el rereproductor de video para usar todo el espacio disponible",
           "description": "Si no se configura, el reproductor de video tendrá la misma proporción de aspecto que el video."
         },
         {
