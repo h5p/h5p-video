@@ -52,22 +52,22 @@ H5P.VideoPanopto = (function ($) {
         serverName: videoId[0],
         sessionId: videoId[1],
         videoParams: { // Optional
-          interactivity: 'none',
+          interactivity: 'none', // Must be enabled for captions to display
           showtitle: false,
           autohide: true,
           offerviewer: false,
           autoplay: !!options.autoplay,
           showbrand: false,
-          start: 0
+          start: 0,
+          hideoverlay: true,
         },
         events: {
           onIframeReady: function () {
             $placeholder.children(0).text('');
-            player.loadVideo();
+            self.trigger('loaded');
           },
           onReady: function () {
-            player.pauseVideo();
-            self.trigger('loaded');
+            // Make tea?
           },
           onStateChange: function (state) {
             // TODO: Playback rate fix for IE11?
@@ -87,11 +87,11 @@ H5P.VideoPanopto = (function ($) {
 
     /**
      * Indicates if the video must be clicked for it to start playing.
-     * For instance Panopto videos on iPad must be pressed to start playing.
+     * This is always true for Panopto since all videos auto play.
      *
      * @public
      */
-    self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false; // TODO: Check if this is true for Panopto
+    self.pressToPlay = true;
 
     /**
     * Appends the video player to the DOM.
@@ -166,11 +166,11 @@ H5P.VideoPanopto = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      if (!player || !player.setPosition) {
+      if (!player || !player.seekTo) {
         return;
       }
 
-      player.setPosition(time);
+      player.seekTo(time);
     };
 
     /**
@@ -244,11 +244,11 @@ H5P.VideoPanopto = (function ($) {
      * @returns {Boolean}
      */
     self.isMuted = function () {
-      if (!player || !player.getIsMuted) {
+      if (!player || !player.isMuted) {
         return;
       }
 
-      return player.getIsMuted();
+      return player.isMuted();
     };
 
     /**
@@ -296,11 +296,11 @@ H5P.VideoPanopto = (function ($) {
      * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
      */
     self.getPlaybackRate = function () {
-      if (!player || !player.getSpeed) {
+      if (!player || !player.getPlaybackRate) {
         return;
       }
 
-      return player.getSpeed();
+      return player.getPlaybackRate();
     };
 
     /**
@@ -311,11 +311,11 @@ H5P.VideoPanopto = (function ($) {
      * @params {Number} suggested rate that may be rounded to supported values
      */
     self.setPlaybackRate = function (newPlaybackRate) {
-      if (!player || !player.setSpeed) {
+      if (!player || !player.setPlaybackRate) {
         return;
       }
 
-      player.setSpeed(newPlaybackRate);
+      player.setPlaybackRate(newPlaybackRate);
     };
 
     /**
@@ -324,13 +324,15 @@ H5P.VideoPanopto = (function ($) {
      * @param {H5P.Video.LabelValue} Captions track to show during playback
      */
     self.setCaptionsTrack = function (track) {
-      if (captionsEnabled) {
+      if (!track) {
+        console.log('Disable captions');
         player.disableCaptions();
-        captionsEnabled = false;
+        currentTrack = null;
       }
       else {
-        player.enableCaptions();
-        captionsEnabled = true;
+        console.log('Set captions', track.value);
+        player.enableCaptions(track.value + '');
+        currentTrack = track;
       }
     };
 
@@ -340,7 +342,7 @@ H5P.VideoPanopto = (function ($) {
      * @return {H5P.Video.LabelValue} Captions track
      */
     self.getCaptionsTrack = function () {
-      return captionsEnabled ? captions[0] : null;
+      return currentTrack; // No function for getting active caption track?
     };
 
     // Respond to resize events by setting the player size.
@@ -371,14 +373,23 @@ H5P.VideoPanopto = (function ($) {
       });
     });
 
-    let captionsEnabled;
-    const captions = [
-      new H5P.Video.LabelValue('On', 0)
-    ];
+    let currentTrack;
 
     self.on('loaded', function () {
       setTimeout(function () {
-        self.trigger('captions', captions);
+        if (player.hasCaptions()) {
+          const captions = [];
+
+          const captionTracks = player.getCaptionTracks();
+          for (trackIndex in captionTracks) {
+            captions.push(new H5P.Video.LabelValue(captionTracks[trackIndex], trackIndex));
+            if (!currentTrack) {
+              currentTrack = captions[0]; // No function for getting active caption track? Assuming first or Off is always default
+            }
+          }
+
+          self.trigger('captions', captions);
+        }
       }, 0);
     });
   }
@@ -400,7 +411,7 @@ H5P.VideoPanopto = (function ($) {
    *
    * @private
    * @param {String} url
-   * @returns {String} YouTube video identifier
+   * @returns {String} Panopto video identifier
    */
   var getId = function (url) {
     const matches = url.match(/^[^\/]+:\/\/([^\/]+).+\?id=(.+)$/);
