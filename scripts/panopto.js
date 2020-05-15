@@ -67,7 +67,19 @@ H5P.VideoPanopto = (function ($) {
             self.trigger('loaded');
           },
           onReady: function () {
-            // Make tea?
+            if (player.hasCaptions()) {
+              const captions = [];
+
+              const captionTracks = player.getCaptionTracks();
+              for (trackIndex in captionTracks) {
+                captions.push(new H5P.Video.LabelValue(captionTracks[trackIndex], trackIndex));
+                if (!currentTrack) {
+                  currentTrack = captions[0]; // No function for getting active caption track? Assuming first or Off is always default
+                }
+              }
+
+              self.trigger('captions', captions);
+            }
           },
           onStateChange: function (state) {
             // TODO: Playback rate fix for IE11?
@@ -374,24 +386,6 @@ H5P.VideoPanopto = (function ($) {
     });
 
     let currentTrack;
-
-    self.on('loaded', function () {
-      setTimeout(function () {
-        if (player.hasCaptions()) {
-          const captions = [];
-
-          const captionTracks = player.getCaptionTracks();
-          for (trackIndex in captionTracks) {
-            captions.push(new H5P.Video.LabelValue(captionTracks[trackIndex], trackIndex));
-            if (!currentTrack) {
-              currentTrack = captions[0]; // No function for getting active caption track? Assuming first or Off is always default
-            }
-          }
-
-          self.trigger('captions', captions);
-        }
-      }, 0);
-    });
   }
 
   /**
