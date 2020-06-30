@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Ficheiros de vídeo",
-      "description": "Para se assegurar que todos os navegadores suportem o vídeo,  deve fazer upload de ambos os formatos: WebM e MP4."
+      "description": "Para assegurar que todos os navegadores suportem o vídeo, deve fazer o upload de ambos os formatos: WebM e MP4."
     },
     {
       "label": "Visuais",
@@ -39,7 +39,7 @@
         {
           "label": "Nome",
           "default": "Vídeo",
-          "description": "Ajuda a identificar o conteúdo deste tipo."
+          "description": "Ajuda a identificar conteúdo deste tipo."
         },
         {
           "label": "A carregar",
@@ -47,7 +47,7 @@
         },
         {
           "label": "Nenhum leitor encontrado",
-          "default": "Nenhum leitor de vídeo para o formato fornecido foi encontrado."
+          "default": "Nenhum leitor de vídeo foi encontrado para o formato fornecido."
         },
         {
           "label": "Sem fontes",
@@ -58,8 +58,8 @@
           "default": "A reprodução foi cancelada."
         },
         {
-          "label": "Falha de ligaçãoão",
-          "default": "Falha de ligaçãoão."
+          "label": "Falha na ligação",
+          "default": "Falha de ligação."
         },
         {
           "label": "Não foi possível descodificar o ficheiro",
@@ -82,7 +82,7 @@
           "default": "ID do YouTube inválido."
         },
         {
-          "label": "ID do YouTube desconhecida",
+          "label": "ID do YouTube desconhecido",
           "default": "Não foi possível encontrar o vídeo com o ID fornecido."
         },
         {
@@ -104,13 +104,13 @@
                 "label": "Rótulo da faixa"
               },
               {
-                "label": "Tipo de categoria, referir a <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Tipo de categoria, refere-se a <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
                 "options": [
                   {
                     "label": "Legendas"
                   },
                   {
-                    "label": "Legendas(Acessibilidade)"
+                    "label": "Legendas (Acessibilidade)"
                   },
                   {
                     "label": "Descrições"
@@ -121,7 +121,7 @@
                 ]
               },
               {
-                "label": "Idioma fonte, deve ser definido para as legendas",
+                "label": "Idioma da fonte, deve ser definido para as legendas",
                 "description": "Deve ser um rótulo de linguagem BCP 47 válido. Se 'Legendas' é o tipo de faixa de texto seleciondo, a linguagem fonte da faixa de texto deve ser definida."
               },
               {
