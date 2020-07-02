@@ -1,22 +1,22 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Videobronnen",
+      "description": "Om ervoor te zorgen dat video in alle browsers werkt, moet u zowel WebM als MP4 opgemaakte bronnen toevoege."
     },
     {
-      "label": "Visuals",
+      "label": "Visueel",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Poster afbeelding"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Laat video player alle beschikbare ruimte gebruiken",
+          "description": "ALs dit niet is ingesteld, gebruikt de video player dezelfde afmetingen als de video."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Toon video player controleknoppen",
+          "description": "Voeg controleknoppen aan de video player toe. Dit staat gebruikers toe af te spelen, pauzeren, etc."
         }
       ]
     },
@@ -25,11 +25,11 @@
       "fields": [
         {
           "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "description": "Automatisch starten met afspelen van de video. Kan mogelijk niet werken op mobiele apparaten."
         },
         {
           "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "description": "Automatisch de video opnieuw starten wanneer die afgelopen is."
         }
       ]
     },
@@ -37,65 +37,65 @@
       "label": "Video localization",
       "fields": [
         {
-          "label": "Name",
+          "label": "Naam",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Helpt inhoud van dit type te herkennen."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Laden",
+          "default": "Video player aan het laden..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Geen players gevonden",
+          "default": "Geen video players gevonden die de gegeven video-opmaak ondersteunen."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Geen bronnen",
+          "default": "Video bevat geen bronnen."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Afgebroken",
+          "default": "Media playback is afgebroken."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Netwerkfout",
+          "default": "Netwerkfout."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Kan videobron niet decoderen",
+          "default": "Niet mogelijk om media te decoderen."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Opmaak niet ondersteund",
+          "default": "Video-opmaak niet ondersteund."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Media versleuteld",
+          "default": "Media versleuteld."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Onbekende fout",
+          "default": "Onbekende fout."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Ongeldige YouTube ID",
+          "default": "Ongeldige YouTube ID."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Onbekende YouTube ID",
+          "default": "Niet mogelijk de video met de opgegeven YouTube ID te vinden."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Afgeschermde YouTube video",
+          "default": "De eigenaar van deze video staat insluiten van deze video niet toe."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Toegankelijkheid",
       "fields": [
         {
-          "label": "Add video track",
+          "label": "Voeg video track toe",
           "entity": "Track",
           "field": {
             "label": "Track",
@@ -104,28 +104,28 @@
                 "label": "Track label"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Type soort, verwijst naar <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Ondertitels"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Bijschriften"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Beschrijvingen"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Hoofdstukken"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Bron taal, moet worden opgegeven voor ondertitels",
+                "description": "Moet een geldige BCP 47 taal tag zijn. Als de soort-attribuut is ingesteld op ondertitels, dan moet srclang worden vastgelegd."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Track bestand (WebVTT)"
               }
             ]
           }
