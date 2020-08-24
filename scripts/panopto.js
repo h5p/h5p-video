@@ -92,6 +92,10 @@ H5P.VideoPanopto = (function ($) {
           },
           onError: function () {
             self.trigger('error', l10n.unknownError);
+          },
+          onLoginShown: function () {
+            $placeholder.children().first().remove(); // Remove loading message
+            self.trigger('loaded'); // Resize parent
           }
         }
       });
