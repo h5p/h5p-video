@@ -52,14 +52,14 @@ H5P.VideoPanopto = (function ($) {
         serverName: videoId[0],
         sessionId: videoId[1],
         videoParams: { // Optional
-          interactivity: 'none', // Must be enabled for captions to display
+          interactivity: 'none',
           showtitle: false,
           autohide: true,
           offerviewer: false,
           autoplay: !!options.autoplay,
           showbrand: false,
           start: 0,
-          hideoverlay: true,
+          hideoverlay: !options.controls,
         },
         events: {
           onIframeReady: function () {
@@ -388,6 +388,12 @@ H5P.VideoPanopto = (function ($) {
         width: width + 'px',
         height: height + 'px'
       });
+
+      const $iframe = $placeholder.children('iframe');
+      if ($iframe.length) {
+        $iframe.attr('width', width);
+        $iframe.attr('height', height);
+      }
     });
 
     let currentTrack;
