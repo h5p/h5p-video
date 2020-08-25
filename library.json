@@ -18,6 +18,9 @@
       "path": "scripts/youtube.js"
     },
     {
+      "path": "scripts/panopto.js"
+    },
+    {
       "path": "scripts/html5.js"
     },
     {
