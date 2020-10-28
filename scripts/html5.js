@@ -643,7 +643,7 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('playing', 'stateChange', H5P.Video.PLAYING);
     mapEvent('pause', 'stateChange', H5P.Video.PAUSED);
     mapEvent('waiting', 'stateChange', H5P.Video.BUFFERING);
-    mapEvent('loadedmetadata', 'loaded');
+    mapEvent('canplay', 'loaded');
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
 
