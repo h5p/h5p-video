@@ -644,6 +644,9 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('pause', 'stateChange', H5P.Video.PAUSED);
     mapEvent('waiting', 'stateChange', H5P.Video.BUFFERING);
     mapEvent('canplay', 'loaded');
+    // Safari never triggers the 'canplay' event, so we have to listen for
+    //  loadedmetadata as well
+    mapEvent('loadedmetadata', 'loaded');
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
 
