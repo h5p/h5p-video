@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Videobronnen",
-      "description": "Om ervoor te zorgen dat video in alle browsers werkt, moet u zowel WebM als MP4 opgemaakte bronnen toevoege."
+      "description": "Om ervoor te zorgen dat video in alle browsers werkt, moet u zowel WebM als MP4 opgemaakte bronnen toevoegen."
     },
     {
       "label": "Visueel",
@@ -25,7 +25,7 @@
       "fields": [
         {
           "label": "Auto-play video",
-          "description": "Automatisch starten met afspelen van de video. Kan mogelijk niet werken op mobiele apparaten."
+          "description": "Automatisch starten met afspelen van de video. Werkt mogelijk niet op mobiele apparaten."
         },
         {
           "label": "Loop video",
