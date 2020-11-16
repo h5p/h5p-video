@@ -74,10 +74,11 @@ H5P.VideoPanopto = (function ($) {
               const captionTracks = player.getCaptionTracks();
               for (trackIndex in captionTracks) {
                 captions.push(new H5P.Video.LabelValue(captionTracks[trackIndex], trackIndex));
-                if (!currentTrack) {
-                  currentTrack = captions[0]; // No function for getting active caption track? Assuming first or Off is always default
-                }
               }
+
+              // Select active track
+              currentTrack = player.getSelectedCaptionTrack();
+              currentTrack = captions[currentTrack] ? captions[currentTrack] : null;
 
               self.trigger('captions', captions);
             }
