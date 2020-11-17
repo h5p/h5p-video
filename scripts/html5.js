@@ -843,7 +843,6 @@ H5P.VideoHtml5 = (function ($) {
     }
     if (!quality) {
       try {
-        console.log(document.cookie.split(';'));
         // The fallback to old cookie solution
         var settings = document.cookie.split(';');
         for (var i = 0; i < settings.length; i++) {
