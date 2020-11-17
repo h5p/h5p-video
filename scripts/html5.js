@@ -820,7 +820,12 @@ H5P.VideoHtml5 = (function ($) {
    * @param {String} quality Index of preferred quality
    */
   var setPreferredQuality = function (quality) {
-    localStorage.setItem('h5pVideoQuality', quality);
+    try {
+      localStorage.setItem('h5pVideoQuality', quality);
+    }
+    catch (err) {
+      console.warn('Unable to set preferred video quality, localStorage is not available.');
+    }
   };
 
   /**
@@ -832,16 +837,28 @@ H5P.VideoHtml5 = (function ($) {
    */
   var getPreferredQuality = function () {
     // First check localStorage
-    let quality = localStorage.getItem('h5pVideoQuality');
+    let quality;
+    try {
+      quality = localStorage.getItem('h5pVideoQuality');
+    }
+    catch (err) {
+      console.warn('Unable to retrieve preferred video quality from localStorage.');
+    }
     if (!quality) {
-      // The fallback to old cookie solution
-      var settings = document.cookie.split(';');
-      for (var i = 0; i < settings.length; i++) {
-        var setting = settings[i].split('=');
-        if (setting[0] === 'H5PVideoQuality') {
-          quality = setting[1];
-          break;
+      try {
+        console.log(document.cookie.split(';'));
+        // The fallback to old cookie solution
+        var settings = document.cookie.split(';');
+        for (var i = 0; i < settings.length; i++) {
+          var setting = settings[i].split('=');
+          if (setting[0] === 'H5PVideoQuality') {
+            quality = setting[1];
+            break;
+          }
         }
+      }
+      catch (err) {
+        console.warn('Unable to retrieve preferred video quality from cookie.');
       }
     }
     return quality;
