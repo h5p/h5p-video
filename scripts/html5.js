@@ -680,6 +680,22 @@ H5P.VideoHtml5 = (function ($) {
       });
     });
 
+    // Alternative to 'canplay' event
+    /*self.on('resize', function () {
+      if (video.offsetParent === null) {
+        return;
+      }
+
+      video.style.width = '100%';
+      video.style.height = '100%';
+
+      var width = video.clientWidth;
+      var height = options.fit ? video.clientHeight : (width * (video.videoHeight / video.videoWidth));
+
+      video.style.width = width + 'px';
+      video.style.height = height + 'px';
+    });*/
+
     // Video controls are ready
     nextTick(function () {
       self.trigger('ready');
