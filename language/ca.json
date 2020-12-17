@@ -1,93 +1,93 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Fonts de vídeo",
+      "description": "Per assegurar-vos que el vídeo funciona en tots els navegadors, heu d’afegir els orígens en format WebM i MP4."
     },
     {
-      "label": "Visuals",
+      "label": "Elements visuals",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Imatge de pòster"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Ajusta el reproductor de vídeo perquè ocupi tot l’espai disponible",
+          "description": "Si no està establert, el reproductor de vídeo tindrà la mateixa relació d’aspecte que el vídeo."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Mostra els controls del reproductor de vídeo",
+          "description": "Afegeix controls al reproductor de vídeo. Això permet als usuaris iniciar el vídeo, fer pausa, etc."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Reproducció",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Reprodueix automàticament el vídeo",
+          "description": "El vídeo començarà a reproduir-se automàticament. Pot ser que no funcioni en dispositius mòbils."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Repeteix el vídeo",
+          "description": "Torna a iniciar automàticament el vídeo quan acabi."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Localització del vídeo",
       "fields": [
         {
-          "label": "Name",
+          "label": "Nom",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Ajuda a identificar el contingut d’aquest estil."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "S’està carregant",
+          "default": "S’està carregant el reproductor de vídeo..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "No s’ha trobat cap reproductor",
+          "default": "No s’ha trobat cap reproductor de vídeo que admeti el format de vídeo indicat."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Sense orígens",
+          "default": "El vídeo no disposa d’orígens."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Cancel·lada",
+          "default": "La preproducció multimèdia s’ha cancel·lat."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Ha fallat la xarxa",
+          "default": "Ha fallat la xarxa."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "No es pot descodificar l’origen del vídeo",
+          "default": "No s’ha pogut descodificar el fitxer."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Format no admès",
+          "default": "El format de vídeo no és compatible."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Multimèdia encriptat",
+          "default": "Contingut encriptat."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Error desconegut",
+          "default": "Error desconegut."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "ID de YouTube invàlid",
+          "default": "ID de YouTube invàlid"
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Identificador de YouTube desconegut",
+          "default": "No es troba el vídeo amb l’identificador de YouTube indicat."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Vídeo de YouTube restringit",
+          "default": "El propietari d’aquest vídeo no permet inserir-lo."
         }
       ]
     },
@@ -95,37 +95,37 @@
       "label": "Accessibility",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Afegeix una pista de vídeo",
+          "entity": "Pista",
           "field": {
-            "label": "Track",
+            "label": "Pista",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Etiqueta de la pista"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Tipus; consulteu <a target=’_blank’ href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML Living Standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Subtítols"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Peus de recurs"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Descripcions"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Capítols"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Idioma d’origen; cal definir-lo per als subtítols",
+                "description": "Ha de ser una etiqueta d’idioma BCP 47 vàlida. Si el tipus d’atribut s’estableix en subtítols, cal definir l’atribut srclang."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Fitxer de la pista (WebVTT)"
               }
             ]
           }
