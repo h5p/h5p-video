@@ -1,15 +1,15 @@
 /** @namespace H5P */
-H5P.VideoYouTube = (function ($) {
+H5P.VideoNanooTv = (function ($) {
 
   /**
-   * YouTube video player for H5P.
+   * Nanoo.tv video player for H5P.
    *
    * @class
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
    * @param {Object} l10n Localization strings
    */
-  function YouTube(sources, options, l10n) {
+  function NanooTv(sources, options, l10n) {
     var self = this;
 
     var player;
@@ -549,9 +549,9 @@ H5P.VideoYouTube = (function ($) {
   ORIGIN = !ORIGIN || ORIGIN[0] === undefined ? undefined : ORIGIN[0];
   // ORIGIN = undefined is needed to support fetching file from device local storage
 
-  return YouTube;
+  return NanooTv;
 })(H5P.jQuery);
 
 // Register video handler
 H5P.videoHandlers = H5P.videoHandlers || [];
-H5P.videoHandlers.push(H5P.VideoYouTube);
+H5P.videoHandlers.push(H5P.VideoNanooTv);
