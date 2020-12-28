@@ -28,6 +28,9 @@
     },
     {
       "path": "scripts/video.js"
+    },
+    {
+      "path": "scripts/nanoo-tv.js"
     }
   ],
   "preloadedCss": [
