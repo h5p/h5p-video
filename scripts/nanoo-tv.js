@@ -44,10 +44,8 @@ H5P.VideoNanooTv = (function ($) {
 
       var $iframe = $('<iframe/>', {
             src: videoPath,
-            // style: {
-              width: width,
-              height: width * (9/16),
-            // },
+            width: width,
+            height: width * (9/16),
           });
       $placeholder.replaceWith($iframe);
     };
@@ -408,29 +406,6 @@ H5P.VideoNanooTv = (function ($) {
     if (matches && matches[3]) {
       return matches[3];
     }
-  };
-
-  /**
-   * Load the IFrame Player API asynchronously.
-   */
-  var loadAPI = function (loaded) {
-    // if (window.onNanooTvIframeAPIReady !== undefined) {
-    //   // Someone else is loading, hook in
-    //   var original = window.onNanooTvIframeAPIReady;
-    //   window.onNanooTvIframeAPIReady = function (id) {
-    //     loaded(id);
-    //     original(id);
-    //   };
-    // }
-    // else {
-    //   // Load the API our self
-    //   var tag = document.createElement('script');
-    //   tag.src = "https://www.nanoo.tv/frontend/framework/prototype.js";
-    //   var firstScriptTag = document.getElementsByTagName('script')[0];
-    //   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    //   Script.load("https://www.nanoo.tv/frontend/framework/nanoo.js");
-    //   window.onNanooTvIframeAPIReady = loaded;
-    // }
   };
 
   /** @constant {Object} */
