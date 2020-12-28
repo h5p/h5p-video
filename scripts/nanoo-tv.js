@@ -490,18 +490,18 @@ H5P.VideoYouTube = (function ($) {
   };
 
   /**
-   * Find id of YouTube video from given URL.
+   * Find id of Nanoo.tv video from given URL.
    *
    * @private
    * @param {String} url
-   * @returns {String} YouTube video identifier
+   * @returns {String} Nanoo.tv video identifier
    */
 
   var getId = function (url) {
     // Has some false positives, but should cover all regular URLs that people can find
-    var matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
-    if (matches && matches[1]) {
-      return matches[1];
+    var matches = url.match(/(nanoo.tv\/link\/(v|w)\/)([A-Za-z0-9_-]{7})/i);
+    if (matches && matches[3]) {
+      return matches[3];
     }
   };
 
