@@ -14,7 +14,7 @@ H5P.VideoNanooTv = (function ($) {
 
     var player;
     var playbackRate = 1;
-    var id = 'h5p-youtube-' + numInstances;
+    var id = 'h5p-nanootv-' + numInstances;
     numInstances++;
 
     var $wrapper = $('<div/>');
@@ -23,25 +23,13 @@ H5P.VideoNanooTv = (function ($) {
       text: l10n.loading
     }).appendTo($wrapper);
 
-    // Optional placeholder
-    // var $placeholder = $('<iframe id="' + id + '" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/' + getId(sources[0].path) + '?enablejsapi=1&origin=' + encodeURIComponent(ORIGIN) + '&autoplay=' + (options.autoplay ? 1 : 0) + '&controls=' + (options.controls ? 1 : 0) + '&disabledkb=' + (options.controls ? 0 : 1) + '&fs=0&loop=' + (options.loop ? 1 : 0) + '&rel=0&showinfo=0&iv_load_policy=3" frameborder="0"></iframe>').appendTo($wrapper);
-
     /**
      * Use the YouTube API to create a new player
      *
      * @private
      */
     var create = function () {
-      if (!$placeholder.is(':visible') || player !== undefined) {
-        return;
-      }
-
-      if (window.YT === undefined) {
-        // Load API first
-        loadAPI(create);
-        return;
-      }
-      if (YT.Player === undefined) {
+      if (!$placeholder.is(':visible') || $iframe !== undefined) {
         return;
       }
 
@@ -52,101 +40,16 @@ H5P.VideoNanooTv = (function ($) {
 
       var loadCaptionsModule = true;
 
-      var videoId = getId(sources[0].path);
+      var videoPath = getPath(sources[0].path);
 
-      player = new YT.Player(id, {
-        width: width,
-        height: width * (9/16),
-        videoId: videoId,
-        playerVars: {
-          origin: ORIGIN,
-          autoplay: options.autoplay ? 1 : 0,
-          controls: options.controls ? 1 : 0,
-          disablekb: options.controls ? 0 : 1,
-          fs: 0,
-          playlist: options.loop ? videoId : undefined,
-          rel: 0,
-          showinfo: 0,
-          iv_load_policy: 3,
-          wmode: "opaque",
-          start: options.startAt,
-          playsinline: 1
-        },
-        events: {
-          onReady: function () {
-            self.trigger('ready');
-            self.trigger('loaded');
-          },
-          onApiChange: function () {
-            if (loadCaptionsModule) {
-              loadCaptionsModule = false;
-
-              // Always load captions
-              player.loadModule('captions');
-            }
-
-            var trackList;
-            try {
-              // Grab tracklist from player
-              trackList = player.getOption('captions', 'tracklist');
-            }
-            catch (err) {}
-            if (trackList && trackList.length) {
-
-              // Format track list into valid track options
-              var trackOptions = [];
-              for (var i = 0; i < trackList.length; i++) {
-                trackOptions.push(new H5P.Video.LabelValue(trackList[i].displayName, trackList[i].languageCode));
-              }
-
-              // Captions are ready for loading
-              self.trigger('captions', trackOptions);
-            }
-          },
-          onStateChange: function (state) {
-            if (state.data > -1 && state.data < 4) {
-
-              // Fix for keeping playback rate in IE11
-              if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
-                // YT doesn't know that IE11 changed the rate so it must be reset before it's set to the correct value
-                player.setPlaybackRate(1);
-                player.setPlaybackRate(playbackRate);
-              }
-              // End IE11 fix
-
-              self.trigger('stateChange', state.data);
-            }
-          },
-          onPlaybackQualityChange: function (quality) {
-            self.trigger('qualityChange', quality.data);
-          },
-          onPlaybackRateChange: function (playbackRate) {
-            self.trigger('playbackRateChange', playbackRate.data);
-          },
-          onError: function (error) {
-            var message;
-            switch (error.data) {
-              case 2:
-                message = l10n.invalidYtId;
-                break;
-
-              case 100:
-                message = l10n.unknownYtId;
-                break;
-
-              case 101:
-              case 150:
-                message = l10n.restrictedYt;
-                break;
-
-              default:
-                message = l10n.unknownError + ' ' + error.data;
-                break;
-            }
-            self.trigger('error', message);
-          }
-        }
-      });
+      var $iframe = $('<iframe/>', {
+            src: videoPath,
+            // style: {
+              width: width,
+              height: width * (9/16),
+            // },
+          });
+      $placeholder.replaceWith($iframe);
     };
 
     /**
@@ -164,7 +67,7 @@ H5P.VideoNanooTv = (function ($) {
     * @param {jQuery} $container
     */
     self.appendTo = function ($container) {
-      $container.addClass('h5p-youtube').append($wrapper);
+      $container.addClass('h5p-nanootv').append($wrapper);
       create();
     };
 
@@ -485,20 +388,22 @@ H5P.VideoNanooTv = (function ($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  YouTube.canPlay = function (sources) {
-    return getId(sources[0].path);
+  NanooTv.canPlay = function (sources) {
+    /** TODO: Make sure it only procs for nanoo.tv videos and also that html5 does not get called! */
+    return getPath(sources[0].path);
   };
 
   /**
-   * Find id of Nanoo.tv video from given URL.
+   * Find path to embed video of Nanoo.tv video from given URL.
    *
    * @private
    * @param {String} url
-   * @returns {String} Nanoo.tv video identifier
+   * @returns {String} Nanoo.tv embed video url
    */
 
-  var getId = function (url) {
-    // Has some false positives, but should cover all regular URLs that people can find
+  var getPath = function (url) {
+    return url;
+    /** TODO: Add rewrite from links with v to w.*/
     var matches = url.match(/(nanoo.tv\/link\/(v|w)\/)([A-Za-z0-9_-]{7})/i);
     if (matches && matches[3]) {
       return matches[3];
@@ -509,22 +414,23 @@ H5P.VideoNanooTv = (function ($) {
    * Load the IFrame Player API asynchronously.
    */
   var loadAPI = function (loaded) {
-    if (window.onYouTubeIframeAPIReady !== undefined) {
-      // Someone else is loading, hook in
-      var original = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = function (id) {
-        loaded(id);
-        original(id);
-      };
-    }
-    else {
-      // Load the API our self
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      window.onYouTubeIframeAPIReady = loaded;
-    }
+    // if (window.onNanooTvIframeAPIReady !== undefined) {
+    //   // Someone else is loading, hook in
+    //   var original = window.onNanooTvIframeAPIReady;
+    //   window.onNanooTvIframeAPIReady = function (id) {
+    //     loaded(id);
+    //     original(id);
+    //   };
+    // }
+    // else {
+    //   // Load the API our self
+    //   var tag = document.createElement('script');
+    //   tag.src = "https://www.nanoo.tv/frontend/framework/prototype.js";
+    //   var firstScriptTag = document.getElementsByTagName('script')[0];
+    //   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    //   Script.load("https://www.nanoo.tv/frontend/framework/nanoo.js");
+    //   window.onNanooTvIframeAPIReady = loaded;
+    // }
   };
 
   /** @constant {Object} */
