@@ -29,7 +29,7 @@ H5P.VideoNanooTv = (function ($) {
      * @private
      */
     var create = function () {
-      if (!$placeholder.is(':visible') || $iframe !== undefined) {
+      if (!$placeholder.is(':visible') || player !== undefined) {
         return;
       }
 
@@ -42,12 +42,13 @@ H5P.VideoNanooTv = (function ($) {
 
       var videoPath = getPath(sources[0].path);
 
-      var $iframe = $('<iframe/>', {
+      player = $('<iframe/>', {
+            id: id,
             src: videoPath,
             width: width,
             height: width * (9/16),
           });
-      $placeholder.replaceWith($iframe);
+      $placeholder.replaceWith(player);
     };
 
     /**
@@ -374,7 +375,10 @@ H5P.VideoNanooTv = (function ($) {
         height: height + 'px'
       });
 
-      player.setSize(width, height);
+      player.css({
+        width: width + 'px',
+        height: height + 'px'
+      });
     });
   }
 
