@@ -14,7 +14,8 @@ H5P.VideoNanooTv = (function ($) {
 
     var player;
     var playbackRate = 1;
-    var id = 'h5p-nanootv-' + numInstances;
+    /** TODO: Check if global ID is a problem in case of multiple nanoo.tv videos on the same page */
+    id = 'h5p-nanootv-' + numInstances;
     numInstances++;
 
     var $wrapper = $('<div/>');
@@ -46,13 +47,28 @@ H5P.VideoNanooTv = (function ($) {
             width: width,
             height: width * (9/16),
             allow: "autoplay; fullscreen",
-          });
+            controls: "",
+        });
       $placeholder.replaceWith(player);
 
-      player.load(function(){
-          playerloaded = true;
-          self.trigger('ready');
-          self.trigger('loaded');
+      player.load(function() {
+        playerloaded = true;
+        self.trigger('ready');
+        var listenLoaded = function(data) {
+          if (!isNaN(data.data.value)) {
+            duration = data.data.value;
+            window.removeEventListener("message", listenLoaded, false);
+            self.loaded(id);
+            self.trigger('loaded');
+          } else {
+            document.getElementById(id).contentWindow.postMessage({
+              command: 'get_duration'}, 'https://www.nanoo.tv');
+          }
+        };
+        window.addEventListener("message", listenLoaded, false);
+
+        document.getElementById(id).contentWindow.postMessage({
+          command: 'get_duration'}, 'https://www.nanoo.tv');
       });
     };
 
@@ -63,6 +79,24 @@ H5P.VideoNanooTv = (function ($) {
      * @public
      */
     self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
+
+    /**
+     * Registers event listeners for communication with the player in the nested iframe.
+     */
+    self.loaded = function(id) {
+      window.addEventListener("message", function(data) {
+        if (data.data.key === "current_position") {
+          currentTime = data.data.value;
+        }
+        if (data.data.key === "duration") {
+          duration = data.data.value;
+        }
+      }, false);
+      window.setInterval(function() {
+        document.getElementById(id).contentWindow.postMessage({
+          command: 'get_current_position'}, 'https://www.nanoo.tv');
+      }, 250);
+    };
 
     /**
     * Appends the video player to the DOM.
@@ -179,10 +213,6 @@ H5P.VideoNanooTv = (function ($) {
 
       document.getElementById(id).contentWindow.postMessage({
         command: 'seek', argument: time }, 'https://www.nanoo.tv');
-      window.addEventListener("message", function(data) {
-        console.log(data);
-        // self.trigger('stateChange', H5P.Video.PLAYING);
-      }, false);
     };
 
     /**
@@ -196,24 +226,6 @@ H5P.VideoNanooTv = (function ($) {
         return;
       }
 
-      document.getElementById(id).contentWindow.postMessage({
-        command: 'get_current_position'}, 'https://www.nanoo.tv');
-
-      // window.addEventListener("get_current_position", ({event}) => {
-      //   window.parent.postMessage(event.data[0] + event.data[1]); // 2: send response
-      // });
-      var currentTime = null;
-      window.addEventListener("message", function(data) {
-        currentTime = data.data.value;
-      }, false);
-
-      const work = async () => {
-        await sleep(Time in ms)
-      };
-
-      while (currentTime === null) {
-        work();
-      }
       return currentTime;
     };
 
@@ -228,9 +240,7 @@ H5P.VideoNanooTv = (function ($) {
         return;
       }
 
-      document.getElementById(id).contentWindow.postMessage({
-        command: 'get_duration'}, 'https://www.nanoo.tv');
-      return 0;//player.getDuration();
+      return duration;
     };
 
     /**
@@ -462,6 +472,10 @@ H5P.VideoNanooTv = (function ($) {
 
   /** @private */
   var numInstances = 0;
+  var playerloaded;
+  /** TODO: Make array */
+  var currentTime = 0;
+  var duration = 0;
 
   // Extract the current origin (used for security)
   var ORIGIN = window.location.href.match(/http[s]?:\/\/[^\/]+/);
