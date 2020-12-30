@@ -85,11 +85,17 @@ H5P.VideoNanooTv = (function ($) {
      */
     self.loaded = function(id) {
       window.addEventListener("message", function(data) {
-        if (data.data.key === "current_position") {
-          currentTime = data.data.value;
-        }
-        if (data.data.key === "duration") {
-          duration = data.data.value;
+        switch (data.data.key) {
+          case "current_position":
+            currentTime = data.data.value;
+            break;
+          case "duration":
+            duration = data.data.value;
+            break;
+          case "playback_rate":
+            playbackRate = data.data.value;
+            self.trigger('playbackRateChange', playbackRate);
+            break;
         }
       }, false);
       window.setInterval(function() {
@@ -263,11 +269,12 @@ H5P.VideoNanooTv = (function ($) {
      * @public
      */
     self.mute = function () {
-      if (!player || !player.mute) {
+      if (!player || playerloaded === undefined) {
         return;
       }
 
-      player.mute();
+      document.getElementById(id).contentWindow.postMessage(
+          { command: 'mute', argument: true }, 'https://www.nanoo.tv' )
     };
 
     /**
@@ -276,11 +283,12 @@ H5P.VideoNanooTv = (function ($) {
      * @public
      */
     self.unMute = function () {
-      if (!player || !player.unMute) {
+      if (!player || playerloaded === undefined) {
         return;
       }
 
-      player.unMute();
+      document.getElementById(id).contentWindow.postMessage(
+          { command: 'mute', argument: false }, 'https://www.nanoo.tv' )
     };
 
     /**
@@ -304,11 +312,11 @@ H5P.VideoNanooTv = (function ($) {
      * @returns {Number} Between 0 and 100.
      */
     self.getVolume = function () {
-      if (!player || !player.getVolume) {
+      if (!player || playerloaded === undefined) {
         return;
       }
 
-      return player.getVolume();
+      return 100;
     };
 
     /**
@@ -318,61 +326,59 @@ H5P.VideoNanooTv = (function ($) {
      * @param {Number} level Between 0 and 100.
      */
     self.setVolume = function (level) {
-      if (!player || !player.setVolume) {
+      if (!player || playerloaded === undefined) {
         return;
       }
 
-      player.setVolume(level);
+      document.getElementById(id).contentWindow.postMessage(
+          { command: 'volume', argument: level/100 }, 'https://www.nanoo.tv' );
     };
 
-    // /**
-    //  * Get list of available playback rates.
-    //  *
-    //  * @public
-    //  * @returns {Array} available playback rates
-    //  */
-    // self.getPlaybackRates = function () {
-    //   // if (!player || !player.getAvailablePlaybackRates) {
-    //   //   return;
-    //   // }
-    //   //
-    //   // var playbackRates = player.getAvailablePlaybackRates();
-    //   // if (!playbackRates.length) {
-    //   //   return; // No rates, but the array should contain at least 1
-    //   // }
-    //   //
-    //   // return playbackRates;
-    // };
-    //
-    // /**
-    //  * Get current playback rate.
-    //  *
-    //  * @public
-    //  * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
-    //  */
-    // self.getPlaybackRate = function () {
-    //   // if (!player || !player.getPlaybackRate) {
-    //   //   return;
-    //   // }
-    //   //
-    //   // return player.getPlaybackRate();
-    // };
-    //
-    // /**
-    //  * Set current playback rate.
-    //  * Listen to event "playbackRateChange" to check if successful.
-    //  *
-    //  * @public
-    //  * @params {Number} suggested rate that may be rounded to supported values
-    //  */
-    // self.setPlaybackRate = function (newPlaybackRate) {
-    //   // if (!player || !player.setPlaybackRate) {
-    //   //   return;
-    //   // }
-    //   //
-    //   // playbackRate = Number(newPlaybackRate);
-    //   // player.setPlaybackRate(playbackRate);
-    // };
+    /**
+     * Get list of available playback rates.
+     *
+     * @public
+     * @returns {Array} available playback rates
+     */
+    self.getPlaybackRates = function () {
+      if (!player || playerloaded === undefined) {
+        return;
+      }
+
+      return [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+    };
+
+    /**
+     * Get current playback rate.
+     *
+     * @public
+     * @returns {Number} such as 0.25, 0.5, 1, 1.25, 1.5 and 2
+     */
+    self.getPlaybackRate = function () {
+      if (!player || playerloaded === undefined) {
+        return;
+      }
+
+      return playbackRate;
+    };
+
+    /**
+     * Set current playback rate.
+     * Listen to event "playbackRateChange" to check if successful.
+     *
+     * @public
+     * @params {Number} suggested rate that may be rounded to supported values
+     */
+    self.setPlaybackRate = function (newPlaybackRate) {
+      if (!player || playerloaded === undefined) {
+        return;
+      }
+
+      document.getElementById(id).contentWindow.postMessage(
+          { command: 'playback_rate', argument: newPlaybackRate }, 'https://www.nanoo.tv' )
+      document.getElementById(id).contentWindow.postMessage(
+          { command: 'get_playback_rate'}, 'https://www.nanoo.tv' )
+    };
 
     /**
      * Set current captions track.
@@ -476,6 +482,7 @@ H5P.VideoNanooTv = (function ($) {
   /** TODO: Make array */
   var currentTime = 0;
   var duration = 0;
+  var playbackRate = 1.0;
 
   // Extract the current origin (used for security)
   var ORIGIN = window.location.href.match(/http[s]?:\/\/[^\/]+/);
