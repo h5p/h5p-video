@@ -458,7 +458,7 @@ H5P.VideoNanooTv = (function ($) {
   var getPath = function (url) {
     var matches = url.match(/(nanoo.tv\/link\/(v|w)\/)([A-Za-z0-9_-]+)/i);
     if (matches && matches[3]) {
-      return "https:\/\/nanoo.tv\/link\/w\/".concat(matches[3]);
+      return "https:\/\/nanoo.tv\/link\/W\/".concat(matches[3]);
     }
   };
 
