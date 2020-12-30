@@ -79,14 +79,6 @@ H5P.VideoNanooTv = (function ($) {
     };
 
     /**
-     * Indicates if the video must be clicked for it to start playing.
-     * For instance YouTube videos on iPad must be pressed to start playing.
-     *
-     * @public
-     */
-    self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
-
-    /**
      * Registers event listeners for communication with the player in the nested iframe.
      */
     self.loaded = function(id) {
