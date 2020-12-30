@@ -25,7 +25,7 @@ H5P.VideoNanooTv = (function ($) {
     }).appendTo($wrapper);
 
     /**
-     * Use the YouTube API to create a new player
+     * Create a new nanoo.tv player
      *
      * @private
      */
