@@ -48,8 +48,7 @@ H5P.VideoNanooTv = (function ($) {
             src: videoPath,
             width: width,
             height: width * (9/16),
-            allow: "autoplay; fullscreen",
-            controls: "",
+            allow: "accelerometer; autoplay; fullscreen",
         });
       $placeholder.replaceWith(player);
 
