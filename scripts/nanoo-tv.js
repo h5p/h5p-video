@@ -96,6 +96,9 @@ H5P.VideoNanooTv = (function ($) {
         switch (data.data.key) {
           case "current_position":
             currentTime = data.data.value;
+            if (currentTime === duration) {
+              self.trigger('stateChange', H5P.Video.ENDED);
+            }
             break;
           case "duration":
             duration = data.data.value;
