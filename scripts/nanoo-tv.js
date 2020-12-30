@@ -102,10 +102,10 @@ H5P.VideoNanooTv = (function ($) {
         }
       }, false);
       // Heartbeat for querying the currentTime of the player.
-      window.setInterval(function() {
+      window.setInterval(function(id) {
         document.getElementById(id).contentWindow.postMessage({
           command: 'get_current_position'}, 'https://www.nanoo.tv');
-      }, 250);
+      }, 250, id);
     };
 
     /**
