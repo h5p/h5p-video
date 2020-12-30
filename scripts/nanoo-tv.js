@@ -67,8 +67,9 @@ H5P.VideoNanooTv = (function ($) {
             self.trigger('loaded');
             self.trigger('ready');
           } else {
-            document.getElementById(id).contentWindow.postMessage({
-              command: 'get_duration'}, 'https://www.nanoo.tv');
+            // Retry to query the duration after a short break.
+            setTimeout(document.getElementById(id).contentWindow.postMessage({
+              command: 'get_duration'}, 'https://www.nanoo.tv'), 50);
           }
         };
         window.addEventListener("message", listenLoaded, false);
