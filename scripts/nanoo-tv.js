@@ -39,8 +39,10 @@ H5P.VideoNanooTv = (function ($) {
         width = 200;
       }
 
+      // Queries the url to a player without controls.
       var videoPath = getPath(sources[0].path);
 
+      // Create iframe holding the nanoo.tv player.
       player = $('<iframe/>', {
             id: id,
             src: videoPath,
@@ -51,11 +53,16 @@ H5P.VideoNanooTv = (function ($) {
         });
       $placeholder.replaceWith(player);
 
+
+      // Initialize the duration value before actually declaring the player as loaded.
       player.load(function() {
         var listenLoaded = function(data) {
+          // As long as the nanoo player is not loaded completely, the duration will be returned as NaN.
           if (!isNaN(data.data.value)) {
             duration = data.data.value;
+            // The current event listener is no longer needed.
             window.removeEventListener("message", listenLoaded, false);
+            // Initialize relevant variables, event listeners and a heartbeat for querying the currentTime.
             self.loaded(id);
             self.trigger('loaded');
             self.trigger('ready');
@@ -84,6 +91,7 @@ H5P.VideoNanooTv = (function ($) {
      */
     self.loaded = function(id) {
       playerloaded = true;
+      // This event listener saves the data returned from the nanoo.tv player after queries through postMessage calls.
       window.addEventListener("message", function(data) {
         switch (data.data.key) {
           case "current_position":
@@ -98,6 +106,7 @@ H5P.VideoNanooTv = (function ($) {
             break;
         }
       }, false);
+      // Heartbeat for querying the currentTime of the player.
       window.setInterval(function() {
         document.getElementById(id).contentWindow.postMessage({
           command: 'get_current_position'}, 'https://www.nanoo.tv');
@@ -122,26 +131,7 @@ H5P.VideoNanooTv = (function ($) {
      * @returns {Array}
      */
     self.getQualities = function () {
-      if (!player || !player.getAvailableQualityLevels) {
-        return;
-      }
-
-      var qualities = player.getAvailableQualityLevels();
-      if (!qualities.length) {
-        return; // No qualities
-      }
-
-      // Add labels
-      for (var i = 0; i < qualities.length; i++) {
-        var quality = qualities[i];
-        var label = (LABELS[quality] !== undefined ? LABELS[quality] : 'Unknown'); // TODO: l10n
-        qualities[i] = {
-          name: quality,
-          label: LABELS[quality]
-        };
-      }
-
-      return qualities;
+      // Currently not supported.
     };
 
     /**
@@ -151,12 +141,7 @@ H5P.VideoNanooTv = (function ($) {
      * @returns {String}
      */
     self.getQuality = function () {
-      if (!player || !player.getPlaybackQuality) {
-        return;
-      }
-
-      var quality = player.getPlaybackQuality();
-      return quality === 'unknown' ? undefined : quality;
+      // Currently not supported.
     };
 
     /**
@@ -167,11 +152,7 @@ H5P.VideoNanooTv = (function ($) {
      * @params {String} [quality]
      */
     self.setQuality = function (quality) {
-      if (!player || !player.setPlaybackQuality) {
-        return;
-      }
-
-      player.setPlaybackQuality(quality);
+      // Currently not supported.
     };
 
     /**
@@ -256,11 +237,7 @@ H5P.VideoNanooTv = (function ($) {
      * @returns {Number} Between 0 and 100
      */
     self.getBuffered = function () {
-      if (!player || !player.getVideoLoadedFraction) {
-        return;
-      }
-
-      return player.getVideoLoadedFraction() * 100;
+      // Currently not supported.
     };
 
     /**
@@ -386,7 +363,7 @@ H5P.VideoNanooTv = (function ($) {
      * @param {H5P.Video.LabelValue} Captions track to show during playback
      */
     self.setCaptionsTrack = function (track) {
-      player.setOption('captions', 'track', track ? {languageCode: track.value} : {});
+      // Currently not supported.
     };
 
     /**
@@ -395,8 +372,7 @@ H5P.VideoNanooTv = (function ($) {
      * @return {H5P.Video.LabelValue} Captions track
      */
     self.getCaptionsTrack = function () {
-      var track = player.getOption('captions', 'track');
-      return (track.languageCode ? new H5P.Video.LabelValue(track.displayName, track.languageCode) : null);
+      // Currently not supported.
     };
 
     // Respond to resize events by setting the YT player size.
@@ -460,20 +436,6 @@ H5P.VideoNanooTv = (function ($) {
     if (matches && matches[3]) {
       return "https:\/\/nanoo.tv\/link\/W\/".concat(matches[3]);
     }
-  };
-
-  /** @constant {Object} */
-  var LABELS = {
-    highres: '2160p', // Old API support
-    hd2160: '2160p', // (New API)
-    hd1440: '1440p',
-    hd1080: '1080p',
-    hd720: '720p',
-    large: '480p',
-    medium: '360p',
-    small: '240p',
-    tiny: '144p',
-    auto: 'Auto'
   };
 
   /** @private */
