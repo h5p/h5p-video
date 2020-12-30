@@ -52,14 +52,13 @@ H5P.VideoNanooTv = (function ($) {
       $placeholder.replaceWith(player);
 
       player.load(function() {
-        playerloaded = true;
-        self.trigger('ready');
         var listenLoaded = function(data) {
           if (!isNaN(data.data.value)) {
             duration = data.data.value;
             window.removeEventListener("message", listenLoaded, false);
             self.loaded(id);
             self.trigger('loaded');
+            self.trigger('ready');
           } else {
             document.getElementById(id).contentWindow.postMessage({
               command: 'get_duration'}, 'https://www.nanoo.tv');
@@ -84,6 +83,7 @@ H5P.VideoNanooTv = (function ($) {
      * Registers event listeners for communication with the player in the nested iframe.
      */
     self.loaded = function(id) {
+      playerloaded = true;
       window.addEventListener("message", function(data) {
         switch (data.data.key) {
           case "current_position":
