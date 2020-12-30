@@ -14,7 +14,7 @@ H5P.VideoNanooTv = (function ($) {
 
     var player;
     var playbackRate = 1;
-    /** TODO: Check if global ID is a problem in case of multiple nanoo.tv videos on the same page */
+
     id = 'h5p-nanootv-' + numInstances;
     numInstances++;
 
@@ -413,7 +413,6 @@ H5P.VideoNanooTv = (function ($) {
    * @returns {Boolean}
    */
   NanooTv.canPlay = function (sources) {
-    /** TODO: Make sure it only procs for nanoo.tv videos and also that html5 does not get called! */
     var canPlay = getPath(sources[0].path);
     return canPlay;
   };
@@ -436,7 +435,6 @@ H5P.VideoNanooTv = (function ($) {
   /** @private */
   var numInstances = 0;
   var playerloaded;
-  /** TODO: Make array */
   var currentTime = 0;
   var duration = 0;
   var playbackRate = 1.0;
