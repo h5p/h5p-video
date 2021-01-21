@@ -104,7 +104,7 @@
                 "label": "Naslov sledi"
               },
               {
-                "label": "Izbor tipa (vir: <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>)",
+                "label": "Izbor tipa (vir: <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>)",
                 "options": [
                   {
                     "label": "Podnapisi"

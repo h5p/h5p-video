@@ -104,7 +104,7 @@
                 "label": "トラックラベル"
               },
               {
-                "label": "種類を入力してください。<a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element> HTML living standard</a> を参照。",
+                "label": "種類を入力してください。<a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\"> HTML living standard</a> を参照。",
                 "options": [
                   {
                     "label": "字幕"
