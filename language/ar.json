@@ -104,7 +104,7 @@
                 "label": "تتبع المسار"
               },
               {
-                "label": "اكتب النوع، ارجع إلى <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "اكتب النوع، ارجع إلى <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "عناوين فرعية"

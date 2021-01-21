@@ -104,7 +104,7 @@
                 "label": "Етикет на пътеката"
               },
               {
-                "label": "Разгледайте тук, за повече информация <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Разгледайте тук, за повече информация <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "Субтитри"
