@@ -1,92 +1,92 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "ប្រភពវីដេអូ",
+      "description": "ដើម្បីធានាថាវីដេអូរបស់អ្នកនឹងដំណើរការលើគ្រប់កម្មវិធីបើកវិបសាយ អ្នកគួរបញ្ចូលវីដេអូទាំងប្រភេទ WebM និង MP4។"
     },
     {
-      "label": "Visuals",
+      "label": "រូបរាង",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "រូបភាពក្រប"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "ដាក់វីដេអូឲ្យសមនឹងទំហំទីតាំងដែលមាន",
+          "description": "ប្រសិនបើមិនកំណត់បែបនេះទេ វីដេអូនឹងបង្ហាញទៅតាមទំហំដើមរបស់វា។"
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "បង្ហាញប៊ូតុងបញ្ជាវីដេអូ",
+          "description": "បង្ហាញប៊ូតុងបញ្ជានៅលើកម្មវិធីចាក់វីដេអូ ដើម្បីឲ្យគេអាចលេង ផ្អាក ។ល។"
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "របៀបចាក់វីដេអូ",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "លេងវីដេអូដោយស្វ័យប្រវត្តិ",
+          "description": "ចាប់ផ្តើមលេងវីដេអូដោយស្វ័យប្រវត្តិ។ អាចនឹងមិនដំណើរការនៅលើឧបករណ៍ចល័ត។"
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "លេងឡើងវិញ",
+          "description": "លេងវីដេអូដដែលៗដោយស្វ័យប្រវត្តិ"
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "បកប្រែ «វីដេអូ",
       "fields": [
         {
-          "label": "Name",
+          "label": "ឈ្មោះ",
           "default": "វីដេអូ",
-          "description": "Helps identify content of this type."
+          "description": "ជួយសម្គាល់មាតិកាប្រភេទនេះ"
         },
         {
-          "label": "Loading",
+          "label": "កំពុងដំណើរការ",
           "default": "កម្មវិធីលេងវីដេអូកំពុងដំណើរការ..."
         },
         {
-          "label": "No players found",
+          "label": "អត់មានកម្មវិធីចាក់វីដេអូ",
           "default": "រកមិនឃើញកម្មវិធីដែលអាចលេងប្រភេទវីដេអូដែលបានបញ្ចូល។"
         },
         {
-          "label": "No sources",
+          "label": "អត់មានវីដេអូ",
           "default": "មិនមានឯកសារវីដេអូ"
         },
         {
-          "label": "Aborted",
+          "label": "ត្រូវបានបោះបង់",
           "default": "ការលេងមេឌាត្រូវបានបោះបង់។"
         },
         {
-          "label": "Network failure",
+          "label": "បណ្តាញបរាជ័យ",
           "default": "បណ្តាញបរាជ័យ"
         },
         {
-          "label": "Cannot decode video source",
+          "label": "មិនអាចបម្លែងមេឌាបាន",
           "default": "មិនអាចបម្លែងមេឌាបាន"
         },
         {
-          "label": "Format not supported",
+          "label": "ប្រភេទវីដេអូមិនត្រូវបានគាំទ្រ",
           "default": "ប្រភេទវីដេអូមិនត្រូវបានគាំទ្រ"
         },
         {
-          "label": "Media encrypted",
+          "label": "មេឌាត្រូវបានអ៊ីនគ្រីប",
           "default": "មេឌាត្រូវបានអ៊ីនគ្រីប"
         },
         {
-          "label": "Unknown error",
+          "label": "មិនដឹងមានបញ្ហាអី",
           "default": "មិនដឹងមានបញ្ហាអី"
         },
         {
-          "label": "Invalid YouTube ID",
+          "label": "ID យូធូបមិនត្រឹមត្រូវ។",
           "default": "ID យូធូបមិនត្រឹមត្រូវ។"
         },
         {
-          "label": "Unknown YouTube ID",
+          "label": "អត់ស្គាល់ YouTube ID",
           "default": "រកមិនឃើញវីដេអូដែលត្រូវ ID ដែលបានបញ្ចូល។"
         },
         {
-          "label": "Restricted YouTube video",
+          "label": "វីដេអូ YouTube មានកំហិត",
           "default": "ម្ចាស់វីដេអូនេះមិនអនុញ្ញាតឲ្យគេបង្កប់វីដេអូនេះក្នុងវេបសាយក្រៅពី YouTube ទេ។"
         }
       ]
