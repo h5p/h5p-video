@@ -24,6 +24,9 @@ H5P.VideoNanooTv = (function ($) {
       text: l10n.loading
     }).appendTo($wrapper);
 
+    // Initialize pressToPlay in order to hide squash overlay in case of a login redirect.
+    self.pressToPlay = true;
+
     /**
      * Create a new nanoo.tv player
      *
@@ -48,7 +51,7 @@ H5P.VideoNanooTv = (function ($) {
             src: videoPath,
             width: width,
             height: width * (9/16),
-            allow: "accelerometer; autoplay; fullscreen",
+            allow: "accelerometer; fullscreen",
         });
       $placeholder.replaceWith(player);
 
@@ -61,10 +64,14 @@ H5P.VideoNanooTv = (function ($) {
             duration = data.data.value;
             // The current event listener is no longer needed.
             window.removeEventListener("message", listenLoaded, false);
+            // Reset pressToPlay to false in order to show overlays again, after player has loaded.
+            self.pressToPlay = false;
             // Initialize relevant variables, event listeners and a heartbeat for querying the currentTime.
             self.loaded(id);
             self.trigger('loaded');
             self.trigger('ready');
+            // Trigger stateChange will case the Interactive video overlay to be shown.
+            self.trigger('stateChange');
           } else {
             // Retry to query the duration after a short break.
             setTimeout(document.getElementById(id).contentWindow.postMessage({
