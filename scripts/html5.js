@@ -178,6 +178,9 @@ H5P.VideoHtml5 = (function ($) {
     video.setAttribute('playsinline', '');
     video.setAttribute('preload', 'metadata');
 
+    // Remove download button in Chrome's video player:
+    video.setAttribute('controlsList', 'nodownload');
+
     // Set options
     video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);
     video.controls = (options.controls ? true : false);
