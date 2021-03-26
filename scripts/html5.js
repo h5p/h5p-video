@@ -66,6 +66,10 @@ H5P.VideoHtml5 = (function ($) {
      * @private
      */
     const setInitialSource = function () {
+      if (qualities[currentQuality] === undefined) {
+        return;
+      }
+
       if (H5P.setSource !== undefined) {
         H5P.setSource(video, qualities[currentQuality].source, self.contentId)
       }
