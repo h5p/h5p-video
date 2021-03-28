@@ -114,20 +114,22 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     // Find player for video sources
     if (sources.length) {
+      const options = {
+        controls: parameters.visuals.controls,
+        autoplay: parameters.playback.autoplay,
+        loop: parameters.playback.loop,
+        fit: parameters.visuals.fit,
+        poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
+        startAt: parameters.startAt || 0,
+        tracks: tracks,
+        disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
+      }
+
       var html5Handler;
       for (var i = 0; i < handlers.length; i++) {
         var handler = handlers[i];
         if (handler.canPlay !== undefined && handler.canPlay(sources)) {
-          handler.call(self, sources, {
-            controls: parameters.visuals.controls,
-            autoplay: parameters.playback.autoplay,
-            loop: parameters.playback.loop,
-            fit: parameters.visuals.fit,
-            poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-            startAt: parameters.startAt || 0,
-            tracks: tracks,
-            disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
-          }, parameters.l10n);
+          handler.call(self, sources, options, parameters.l10n);
           handlerName = handler.name;
           return;
         }
@@ -140,16 +142,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       // Fallback to trying HTML5 player
       if (html5Handler) {
-        html5Handler.call(self, sources, {
-          controls: parameters.visuals.controls,
-          autoplay: parameters.playback.autoplay,
-          loop: parameters.playback.loop,
-          fit: parameters.visuals.fit,
-          poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-          startAt: parameters.startAt || 0,
-          tracks: tracks,
-          disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
-        }, parameters.l10n);
+        html5Handler.call(self, sources, options, parameters.l10n);
       }
     }
   }
