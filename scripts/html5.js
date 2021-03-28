@@ -178,8 +178,15 @@ H5P.VideoHtml5 = (function ($) {
     video.setAttribute('playsinline', '');
     video.setAttribute('preload', 'metadata');
 
-    // Remove download button in Chrome's video player:
-    video.setAttribute('controlsList', 'nodownload');
+    // Remove buttons in Chrome's video player:
+    let controlsList = 'nodownload';
+    if (options.disableFullscreen) {
+      controlsList += ' nofullscreen';
+    }
+    if (options.disableRemotePlayback) {
+      controlsList += ' noremoteplayback';
+    }
+    video.setAttribute('controlsList', controlsList);
 
     // Set options
     video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);

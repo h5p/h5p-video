@@ -9,7 +9,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Object} parameters.visuals Visual options
    * @param {Object} parameters.playback Playback options
    * @param {Object} parameters.a11y Accessibility options
-   * @param {Boolean} [parameters.startAt] Start time of video
+   * @param {Boolean} [parameters.startAt] Start time of video 
    * @param {Number} id Content identifier
    */
   function Video(parameters, id) {
@@ -46,7 +46,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
-    parameters.visuals = parameters.visuals || {};
+    parameters.visuals = $.extend(true, parameters.visuals, {
+      disableFullscreen: true
+    });
 
     /** @private */
     var sources = [];
@@ -122,7 +124,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
         startAt: parameters.startAt || 0,
         tracks: tracks,
-        disableRemotePlayback: (parameters.visuals.disableRemotePlayback || false)
+        disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
+        disableFullscreen: parameters.visuals.disableFullscreen === true
       }
 
       var html5Handler;
