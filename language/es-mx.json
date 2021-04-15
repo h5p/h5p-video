@@ -1,17 +1,17 @@
 {
   "semantics": [
     {
-      "label": "Orígenes de Video",
-      "description": "Para asegurar que los videos funcionen en todos los navegadores usted debería añadir tanto orígenes formateados WebM y MP4."
+      "label": "Fuentes de Video",
+      "description": "Para asegurar que los videos funcionen en todos los navegadores usted debería añadir tanto fuentes formateados en WebM y MP4."
     },
     {
       "label": "Visuales",
       "fields": [
         {
-          "label": "Imagen de Poster"
+          "label": "Imagen de cartel"
         },
         {
-          "label": "Se ajusta el rereproductor de video para usar todo el espacio disponible",
+          "label": "Se ajusta el reproductor de video para usar todo el espacio disponible",
           "description": "Si no se configura, el reproductor de video tendrá la misma proporción de aspecto que el video."
         },
         {
@@ -38,7 +38,7 @@
       "fields": [
         {
           "label": "Nombre",
-          "default": "Vídeo",
+          "default": "Video",
           "description": "Ayuda a identificar el contenido de este tipo."
         },
         {
@@ -63,7 +63,7 @@
         },
         {
           "label": "No se puede decodificar la fuente de video",
-          "default": "No se puede decodificar los medios."
+          "default": "No se pueden decodificar los medios."
         },
         {
           "label": "Formato no soportado",
@@ -86,7 +86,7 @@
           "default": "No se puede encontrar video con la ID de YouTube dada."
         },
         {
-          "label": "Video YouTube Restringido",
+          "label": "Video YouTube restringido",
           "default": "El propietario de este video no permite que sea incrustado."
         }
       ]
