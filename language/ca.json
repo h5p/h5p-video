@@ -79,7 +79,7 @@
         },
         {
           "label": "ID de YouTube invàlid",
-          "default": "ID de YouTube invàlid"
+          "default": "ID de YouTube invàlid."
         },
         {
           "label": "Identificador de YouTube desconegut",
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Accessibilitat",
       "fields": [
         {
           "label": "Afegeix una pista de vídeo",
