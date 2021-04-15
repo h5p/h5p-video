@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Video bronne",
-      "description": "Om te verseker dat die video in alle webblaaiers werk, moet u die WebM- en MP4-geformateerde bronne byvoeg"
+      "description": "Om te verseker dat die video in alle webblaaiers werk, moet jy die WebM- en MP4-geformateerde bronne byvoeg."
     },
     {
       "label": "Beeldmateriaal",
@@ -25,7 +25,7 @@
       "fields": [
         {
           "label": "Speel video outomaties",
-          "description": "Begin om die video outomaties te speel. Sal moontlik nie op mobiele toestelle werk nie"
+          "description": "Begin om die video outomaties te speel. Sal moontlik nie op mobiele toestelle werk nie."
         },
         {
           "label": "Herhaal video",
@@ -39,10 +39,10 @@
         {
           "label": "Naam",
           "default": "Video",
-          "description": "Help om inhoud van hierdie soort te identifiseer"
+          "description": "Help om inhoud van hierdie soort te identifiseer."
         },
         {
-          "label": "Besig op te laai",
+          "label": "Besig om te laai",
           "default": "Videospeler laai..."
         },
         {
@@ -51,11 +51,11 @@
         },
         {
           "label": "Geen bronne",
-          "default": "Video vermis bronne"
+          "default": "Video vermis bronne."
         },
         {
           "label": "Gestaak",
-          "default": "Mediaspeel is gestaak"
+          "default": "Media terugspeel is gestaak."
         },
         {
           "label": "Netwerkfout",
@@ -83,7 +83,7 @@
         },
         {
           "label": "Onbekende YouTube ID",
-          "default": "Kan nie video met die gegewe  YouTube ID vind nie."
+          "default": "Kan nie video met die gegewe YouTube ID vind nie."
         },
         {
           "label": "Beperkte YouTube video",
@@ -104,10 +104,10 @@
                 "label": "Snitetiket"
               },
               {
-                "label": "Tipe verwys na <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
+                "label": "Tipe verwys na <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML lewensstandaard</a>",
                 "options": [
                   {
-                    "label": "Ondertitel"
+                    "label": "Byskrif"
                   },
                   {
                     "label": "Onderskrifte"
