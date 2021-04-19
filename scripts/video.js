@@ -47,7 +47,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
     parameters.visuals = $.extend(true, parameters.visuals, {
-      disableFullscreen: true
+      disableFullscreen: false
     });
 
     /** @private */
