@@ -192,6 +192,9 @@ H5P.VideoHtml5 = (function ($) {
     }
     video.setAttribute('controlsList', controlsList);
 
+    // Remove picture in picture as it interfers with other video players
+    video.disablePictureInPicture = true;
+
     // Set options
     video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);
     video.controls = (options.controls ? true : false);
