@@ -468,8 +468,6 @@ H5P.VideoYouTube = (function ($) {
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
-     // Validate height before setting
-     if (height > 0) {
       // Set size
       $wrapper.css({
         width: width + 'px',
@@ -477,7 +475,7 @@ H5P.VideoYouTube = (function ($) {
       });
 
       player.setSize(width, height);
-    }
+    });
   }
 
   /**
