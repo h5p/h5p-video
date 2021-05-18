@@ -467,14 +467,17 @@ H5P.VideoYouTube = (function ($) {
 
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
+      
+      // Validate height before setting
+      if (height > 0) {
+        // Set size
+        $wrapper.css({
+          width: width + 'px',
+          height: height + 'px'
+        });
 
-      // Set size
-      $wrapper.css({
-        width: width + 'px',
-        height: height + 'px'
-      });
-
-      player.setSize(width, height);
+        player.setSize(width, height);
+      }
     });
   }
 
