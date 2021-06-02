@@ -65,6 +65,7 @@ H5P.VideoPanopto = (function ($) {
           onIframeReady: function () {
             $placeholder.children(0).text('');
             player.loadVideo();
+            self.trigger('containerLoaded');
           },
           onReady: function () {
             self.trigger('loaded');
