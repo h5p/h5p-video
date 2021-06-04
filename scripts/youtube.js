@@ -243,6 +243,18 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
+     * Stop the video.
+     *
+     * @public
+     */
+     self.stop = function () {
+      if (!player || !player.playVideo) {
+        return;
+      }
+      player.stopVideo();
+    };
+
+    /**
      * Pause the video.
      *
      * @public

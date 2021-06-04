@@ -471,6 +471,15 @@ H5P.VideoHtml5 = (function ($) {
     };
 
     /**
+     * Stops the video.
+     *
+     * @public
+     */
+     self.stop = function () {
+      setInitialSource();
+    };
+
+    /**
      * Pauses the video.
      *
      * @public
