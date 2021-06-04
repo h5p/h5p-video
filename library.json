@@ -24,22 +24,12 @@
       "path": "scripts/html5.js"
     },
     {
-      "path": "scripts/flash.js"
-    },
-    {
       "path": "scripts/video.js"
     }
   ],
   "preloadedCss": [
     {
       "path": "styles/video.css"
-    }
-  ],
-  "preloadedDependencies": [
-    {
-      "machineName": "flowplayer",
-      "majorVersion": 1,
-      "minorVersion": 0
     }
   ]
 }
