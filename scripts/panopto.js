@@ -167,18 +167,6 @@ H5P.VideoPanopto = (function ($) {
     };
 
     /**
-     * Stop the video.
-     *
-     * @public
-     */
-     self.stop = function () {
-      if (!player || !player.playVideo) {
-        return;
-      }
-      player.stopVideo();
-    };
-
-    /**
      * Pause the video.
      *
      * @public
