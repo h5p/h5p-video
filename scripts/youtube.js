@@ -11,7 +11,7 @@ H5P.VideoYouTube = (function ($) {
    */
   function YouTube(sources, options, l10n) {
     var self = this;
-
+    
     var player;
     var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
@@ -63,7 +63,7 @@ H5P.VideoYouTube = (function ($) {
           autoplay: options.autoplay ? 1 : 0,
           controls: options.controls ? 1 : 0,
           disablekb: options.controls ? 0 : 1,
-          fs: 0,
+          fs: 1,
           loop: options.loop ? 1 : 0,
           playlist: options.loop ? videoId : undefined,
           rel: 0,
