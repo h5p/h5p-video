@@ -38,7 +38,7 @@
       "fields": [
         {
           "label": "Nombre",
-          "default": "Video",
+          "default": "Vídeo",
           "description": "Ayuda a identificar el contenido de este tipo."
         },
         {
