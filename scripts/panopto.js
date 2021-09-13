@@ -175,7 +175,13 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.pauseVideo) {
         return;
       }
-      player.pauseVideo();
+      try {
+        player.pauseVideo();
+      }
+      catch (err) {
+        // Swallow Panopto throwing an error. This has been seen in the authoring
+        // tool if Panopto has been used inside Iv inside CP 
+      }
     };
 
     /**
