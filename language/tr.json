@@ -1,22 +1,22 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Video kaynakları",
+      "description": "Videonun tüm tarayıcılarda çalışmasını sağlamak için hem WebM hem de MP4 formatlı kaynaklar eklemelisiniz."
     },
     {
-      "label": "Visuals",
+      "label": "Görseller",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Poster resmi"
         },
         {
-          "label": "Fit video player to use all available space",
+          "label": "Mevcut tüm alanı kullanmak için video oynatıcıyı sığdır",
           "description": "If not set the video player will have the same aspect ratio as the video."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Video oynatıcı kontrollerini göster",
+          "description": "Video oynatıcıya kontroller ekleyiniz. Bu, kullanıcılara oynatma, duraklatma vb. izinler verir."
         }
       ]
     },
@@ -24,12 +24,12 @@
       "label": "Playback",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Videoyu otomatik oynat",
+          "description": "Videoyu otomatik olarak oynatmaya başlayınız. Mobil cihazlarda çalışmayabilir."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Videoyu tekrarla",
+          "description": "Bittiğinde videoyu otomatik olarak yeniden başlatınız."
         }
       ]
     },
