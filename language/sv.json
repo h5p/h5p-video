@@ -1,132 +1,131 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Videokällor",
+      "description": "För att säkerställa att video fungerar i alla olika webbläsare så bör du lägga till källor i både WebM- och MP4-format."
     },
     {
-      "label": "Visuals",
+      "label": "Visualisering",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Poster-bild"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Anpassa videospelaren så att allt tillgängligt utrymme används",
+          "description": "Om inte angivet, så kommer videospelaren ha samma bildförhållande som själva videon."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Visa videospelar-kontroller",
+          "description": "Lägger till kontroller till videospelaren. Gör det möjligt att spela upp, pausa, etc."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Uppspelning",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Auto-spela video",
+          "description": "Börja spela videon automatiskt. Kanske inte stöds på mobila enheter."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Loopa video",
+          "description": "När videon är slut, starta automatiskt om från början."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Video-lokalisering",
       "fields": [
         {
-          "label": "Name",
+          "label": "Namn",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Underlättar att identifiera innehåll av denna typ."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Laddar",
+          "default": "Videospelare laddar ..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Inga spelare hittades",
+          "default": "Hittade inga videospelare som stödjer angivet videoformat."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Inga källor",
+          "default": "Videokällor saknas."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Avbruten",
+          "default": "Uppspelning av media har avbrutits."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Nätverksfel",
+          "default": "Nätverksfel."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Kan inte avkoda videookälla",
+          "default": "Kan inte avkoda videookälla."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Format stöds inte",
+          "default": "Videoformat stöds inte."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Media krypterat",
+          "default": "Media krypterat."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Okänt fel",
+          "default": "Okänt fel."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Ogiltigt YouTube ID",
+          "default": "Ogiltigt YouTube ID."
         },
         {
-          "label": "Unkown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Okänt YouTube ID",
+          "default": "Kunde inte hitta video med angivet YouTube ID."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Begränsad YouTube video",
+          "default": "Ägaren till denna video tillåter inte inbäddning."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Tillgänglighet",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Lägg till videospår",
+          "entity": "Spår",
           "field": {
-            "label": "Track",
+            "label": "Spår",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Etikett för spår"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Ange typ, se <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Undertexter"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Skyltar"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Beskrivningar"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Kapitel"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "default": "en",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Källspråk, måste anges för undertexter",
+                "description": "Måste vara en giltig BCP 47-språktagg. Om typen undertexter är vald, så måste srclang definieras."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Spårfil (WebVTT)"
               }
             ]
           }

@@ -104,7 +104,7 @@
                 "label": "Надпись трека"
               },
               {
-                "label": "Введите тип, обратитесь к <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Введите тип, обратитесь к <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "Субтитры"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "Исходный язык, должен быть определен для субтитров",
-                "default": "en",
                 "description": "Должен быть действительным языковым тегом BCP 47. Если тип атрибута установлен в субтитрах, то язык источника должен быть определен."
               },
               {

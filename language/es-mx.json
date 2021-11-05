@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Fuentes de Vídeo",
+      "label": "Fuentes de Video",
       "description": "Para asegurar que los videos funcionen en todos los navegadores usted debería añadir tanto fuentes formateados en WebM y MP4."
     },
     {
@@ -11,12 +11,12 @@
           "label": "Imagen de cartel"
         },
         {
-          "label": "Se ajusta el reproductor de vídeo para usar todo el espacio disponible",
-          "description": "Si no se configura, el reproductor de vídeo tendrá la misma proporción de aspecto que el vídeo."
+          "label": "Se ajusta el reproductor de video para usar todo el espacio disponible",
+          "description": "Si no se configura, el reproductor de video tendrá la misma proporción de aspecto que el video."
         },
         {
-          "label": "Mostrar controles del reproductor de vídeo",
-          "description": "Añadir controles al reproductor de vídeo. Esto le permite a los usuarios el reproducir, pausar, etc."
+          "label": "Mostrar controles del reproductor de video",
+          "description": "Añadir controles al reproductor de video. Esto le permite a los usuarios el reproducir, pausar, etc."
         }
       ]
     },
@@ -24,17 +24,17 @@
       "label": "Reproducción",
       "fields": [
         {
-          "label": "Auto-reproducir vídeo",
-          "description": "Comenzar a reproducir el vídeo automáticamente. Podría no funcionar en dispositivos móviles."
+          "label": "Auto-reproducir video",
+          "description": "Comenzar a reproducir el video automáticamente. Podría no funcionar en dispositivos móviles."
         },
         {
-          "label": "Bucle de vídeo",
-          "description": "Automáticamente iniciar el vídeo una y otra vez cuando se termine."
+          "label": "Bucle de video",
+          "description": "Automáticamente iniciar el video una y otra vez cuando se termine."
         }
       ]
     },
     {
-      "label": "Localización del Vídeo",
+      "label": "Localización del Video",
       "fields": [
         {
           "label": "Nombre",
@@ -43,15 +43,15 @@
         },
         {
           "label": "Cargando",
-          "default": "Reproductor de Vídeo cargando..."
+          "default": "Reproductor de Video cargando..."
         },
         {
           "label": "No se encontraron reproductores",
-          "default": "No se encontraron reproductores de video que soporten el formato dado de vídeo."
+          "default": "No se encontraron reproductores de video que soporten el formato dado de video."
         },
         {
           "label": "No hay orígenes (fuentes)",
-          "default": "Faltan fuentes de vídeo."
+          "default": "Faltan fuentes de video."
         },
         {
           "label": "Abortado",
@@ -63,11 +63,11 @@
         },
         {
           "label": "No se puede decodificar la fuente de video",
-          "default": "No se puede decodificar los medios."
+          "default": "No se pueden decodificar los medios."
         },
         {
           "label": "Formato no soportado",
-          "default": "Formato de vídeo no soportado."
+          "default": "Formato de video no soportado."
         },
         {
           "label": "Medio encriptado",
@@ -83,11 +83,11 @@
         },
         {
           "label": "ID de YouTube desconocida",
-          "default": "No se puede encontrar vídeo con la ID de YouTube dada."
+          "default": "No se puede encontrar video con la ID de YouTube dada."
         },
         {
-          "label": "Vídeo YouTube Restringido",
-          "default": "El propietario de este vídeo no permite que sea incrustado."
+          "label": "Video YouTube restringido",
+          "default": "El propietario de este video no permite que sea incrustado."
         }
       ]
     },

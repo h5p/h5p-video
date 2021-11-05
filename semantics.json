@@ -193,7 +193,7 @@
             {
               "name": "kind",
               "type": "select",
-              "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+              "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
               "importance": "low",
               "default": "descriptions",
               "options": [

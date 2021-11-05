@@ -64,6 +64,7 @@ H5P.VideoYouTube = (function ($) {
           controls: options.controls ? 1 : 0,
           disablekb: options.controls ? 0 : 1,
           fs: 0,
+          loop: options.loop ? 1 : 0,
           playlist: options.loop ? videoId : undefined,
           rel: 0,
           showinfo: 0,
@@ -297,6 +298,20 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
+     * Get current status of the video.
+     *
+     * @public
+     * @returns {Number}
+     */
+     self.getPlayerState = function () {
+      if (!player || !player.getPlayerState) {
+        return;
+      }
+
+      return player.getPlayerState();
+    };
+
+    /**
      * Get percentage of video that is buffered.
      *
      * @public
@@ -408,8 +423,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      var playbackRate = player.getPlaybackRate();
-	  return playbackRate;
+      return player.getPlaybackRate();
     };
 
     /**
@@ -424,8 +438,8 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
 
-      playbackRate = newPlaybackRate;
-      player.setPlaybackRate(newPlaybackRate);
+      playbackRate = Number(newPlaybackRate);
+      player.setPlaybackRate(playbackRate);
     };
 
     /**
@@ -467,14 +481,17 @@ H5P.VideoYouTube = (function ($) {
 
       var width = $wrapper[0].clientWidth;
       var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
+      
+      // Validate height before setting
+      if (height > 0) {
+        // Set size
+        $wrapper.css({
+          width: width + 'px',
+          height: height + 'px'
+        });
 
-      // Set size
-      $wrapper.css({
-        width: width + 'px',
-        height: height + 'px'
-      });
-
-      player.setSize(width, height);
+        player.setSize(width, height);
+      }
     });
   }
 

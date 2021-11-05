@@ -104,7 +104,7 @@
                 "label": "Intitulé de la piste"
               },
               {
-                "label": "Type de piste, voir <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>standard HTML actuel</a>",
+                "label": "Type de piste, voir <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">standard HTML actuel</a>",
                 "options": [
                   {
                     "label": "Sous-titres"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "Fichier de la piste (format WebVTT)",
-                "default": "en",
                 "description": "Doit être un code langage conforme à la norme BCP 47. Si le type de piste est défini à \"Sous-titres\", alors la langue doit être définie."
               },
               {

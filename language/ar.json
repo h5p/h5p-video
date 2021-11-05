@@ -5,7 +5,7 @@
       "description": "\"MP4\"للتأكد من أن الفيديو يعمل في جميع المتصفحات يجب عليك إضافة كل ويب إم وتنسيق المصادر"
     },
     {
-      "label": "Visuals",
+      "label": "مرئيات",
       "fields": [
         {
           "label": "الملصق"
@@ -79,7 +79,7 @@
         },
         {
           "label": "رابط يوتوب غير صالح",
-          "default": "Invalid YouTube ID."
+          "default": "معرف يوتيوب غير صالح."
         },
         {
           "label": "رابط يوتوب مجهول",
@@ -104,7 +104,7 @@
                 "label": "تتبع المسار"
               },
               {
-                "label": "اكتب النوع، ارجع إلى <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "اكتب النوع، ارجع إلى <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "عناوين فرعية"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "تتبع الملف (WebVTT)",
-                "default": "en",
                 "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
               },
               {

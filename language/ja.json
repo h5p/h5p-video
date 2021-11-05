@@ -104,7 +104,7 @@
                 "label": "トラックラベル"
               },
               {
-                "label": "種類を入力してください。<a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element> HTML living standard</a> を参照。",
+                "label": "種類を入力してください。<a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\"> HTML living standard</a> を参照。",
                 "options": [
                   {
                     "label": "字幕"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "字幕のソース言語を定義する必要があります。",
-                "default": "en",
                 "description": "有効な BCP 47 言語タグでなければなりません。kind 属性に subtitles を設定した場合は、srclang 属性を定義しなければなりません。"
               },
               {

@@ -1,22 +1,22 @@
 {
   "semantics": [
     {
-      "label": "Sorgenti Video",
-      "description": "Per assicurarsi che il video sia riproducibile in tutti i browser si dovrebbe aggiungere sia WebM sia MP4 come sorgenti di formattazione."
+      "label": "Sorgenti video",
+      "description": "Per assicurarsi che il video sia riproducibile su tutti i browser si dovrebbero aggiungere sia WebM sia MP4 come sorgenti di formattazione"
     },
     {
-      "label": "Visuals",
+      "label": "Effetti visivi",
       "fields": [
         {
-          "label": "Poster"
+          "label": "Immagine popup"
         },
         {
           "label": "Adatta il video player per utilizzare tutto lo spazio disponibile",
-          "description": "Se non è impostato il lettore video avrà le stesse proporzioni del video."
+          "description": "Se non è impostato, il lettore video avrà le stesse proporzioni del video"
         },
         {
           "label": "Mostra controlli del video player",
-          "description": "Aggiungi controlli al video player. Questo consente agli utenti di premere play, pausa, etc."
+          "description": "Aggiungi controlli al video player. Questo consente agli utenti di premere avvio, pausa ecc."
         }
       ]
     },
@@ -24,109 +24,108 @@
       "label": "Playback",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili."
+          "label": "Riproduzione automatica del video",
+          "description": "Avvia la riproduzione video automaticamente. Potrebbe non funzionare sui dispositivi mobili"
         },
         {
-          "label": "Loop video",
-          "description": "Riavvia il video automaticamente dopo la fine."
+          "label": "Ripeti video",
+          "description": "Riavvia automaticamente il video dopo che è finito"
         }
       ]
     },
     {
-      "label": "Localizzazione Video",
+      "label": "Localizzazione del video",
       "fields": [
         {
           "label": "Nome",
           "default": "Video",
-          "description": "Consente di identificare il tipo di contenuto."
+          "description": "Aiuta a identificare contenuto di questo tipo"
         },
         {
           "label": "Caricamento",
-          "default": "Video player loading..."
+          "default": "Video player in caricamento..."
         },
         {
           "label": "Nessun player trovato",
-          "default": "Found no video players that supports the given video format."
+          "default": "Impossibile trovare dei video player che supportino quel formato video"
         },
         {
           "label": "Nessun sorgente",
-          "default": "Video is missing sources."
+          "default": "Mancano i sorgenti del video"
         },
         {
-          "label": "Bloccato",
-          "default": "Media playback has been aborted."
+          "label": "Terminato",
+          "default": "La riproduzione multimediale è stata interrotta"
         },
         {
           "label": "Errore di rete",
-          "default": "Network failure."
+          "default": "Errore di rete"
         },
         {
           "label": "Impossibile decodificare il sorgente video",
-          "default": "Unable to decode media."
+          "default": "Impossibile decodificare il supporto"
         },
         {
           "label": "Formato non supportato",
-          "default": "Video format not supported."
+          "default": "Formato video non supportato"
         },
         {
-          "label": "Supporto cifrato",
-          "default": "Media encrypted."
+          "label": "Media criptato",
+          "default": "Media criptato"
         },
         {
           "label": "Errore sconosciuto",
-          "default": "Unknown error."
+          "default": "Errore sconosciuto"
         },
         {
           "label": "ID YouTube non valido",
-          "default": "Invalid YouTube ID."
+          "default": "ID YouTube non valido"
         },
         {
           "label": "ID YouTube sconosciuto",
-          "default": "Unable to find video with the given YouTube ID."
+          "default": "Impossibile trovare un video con quell'ID YouTube"
         },
         {
-          "label": "Video YouTube riproduzione riservata",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Video YouTube a riproduzione riservata",
+          "default": "Il proprietario di questo video non ne permette l'incorporazione"
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Accessibilità",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Aggiungi traccia video",
+          "entity": "Traccia",
           "field": {
-            "label": "Track",
+            "label": "Traccia",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Etichetta della traccia"
               },
               {
-                "label": "Type kind, refer to <a href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Digita \"kind\". Fai riferimento a <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Sottotitoli"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Didascalie"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Descrizioni"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Capitoli"
                   }
                 ]
               },
               {
-                "label": "Track file (WebVTT)",
-                "default": "en",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "File di traccia (WebVTT)",
+                "description": "Dev'essere un tag di lingua valido BCP 47. Se l'attributo \"kind\" è impostato su sottotitoli, allora \"srclang\" dev'essere definito"
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "File di traccia (WebVTT)"
               }
             ]
           }

@@ -1,4 +1,4 @@
-﻿{
+{
   "semantics": [
     {
       "label": "Изходни видеа",
@@ -28,7 +28,7 @@
           "description": "Започнете автоматично възпроизвеждане на видеоклипа. Може да не работи при мобилни устройства."
         },
         {
-          "label": "Loop video",
+          "label": "Повтаряне на видео",
           "description": "Автоматично стартирайте видеото отново, когато свърши."
         }
       ]
@@ -104,7 +104,7 @@
                 "label": "Етикет на пътеката"
               },
               {
-                "label": "Type kind, refer to <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element>HTML living standard</a>",
+                "label": "Разгледайте тук, за повече информация <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "Субтитри"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "Трябва да бъде дефиниран езиков източник за субтитрите.",
-                "default": "en",
                 "description": "Трябва да бъде посочен валиден таг за езика измежду BCP 47. Ако е настроено на субтитри, то тогава трябва да се дефинира srclang."
               },
               {

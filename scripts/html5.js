@@ -66,6 +66,10 @@ H5P.VideoHtml5 = (function ($) {
      * @private
      */
     const setInitialSource = function () {
+      if (qualities[currentQuality] === undefined) {
+        return;
+      }
+
       if (H5P.setSource !== undefined) {
         H5P.setSource(video, qualities[currentQuality].source, self.contentId)
       }
@@ -177,6 +181,19 @@ H5P.VideoHtml5 = (function ($) {
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('preload', 'metadata');
+
+    // Remove buttons in Chrome's video player:
+    let controlsList = 'nodownload';
+    if (options.disableFullscreen) {
+      controlsList += ' nofullscreen';
+    }
+    if (options.disableRemotePlayback) {
+      controlsList += ' noremoteplayback';
+    }
+    video.setAttribute('controlsList', controlsList);
+
+    // Remove picture in picture as it interfers with other video players
+    video.disablePictureInPicture = true;
 
     // Set options
     video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);
@@ -427,7 +444,7 @@ H5P.VideoHtml5 = (function ($) {
       self.trigger('stateChange', H5P.Video.BUFFERING);
 
       // Change source
-      track.src = getCrossOriginPath(qualities[quality].source); // (iPad does not support #t=).
+      video.src = getCrossOriginPath(qualities[quality].source); // (iPad does not support #t=).
       // Note: Optional tracks use same crossOrigin as the original. You cannot mix.
 
       // Remove poster so it will not show during quality change
@@ -645,6 +662,7 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('pause', 'stateChange', H5P.Video.PAUSED);
     mapEvent('waiting', 'stateChange', H5P.Video.BUFFERING);
     mapEvent('loadedmetadata', 'loaded');
+    mapEvent('canplay', 'canplay');
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
 
@@ -679,6 +697,22 @@ H5P.VideoHtml5 = (function ($) {
         }
       });
     });
+
+    // Alternative to 'canplay' event
+    /*self.on('resize', function () {
+      if (video.offsetParent === null) {
+        return;
+      }
+
+      video.style.width = '100%';
+      video.style.height = '100%';
+
+      var width = video.clientWidth;
+      var height = options.fit ? video.clientHeight : (width * (video.videoHeight / video.videoWidth));
+
+      video.style.width = width + 'px';
+      video.style.height = height + 'px';
+    });*/
 
     // Video controls are ready
     nextTick(function () {
@@ -818,18 +852,12 @@ H5P.VideoHtml5 = (function ($) {
    * @param {String} quality Index of preferred quality
    */
   var setPreferredQuality = function (quality) {
-    var settings = document.cookie.split(';');
-    for (var i = 0; i < settings.length; i++) {
-      var setting = settings[i].split('=');
-      if (setting[0] === 'H5PVideoQuality') {
-        setting[1] = quality;
-        settings[i] = setting.join('=');
-        document.cookie = settings.join(';');
-        return;
-      }
+    try {
+      localStorage.setItem('h5pVideoQuality', quality);
     }
-
-    document.cookie = 'H5PVideoQuality=' + quality + '; ' + document.cookie;
+    catch (err) {
+      console.warn('Unable to set preferred video quality, localStorage is not available.');
+    }
   };
 
   /**
@@ -840,15 +868,30 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {String} Index of preferred quality
    */
   var getPreferredQuality = function () {
-    var quality, settings = document.cookie.split(';');
-    for (var i = 0; i < settings.length; i++) {
-      var setting = settings[i].split('=');
-      if (setting[0] === 'H5PVideoQuality') {
-        quality = setting[1];
-        break;
+    // First check localStorage
+    let quality;
+    try {
+      quality = localStorage.getItem('h5pVideoQuality');
+    }
+    catch (err) {
+      console.warn('Unable to retrieve preferred video quality from localStorage.');
+    }
+    if (!quality) {
+      try {
+        // The fallback to old cookie solution
+        var settings = document.cookie.split(';');
+        for (var i = 0; i < settings.length; i++) {
+          var setting = settings[i].split('=');
+          if (setting[0] === 'H5PVideoQuality') {
+            quality = setting[1];
+            break;
+          }
+        }
+      }
+      catch (err) {
+        console.warn('Unable to retrieve preferred video quality from cookie.');
       }
     }
-
     return quality;
   };
 

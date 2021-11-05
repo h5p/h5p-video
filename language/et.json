@@ -104,7 +104,7 @@
                 "label": "Riba silt"
               },
               {
-                "label": "Liik, viide: <a target='_blank' href=https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element> HTML living standard</a>",
+                "label": "Liik, viide: <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\"> HTML living standard</a>",
                 "options": [
                   {
                     "label": "Subtiitrid"
@@ -122,7 +122,6 @@
               },
               {
                 "label": "Algkeel, peab olema määratletud subtiitride puhul",
-                "default": "en",
                 "description": "Peab olema kehtiv BCP 47 keelesilt. Kui liigi-atribuut on seatud subtiitriks, siis peab srclang olema määratud."
               },
               {
