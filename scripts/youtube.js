@@ -298,20 +298,6 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Get current status of the video.
-     *
-     * @public
-     * @returns {Number}
-     */
-     self.getPlayerState = function () {
-      if (!player || !player.getPlayerState) {
-        return;
-      }
-
-      return player.getPlayerState();
-    };
-
-    /**
      * Get percentage of video that is buffered.
      *
      * @public
