@@ -29,8 +29,8 @@ H5P.VideoVimeo = (function ($) {
         return;
       }
 
-
-   /*   if (player) {
+      /*
+      if (player) {
         player.off('loaded');
         player.off('playing');
         player.off('pause');
@@ -39,7 +39,7 @@ H5P.VideoVimeo = (function ($) {
 
       const videoId = getId(sources[0].path);
 
-      var width = $wrapper.width();
+      let width = $wrapper.width();
       if (width < 200) {
         width = 200;
       }
@@ -52,10 +52,6 @@ H5P.VideoVimeo = (function ($) {
         width: width,
         height: width * (9/16)
       };
-
-    /*  if (track) {
-        options.track = track;
-      }*/
 
       player = new Vimeo.Player(id, options);
       
@@ -82,7 +78,7 @@ H5P.VideoVimeo = (function ($) {
           player.getTextTracks().then(function(tracks) {
             console.log('Tracks', tracks);
 
-            var trackOptions = [];
+            const trackOptions = [];
             for (var i = 0; i < tracks.length; i++) {
               trackOptions.push(new H5P.Video.LabelValue(tracks[i].label, tracks[i].language));
             }
@@ -92,32 +88,19 @@ H5P.VideoVimeo = (function ($) {
             self.trigger('captions', trackOptions);
           });
         });
-        
-       
-
-        /*setInterval(() => {
-          player.getCurrentTime().then(time => currentTime = time);
-        }, 100);*/
       }); 
 
       player.on('playing', function () {
-
         console.log('PLAYING');
         self.trigger('stateChange', H5P.Video.PLAYING);
-        
       });
 
       player.on('pause', function () {
-
         console.log('PAUSING');
-
         self.trigger('stateChange', H5P.Video.PAUSED);
       });
 
       player.on('timeupdate', function (time) {
-
-
-        //console.log('timeupdate', time);
         currentTime = time.seconds;
       });
     }
@@ -129,7 +112,6 @@ H5P.VideoVimeo = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      console.log('APPENDTO');
       $container.addClass('h5p-vimeo').append($wrapper);
       create();
     };
@@ -137,67 +119,80 @@ H5P.VideoVimeo = (function ($) {
     self.getQualities = function () {
       return qualities;
     };
+
     self.getQuality = function () {};
+
     self.setQuality = function (quality) {
       console.log('setQuality', quality);
       player.setQuality(quality);
     };
+
     self.play = function () {
-
       console.log('PLAY');
-
       player.play();
-      
-
-      
     };
 
     self.pause = function () {
+      console.log('PAUSE');
       if (player) {
         player.pause();
       }
     };
+
     self.seek = function (time) {
+      console.log('SEEK');
       player.setCurrentTime(time);
     };
+
     self.getCurrentTime = function () {
+      console.log('GETCURRENTTIME');
       return currentTime;
     };
-    self.getDuration = function () {
 
+    self.getDuration = function () {
       console.log('GETTING DURATION');
       return duration;
     };
+
     self.getPlayerState = function () {
 
     };
+
     self.getBuffered = function () {};
+
     self.mute = function () {
       player.setMuted(true);
     };
+
     self.unMute = function () {
       player.setMuted(false);
     };
+
     self.isMuted = function () {
 
     };
+
     self.getVolume = function () {};
+
     self.setVolume = function (level) {
       player.setVolume(level);
     };
+
     self.getPlaybackRates = function () {
       return [0.5, 1, 1.5, 2];
     };
+
     self.getPlaybackRate = function () {};
+
     self.setPlaybackRate = function (rate) {
       player.setPlaybackRate(rate);
     };
+
     self.setCaptionsTrack = function (track) {
-
       console.log('setCaptionsTrack', track);
-
       player.enableTextTrack(track.value);
     };
+
     self.getCaptionsTrack = function () {
       //return track;
     };
@@ -213,11 +208,11 @@ H5P.VideoVimeo = (function ($) {
         height: '100%'
       });
 
-      var width = $wrapper[0].clientWidth;
-      var height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
+      const width = $wrapper[0].clientWidth;
+      const height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
 
-       // Validate height before setting
-       if (height > 0) {
+      // Validate height before setting
+      if (height > 0) {
         // Set size
         $wrapper.css({
           width: width + 'px',
@@ -236,7 +231,9 @@ H5P.VideoVimeo = (function ($) {
    * @returns {Boolean}
    */
   VimeoPlayer.canPlay = function (sources) {
-    console.log('GETTING HERE');
+    // TODO - Hardcoded for now - need to use getId together with path
+
+    console.log('VimeoPlayer.canPlay');
     return true;
     //return getId(sources[0].path) !== undefined;
   };
@@ -249,14 +246,15 @@ H5P.VideoVimeo = (function ($) {
    * @returns {String} YouTube video identifier
    */
 
-   var getId = function (url) {
+  const getId = function (url) {
     // Has some false positives, but should cover all regular URLs that people can find
-    /*var matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
+    /*const matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
     if (matches && matches[1]) {
       return matches[1];
     }*/
 
-    return "558162919";
+    // TODO - Hardcoded for now - need to create regexp
+    return '558162919';
   };
 
   /**
