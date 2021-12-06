@@ -1,108 +1,198 @@
 /** @namespace H5P */
 H5P.VideoVimeo = (function ($) {
 
+  let numInstances = 0;
+
+  /**
+   * Vimeo video player for H5P.
+   * 
+   * @class
+   * @param {Array} sources Video files to use
+   * @param {Object} options Settings for the player
+   * @param {Object} l10n Localization strings
+   */
   function VimeoPlayer(sources, options, l10n) {
     const self = this;
 
     let player;
-    let playbackRate = 1;
-    const id = 'h5p-vimeo-' + numInstances;
-    numInstances++;
-    const $wrapper = $('<div/>');
-    let duration = 0;
+
+    // Since all the methods of the Vimeo Player SDK are promise-based, we keep
+    // track of all relevant state variables so that we can implement the
+    // H5P.Video API where all methods return synchronously.
+    let buffered = 0;
+    let currentQuality;
+    let currentTextTrack;
     let currentTime = 0;
-    
+    let duration = 0;
+    let isMuted = 0;
+    let volume = 0;
+    let playbackRate = 1;
     let qualities = [];
+
+    const id = `h5p-vimeo-${++numInstances}`;
+    const $wrapper = $('<div/>');
     const $placeholder = $('<div/>', {
-      id: id,
-      //text: l10n.loading
+      id: id
     }).appendTo($wrapper);
+    // const $placeholderContent = $('<span/>', {
+    //   text: l10n.loading
+    // }).appendTo($placeholder);
 
-    const create = function () {
-      if (!$placeholder.is(':visible') /*|| player !== undefined*/) {
-        //return;
-      }
+    /**
+     * Create a new player with the Vimeo Player SDK.
+     * 
+     * @private
+     */
+    const createVimeoPlayer = async () => {
+      const Vimeo = await loadVimeoPlayerSDK();
 
-      if (window.Vimeo === undefined) {
-        // Load API first
-        loadAPI(create);
-        return;
-      }
+      const MIN_WIDTH = 200;
+      const width = Math.max($wrapper.width(), MIN_WIDTH);
 
-      /*
-      if (player) {
-        player.off('loaded');
-        player.off('playing');
-        player.off('pause');
-        player.off('timeupdate');
-      }*/
-
-      const videoId = getId(sources[0].path);
-
-      let width = $wrapper.width();
-      if (width < 200) {
-        width = 200;
-      }
-
-      const options = {
-        id: videoId,
-        controls: false,
+      const embedOptions = {
+        url: sources[0].path,
+        controls: options.controls ? true : false,
         responsive: true,
         dnt: true,
-        width: width,
-        height: width * (9/16)
+        autoplay: options.autoplay ? true : false,
+        loop: options.loop ? true : false,
+        playsinline: true,
+        quality: 'auto',
+        width: width
       };
 
-      player = new Vimeo.Player(id, options);
-      
-      player.on('loaded', function () {
+      // Create a new player
+      player = new Vimeo.Player(id, embedOptions);
 
-        console.log('LOADED');
+      registerVimeoPlayerEventListeneners(player);
+    }
 
-        Promise.all([
-          player.getDuration().then(dur => {
-            duration = dur;
-          }),
-          player.getQualities().then(function(qual) {
-            // qualities = an array of quality objects
-            console.log('Qualities', qual);
+    /**
+     * Register event listeners on the given Vimeo player.
+     * 
+     * @private
+     * @param {Vimeo.Player} player 
+     */
+    const registerVimeoPlayerEventListeneners = (player) => {
+      // When the player has finished loading, we load certain video details
+      // and trigger some events.
+      player.on('loaded', async () => {
+        const videoDetails = await getVimeoVideoMetadata(player);
+        const { tracks } = videoDetails;
+        currentTextTrack = tracks.current;
+        duration = videoDetails.duration;
+        qualities = videoDetails.qualities;
+        currentQuality = 'auto';
 
-            for (let i=0; i < qual.length; i++) {
-              qualities[i] = {
-                name: qual[i].id,
-                label: qual[i].label
-              };
-            }
-          })
-        ]).then(function () {
-          player.getTextTracks().then(function(tracks) {
-            console.log('Tracks', tracks);
+        // $placeholderContent.remove();
 
-            const trackOptions = [];
-            for (var i = 0; i < tracks.length; i++) {
-              trackOptions.push(new H5P.Video.LabelValue(tracks[i].label, tracks[i].language));
-            }
-
-            self.trigger('ready');
-            self.trigger('loaded');
-            self.trigger('captions', trackOptions);
-          });
-        });
-      }); 
-
-      player.on('playing', function () {
-        console.log('PLAYING');
-        self.trigger('stateChange', H5P.Video.PLAYING);
+        self.trigger('ready');
+        self.trigger('loaded');
+        self.trigger('captions', tracks.options);
+        self.trigger('qualityChange', currentQuality);
+        self.trigger('resize');
       });
 
-      player.on('pause', function () {
-        console.log('PAUSING');
-        self.trigger('stateChange', H5P.Video.PAUSED);
+      // Handle playback state changes.
+      player.on('playing', () => self.trigger('stateChange', H5P.Video.PLAYING));
+      player.on('pause', () => self.trigger('stateChange', H5P.Video.PAUSED));
+      player.on('ended', () => self.trigger('stateChange', H5P.Video.ENDED));
+
+      // Track the percentage of video that has finished loading (buffered).
+      player.on('progress', (data) => {
+        buffered = data.percent * 100;
       });
 
-      player.on('timeupdate', function (time) {
+      // Track the current time. The update frequency may be browser-dependent,
+      // according to the official docs:
+      // https://developer.vimeo.com/player/sdk/reference#timeupdate
+      player.on('timeupdate', (time) => {
         currentTime = time.seconds;
       });
+    };
+
+    /**
+     * Get metadata about the video loaded in the given Vimeo player.
+     * 
+     * Example resolved value:
+     * 
+     * ```
+     * {
+     *   "duration": 39,
+     *   "qualities": [
+     *     {
+     *       "name": "auto",
+     *       "label": "Auto"
+     *     },
+     *     {
+     *       "name": "1080p",
+     *       "label": "1080p"
+     *     },
+     *     {
+     *       "name": "720p",
+     *       "label": "720p"
+     *     }
+     *   ],
+     *   "dimensions": {
+     *     "width": 1920,
+     *     "height": 1080
+     *   },
+     *   "tracks": {
+     *     "current": {
+     *       "label": "English",
+     *       "value": "en"
+     *     },
+     *     "options": [
+     *       {
+     *         "label": "English",
+     *         "value": "en"
+     *       },
+     *       {
+     *         "label": "Norsk bokmål",
+     *         "value": "nb"
+     *       }
+     *     ]
+     *   }
+     * }
+     * ```
+     * 
+     * @private
+     * @param {Vimeo.Player} player 
+     * @returns {Promise}
+     */
+    const getVimeoVideoMetadata = (player) => {
+      // Create an object for easy lookup of relevant metadata
+      const massageVideoMetadata = (data) => {
+        const duration = data[0];
+        const qualities = data[1].map(q => ({
+          name: q.id,
+          label: q.label
+        }));
+        const tracks = data[2].reduce((tracks, current) => {
+          const h5pVideoTrack = new H5P.Video.LabelValue(current.label, current.language);
+          tracks.options.push(h5pVideoTrack);
+          if (current.mode === 'showing') {
+            tracks.current = h5pVideoTrack;
+          }
+          return tracks;
+        }, { current: undefined, options: [] });
+        const dimensions = { width: data[3], height: data[4] };
+
+        return {
+          duration,
+          qualities,
+          tracks,
+          dimensions
+        };
+      };
+
+      return Promise.all([
+        player.getDuration(),
+        player.getQualities(),
+        player.getTextTracks(),
+        // player.getVideoWidth(),
+        // player.getVideoHeight(),
+      ]).then(data => massageVideoMetadata(data));
     }
 
     /**
@@ -111,93 +201,232 @@ H5P.VideoVimeo = (function ($) {
      * @public
      * @param {jQuery} $container
      */
-    self.appendTo = function ($container) {
+    self.appendTo = ($container) => {
       $container.addClass('h5p-vimeo').append($wrapper);
-      create();
+      createVimeoPlayer();
     };
 
-    self.getQualities = function () {
+    /**
+     * Get list of available qualities.
+     * 
+     * @public
+     * @returns {Array}
+     */
+    self.getQualities = () => {
       return qualities;
     };
 
-    self.getQuality = function () {};
-
-    self.setQuality = function (quality) {
-      console.log('setQuality', quality);
-      player.setQuality(quality);
+    /**
+     * Get the current quality.
+     * 
+     * @returns {String} Current quality identifier
+     */
+    self.getQuality = () => {
+      return currentQuality;
     };
 
-    self.play = function () {
-      console.log('PLAY');
-      player.play();
+    /**
+     * Set the playback quality.
+     * 
+     * @public
+     * @param {String} quality 
+     */
+    self.setQuality = (quality) => {
+      player.setQuality(quality).then((q) => {
+        currentQuality = q;
+        self.trigger('qualityChange', currentQuality);
+      });
     };
 
-    self.pause = function () {
-      console.log('PAUSE');
+    /**
+     * Start the video.
+     * 
+     * @public
+     */
+    self.play = async () => {
+      try {
+        await player.play();
+      }
+      catch (error) {
+        switch (error.name) {
+          case 'PasswordError': // The video is password-protected
+            self.trigger('error', l10n.vimeoPasswordError);
+            break;
+
+          case 'PrivacyError': // The video is private
+            self.trigger('error', l10n.vimeoPrivacyError);
+            break;
+
+          default:
+            self.trigger('error', l10n.unknownError);
+            break;
+        }
+      }
+    };
+
+    /**
+     * Pause the video.
+     * 
+     * @public
+     */
+    self.pause = () => {
       if (player) {
         player.pause();
       }
     };
 
-    self.seek = function (time) {
-      console.log('SEEK');
+    /**
+     * Seek video to given time.
+     * 
+     * @public
+     * @param {Number} time 
+     */
+    self.seek = (time) => {
       player.setCurrentTime(time);
     };
 
-    self.getCurrentTime = function () {
-      console.log('GETCURRENTTIME');
+    /**
+     * @public
+     * @returns {Number} Seconds elapsed since beginning of video
+     */
+    self.getCurrentTime = () => {
       return currentTime;
     };
 
-    self.getDuration = function () {
-      console.log('GETTING DURATION');
+    /**
+     * @public
+     * @returns {Number} Video duration in seconds
+     */
+    self.getDuration = () => {
       return duration;
     };
 
-    self.getPlayerState = function () {
-
+    /**
+     * Get percentage of video that is buffered.
+     * 
+     * @public
+     * @returns {Number} Between 0 and 100
+     */
+    self.getBuffered = () => {
+      return buffered;
     };
 
-    self.getBuffered = function () {};
-
-    self.mute = function () {
-      player.setMuted(true);
+    /**
+     * Mute the video.
+     * 
+     * @public
+     */
+    self.mute = () => {
+      player.setMuted(true).then(() => {
+        isMuted = true;
+      });
     };
 
-    self.unMute = function () {
-      player.setMuted(false);
+    /**
+     * Unmute the video.
+     * 
+     * @public
+     */
+    self.unMute = () => {
+      player.setMuted(false).then(() => {
+        isMuted = false;
+      });
     };
 
-    self.isMuted = function () {
-
+    /**
+     * Whether the video is muted.
+     * 
+     * @public
+     * @returns {Boolean} True if the video is muted, false otherwise
+     */
+    self.isMuted = () => {
+      return isMuted;
     };
 
-    self.getVolume = function () {};
-
-    self.setVolume = function (level) {
-      player.setVolume(level);
+    /**
+     * Get the video player's current sound volume.
+     * 
+     * @public
+     * @returns {Number} Between 0 and 100.
+     */
+    self.getVolume = () => {
+      return volume;
     };
 
-    self.getPlaybackRates = function () {
+    /**
+     * Set the video player's sound volume.
+     * 
+     * @public
+     * @param {Number} level 
+     */
+    self.setVolume = (level) => {
+      player.setVolume(level).then(() => {
+        volume = level;
+      });
+    };
+
+    /**
+     * Get list of available playback rates.
+     * 
+     * @public
+     * @returns {Array} Available playback rates
+     */
+    self.getPlaybackRates = () => {
       return [0.5, 1, 1.5, 2];
     };
 
-    self.getPlaybackRate = function () {};
-
-    self.setPlaybackRate = function (rate) {
-      player.setPlaybackRate(rate);
+    /**
+     * Get the current playback rate.
+     * 
+     * @public
+     * @returns {Number} e.g. 0.5, 1, 1.5 or 2
+     */
+    self.getPlaybackRate = () => {
+      return playbackRate;
     };
 
-    self.setCaptionsTrack = function (track) {
-      console.log('setCaptionsTrack', track);
-      player.enableTextTrack(track.value);
+    /**
+     * Set the current playback rate.
+     * 
+     * @public
+     * @param {Number} rate Must be one of available rates from getPlaybackRates
+     */
+    self.setPlaybackRate = (rate) => {
+      player.setPlaybackRate(rate).then(() => {
+        playbackRate = rate;
+        self.trigger('playbackRateChange', rate);
+      });
     };
 
-    self.getCaptionsTrack = function () {
-      //return track;
+    /**
+     * Set current captions track.
+     * 
+     * @public
+     * @param {H5P.Video.LabelValue} track Captions to display
+     */
+    self.setCaptionsTrack = (track) => {
+      if (!track) {
+        return player.disableTextTrack().then(() => {
+          currentTextTrack = null;
+        });
+      }
+
+      player.enableTextTrack(track.value).then(() => {
+        currentTextTrack = track;
+      });
     };
 
-    self.on('resize', function () {
+    /**
+     * Get current captions track.
+     * 
+     * @public
+     * @returns {H5P.Video.LabelValue}
+     */
+    self.getCaptionsTrack = () => {
+      return currentTextTrack;
+    };
+
+    self.on('resize', () => {
       if (!$wrapper.is(':visible')) {
         return;
       }
@@ -205,7 +434,7 @@ H5P.VideoVimeo = (function ($) {
       // Use as much space as possible
       $wrapper.css({
         width: '100%',
-        height: '100%'
+        height: 'auto'
       });
 
       const width = $wrapper[0].clientWidth;
@@ -230,12 +459,8 @@ H5P.VideoVimeo = (function ($) {
    * @param {Array} sources
    * @returns {Boolean}
    */
-  VimeoPlayer.canPlay = function (sources) {
-    // TODO - Hardcoded for now - need to use getId together with path
-
-    console.log('VimeoPlayer.canPlay');
-    return true;
-    //return getId(sources[0].path) !== undefined;
+  VimeoPlayer.canPlay = (sources) => {
+    return getId(sources[0].path);
   };
 
   /**
@@ -243,37 +468,35 @@ H5P.VideoVimeo = (function ($) {
    *
    * @private
    * @param {String} url
-   * @returns {String} YouTube video identifier
+   * @returns {String} Vimeo video ID
    */
-
-  const getId = function (url) {
-    // Has some false positives, but should cover all regular URLs that people can find
-    /*const matches = url.match(/(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i);
-    if (matches && matches[1]) {
-      return matches[1];
-    }*/
-
-    // TODO - Hardcoded for now - need to create regexp
-    return '558162919';
+  const getId = (url) => {
+    // https://stackoverflow.com/a/11660798
+    const matches = url.match(/^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/);
+    if (matches && matches[5]) {
+      return matches[5];
+    }
   };
 
   /**
-   * Load the IFrame Player API asynchronously.
+   * Load the Vimeo Player SDK asynchronously.
+   * 
+   * @private
+   * @returns {Promise} Vimeo Player SDK object
    */
-  const loadAPI = function (loaded) {
-
+  const loadVimeoPlayerSDK = () => {
     if (window.Vimeo) {
-      return loaded();
+      return Promise.resolve(window.Vimeo);
     }
 
-    const tag = document.createElement('script');
-    tag.src="https://player.vimeo.com/api/player.js";
-    tag.onload = loaded;
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    return new Promise((resolve, reject) => {
+      const tag = document.createElement('script');
+      tag.src = 'https://player.vimeo.com/api/player.js';
+      tag.onload = () => resolve(window.Vimeo);
+      tag.onerror = reject;
+      document.querySelector('script').before(tag);
+    });
   };
-
-  let numInstances = 0;
 
   return VimeoPlayer;
 })(H5P.jQuery);
