@@ -806,11 +806,8 @@ H5P.VideoHtml5 = (function ($) {
    * @returns {boolean} True if HLS type and HLS is supported, false otherwise
    */
   var isSupportedHlsType = function(type) {
-    if (type === 'application/x-mpegURL' || type === 'video/m3u8') {
-      // TODO can be skip this check and assume that hls will later be loaded correctly to avoid always loading hls?
-      //     if (window.Hls.isSupported()) {
+    if (type === 'application/x-mpegURL' || type === 'application/vnd.apple.mpegurl' || type === 'video/m3u8') {
       return true;
-      //     }
     }
     return false
   }
