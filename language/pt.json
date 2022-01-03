@@ -2,21 +2,21 @@
   "semantics": [
     {
       "label": "Ficheiros de vídeo",
-      "description": "Para assegurar que todos os navegadores suportem o vídeo, deve fazer o upload de ambos os formatos: WebM e MP4."
+      "description": "Para assegurar que todos os navegadores suportam o vídeo, deve carregar ambos os formatos: WebM e MP4."
     },
     {
       "label": "Visuais",
       "fields": [
         {
-          "label": "Imagem de capa"
+          "label": "Imagem da capa"
         },
         {
-          "label": "Encaixar o leitor de vídeo para ocupar todo o espaço disponível",
+          "label": "Ajustar o leitor de vídeo para ocupar todo o espaço disponível",
           "description": "Se desativado, o leitor terá o mesmo tamanho do vídeo fornecido."
         },
         {
           "label": "Mostrar controlos do leitor de vídeo",
-          "description": "Adiciona controlos ao leitor de vídeo. Permite que o utilizador reproduza o vídeo, faça pausa, etc."
+          "description": "Adicionar controlos ao leitor de vídeo. Permite que o utilizador reproduza o vídeo, faça pausa, etc."
         }
       ]
     },
@@ -29,7 +29,7 @@
         },
         {
           "label": "Repetição do vídeo",
-          "description": "Reproduz novamenete o vídeo após terminar."
+          "description": "Reproduz novamente o vídeo após terminar."
         }
       ]
     },
@@ -51,7 +51,7 @@
         },
         {
           "label": "Sem fontes",
-          "default": "Vídeo não possui fonte."
+          "default": "Falta fonte do vídeo."
         },
         {
           "label": "Cancelado",
@@ -62,7 +62,7 @@
           "default": "Falha de ligação."
         },
         {
-          "label": "Não foi possível descodificar o ficheiro",
+          "label": "Não foi possível descodificar o ficheiro de vídeo",
           "default": "Não foi possível descodificar o ficheiro multimédia."
         },
         {
@@ -86,7 +86,7 @@
           "default": "Não foi possível encontrar o vídeo com o ID fornecido."
         },
         {
-          "label": "Vídeo de YouTube restrito",
+          "label": "Vídeo de YouTube privado",
           "default": "O proprietário deste vídeo não permite que seja incorporado."
         }
       ]
@@ -101,7 +101,7 @@
             "label": "Faixa",
             "fields": [
               {
-                "label": "Rótulo da faixa"
+                "label": "Etiqueta da faixa"
               },
               {
                 "label": "Tipo de categoria, refere-se a <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
@@ -122,7 +122,7 @@
               },
               {
                 "label": "Idioma da fonte, deve ser definido para as legendas",
-                "description": "Deve ser um rótulo de linguagem BCP 47 válido. Se 'Legendas' é o tipo de faixa de texto seleciondo, a linguagem fonte da faixa de texto deve ser definida."
+                "description": "Deve ser uma tag de idioma BCP 47 válido. Se o tipo de faixa de texto está definido como 'Legendas', o idioma fonte da faixa de texto deve ser definido."
               },
               {
                 "label": "Fonte da faixa (ficheiro WebVTT)"
