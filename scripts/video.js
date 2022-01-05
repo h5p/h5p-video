@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
+  'use strict';
 
   /**
    * The ultimate H5P video player!
@@ -16,8 +17,35 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     var self = this;
     self.contentId = id;
 
+    self.videoXAPI = new H5P.VideoXAPI(self);
+
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
+
+    self.finishedThreshold = 0.95;
+
+    // Values needed for xAPI triggering, set by handlers
+    self.previousTime = 0;
+    self.seeking = false;
+    self.seekedTo = 0;
+    self.duration = 0;
+    self.previousState = -1;
+    self.mousedown = false;
+
+    /*
+     * Used to distinguish seeking from pausing
+     * TODO: This might be much cleaner with refactoring IV, video and the handlers
+     */
+    document.addEventListener('mousedown', function() {
+      self.mousedown = true;
+    });
+    document.addEventListener('mouseup', function() {
+      if (self.seeking) {
+        self.trigger('seeked', self.videoXAPI.getArgsXAPISeeked(self.seekedTo));
+        self.seeking = false;
+      }
+      self.mousedown = false;
+    });
 
     // Reference to the handler
     var handlerName = '';
@@ -112,6 +140,35 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
+    });
+    // xAPI extension events for video.
+    self.on('seeked', function (event) {
+      self.triggerXAPI('seeked', event.data);
+    });
+    self.on('volumechange', function (event) {
+      self.triggerXAPI('interacted', event.data);
+    });
+    self.on('finished', function (event) {
+      // Triggered as finished to be seperate from H5Ps completed,
+      // but statement is sent as completed and differentiated by object.id
+      self.triggerXAPI('completed', event.data);
+    });
+    self.on('fullscreen', function (event) {
+      // Note: youtube.js and html5.js players do not fire this event.
+      self.triggerXAPI('interacted', event.data);
+    });
+    self.on('play', function (event) {
+      self.triggerXAPI('played', event.data);
+    });
+    self.on('xAPIloaded', function (event) {
+      self.duration = self.getDuration();
+      self.triggerXAPI('initialized', event.data);
+    });
+    self.on('paused', function (event) {
+      // if mouse button is down, we're seeking
+      if (self.mousedown === false) {
+        self.triggerXAPI('paused', event.data);
+      }
     });
 
     // Find player for video sources

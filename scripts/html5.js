@@ -1,5 +1,6 @@
 /** @namespace H5P */
 H5P.VideoHtml5 = (function ($) {
+  'use strict';
 
   /**
    * HTML5 video player for H5P.
@@ -124,6 +125,12 @@ H5P.VideoHtml5 = (function ($) {
     var currentTimeBeforeChangingQuality;
 
     /**
+     * Track xAPI statement data for video events.
+     * @private
+     */
+    var lastSend = null;
+
+    /**
      * Avoids firing the same event twice.
      * @private
      */
@@ -210,6 +217,27 @@ H5P.VideoHtml5 = (function ($) {
     }
 
     /**
+     * Create the xAPI object for the 'Initialized' event.
+     */
+    var getLoadedParams = function () {
+      var ccEnabled = false;
+      var ccLanguage;
+
+      for (var i = 0; i < video.textTracks.length; i++) {
+        if (video.textTracks[i].mode === 'showing') {
+          ccEnabled = true;
+          ccLanguage = video.textTracks[i].language;
+        }
+      }
+
+      return self.videoXAPI.getArgsXAPIInitialized(video.videoWidth, video.videoHeight, video.playbackRate, video.volume, ccEnabled, ccLanguage, video.videoHeight, video.duration);
+
+    };
+
+    // Set duration used for xAPI statements.
+    self.duration = video.duration;
+
+    /**
      * Helps registering events.
      *
      * @private
@@ -219,6 +247,8 @@ H5P.VideoHtml5 = (function ($) {
      */
     var mapEvent = function (native, h5p, arg) {
       video.addEventListener(native, function () {
+        var extraArg = null;
+        var extraTrigger = null;
         switch (h5p) {
           case 'stateChange':
             if (lastState === arg) {
@@ -231,8 +261,63 @@ H5P.VideoHtml5 = (function ($) {
               delete options.startAt;
             }
 
-            break;
+            if (arg === H5P.Video.PLAYING) {
+              if (lastSend !== 'play') {
+                extraArg = self.videoXAPI.getArgsXAPIPlayed(video.currentTime);
+                extraTrigger = 'play';
+                lastSend = 'play';
+              }
+            }
 
+            if (arg === H5P.Video.PAUSED) {
+              // Put together extraArg for sending to xAPI statement.
+              if (!video.seeking && self.seeking === false && video.currentTime !== video.duration && self.previousState !== H5P.Video.BUFFERING) {
+                extraTrigger = 'paused';
+                extraArg = self.videoXAPI.getArgsXAPIPaused(video.currentTime, video.duration);
+                lastSend = 'paused';
+              }
+            }
+
+            if (arg === H5P.Video.ENDED) {
+              // Send extra trigger for giving progress on ended call to xAPI.
+              var length = video.duration;
+              if (length > 0) {
+                // Length passed in as current time, because at end of video when this is fired currentTime reset to 0 if on loop
+                var progress = self.videoXAPI.getProgress(length, length);
+                if (progress >= self.finishedThreshold) {
+                  extraTrigger = 'finished';
+                  extraArg = self.videoXAPI.getArgsXAPICompleted(video.currentTime, video.duration, progress);
+                  lastSend = 'finished';
+                }
+              }
+            }
+            break;
+          case 'seeked':
+            return; // Seek is tracked differently based on time difference in timeupdate.
+            break;
+          case 'seeking':
+            return; // Just need to store current time for seeked event.
+            break;
+          case 'volumechange' :
+            arg = self.videoXAPI.getArgsXAPIVolumeChanged(video.currentTime, video.muted, video.volume);
+            lastSend = 'volumechange';
+            break;
+          case 'play':
+            if (self.seeking === false && lastSend !== h5p) {
+              arg = self.videoXAPI.getArgsXAPIPlayed(video.currentTime);
+              lastSend = h5p;
+            }
+            else {
+              arg = self.videoXAPI.getArgsXAPISeeked(self.seekedTo);
+              lastSend = 'seeked';
+              self.seeking = false;
+              h5p = 'seeked';
+            }
+            break;
+          case 'fullscreen':
+            arg = self.videoXAPI.getArgsXAPIFullScreen(video.currentTime, video.videoWidth, video.videoHeight);
+            lastSend = h5p;
+            break;
           case 'loaded':
             isLoaded = true;
 
@@ -254,8 +339,12 @@ H5P.VideoHtml5 = (function ($) {
               video.addEventListener('durationchange', andLoaded, false);
               return;
             }
-            break;
 
+            extraTrigger = 'xAPIloaded';
+            extraArg = getLoadedParams();
+            lastSend = 'xAPIloaded';
+
+            break;
           case 'error':
             // Handle error and get message.
             arg = error(arguments[0], arguments[1]);
@@ -279,7 +368,13 @@ H5P.VideoHtml5 = (function ($) {
             arg = self.getPlaybackRate();
             break;
         }
+        self.previousState = arg;
         self.trigger(h5p, arg);
+
+        // Make extra calls for events with needed values for xAPI statement.
+        if (extraTrigger !== null && extraArg !== null) {
+          self.trigger(extraTrigger, extraArg);
+        }
       }, false);
     };
 
@@ -492,8 +587,12 @@ H5P.VideoHtml5 = (function ($) {
         video.play();
         video.pause();
       }
-
+      if (self.seeking === false) {
+        self.previousTime = video.currentTime;
+      }
       video.currentTime = time;
+      self.seeking = true;
+      self.seekedTo = time;
     };
 
     /**
@@ -664,6 +763,11 @@ H5P.VideoHtml5 = (function ($) {
     mapEvent('canplay', 'canplay');
     mapEvent('error', 'error');
     mapEvent('ratechange', 'playbackRateChange');
+    mapEvent('seeking','seeking', H5P.Video.PAUSED);
+    mapEvent('timeupdate', 'timeupdate', H5P.Video.PLAYING);
+    mapEvent('volumechange', 'volumechange');
+    mapEvent('play', 'play', H5P.Video.PLAYING);
+    mapEvent('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', 'fullscreen');
 
     if (!video.controls) {
       // Disable context menu(right click) to prevent controls.
@@ -671,7 +775,6 @@ H5P.VideoHtml5 = (function ($) {
         event.preventDefault();
       }, false);
     }
-
     // Display throbber when buffering/loading video.
     self.on('stateChange', function (event) {
       var state = event.data;

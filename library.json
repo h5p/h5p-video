@@ -15,6 +15,9 @@
   },
   "preloadedJs": [
     {
+        "path": "scripts/x-api.js"
+    },
+    {
       "path": "scripts/youtube.js"
     },
     {
