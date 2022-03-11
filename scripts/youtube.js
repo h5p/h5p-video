@@ -26,6 +26,13 @@ H5P.VideoYouTube = (function ($) {
     // Optional placeholder
     // var $placeholder = $('<iframe id="' + id + '" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/' + getId(sources[0].path) + '?enablejsapi=1&origin=' + encodeURIComponent(ORIGIN) + '&autoplay=' + (options.autoplay ? 1 : 0) + '&controls=' + (options.controls ? 1 : 0) + '&disabledkb=' + (options.controls ? 0 : 1) + '&fs=0&loop=' + (options.loop ? 1 : 0) + '&rel=0&showinfo=0&iv_load_policy=3" frameborder="0"></iframe>').appendTo($wrapper);
 
+    const qualities = extractQualities(sources);
+    let currentQuality = Object.keys(qualities).length ?
+      Object.keys(qualities)[0] :
+      undefined;
+
+    let videoState;
+
     /**
      * Use the YouTube API to create a new player
      *
@@ -106,6 +113,20 @@ H5P.VideoYouTube = (function ($) {
             }
           },
           onStateChange: function (state) {
+            videoState = state.data;
+
+            /*
+             * State before changing video was paused. YouTube autoplays and
+             * there's no way to prevent this, so the best we can do here is
+             * to immediately stop it again if we don't want the user to be
+             * stuck with the loading spinner. User will notice video playing
+             * briefly.
+             */
+            if (self.stopVideoAfterChange && videoState === H5P.Video.PLAYING) {
+              self.stopVideoAfterChange = false;
+              self.pause();
+            }
+
             if (state.data > -1 && state.data < 4) {
 
               // Fix for keeping playback rate in IE11
@@ -181,62 +202,62 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Get list of available qualities. Not available until after play.
+     * Get list of available qualities.
      *
      * @public
      * @returns {Array}
      */
     self.getQualities = function () {
-      if (!player || !player.getAvailableQualityLevels) {
+      // Create reverse list
+      var options = [];
+      for (var q in qualities) {
+        if (qualities.hasOwnProperty(q)) {
+          options.splice(0, 0, {
+            name: q,
+            label: qualities[q].label,
+            isSignLanguage: qualities[q].source && qualities[q].source.metadata && qualities[q].source.metadata.isSignLanguage || false
+          });
+        }
+      }
+
+      if (options.length < 2) {
+        // Do not return if only one quality.
         return;
       }
 
-      var qualities = player.getAvailableQualityLevels();
-      if (!qualities.length) {
-        return; // No qualities
-      }
-
-      // Add labels
-      for (var i = 0; i < qualities.length; i++) {
-        var quality = qualities[i];
-        var label = (LABELS[quality] !== undefined ? LABELS[quality] : 'Unknown'); // TODO: l10n
-        qualities[i] = {
-          name: quality,
-          label: LABELS[quality]
-        };
-      }
-
-      return qualities;
+      return options;
     };
 
     /**
-     * Get current playback quality. Not available until after play.
+     * Get current playback quality.
      *
      * @public
      * @returns {String}
      */
     self.getQuality = function () {
-      if (!player || !player.getPlaybackQuality) {
-        return;
-      }
-
-      var quality = player.getPlaybackQuality();
-      return quality === 'unknown' ? undefined : quality;
+      return currentQuality;
     };
 
     /**
-     * Set current playback quality. Not available until after play.
-     * Listen to event "qualityChange" to check if successful.
+     * Set current playback quality.
      *
      * @public
-     * @params {String} [quality]
+     * @params {String} [qualityName]
      */
-    self.setQuality = function (quality) {
-      if (!player || !player.setPlaybackQuality) {
-        return;
+    self.setQuality = function (qualityName) {
+      if (qualities[qualityName] === undefined || qualityName === currentQuality) {
+        return; // Invalid quality
       }
 
-      player.setPlaybackQuality(quality);
+      currentQuality = qualityName;
+
+      // Change Video
+      this.stopVideoAfterChange = (videoState !== H5P.Video.PLAYING);
+      if (player && player.loadVideoById) {
+        player.loadVideoById(getId(qualities[currentQuality].source.path), this.getCurrentTime());
+      }
+
+      self.trigger('qualityChange', currentQuality);
     };
 
     /**
@@ -541,19 +562,45 @@ H5P.VideoYouTube = (function ($) {
     }
   };
 
-  /** @constant {Object} */
-  var LABELS = {
-    highres: '2160p', // Old API support
-    hd2160: '2160p', // (New API)
-    hd1440: '1440p',
-    hd1080: '1080p',
-    hd720: '720p',
-    large: '480p',
-    medium: '360p',
-    small: '240p',
-    tiny: '144p',
-    auto: 'Auto'
-  };
+  /**
+   * Sort sources into qualities.
+   *
+   * @private
+   * @static
+   * @param {Array} sources
+   * @param {Object} video
+   * @returns {Object} Quality mapping
+   */
+  var extractQualities = function (sources, video) {
+    const qualities = {};
+    let qualityIndex = 1;
+
+    for (let i = 0; i < sources.length; i++) {
+      const source = sources[i];
+
+      if (!source.mime || source.mime !== 'video/YouTube') {
+        continue; // Can only handle YouTube
+      }
+
+      if (source.quality === undefined) {
+        // Create a new quality tag
+        source.quality = {
+          name: 'q' + qualityIndex,
+          label: (source.metadata && source.metadata.qualityName) ? source.metadata.qualityName : 'Quality ' + qualityIndex // TODO: l10n
+        };
+        qualityIndex++;
+      }
+
+      if (qualities[source.quality.name] === undefined) {
+        qualities[source.quality.name] = {
+          label: source.quality.label,
+          source: source
+        };
+      }
+    }
+
+    return qualities;
+  }
 
   /** @private */
   var numInstances = 0;
