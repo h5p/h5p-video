@@ -417,20 +417,33 @@ H5P.VideoHtml5 = (function ($) {
             self.seek(currentTimeBeforeChangingQuality);
           }
 
+          // Callback to resolve play
+          var resolvePlaying = function () {
+            if (stateBeforeChangingQuality !== H5P.Video.PLAYING) {
+              // Do not resume playing
+              video.pause();
+            }
+
+            // Done changing quality
+            stateBeforeChangingQuality = undefined;
+
+            // Remove any errors
+            if ($error.is(':visible')) {
+              $error.remove();
+            }
+          };
+
           // Always play to get image.
-          video.play();
-
-          if (stateBeforeChangingQuality !== H5P.Video.PLAYING) {
-            // Do not resume playing
-            video.pause();
+          var playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(resolvePlaying)
+              .catch(function (error) {
+                resolvePlaying(); // Fallback
+              });
           }
-
-          // Done changing quality
-          stateBeforeChangingQuality = undefined;
-
-          // Remove any errors
-          if ($error.is(':visible')) {
-            $error.remove();
+          else {
+            resolvePlaying(); // Fallback
           }
         };
         video.addEventListener('loadedmetadata', loaded, false);
@@ -490,8 +503,21 @@ H5P.VideoHtml5 = (function ($) {
       if (lastState === undefined) {
         // Make sure we always play before we seek to get an image.
         // If not iOS devices will reset currentTime when pressing play.
-        video.play();
-        video.pause();
+
+        // Always play to get image.
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(function () {
+              video.pause();
+            })
+            .catch(function (error) {
+              video.pause(); // Fallback
+            });
+        }
+        else {
+          video.pause(); // Fallback
+        }
       }
 
       video.currentTime = time;
