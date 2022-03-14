@@ -355,7 +355,8 @@ H5P.VideoHtml5 = (function ($) {
         if (qualities.hasOwnProperty(q)) {
           options.splice(0, 0, {
             name: q,
-            label: qualities[q].label
+            label: qualities[q].label,
+            isSignLanguage: qualities[q].source.metadata && qualities[q].source.metadata.isSignLanguage || false
           });
         }
       }
