@@ -1,9 +1,6 @@
 .h5p-video > video {
   background: #000;
 }
-.h5p-video-flash {
-  color: #fff;
-}
 .h5p-video-loading {
   display: none;
   position: absolute;

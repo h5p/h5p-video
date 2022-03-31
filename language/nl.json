@@ -5,36 +5,36 @@
       "description": "Om ervoor te zorgen dat video in alle browsers werkt, moet u zowel WebM als MP4 opgemaakte bronnen toevoegen."
     },
     {
-      "label": "Visueel",
+      "label": "Visuele effecten",
       "fields": [
         {
-          "label": "Poster afbeelding"
+          "label": "Poster-afbeelding"
         },
         {
           "label": "Laat video player alle beschikbare ruimte gebruiken",
-          "description": "ALs dit niet is ingesteld, gebruikt de video player dezelfde afmetingen als de video."
+          "description": "Indien niet ingesteld, gebruikt de video player dezelfde afmetingen als de video."
         },
         {
-          "label": "Toon video player controleknoppen",
-          "description": "Voeg controleknoppen aan de video player toe. Dit staat gebruikers toe af te spelen, pauzeren, etc."
+          "label": "Toon video player bedieningsknoppen",
+          "description": "Voeg bedieningsknoppen aan de video player toe. Dit staat gebruikers toe af te spelen, pauzeren, etc."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Afspelen",
       "fields": [
         {
-          "label": "Auto-play video",
+          "label": "Video automatisch afspelen",
           "description": "Automatisch starten met afspelen van de video. Werkt mogelijk niet op mobiele apparaten."
         },
         {
-          "label": "Loop video",
+          "label": "Video herhalen",
           "description": "Automatisch de video opnieuw starten wanneer die afgelopen is."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Video localisatie",
       "fields": [
         {
           "label": "Naam",
@@ -42,7 +42,7 @@
           "description": "Helpt inhoud van dit type te herkennen."
         },
         {
-          "label": "Laden",
+          "label": "Aan het laden",
           "default": "Video player aan het laden..."
         },
         {
@@ -55,7 +55,7 @@
         },
         {
           "label": "Afgebroken",
-          "default": "Media playback is afgebroken."
+          "default": "Media afspelen is afgebroken."
         },
         {
           "label": "Netwerkfout",
@@ -121,7 +121,7 @@
                 ]
               },
               {
-                "label": "Bron taal, moet worden opgegeven voor ondertitels",
+                "label": "Brontaal, moet worden opgegeven voor ondertitels",
                 "description": "Moet een geldige BCP 47 taal tag zijn. Als de soort-attribuut is ingesteld op ondertitels, dan moet srclang worden vastgelegd."
               },
               {

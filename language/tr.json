@@ -1,131 +1,131 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Video kaynakları",
+      "description": "Videonun tüm tarayıcılarda çalışmasını sağlamak için hem WebM hem de MP4 formatlı kaynaklar eklemelisiniz."
     },
     {
-      "label": "Visuals",
+      "label": "Görseller",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Poster resmi"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Mevcut tüm alanı kullanmak için video oynatıcıyı sığdır",
+          "description": "Ayarlanmazsa, video oynatıcı video ile aynı en boy oranına sahip olacaktır."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Video oynatıcı kontrollerini göster",
+          "description": "Video oynatıcıya kontroller ekleyiniz. Bu, kullanıcılara oynatma, duraklatma vb. izinler verir."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Oynatma",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Videoyu otomatik oynat",
+          "description": "Videoyu otomatik olarak oynatmaya başlayınız. Mobil cihazlarda çalışmayabilir."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Videoyu tekrarla",
+          "description": "Bittiğinde videoyu otomatik olarak yeniden başlatınız."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Video bölge ve dil seçenekleri",
       "fields": [
         {
-          "label": "Name",
+          "label": "İsim",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Bu türdeki içeriği tanımlamaya yardımcı olur."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Yükleniyor",
+          "default": "Video oynatıcı yükleniyor..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Video oynatıcı bulunamadı",
+          "default": "Verilen video biçimini destekleyen hiçbir video oynatıcı bulunamadı."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Kaynak yok",
+          "default": "Videonun kaynakları eksik."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "İptal edildi",
+          "default": "Medya oynatma durduruldu."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Ağ hatası",
+          "default": "Ağ hatası."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Video kaynağının kodu çözülemiyor",
+          "default": "Medyanın kodu çözülemiyor."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Biçim desteklenmiyor",
+          "default": "Video formatı desteklenmiyor."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Medya şifrelenmiş",
+          "default": "Medya şifrelenmiş."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Bilinmeyen hata",
+          "default": "Bilinmeyen hata."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Geçersiz YouTube Kimliği (ID)",
+          "default": "Geçersiz YouTube Kimliği (ID)."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Bilinmeyen YouTube Kimliği (ID)",
+          "default": "Verilen YouTube kimliğine (ID) sahip video bulunamadı."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Kısıtlanmış YouTube videosu",
+          "default": "Bu videonun sahibi, videonun yerleştirilmesine izin vermiyor."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Erişilebilirlik",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Video alt yazısı ekle",
+          "entity": "Alt Yazı",
           "field": {
-            "label": "Track",
+            "label": "Alt Yazı",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Alt Yazı etiketi"
               },
               {
-                "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
+                "label": "Tür yazın, <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML yaşam standardına</a> bakın",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Altyazılar"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Başlıklar"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Açıklamalar"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Bölümler"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Kaynak dil, altyazılar için tanımlanmalıdır",
+                "description": "Geçerli bir BCP 47 dil etiketi olmalıdır. Tür niteliği altyazılara ayarlanmışsa, srclang tanımlanmalıdır."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "İzleme dosyası (WebVTT)"
               }
             ]
           }

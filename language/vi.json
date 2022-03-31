@@ -1,8 +1,8 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Nguồn video",
+      "description": "Để đảm bảo video phát được trong mọi trình duyệt, bạn nên thêm cả hai nguồn có định dạng WebM và MP4."
     },
     {
       "label": "Visuals",
@@ -24,12 +24,12 @@
       "label": "Playback",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Tự động phát video",
+          "description": "Tự động phát video. Có thể không hoạt động trên thiết bị di động."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Lặp video",
+          "description": "Tự động phát lại video khi hết."
         }
       ]
     },
@@ -37,57 +37,57 @@
       "label": "Video localization",
       "fields": [
         {
-          "label": "Name",
+          "label": "Tên",
           "default": "Video",
           "description": "Helps identify content of this type."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Đang tải",
+          "default": "Đang tải trình phát video..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Không tìm thấy trình phát",
+          "default": "Không tìm thấy trình phát hỗ trợ định dạng video này."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Không có nguồn",
+          "default": "Video bị thiếu nguồn."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Đã ngừng",
+          "default": "Đã ngừng phát video."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Lỗi mạng",
+          "default": "Lỗi mạng."
         },
         {
           "label": "Cannot decode video source",
           "default": "Unable to decode media."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Không hỗ trợ định dạng",
+          "default": "Định dạng của video không được hỗ trợ."
         },
         {
           "label": "Media encrypted",
           "default": "Media encrypted."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Lỗi không xác định",
+          "default": "Lỗi không xác định."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "ID YouTube không hợp lệ",
+          "default": "ID YouTube không hợp lệ."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Không tìm thấy ID YouTube",
+          "default": "Không tìm thấy video nào có ID YouTube này."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Video YouTube bị hạn chế",
+          "default": "Người sở hữu video này không cho phép nhúng video này."
         }
       ]
     },
@@ -107,16 +107,16 @@
                 "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Phụ đề"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Phụ đề"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Mô tả"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Chương"
                   }
                 ]
               },
