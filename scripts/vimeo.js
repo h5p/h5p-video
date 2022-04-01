@@ -44,6 +44,10 @@ H5P.VideoVimeo = (function ($) {
      * @private
      */
     const createVimeoPlayer = async () => {
+      if (!$placeholder.is(':visible') || player !== undefined) {
+        return;
+      }
+
       const Vimeo = await loadVimeoPlayerSDK();
 
       const MIN_WIDTH = 200;
@@ -428,6 +432,12 @@ H5P.VideoVimeo = (function ($) {
 
     self.on('resize', () => {
       if (!$wrapper.is(':visible')) {
+        return;
+      }
+
+      if (!player) {
+        // Player isn't created yet. Try again.
+        createVimeoPlayer();
         return;
       }
 
