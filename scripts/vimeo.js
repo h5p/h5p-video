@@ -5,7 +5,7 @@ H5P.VideoVimeo = (function ($) {
 
   /**
    * Vimeo video player for H5P.
-   * 
+   *
    * @class
    * @param {Array} sources Video files to use
    * @param {Object} options Settings for the player
@@ -32,21 +32,25 @@ H5P.VideoVimeo = (function ($) {
     const id = `h5p-vimeo-${++numInstances}`;
     const $wrapper = $('<div/>');
     const $placeholder = $('<div/>', {
-      id: id
+      id: id,
+      html: `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100;" aria-label="${l10n.loading}"></div>`
     }).appendTo($wrapper);
-    // const $placeholderContent = $('<span/>', {
-    //   text: l10n.loading
-    // }).appendTo($placeholder);
 
     /**
      * Create a new player with the Vimeo Player SDK.
-     * 
+     *
      * @private
      */
     const createVimeoPlayer = async () => {
       if (!$placeholder.is(':visible') || player !== undefined) {
         return;
       }
+
+      // Since the SDK is loaded asynchronously below, explicitly set player to
+      // null (unlike undefined) which indicates that creation has begun. This
+      // allows the guard statement above to be hit if this function is called
+      // more than once.
+      player = null;
 
       const Vimeo = await loadVimeoPlayerSDK();
 
@@ -73,13 +77,11 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Register event listeners on the given Vimeo player.
-     * 
+     *
      * @private
-     * @param {Vimeo.Player} player 
+     * @param {Vimeo.Player} player
      */
     const registerVimeoPlayerEventListeneners = (player) => {
-      // When the player has finished loading, we load certain video details
-      // and trigger some events.
       player.on('loaded', async () => {
         const videoDetails = await getVimeoVideoMetadata(player);
         const { tracks } = videoDetails;
@@ -88,7 +90,13 @@ H5P.VideoVimeo = (function ($) {
         qualities = videoDetails.qualities;
         currentQuality = 'auto';
 
-        // $placeholderContent.remove();
+        $placeholder.find('div.h5p-video-loading').remove();
+
+        if (options.startAt) {
+          // Vimeo.Player doesn't have an option for setting start time upon
+          // instantiation, so we instead perform an initial seek here.
+          currentTime = await self.seek(options.startAt);
+        }
 
         self.trigger('ready');
         self.trigger('loaded');
@@ -117,9 +125,9 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get metadata about the video loaded in the given Vimeo player.
-     * 
+     *
      * Example resolved value:
-     * 
+     *
      * ```
      * {
      *   "duration": 39,
@@ -159,9 +167,9 @@ H5P.VideoVimeo = (function ($) {
      *   }
      * }
      * ```
-     * 
+     *
      * @private
-     * @param {Vimeo.Player} player 
+     * @param {Vimeo.Player} player
      * @returns {Promise}
      */
     const getVimeoVideoMetadata = (player) => {
@@ -194,8 +202,8 @@ H5P.VideoVimeo = (function ($) {
         player.getDuration(),
         player.getQualities(),
         player.getTextTracks(),
-        // player.getVideoWidth(),
-        // player.getVideoHeight(),
+        player.getVideoWidth(),
+        player.getVideoHeight(),
       ]).then(data => massageVideoMetadata(data));
     }
 
@@ -212,7 +220,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get list of available qualities.
-     * 
+     *
      * @public
      * @returns {Array}
      */
@@ -222,7 +230,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get the current quality.
-     * 
+     *
      * @returns {String} Current quality identifier
      */
     self.getQuality = () => {
@@ -231,20 +239,18 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Set the playback quality.
-     * 
+     *
      * @public
-     * @param {String} quality 
+     * @param {String} quality
      */
-    self.setQuality = (quality) => {
-      player.setQuality(quality).then((q) => {
-        currentQuality = q;
-        self.trigger('qualityChange', currentQuality);
-      });
+    self.setQuality = async (quality) => {
+      currentQuality = await player.setQuality(quality);
+      self.trigger('qualityChange', currentQuality);
     };
 
     /**
      * Start the video.
-     * 
+     *
      * @public
      */
     self.play = async () => {
@@ -270,7 +276,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Pause the video.
-     * 
+     *
      * @public
      */
     self.pause = () => {
@@ -281,12 +287,12 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Seek video to given time.
-     * 
+     *
      * @public
-     * @param {Number} time 
+     * @param {Number} time
      */
-    self.seek = (time) => {
-      player.setCurrentTime(time);
+    self.seek = async (time) => {
+      currentTime = await player.setCurrentTime(time);
     };
 
     /**
@@ -307,7 +313,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get percentage of video that is buffered.
-     * 
+     *
      * @public
      * @returns {Number} Between 0 and 100
      */
@@ -317,29 +323,25 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Mute the video.
-     * 
+     *
      * @public
      */
-    self.mute = () => {
-      player.setMuted(true).then(() => {
-        isMuted = true;
-      });
+    self.mute = async () => {
+      isMuted = await player.setMuted(true);
     };
 
     /**
      * Unmute the video.
-     * 
+     *
      * @public
      */
-    self.unMute = () => {
-      player.setMuted(false).then(() => {
-        isMuted = false;
-      });
+    self.unMute = async () => {
+      isMuted = await player.setMuted(false);
     };
 
     /**
      * Whether the video is muted.
-     * 
+     *
      * @public
      * @returns {Boolean} True if the video is muted, false otherwise
      */
@@ -349,7 +351,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get the video player's current sound volume.
-     * 
+     *
      * @public
      * @returns {Number} Between 0 and 100.
      */
@@ -359,19 +361,17 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Set the video player's sound volume.
-     * 
+     *
      * @public
-     * @param {Number} level 
+     * @param {Number} level
      */
-    self.setVolume = (level) => {
-      player.setVolume(level).then(() => {
-        volume = level;
-      });
+    self.setVolume = async (level) => {
+      volume = await player.setVolume(level);
     };
 
     /**
      * Get list of available playback rates.
-     * 
+     *
      * @public
      * @returns {Array} Available playback rates
      */
@@ -381,7 +381,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get the current playback rate.
-     * 
+     *
      * @public
      * @returns {Number} e.g. 0.5, 1, 1.5 or 2
      */
@@ -391,20 +391,18 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Set the current playback rate.
-     * 
+     *
      * @public
      * @param {Number} rate Must be one of available rates from getPlaybackRates
      */
-    self.setPlaybackRate = (rate) => {
-      player.setPlaybackRate(rate).then(() => {
-        playbackRate = rate;
-        self.trigger('playbackRateChange', rate);
-      });
+    self.setPlaybackRate = async (rate) => {
+      playbackRate = await player.setPlaybackRate(rate);
+      self.trigger('playbackRateChange', rate);
     };
 
     /**
      * Set current captions track.
-     * 
+     *
      * @public
      * @param {H5P.Video.LabelValue} track Captions to display
      */
@@ -422,7 +420,7 @@ H5P.VideoVimeo = (function ($) {
 
     /**
      * Get current captions track.
-     * 
+     *
      * @public
      * @returns {H5P.Video.LabelValue}
      */
@@ -435,7 +433,7 @@ H5P.VideoVimeo = (function ($) {
         return;
       }
 
-      if (!player) {
+      if (player === undefined) {
         // Player isn't created yet. Try again.
         createVimeoPlayer();
         return;
@@ -490,16 +488,16 @@ H5P.VideoVimeo = (function ($) {
 
   /**
    * Load the Vimeo Player SDK asynchronously.
-   * 
+   *
    * @private
    * @returns {Promise} Vimeo Player SDK object
    */
-  const loadVimeoPlayerSDK = () => {
+  const loadVimeoPlayerSDK = async () => {
     if (window.Vimeo) {
-      return Promise.resolve(window.Vimeo);
+      return await Promise.resolve(window.Vimeo);
     }
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const tag = document.createElement('script');
       tag.src = 'https://player.vimeo.com/api/player.js';
       tag.onload = () => resolve(window.Vimeo);
