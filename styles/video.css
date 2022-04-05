@@ -25,3 +25,10 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+/* Fullscreen special handling for Vimeo Player */
+.h5p-video.h5p-vimeo.h5p-fullscreen div[id^=h5p-vimeo-] > div {
+  /* This overrides the Vimeo Player SDKs `responsive` mode while in fullscreen
+   so that the player does not get clipped by the bottom of the screen. */
+  position: unset !important;
+}
