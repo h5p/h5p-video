@@ -339,6 +339,14 @@ H5P.VideoHtml5 = (function ($) {
      */
     self.appendTo = function ($container) {
       $container.append(video);
+
+      if (isSupportedHlsType(getType({path: video.src}))) {
+        if (!window.Hls) {
+          self.loadHlsJsAndInitialize();
+        } else {
+          self.initializeHlsVideo();
+        }
+      }
     };
 
     /**
@@ -655,6 +663,28 @@ H5P.VideoHtml5 = (function ($) {
       return null;
     };
 
+    /**
+     * Initialize HLS video.
+     */
+    self.initializeHlsVideo = function() {
+      var hls = new window.Hls();
+      hls.loadSource(video.src);
+      hls.attachMedia(video);
+    };
+
+    /**
+     * Load HLS.js library.
+     */
+    self.loadHlsJsAndInitialize = function() {
+      var tag = document.createElement('script');
+      tag.src = "https://cdn.jsdelivr.net/npm/hls.js@1";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      tag.addEventListener('load', () => {
+        self.initializeHlsVideo()
+      })
+    };
+
     // Register event listeners
     mapEvent('ended', 'stateChange', H5P.Video.ENDED);
     mapEvent('playing', 'stateChange', H5P.Video.PLAYING);
@@ -736,7 +766,7 @@ H5P.VideoHtml5 = (function ($) {
     // Cycle through sources
     for (var i = 0; i < sources.length; i++) {
       var type = getType(sources[i]);
-      if (type && video.canPlayType(type) !== '') {
+      if (type && (video.canPlayType(type) !== '' || isSupportedHlsType(type))) {
         // We should be able to play this
         return true;
       }
@@ -771,6 +801,18 @@ H5P.VideoHtml5 = (function ($) {
   };
 
   /**
+   * Checks if the video type is an HLS stream and if the browser can play it.
+   * @param {string} type Mime type of video
+   * @returns {boolean} True if HLS type and HLS is supported, false otherwise
+   */
+  var isSupportedHlsType = function(type) {
+    if (type === 'application/x-mpegURL' || type === 'application/vnd.apple.mpegurl' || type === 'video/m3u8') {
+      return true;
+    }
+    return false
+  }
+
+  /**
    * Sort sources into qualities.
    *
    * @private
@@ -792,7 +834,7 @@ H5P.VideoHtml5 = (function ($) {
       var type = source.type = getType(source);
 
       // Check if we support this type
-      var isPlayable = type && (type === 'video/unknown' || video.canPlayType(type) !== '');
+      var isPlayable = type && (type === 'video/unknown' || video.canPlayType(type) !== '' || isSupportedHlsType(type));
       if (!isPlayable) {
         continue; // We cannot play this source
       }
