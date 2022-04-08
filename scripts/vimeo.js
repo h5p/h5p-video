@@ -254,6 +254,11 @@ H5P.VideoVimeo = (function ($) {
      * @public
      */
     self.play = async () => {
+      if (!player) {
+        self.on('ready', self.play);
+        return;
+      }
+
       try {
         await player.play();
       }
