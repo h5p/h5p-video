@@ -9,7 +9,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Object} parameters.visuals Visual options
    * @param {Object} parameters.playback Playback options
    * @param {Object} parameters.a11y Accessibility options
-   * @param {Boolean} [parameters.startAt] Start time of video 
+   * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
    */
   function Video(parameters, id) {
@@ -79,6 +79,45 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     });
 
     /**
+     * Handle autoplay. If autoplay is disabled, it will still autopause when
+     * video is not visible.
+     *
+     * @param {*} $container
+     */
+    const handleAutoPlayPause = function ($container) {
+      // Keep the current state
+      let state;
+      self.on('stateChange', function(event) {
+        state = event.data;
+      });
+
+      // Keep record of autopauses.
+      // I.e: we don't wanna autoplay if the user has excplicitly paused.
+      self.autoPaused = true;
+
+      new IntersectionObserver(function (entries) {
+        const entry = entries[0];
+
+        // This video element became visible
+        if (entry.isIntersecting) {
+          // Autoplay if autoplay is enabled and it was not explicitly
+          // paused by a user
+          if (parameters.playback.autoplay && self.autoPaused) {
+            self.autoPaused = false;
+            self.play();
+          }
+        }
+        else if (state !== Video.PAUSED) {
+          self.autoPaused = true;
+          self.pause();
+        }
+      }, {
+        root: null,
+        threshold: [0, 1] // Get events when it is shown and hidden
+      }).observe($container.get(0));
+    };
+
+    /**
      * Attaches the video handler to the given container.
      * Inserts text if no handler is found.
      *
@@ -90,14 +129,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       if (self.appendTo !== undefined) {
         self.appendTo($container);
+
+        // Avoid autoplaying in authoring tool
+        if (window.H5PEditor === undefined) {
+          handleAutoPlayPause($container);
+        }
+      }
+      else if (sources.length) {
+        $container.text(parameters.l10n.noPlayers);
       }
       else {
-        if (sources.length) {
-          $container.text(parameters.l10n.noPlayers);
-        }
-        else {
-          $container.text(parameters.l10n.noSources);
-        }
+        $container.text(parameters.l10n.noSources);
       }
     };
 
@@ -120,7 +162,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     if (sources.length) {
       const options = {
         controls: parameters.visuals.controls,
-        autoplay: parameters.playback.autoplay,
+        autoplay: false,
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
