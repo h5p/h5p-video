@@ -39,7 +39,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         mediaEncrypted: 'Media encrypted.',
         unknownError: 'Unknown error.',
         vimeoPasswordError: 'Password-protected Vimeo videos are not supported.',
-        vimeoPrivacyError: 'The vimeo video cannot be used due to its privacy settings.',
+        vimeoPrivacyError: 'The Vimeo video cannot be used due to its privacy settings.',
+        vimeoLoadingError: ' The Vimeo video could not be loaded.',
         invalidYtId: 'Invalid YouTube ID.',
         unknownYtId: 'Unable to find video with the given YouTube ID.',
         restrictedYt: 'The owner of this video does not allow it to be embedded.'

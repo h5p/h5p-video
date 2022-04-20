@@ -32,3 +32,8 @@
    so that the player does not get clipped by the bottom of the screen. */
   position: unset !important;
 }
+
+/* Constrain loading indicator to video's container when used as intro media */
+.h5p-video.h5p-vimeo.h5p-question-video {
+  position: relative;
+}

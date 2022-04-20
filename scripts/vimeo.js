@@ -28,6 +28,9 @@ H5P.VideoVimeo = (function ($) {
     let volume = 0;
     let playbackRate = 1;
     let qualities = [];
+    let loadingFailedTimeout;
+
+    const LOADING_TIMEOUT_IN_SECONDS = 8;
 
     const id = `h5p-vimeo-${++numInstances}`;
     const $wrapper = $('<div/>');
@@ -73,7 +76,21 @@ H5P.VideoVimeo = (function ($) {
       player = new Vimeo.Player(id, embedOptions);
 
       registerVimeoPlayerEventListeneners(player);
+
+      // Failsafe timeout to handle failed loading of videos.
+      // This seems to happen for private videos even though the SDK docs
+      // suggests to catch PrivacyError when attempting play()
+      loadingFailedTimeout = setTimeout(() => {
+        removeLoadingIndicator();
+        $placeholder.html(`<p>${l10n.vimeoLoadingError}</p>`);
+        self.trigger('resize');
+        self.trigger('error', l10n.vimeoLoadingError);
+      }, LOADING_TIMEOUT_IN_SECONDS * 1000);
     }
+
+    const removeLoadingIndicator = () => {
+      $placeholder.find('div.h5p-video-loading').remove();
+    };
 
     /**
      * Register event listeners on the given Vimeo player.
@@ -83,6 +100,9 @@ H5P.VideoVimeo = (function ($) {
      */
     const registerVimeoPlayerEventListeneners = (player) => {
       player.on('loaded', async () => {
+
+        clearTimeout(loadingFailedTimeout);
+
         const videoDetails = await getVimeoVideoMetadata(player);
         const { tracks } = videoDetails;
         currentTextTrack = tracks.current;
@@ -90,7 +110,7 @@ H5P.VideoVimeo = (function ($) {
         qualities = videoDetails.qualities;
         currentQuality = 'auto';
 
-        $placeholder.find('div.h5p-video-loading').remove();
+        removeLoadingIndicator();
 
         if (options.startAt) {
           // Vimeo.Player doesn't have an option for setting start time upon
