@@ -37,3 +37,10 @@
 .h5p-video.h5p-vimeo.h5p-question-video {
   position: relative;
 }
+
+.vimeo-failed-loading {
+  color: #fff;
+  text-align: center;
+  padding: 2.5em 1em;
+  background: #222;
+}

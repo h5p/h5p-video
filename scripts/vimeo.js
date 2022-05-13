@@ -29,6 +29,7 @@ H5P.VideoVimeo = (function ($) {
     let playbackRate = 1;
     let qualities = [];
     let loadingFailedTimeout;
+    let failedLoading = false;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -81,8 +82,13 @@ H5P.VideoVimeo = (function ($) {
       // This seems to happen for private videos even though the SDK docs
       // suggests to catch PrivacyError when attempting play()
       loadingFailedTimeout = setTimeout(() => {
+        failedLoading = true;
         removeLoadingIndicator();
-        $placeholder.html(`<p>${l10n.vimeoLoadingError}</p>`);
+        $wrapper.html(`<p class="vimeo-failed-loading">${l10n.vimeoLoadingError}</p>`);
+        $wrapper.css({
+          width: null,
+          height: null
+        });
         self.trigger('resize');
         self.trigger('error', l10n.vimeoLoadingError);
       }, LOADING_TIMEOUT_IN_SECONDS * 1000);
@@ -454,7 +460,7 @@ H5P.VideoVimeo = (function ($) {
     };
 
     self.on('resize', () => {
-      if (!$wrapper.is(':visible')) {
+      if (failedLoading || !$wrapper.is(':visible')) {
         return;
       }
 
