@@ -109,11 +109,11 @@ H5P.VideoWarpwire = (function ($) {
 
     /**
      * Indicates if the video must be clicked for it to start playing.
-     * For instance Warpwire videos on iPad must be pressed to start playing.
+	 * Warpwire videos always require clicking to start.
      *
      * @public
      */
-     self.pressToPlay = navigator.userAgent.match(/iPad/i) ? true : false;
+     self.pressToPlay = true;
 
     /**
     * Appends the video player to the DOM.
