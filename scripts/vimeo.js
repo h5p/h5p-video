@@ -30,6 +30,7 @@ H5P.VideoVimeo = (function ($) {
     let qualities = [];
     let loadingFailedTimeout;
     let failedLoading = false;
+    let ratio = 9/16;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -115,6 +116,10 @@ H5P.VideoVimeo = (function ($) {
         duration = videoDetails.duration;
         qualities = videoDetails.qualities;
         currentQuality = 'auto';
+        try {
+          ratio = videoDetails.dimensions.height / videoDetails.dimensions.width;
+        }
+        catch (e) { /* Intentionally ignore this, and fallback on the default ratio */ }
 
         removeLoadingIndicator();
 
@@ -477,7 +482,7 @@ H5P.VideoVimeo = (function ($) {
       });
 
       const width = $wrapper[0].clientWidth;
-      const height = options.fit ? $wrapper[0].clientHeight : (width * (9/16));
+      const height = options.fit ? $wrapper[0].clientHeight : (width * (ratio));
 
       // Validate height before setting
       if (height > 0) {
