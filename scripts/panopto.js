@@ -64,7 +64,10 @@ H5P.VideoPanopto = (function ($) {
         events: {
           onIframeReady: function () {
             $placeholder.children(0).text('');
-            player.loadVideo();
+            // Check if Interactive Video override params has autoplay enabled
+            if(self.parent.hasOwnProperty('autoplay') && self.parent.autoplay) {
+              player.loadVideo();
+            }
             self.trigger('containerLoaded');
           },
           onReady: function () {
@@ -83,7 +86,6 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-            self.pause();
           },
           onStateChange: function (state) {
             // TODO: Playback rate fix for IE11?
