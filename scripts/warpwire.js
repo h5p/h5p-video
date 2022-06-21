@@ -450,7 +450,7 @@ H5P.VideoWarpwire = (function ($) {
    */
 
   var getId = function (url) {
-    const matches = url.match(/^[^\/]+:\/\/([^\/]*\.[^\/]+)\/w\/(.+)\/.*$/);
+    const matches = url.match(/^https?:\/\/([^\/]*\.[^\/]+)\/w\/([-_0-9a-zA-Z]{6,8})\/.*$/);
     if (matches && matches.length === 3) {
       return [matches[1], matches[2]];
     }
