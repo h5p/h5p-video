@@ -46,6 +46,9 @@ H5P.VideoPanopto = (function ($) {
 
       const videoId = getId(sources[0].path);
 
+      // Check if autoplay is checked turned on
+      const isAutoPlay = (self.parent && self.parent.autoplay) || options.autoplay;
+
       player = new EmbedApi(id, {
         width: width,
         height: width * (9/16),
@@ -56,7 +59,7 @@ H5P.VideoPanopto = (function ($) {
           showtitle: false,
           autohide: true,
           offerviewer: false,
-          autoplay: !!options.autoplay,
+          autoplay: !!isAutoPlay,
           showbrand: false,
           start: 0,
           hideoverlay: !options.controls,
@@ -64,8 +67,8 @@ H5P.VideoPanopto = (function ($) {
         events: {
           onIframeReady: function () {
             $placeholder.children(0).text('');
-            // Check if Interactive Video override params has autoplay enabled
-            if(self.parent.hasOwnProperty('autoplay') && self.parent.autoplay) {
+            // Check if autoplay is enabled and using Panopto API to load video
+            if(isAutoPlay) {
               player.loadVideo();
             }
             self.trigger('containerLoaded');

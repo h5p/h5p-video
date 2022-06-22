@@ -163,7 +163,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     if (sources.length) {
       const options = {
         controls: parameters.visuals.controls,
-        autoplay: false,
+        autoplay: parameters.playback.autoplay || false,
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
