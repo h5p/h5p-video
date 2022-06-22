@@ -72,9 +72,9 @@ H5P.VideoPanopto = (function ($) {
               player.loadVideo();
             }
             self.trigger('containerLoaded');
+            self.trigger('loaded');
           },
           onReady: function () {
-            self.trigger('loaded');
             if (player.hasCaptions()) {
               const captions = [];
 
