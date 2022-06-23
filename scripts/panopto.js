@@ -67,14 +67,11 @@ H5P.VideoPanopto = (function ($) {
         events: {
           onIframeReady: function () {
             $placeholder.children(0).text('');
-            // Check if autoplay is enabled and using Panopto API to load video
-            if(isAutoPlay) {
-              player.loadVideo();
-            }
+            player.loadVideo();
             self.trigger('containerLoaded');
-            self.trigger('loaded');
           },
           onReady: function () {
+            self.trigger('loaded');
             if (player.hasCaptions()) {
               const captions = [];
 
@@ -88,6 +85,10 @@ H5P.VideoPanopto = (function ($) {
               currentTrack = captions[currentTrack] ? captions[currentTrack] : null;
 
               self.trigger('captions', captions);
+            }
+            // Check if autoplay is enabled and using Panopto API to load video
+            if(!isAutoPlay) {
+              self.pause();
             }
           },
           onStateChange: function (state) {
