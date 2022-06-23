@@ -86,7 +86,7 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-            // Check if autoplay is enabled and using Panopto API to load video
+            // Check if autoplay is disabled to pause the video
             if(!isAutoPlay) {
               self.pause();
             }
