@@ -198,7 +198,8 @@ H5P.VideoHtml5 = (function ($) {
     // Set options
     video.disableRemotePlayback = (options.disableRemotePlayback ? true : false);
     video.controls = (options.controls ? true : false);
-    video.autoplay = (options.autoplay ? true : false);
+    // Hardcoded autoplay to false to avoid playing videos on init
+    video.autoplay = false;
     video.loop = (options.loop ? true : false);
     video.className = 'h5p-video';
     video.style.display = 'block';
