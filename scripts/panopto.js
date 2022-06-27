@@ -46,6 +46,9 @@ H5P.VideoPanopto = (function ($) {
 
       const videoId = getId(sources[0].path);
 
+      // Check if autoplay is checked turned on
+      const isAutoPlay = (self.parent && self.parent.autoplay) || options.autoplay;
+
       player = new EmbedApi(id, {
         width: width,
         height: width * (9/16),
@@ -56,7 +59,7 @@ H5P.VideoPanopto = (function ($) {
           showtitle: false,
           autohide: true,
           offerviewer: false,
-          autoplay: !!options.autoplay,
+          autoplay: !!isAutoPlay,
           showbrand: false,
           start: 0,
           hideoverlay: !options.controls,
@@ -83,7 +86,10 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-            self.pause();
+            // Check if autoplay is disabled to pause the video
+            if(!isAutoPlay) {
+              self.pause();
+            }
           },
           onStateChange: function (state) {
             // TODO: Playback rate fix for IE11?
