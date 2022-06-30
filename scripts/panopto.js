@@ -14,6 +14,7 @@ H5P.VideoPanopto = (function ($) {
 
     var player;
     var playbackRate = 1;
+    let canHasPlay;
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
 
@@ -45,10 +46,6 @@ H5P.VideoPanopto = (function ($) {
       }
 
       const videoId = getId(sources[0].path);
-
-      // Check if autoplay is checked turned on
-      const isAutoPlay = (self.parent && self.parent.autoplay) || options.autoplay;
-
       player = new EmbedApi(id, {
         width: width,
         height: width * (9/16),
@@ -59,7 +56,7 @@ H5P.VideoPanopto = (function ($) {
           showtitle: false,
           autohide: true,
           offerviewer: false,
-          autoplay: !!isAutoPlay,
+          autoplay: false,
           showbrand: false,
           start: 0,
           hideoverlay: !options.controls,
@@ -69,6 +66,7 @@ H5P.VideoPanopto = (function ($) {
             $placeholder.children(0).text('');
             player.loadVideo();
             self.trigger('containerLoaded');
+            self.trigger('resize'); // Avoid black iframe if loading is slow
           },
           onReady: function () {
             self.trigger('loaded');
@@ -86,9 +84,9 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-            // Check if autoplay is disabled to pause the video
-            if(!isAutoPlay) {
-              self.pause();
+
+            if (!canHasPlay) {
+              self.pause(); // Only autoplay if play() has been called before load
             }
           },
           onStateChange: function (state) {
@@ -167,6 +165,7 @@ H5P.VideoPanopto = (function ($) {
      * @public
      */
     self.play = function () {
+      canHasPlay = true;
       if (!player || !player.playVideo) {
         return;
       }
@@ -179,6 +178,7 @@ H5P.VideoPanopto = (function ($) {
      * @public
      */
     self.pause = function () {
+      canHasPlay = false;
       if (!player || !player.pauseVideo) {
         return;
       }
@@ -187,7 +187,7 @@ H5P.VideoPanopto = (function ($) {
       }
       catch (err) {
         // Swallow Panopto throwing an error. This has been seen in the authoring
-        // tool if Panopto has been used inside Iv inside CP 
+        // tool if Panopto has been used inside Iv inside CP
       }
     };
 
@@ -357,12 +357,10 @@ H5P.VideoPanopto = (function ($) {
      */
     self.setCaptionsTrack = function (track) {
       if (!track) {
-        console.log('Disable captions');
         player.disableCaptions();
         currentTrack = null;
       }
       else {
-        console.log('Set captions', track.value);
         player.enableCaptions(track.value + '');
         currentTrack = track;
       }
