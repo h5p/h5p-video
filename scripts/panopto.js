@@ -12,6 +12,8 @@ H5P.VideoPanopto = (function ($) {
   function Panopto(sources, options, l10n) {
     var self = this;
 
+    self.volume = 100;
+
     var player;
     var playbackRate = 1;
     let canHasPlay;
@@ -98,8 +100,15 @@ H5P.VideoPanopto = (function ($) {
           onPlaybackRateChange: function () {
             self.trigger('playbackRateChange', self.getPlaybackRate());
           },
-          onError: function () {
-            self.trigger('error', l10n.unknownError);
+          onError: function (error) {
+            if (error === ApiError.PlayWithSoundNotAllowed) {
+              setTimeout(function () {
+                self.unMute();
+              }, 10);
+            }
+            else {
+              self.trigger('error', l10n.unknownError);
+            }
           },
           onLoginShown: function () {
             $placeholder.children().first().remove(); // Remove loading message
@@ -267,6 +276,10 @@ H5P.VideoPanopto = (function ($) {
       }
 
       player.unmuteVideo();
+
+      // The volume is set to 0 when the browser prevents autoplay, 
+      // causing there to be no sound despite unmuting
+      self.setVolume(self.volume);
     };
 
     /**
@@ -309,6 +322,7 @@ H5P.VideoPanopto = (function ($) {
       }
 
       player.setVolume(level/100);
+      self.volume = level;
     };
 
     /**
