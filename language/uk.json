@@ -97,7 +97,7 @@
         {
           "label": "Додати відео трек",
           "entity": "Трек",
-          "fields": {
+          "field": {
             "label": "Трек",
             "fields": [
               {
