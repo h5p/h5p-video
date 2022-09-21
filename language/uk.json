@@ -97,14 +97,14 @@
         {
           "label": "Додати відео трек",
           "entity": "Трек",
-          "fields": {
+          "field": {
             "label": "Трек",
             "fields": [
               {
                 "label": "Надпись трека"
               },
               {
-                "label": "Введіть тип, зверніться до <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\" >стандарт життя HTML</a>",
+                "label": "Введіть тип, зверніться до <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">стандарт життя HTML</a>",
                 "options": [
                   {
                     "label": "Субтитри"
