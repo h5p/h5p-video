@@ -60,7 +60,8 @@ H5P.VideoYouTube = (function ($) {
         videoId: videoId,
         playerVars: {
           origin: ORIGIN,
-          autoplay: options.autoplay ? 1 : 0,
+          // Hardcoded autoplay to false to avoid playing videos on init
+          autoplay: 0,
           controls: options.controls ? 1 : 0,
           disablekb: options.controls ? 0 : 1,
           fs: 0,

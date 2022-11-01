@@ -67,7 +67,8 @@ H5P.VideoVimeo = (function ($) {
         controls: options.controls ? true : false,
         responsive: true,
         dnt: true,
-        autoplay: options.autoplay ? true : false,
+        // Hardcoded autoplay to false to avoid playing videos on init
+        autoplay: false,
         loop: options.loop ? true : false,
         playsinline: true,
         quality: 'auto',
