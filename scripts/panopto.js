@@ -31,9 +31,6 @@ H5P.VideoPanopto = (function ($) {
       if (document.featurePolicy.allowsFeature('autoplay') !== false) {
         canHasAutoplay = true;
       }
-      else {
-
-      }
     }
     catch (err) {}
     let canHasPlay = !canHasAutoplay;
