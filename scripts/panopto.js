@@ -16,7 +16,7 @@ H5P.VideoPanopto = (function ($) {
 
     var player;
     var playbackRate = 1;
-    let canHasPlay;
+    let canHasAutoplay;
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
 
@@ -25,6 +25,18 @@ H5P.VideoPanopto = (function ($) {
       id: id,
       html: '<div>' + l10n.loading + '</div>'
     }).appendTo($wrapper);
+
+    // Determine autoplay/play.
+    try {
+      if (document.featurePolicy.allowsFeature('autoplay') !== false) {
+        canHasAutoplay = true;
+      }
+      else {
+
+      }
+    }
+    catch (err) {}
+    let canHasPlay = !canHasAutoplay;
 
     /**
      * Use the Panopto API to create a new player
@@ -66,7 +78,9 @@ H5P.VideoPanopto = (function ($) {
         events: {
           onIframeReady: function () {
             $placeholder.children(0).text('');
-            player.loadVideo();
+            if (canHasAutoplay) {
+              player.loadVideo();
+            }
             self.trigger('containerLoaded');
             self.trigger('resize'); // Avoid black iframe if loading is slow
           },
@@ -277,7 +291,7 @@ H5P.VideoPanopto = (function ($) {
 
       player.unmuteVideo();
 
-      // The volume is set to 0 when the browser prevents autoplay, 
+      // The volume is set to 0 when the browser prevents autoplay,
       // causing there to be no sound despite unmuting
       self.setVolume(self.volume);
     };
