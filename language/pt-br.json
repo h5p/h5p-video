@@ -1,22 +1,22 @@
 {
   "semantics": [
     {
-      "label": "Arquivos de vídeo",
-      "description": "Para se assegurar que todos os navegadores suportem o vídeo, você deve fazer upload de ambos formatos WebM e MP4."
+      "label": "Fontes de vídeo",
+      "description": "Para garantir que o vídeo funcione em todos os navegadores, você deve adicionar fontes no formato WebM e MP4."
     },
     {
       "label": "Visuais",
       "fields": [
         {
-          "label": "Imagem de cartaz"
+          "label": "Imagem do cartaz"
         },
         {
-          "label": "Encaixar o reprodutor de vídeo para ocupar todo o espaço disponível",
-          "description": "Se não habilitado, o reprodutor terá o mesmo tamanho do vídeo fornecido."
+          "label": "Ajustar o reprodutor de vídeo para ocupar todo o espaço disponível",
+          "description": "Caso não seja configurado, o vídeo-player terá a mesma relação de aspecto do vídeo."
         },
         {
-          "label": "Mostrar controles do reprodutor de vídeo",
-          "description": "Adiciona controles ao reprodutor de vídeo. Isso permite que o usuário reproduza o vídeo, pause, etc."
+          "label": "Mostrar os controles do reprodutor de vídeo",
+          "description": "Acrescentar controles ao reprodutor de vídeo. Isto permite que os usuários reproduzam, pausem, etc."
         }
       ]
     },
@@ -24,17 +24,17 @@
       "label": "Reprodução",
       "fields": [
         {
-          "label": "Reprodução automática de vídeo",
+          "label": "Reprodução automática do vídeo",
           "description": "O vídeo é reproduzido automaticamente. Pode não funcionar em dispositivos móveis."
         },
         {
-          "label": "Vídeo em loop",
-          "description": "Automaticamente reproduz o vídeo novamente após seu término."
+          "label": "Vídeo reproduzido em sequência (loop)",
+          "description": "Recomeçar automaticamente o vídeo após o término."
         }
       ]
     },
     {
-      "label": "Localização de vídeo",
+      "label": "Localização do vídeo",
       "fields": [
         {
           "label": "Nome",
@@ -43,27 +43,27 @@
         },
         {
           "label": "Carregando",
-          "default": "Reprodutor de vídeo carregando..."
+          "default": "Carregamento do reprodutor de vídeo..."
         },
         {
           "label": "Nenhum reprodutor encontrado",
-          "default": "Nenhum reprodutor de vídeo para o formato fornecido foi encontrado."
+          "default": "Nenhum reprodutor de vídeo que suporte o formato de vídeo em questão foi encontrado."
         },
         {
           "label": "Sem fontes",
-          "default": "Vídeo não possui fonte."
+          "default": "O vídeo não possui fonte."
         },
         {
           "label": "Abortado",
           "default": "A reprodução da mídia foi abortada."
         },
         {
-          "label": "Falha de conexão",
-          "default": "Falha de conexão."
+          "label": "Falha na conexão de rede",
+          "default": "Falha na conexão de rede."
         },
         {
-          "label": "Não foi possível decodificar a mídia",
-          "default": "Não foi possível decodificar a mídia."
+          "label": "Não foi possível decodificar a fonte do vídeo",
+          "default": "Incapaz de decodificar a mídia."
         },
         {
           "label": "Formato não suportado",
@@ -83,11 +83,11 @@
         },
         {
           "label": "ID do YouTube desconhecida",
-          "default": "Incapaz de encontrar o vídeo dada a ID fornecida."
+          "default": "Não foi possível encontrar o vídeo com a ID do YouTube."
         },
         {
-          "label": "Vídeo de YouTube restrito",
-          "default": "O proprietário deste vídeo não permite que seja embutido."
+          "label": "Vídeo restrito do YouTube",
+          "default": "O proprietário deste vídeo não permite que ele seja incorporado."
         }
       ]
     },
@@ -96,7 +96,7 @@
       "fields": [
         {
           "label": "Adicionar faixa de vídeo",
-          "entity": "Track",
+          "entity": "Faixa",
           "field": {
             "label": "Faixa",
             "fields": [
@@ -110,7 +110,7 @@
                     "label": "Legendas"
                   },
                   {
-                    "label": "Legendas(Acessibilidade)"
+                    "label": "Legendas (Acessibilidade)"
                   },
                   {
                     "label": "Descrições"
@@ -121,11 +121,11 @@
                 ]
               },
               {
-                "label": "Idioma fonte, deve ser definido para legendas",
-                "description": "Deve ser um rótulo de linguagem BCP 47 válido. Se 'Legendas' é o tipo de faixa de texto seleciondo, a linguagem fonte da faixa de texto deve ser definida."
+                "label": "O idioma de origem, deve ser definido para as legendas",
+                "description": "Deve ser uma tag de idioma BCP 47 válido. Se 'Legendas' é o tipo de faixa de texto seleciondo, o idioma fonte da faixa de texto deve ser definido."
               },
               {
-                "label": "Fonte da faixa (arquivo WebVTT)"
+                "label": "Arquivo de rastreamento (WebVTT)"
               }
             ]
           }
