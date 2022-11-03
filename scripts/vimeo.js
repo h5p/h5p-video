@@ -62,9 +62,10 @@ H5P.VideoVimeo = (function ($) {
       const MIN_WIDTH = 200;
       const width = Math.max($wrapper.width(), MIN_WIDTH);
 
+      const canHasControls = options.controls || self.pressToPlay;
       const embedOptions = {
         url: sources[0].path,
-        controls: options.controls ? true : false,
+        controls: canHasControls,
         responsive: true,
         dnt: true,
         // Hardcoded autoplay to false to avoid playing videos on init
@@ -72,7 +73,9 @@ H5P.VideoVimeo = (function ($) {
         loop: options.loop ? true : false,
         playsinline: true,
         quality: 'auto',
-        width: width
+        width: width,
+        muted: false,
+        keyboard: canHasControls,
       };
 
       // Create a new player
