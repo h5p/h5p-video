@@ -94,7 +94,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       // Keep record of autopauses.
       // I.e: we don't wanna autoplay if the user has excplicitly paused.
-      self.autoPaused = true;
+      self.autoPaused = !self.pressToPlay;
 
       new IntersectionObserver(function (entries) {
         const entry = entries[0];

@@ -62,9 +62,10 @@ H5P.VideoVimeo = (function ($) {
       const MIN_WIDTH = 200;
       const width = Math.max($wrapper.width(), MIN_WIDTH);
 
+      const canHasControls = options.controls || self.pressToPlay;
       const embedOptions = {
         url: sources[0].path,
-        controls: options.controls ? true : false,
+        controls: canHasControls,
         responsive: true,
         dnt: true,
         // Hardcoded autoplay to false to avoid playing videos on init
@@ -72,7 +73,9 @@ H5P.VideoVimeo = (function ($) {
         loop: options.loop ? true : false,
         playsinline: true,
         quality: 'auto',
-        width: width
+        width: width,
+        muted: false,
+        keyboard: canHasControls,
       };
 
       // Create a new player
@@ -107,12 +110,13 @@ H5P.VideoVimeo = (function ($) {
      * @param {Vimeo.Player} player
      */
     const registerVimeoPlayerEventListeneners = (player) => {
+      let isFirstPlay, tracks;
       player.on('loaded', async () => {
-
+        isFirstPlay = true;
         clearTimeout(loadingFailedTimeout);
 
         const videoDetails = await getVimeoVideoMetadata(player);
-        const { tracks } = videoDetails;
+        tracks = videoDetails.tracks.options;
         currentTextTrack = tracks.current;
         duration = videoDetails.duration;
         qualities = videoDetails.qualities;
@@ -132,9 +136,17 @@ H5P.VideoVimeo = (function ($) {
 
         self.trigger('ready');
         self.trigger('loaded');
-        self.trigger('captions', tracks.options);
         self.trigger('qualityChange', currentQuality);
         self.trigger('resize');
+      });
+
+      player.on('play', () => {
+        if (isFirstPlay) {
+          isFirstPlay = false;
+          if (tracks.length) {
+            self.trigger('captions', tracks);
+          }
+        }
       });
 
       // Handle playback state changes.
@@ -238,6 +250,13 @@ H5P.VideoVimeo = (function ($) {
         player.getVideoHeight(),
       ]).then(data => massageVideoMetadata(data));
     }
+
+    try {
+      if (document.featurePolicy.allowsFeature('autoplay') === false) {
+        self.pressToPlay = true;
+      }
+    }
+    catch (err) {}
 
     /**
      * Appends the video player to the DOM.
