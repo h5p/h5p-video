@@ -1,131 +1,131 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Źródła wideo",
+      "description": "Aby upewnić się, że wideo działa we wszystkich przeglądarkach, należy dodać źródła w formacie WebM i MP4."
     },
     {
-      "label": "Visuals",
+      "label": "Wizualizacje",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Obraz plakatu"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Dopasuj odtwarzacz wideo, aby wykorzystać całą dostępną przestrzeń ekranu",
+          "description": "Jeśli nie jest ustawiony, odtwarzacz wideo będzie miał takie same proporcje jak wideo."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Pokaż panel sterujący odtwarzacza wideo",
+          "description": "Dodaj elementy panelu sterującego do odtwarzacza wideo. Pozwala to użytkownikom na odtwarzanie, wstrzymywanie itp."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Odtwarzanie nagranego dźwięku",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Automatyczne odtwarzanie wideo",
+          "description": "Rozpocznij automatyczne odtwarzanie wideo. Może nie działać na urządzeniach mobilnych."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Zapętl wideo",
+          "description": "Automatycznie rozpocznij odtwarzanie wideo od nowa po jego zakończeniu."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Tłumaczenie wideo",
       "fields": [
         {
-          "label": "Name",
-          "default": "Video",
-          "description": "Helps identify content of this type."
+          "label": "Nazwa",
+          "default": "Wideo",
+          "description": "Pomaga zidentyfikować treści tego typu."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Ładowanie",
+          "default": "Ładowanie odtwarzacza wideo..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Nie znaleziono odtwarzaczy",
+          "default": "Nie znaleziono odtwarzaczy wideo obsługujących dany format wideo."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Brak źródeł",
+          "default": "Brak źródeł dla wideo"
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Przerwane",
+          "default": "Odtwarzanie multimediów zostało przerwane."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Awaria sieci",
+          "default": "Awaria sieci."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Nie można odkodować źródła wideo",
+          "default": "Nie można odkodować multimediów."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Nieobsługiwany format",
+          "default": "Nieobsługiwany format wideo."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Zaszyfrowane multimedia",
+          "default": "Zaszyfrowane multimedia."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Nieznany błąd",
+          "default": "Nieznany błąd."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Nieważne YouTube ID",
+          "default": "Nieważne YouTube ID."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Nieznane YouTube ID",
+          "default": "Nie można znaleźć wideo z podanym YouTube ID."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Ograniczone wideo YouTube",
+          "default": "Właściciel tego wideo nie pozwala na jego osadzenie."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Dostępność",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Dodaj ścieżkę wideo",
+          "entity": "Ścieżka",
           "field": {
-            "label": "Track",
+            "label": "Ścieżka",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Etykieta ścieżki"
               },
               {
-                "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
+                "label": "Wpisz rodzaj, który odnosi się do <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Napisy"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Podpisy"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Opisy"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Rozdziały"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Język źródłowy, musi być zdefiniowany dla napisów",
+                "description": "Musi być prawidłowym tagiem języka BCP 47. Jeśli atrybut rodzaju jest ustawiony na napisy, należy zdefiniować srclang (język źródłowy)."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Plik ścieżki (WebVTT)"
               }
             ]
           }
