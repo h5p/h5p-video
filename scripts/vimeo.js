@@ -328,7 +328,8 @@ H5P.VideoVimeo = (function ($) {
      * @param {Number} time
      */
     self.seek = async (time) => {
-      currentTime = await player.setCurrentTime(time);
+      currentTime = time;
+      await player.setCurrentTime(time);
     };
 
     /**
