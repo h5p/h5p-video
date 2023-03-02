@@ -436,11 +436,9 @@ H5P.VideoHtml5 = (function ($) {
           // Always play to get image.
           var playPromise = video.play();
           if (playPromise !== undefined) {
-            playPromise
-              .then(resolvePlaying)
-              .catch(function (error) {
-                resolvePlaying(); // Fallback
-              });
+            playPromise.finally(() => {
+              resolvePlaying();
+            });
           }
           else {
             resolvePlaying(); // Fallback
@@ -507,13 +505,9 @@ H5P.VideoHtml5 = (function ($) {
         // Always play to get image.
         var playPromise = video.play();
         if (playPromise !== undefined) {
-          playPromise
-            .then(function () {
-              video.pause();
-            })
-            .catch(function (error) {
-              video.pause(); // Fallback
-            });
+          playPromise.finally(() => {
+            video.pause();
+          });
         }
         else {
           video.pause(); // Fallback
