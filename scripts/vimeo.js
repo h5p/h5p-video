@@ -31,6 +31,7 @@ H5P.VideoVimeo = (function ($) {
     let loadingFailedTimeout;
     let failedLoading = false;
     let ratio = 9/16;
+    let isLoaded = false;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -113,6 +114,7 @@ H5P.VideoVimeo = (function ($) {
       let isFirstPlay, tracks;
       player.on('loaded', async () => {
         isFirstPlay = true;
+        isLoaded = true;
         clearTimeout(loadingFailedTimeout);
 
         const videoDetails = await getVimeoVideoMetadata(player);
@@ -404,6 +406,16 @@ H5P.VideoVimeo = (function ($) {
      */
     self.isMuted = () => {
       return isMuted;
+    };
+
+    /**
+     * Whether the video is loaded.
+     *
+     * @public
+     * @returns {Boolean} True if the video is muted, false otherwise
+     */
+    self.isLoaded = () => {
+      return isLoaded;
     };
 
     /**

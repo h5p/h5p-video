@@ -718,6 +718,16 @@ H5P.VideoHtml5 = (function ($) {
     nextTick(function () {
       self.trigger('ready');
     });
+
+    /**
+     * Check video is loaded and ready play.
+     *
+     * @public
+     * @param {Boolean}
+     */
+    self.isLoaded = function () {
+      return isLoaded;
+    };
   }
 
   /**
