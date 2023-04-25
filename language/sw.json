@@ -104,7 +104,7 @@
                 "label": "Lebo ya wimbo"
               },
               {
-                "label": "Aina ya aina,<a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\"> rejelea kiwango cha maisha cha Lugha ya kutunga matini ya mtandao}",
+                "label": "Aina ya aina, rejelea <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">kiwango cha maisha cha Lugha ya kutunga matini ya mtandao</a>",
                 "options": [
                   {
                     "label": "Manukuu"
