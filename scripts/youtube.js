@@ -362,6 +362,20 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
+     * Check if video is loaded and ready to play.
+     *
+     * @public
+     * @returns {Boolean}
+     */
+    self.isLoaded = function () {
+      if (!player || !player.getPlayerState) {
+        return;
+      }
+
+      return player.getPlayerState() === 5;
+    };
+
+    /**
      * Return the video sound level.
      *
      * @public

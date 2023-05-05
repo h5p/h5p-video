@@ -19,6 +19,7 @@ H5P.VideoPanopto = (function ($) {
     let canHasAutoplay;
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
+    let isLoaded = false;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -74,6 +75,7 @@ H5P.VideoPanopto = (function ($) {
         },
         events: {
           onIframeReady: function () {
+            isLoaded = true;
             $placeholder.children(0).text('');
             if (canHasAutoplay) {
               player.loadVideo();
@@ -305,6 +307,16 @@ H5P.VideoPanopto = (function ($) {
       }
 
       return player.isMuted();
+    };
+
+    /**
+     * Check video is loaded and ready to play
+     *
+     * @public
+     * @returns {Boolean}
+     */
+    self.isLoaded = function () {
+      return isLoaded;
     };
 
     /**
