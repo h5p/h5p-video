@@ -42,8 +42,8 @@
           "description": "Pomáhá identifikovat obsah tohoto typu."
         },
         {
-          "label": "Načítání",
-          "default": "Načítání video přehrávače..."
+          "label": "Nahrávání",
+          "default": "Nahrávání video přehrávače..."
         },
         {
           "label": "Nebyly nalezeny žádné přehrávače",
