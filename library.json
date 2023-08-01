@@ -25,6 +25,9 @@
       "path": "scripts/panopto.js"
     },
     {
+      "path": "scripts/echo360.js"
+    },
+    {
       "path": "scripts/html5.js"
     },
     {
