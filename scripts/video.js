@@ -51,7 +51,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       disableFullscreen: false
     });
     parameters.startAt = parameters.startAt ||
-      (extras.previousState && extras.previousState.time) ? extras.previousState.time : 0;
+      (extras?.previousState?.time ?? 0) || 0;
 
     /** @private */
     var sources = [];
