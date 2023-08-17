@@ -43,7 +43,7 @@
         },
         {
           "label": "Įkeliama",
-          "default": "Vaizdo grotuvas pasileidžia..."
+          "default": "Vaizdo įrašų grotuvas įkeliamas..."
         },
         {
           "label": "Grotuvai nerasti",
@@ -51,27 +51,27 @@
         },
         {
           "label": "Nėra šaltinių",
-          "default": "Nerastas video šaltinis"
+          "default": "Nerastas video šaltinis."
         },
         {
           "label": "Atšaukta",
-          "default": "Medijos grojimas atšauktas"
+          "default": "Medijos grojimas atšauktas."
         },
         {
           "label": "Tinklo sutrikimas",
-          "default": "Tinklo sutrikimas"
+          "default": "Tinklo sutrikimas."
         },
         {
           "label": "Negalima dekoduoti video",
-          "default": "Negalima dekoduoti medijos"
+          "default": "Negalima dekoduoti medijos."
         },
         {
-          "label": "Nepalaikomas formatas",
-          "default": "Nepalaikomas vaizdo formatas"
+          "label": "Formatas nepalaikomas",
+          "default": "Vaizdo įrašo formatas nepalaikomas."
         },
         {
-          "label": "Media užšifruota",
-          "default": "Media užšifruoti"
+          "label": "Medija užšifruota",
+          "default": "Medija užšifruota."
         },
         {
           "label": "Nežinoma klaida",
@@ -83,7 +83,7 @@
         },
         {
           "label": "Nežinomas YouTube ID",
-          "default": "Nerastas video su duotu YouTube ID."
+          "default": "Nepavyko rasti vaizdo įrašo su nurodytu „YouTube“ ID."
         },
         {
           "label": "Uždraustas YouTube video",
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "label": "Pasiekiamumas",
+      "label": "Pritaikomumas",
       "fields": [
         {
           "entity": "Takelis",
@@ -116,11 +116,11 @@
                     "label": "Skyriai"
                   }
                 ],
-                "label": "Įveskite tipą, nuoroda <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
+                "label": "Įveskite tipą, žr. <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
               },
               {
                 "label": "Originalo kalba turi būti apibrėžta subtitrams",
-                "description": "Turi būti galiojanti BCP 47 kalbos žyma. Jei atributo tipas nustatytas į subtitrus, tada reikia apibrėžti srclang."
+                "description": "Turi būti galiojanti BCP 47 kalbos žyma. Jei tipo atributas nustatytas į subtitrus, tada reikia apibrėžti srclang."
               },
               {
                 "label": "Failo takelis (WebVTT)"
@@ -128,7 +128,7 @@
             ],
             "label": "Takelis"
           },
-          "label": "Pridėti vaizdo takelį"
+          "label": "Pridėti vaizdo įrašo takelį"
         }
       ]
     }
