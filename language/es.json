@@ -8,7 +8,7 @@
       "label": "Efectos visuales",
       "fields": [
         {
-          "label": "Cartel"
+          "label": "Imagen de cartel"
         },
         {
           "label": "Ajustar el reproductor de vídeo para usar todo el espacio disponible",
@@ -24,7 +24,7 @@
       "label": "Reproducción",
       "fields": [
         {
-          "label": "Vídeo de reproducción automática",
+          "label": "Auto-reproducir vídeo",
           "description": "Comenzar a reproducir el vídeo automáticamente. Podría no funcionar en dispositivos móviles."
         },
         {
@@ -58,8 +58,8 @@
           "default": "El reproductor de medios ha sido abortado."
         },
         {
-          "label": "Fallo de red",
-          "default": "Fallo de red."
+          "label": "Falla de la red",
+          "default": "Falla de la red."
         },
         {
           "label": "No se puede decodificar la fuente de vídeo",
@@ -70,8 +70,8 @@
           "default": "Formato de vídeo no soportado."
         },
         {
-          "label": "Medio cifrado",
-          "default": "Medio cifrado."
+          "label": "Medio encriptado",
+          "default": "Medio encriptado."
         },
         {
           "label": "Error desconocido",
