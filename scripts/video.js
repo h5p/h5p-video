@@ -14,7 +14,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    */
   function Video(parameters, id, extras) {
     var self = this;
-    self.oldTime = extras ? extras?.previousState?.oldTime : 0;
+    self.oldTime = extras.previousState?.oldTime;
     self.contentId = id;
 
     // Ref youtube.js - ipad & youtube - issue
