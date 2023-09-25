@@ -14,7 +14,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    */
   function Video(parameters, id, extras) {
     var self = this;
-    self.oldTime = extras.previousState?.oldTime;
+    self.oldTime = extras.previousState?.time;
     self.contentId = id;
 
     // Ref youtube.js - ipad & youtube - issue
@@ -157,14 +157,14 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     /**
     * @public
-    * Get current state for resetting it later.
+    * Get current state for resume support.
     *
     * @returns {object} Current state.
     */
     self.getCurrentState = function () {
       return {
-        oldTime: self.getCurrentTime() || self.oldTime
-      }
+        time: self.getCurrentTime() || self.oldTime,
+      };
     };
 
     /**
