@@ -13,8 +13,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Number} id Content identifier
    */
   function Video(parameters, id, extras) {
-    parameters.startAt = extras ? extras?.previousState?.startAt : 0;
     var self = this;
+    self.oldTime = extras ? extras?.previousState?.oldTime : 0;
     self.contentId = id;
 
     // Ref youtube.js - ipad & youtube - issue
@@ -163,18 +163,18 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     */
     self.getCurrentState = function () {
       return {
-        startAt: self.getCurrentTime() || parameters.startAt
+        oldTime: self.getCurrentTime() || self.oldTime
       }
     };
 
     /**
     * @public
-    * Reset task.
+    * Reset current state (time).
     *
     */
     self.resetTask = function () {
-      parameters.startAt = 0;
-      self.seek(0);
+      delete self.oldTime;
+      self.seek(parameters.startAt || 0);
       self.pause();
     };
 
@@ -191,7 +191,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-        startAt: parameters.startAt || 0,
+        startAt: self.oldTime || parameters.startAt || 0,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
         disableFullscreen: parameters.visuals.disableFullscreen === true
