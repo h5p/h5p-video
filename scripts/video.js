@@ -12,7 +12,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
    */
-  function Video(parameters, id) {
+  function Video(parameters, id, extras) {
+    parameters.startAt = extras ? extras?.previousState?.startAt : 0;
     var self = this;
     self.contentId = id;
 
@@ -88,7 +89,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     const handleAutoPlayPause = function ($container) {
       // Keep the current state
       let state;
-      self.on('stateChange', function(event) {
+      self.on('stateChange', function(event) {
         state = event.data;
       });
 
@@ -152,6 +153,27 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      */
     self.getHandlerName = function() {
       return handlerName;
+    };
+
+    /**
+    * @public
+    * Get current state for resetting it later.
+    *
+    * @returns {object} Current state.
+    */
+    self.getCurrentState = function () {
+      return {
+        startAt: self.getCurrentTime() || parameters.startAt
+      }
+    };
+
+    /**
+    * @public
+    * Reset task.
+    *
+    */
+    self.resetTask = function () {
+      self.seek(0);
     };
 
     // Resize the video when we know its aspect ratio
