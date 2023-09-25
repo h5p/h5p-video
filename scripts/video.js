@@ -12,8 +12,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
    */
-  function Video(parameters, id) {
+  function Video(parameters, id, extras) {
     var self = this;
+    self.oldTime = extras.previousState?.time;
     self.contentId = id;
 
     // Ref youtube.js - ipad & youtube - issue
@@ -88,7 +89,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     const handleAutoPlayPause = function ($container) {
       // Keep the current state
       let state;
-      self.on('stateChange', function(event) {
+      self.on('stateChange', function(event) {
         state = event.data;
       });
 
@@ -154,6 +155,29 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       return handlerName;
     };
 
+    /**
+    * @public
+    * Get current state for resume support.
+    *
+    * @returns {object} Current state.
+    */
+    self.getCurrentState = function () {
+      return {
+        time: self.getCurrentTime() || self.oldTime,
+      };
+    };
+
+    /**
+    * @public
+    * Reset current state (time).
+    *
+    */
+    self.resetTask = function () {
+      delete self.oldTime;
+      self.seek(parameters.startAt || 0);
+      self.pause();
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
@@ -167,7 +191,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-        startAt: parameters.startAt || 0,
+        startAt: self.oldTime || parameters.startAt || 0,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
         disableFullscreen: parameters.visuals.disableFullscreen === true
