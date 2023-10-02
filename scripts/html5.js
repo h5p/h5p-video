@@ -487,14 +487,15 @@ H5P.VideoHtml5 = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      if (lastState === undefined) {
-        // Make sure we always play before we seek to get an image.
-        // If not iOS devices will reset currentTime when pressing play.
-        video.play();
-        video.pause();
-      }
+      // Handling this with an event listener for 'canplaythrough' should
+      // ensure that it correctly sets the time for all devices (Windows, Apple, Android),
+      // without required separate conditional handling for Apple.
+      function seekTo() {
+        video.currentTime = time;
+        video.removeEventListener("canplaythrough", seekTo)
+      };
 
-      video.currentTime = time;
+      video.addEventListener("canplaythrough", seekTo);
     };
 
     /**
