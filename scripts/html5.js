@@ -495,7 +495,12 @@ H5P.VideoHtml5 = (function ($) {
         video.removeEventListener(eventName, seekTo);
       };
 
-      video.addEventListener(eventName, seekTo);
+      if (video.readyState === 4) {
+        seekTo();
+      }
+      else {
+        video.addEventListener(eventName, seekTo);
+      }
     };
 
     /**
