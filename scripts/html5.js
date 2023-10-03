@@ -487,15 +487,20 @@ H5P.VideoHtml5 = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      // Handling this with an event listener for 'canplaythrough' should
-      // ensure that it correctly sets the time for all devices (Windows, Apple, Android),
-      // without required separate conditional handling for Apple.
+      // Use canplaythrough for IOs devices
+      // Use loadedmetadata for all other devices.
+      const eventName = navigator.userAgent.match(/iPad|iPod|iPhone/i) ? "canplaythrough" : "loadedmetadata";
       function seekTo() {
         video.currentTime = time;
-        video.removeEventListener("canplaythrough", seekTo)
+        video.removeEventListener(eventName, seekTo);
       };
 
-      video.addEventListener("canplaythrough", seekTo);
+      if (video.readyState === 4) {
+        seekTo();
+      }
+      else {
+        video.addEventListener(eventName, seekTo);
+      }
     };
 
     /**
