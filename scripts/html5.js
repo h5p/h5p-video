@@ -227,7 +227,7 @@ H5P.VideoHtml5 = (function ($) {
             }
 
             var validStartTime = options.startAt && options.startAt > 0;
-            if (arg === H5P.Video.PLAYING && validStartTime) {
+            if (arg === H5P.Video.PLAYING && validStartTime && !video.currentTime) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }
@@ -487,6 +487,7 @@ H5P.VideoHtml5 = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
+      video.currentTime = time;
       // Use canplaythrough for IOs devices
       // Use loadedmetadata for all other devices.
       const eventName = navigator.userAgent.match(/iPad|iPod|iPhone/i) ? "canplaythrough" : "loadedmetadata";
