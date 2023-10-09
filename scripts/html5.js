@@ -227,7 +227,8 @@ H5P.VideoHtml5 = (function ($) {
             }
 
             var validStartTime = options.startAt && options.startAt > 0;
-            if (arg === H5P.Video.PLAYING && validStartTime && !video.currentTime) {
+            let isAtBeginning = video.currentTime == options.originalStartTime;
+            if (arg === H5P.Video.PLAYING && validStartTime && !isAtBeginning) {
               video.currentTime = options.startAt;
               delete options.startAt;
             }

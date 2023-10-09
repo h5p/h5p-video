@@ -173,8 +173,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     *
     */
     self.resetTask = function () {
+      Video.WAS_RESET = true;
+      parameters.startAt = parameters.originalStartTime;
       delete self.oldTime;
-      self.seek(parameters.startAt || 0);
+      self.seek(parameters.originalStartTime || 0);
       self.pause();
     };
 
@@ -192,6 +194,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
         startAt: self.oldTime || parameters.startAt || 0,
+        originalStartTime: parameters.originalStartTime,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
         disableFullscreen: parameters.visuals.disableFullscreen === true
@@ -237,6 +240,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @constant {Number}
    */
   Video.VIDEO_CUED = 5;
+  
+  
+  /**
+   * Flag to keep track of whether the video has been reset
+   * @constant {Boolean}
+   */
+  Video.WAS_RESET = false;
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
