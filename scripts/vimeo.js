@@ -133,8 +133,7 @@ H5P.VideoVimeo = (function ($) {
         if (options.startAt) {
           // Vimeo.Player doesn't have an option for setting start time upon
           // instantiation, so we instead perform an initial seek here.
-          let startTime = H5P.Video.WAS_RESET ? options.originalStartTime : options.startAt;
-          currentTime = await self.seek(startTime);
+          currentTime = await self.seek(options.startAt);
         }
 
         self.trigger('ready');

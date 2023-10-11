@@ -71,7 +71,7 @@ H5P.VideoYouTube = (function ($) {
           showinfo: 0,
           iv_load_policy: 3,
           wmode: "opaque",
-          start: H5P.Video.WAS_RESET ? options.originalStartTime : Math.floor(options.startAt || 0),
+          start: Math.floor(options.startAt || 0),
           playsinline: 1
         },
         events: {
