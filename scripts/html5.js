@@ -466,9 +466,13 @@ H5P.VideoHtml5 = (function ($) {
       if (!isLoaded) {
         // Make sure video is loaded before playing
         video.load();
-      }
 
-      return video.play();
+        video.addEventListener('loadeddata', function() {
+          video.play();
+        }, false);
+      } else {
+        return video.play();
+      }
     };
 
     /**
