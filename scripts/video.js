@@ -186,6 +186,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         self.seek(parameters.startAt || 0);
         self.pause();
         self.WAS_RESET = false;
+      } else if(self.oldTime) {
+        self.seek(self.oldTime);
+        self.pause();
       }
 
       self.trigger('resize');

@@ -221,19 +221,6 @@ H5P.VideoHtml5 = (function ($) {
     var mapEvent = function (native, h5p, arg) {
       video.addEventListener(native, function () {
         switch (h5p) {
-          case 'stateChange':
-            if (lastState === arg) {
-              return; // Avoid firing event twice.
-            }
-
-            var validStartTime = options.startAt && options.startAt > 0;
-            if (arg === H5P.Video.PLAYING && validStartTime && !video.currentTime) {
-              video.currentTime = options.startAt;
-              delete options.startAt;
-            }
-
-            break;
-
           case 'loaded':
             isLoaded = true;
 
