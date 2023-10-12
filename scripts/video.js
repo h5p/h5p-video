@@ -16,6 +16,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     var self = this;
     self.oldTime = extras.previousState?.time;
     self.contentId = id;
+    self.WAS_RESET = false;
 
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
@@ -173,6 +174,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     *
     */
     self.resetTask = function () {
+      self.WAS_RESET = true;
       delete self.oldTime;
       self.seek(parameters.startAt || 0);
       self.pause();
@@ -180,6 +182,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
+      if (self.WAS_RESET) {
+        self.seek(parameters.startAt || 0);
+        self.pause();
+        self.WAS_RESET = false;
+      }
+
       self.trigger('resize');
     });
 
@@ -191,10 +199,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-        startAt: self.oldTime || parameters.startAt || 0,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
         disableFullscreen: parameters.visuals.disableFullscreen === true
+      }
+
+      if(!self.WAS_RESET) {
+        options.startAt = self.oldTime || (parameters.startAt || 0);
       }
 
       var html5Handler;
@@ -237,6 +248,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @constant {Number}
    */
   Video.VIDEO_CUED = 5;
+  
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
