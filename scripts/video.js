@@ -105,7 +105,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         const entry = entries[0];
 
         // This video element became visible
-        if (entry.isIntersecting && state === Video.PAUSED) {
+        if (entry.isIntersecting) {
           // Autoplay if autoplay is enabled and it was not explicitly
           // paused by a user
           if (parameters.playback.autoplay && self.autoPaused) {
