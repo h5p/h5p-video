@@ -77,8 +77,8 @@ H5P.VideoPanopto = (function ($) {
           onIframeReady: function () {
             $placeholder.children(0).text('');
             if (options.autoplay) {
-              isLoaded = true;
               player.loadVideo();
+              isLoaded = true;
             }
             self.trigger('containerLoaded');
             self.trigger('resize'); // Avoid black iframe if loading is slow
@@ -110,7 +110,7 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
-            if(state == 2 && player.getCurrentTime() == options.startAt) {
+            if (state == 2 && player.getCurrentTime() == options.startAt) {
               self.play();
             }
           },
