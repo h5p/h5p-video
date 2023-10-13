@@ -191,8 +191,8 @@ H5P.VideoPanopto = (function ($) {
       if (isLoaded) {
         player.playVideo();
       } else {
-        isLoaded = true;
         player.loadVideo(); // Loads and starts playing
+        isLoaded = true;
       }
     };
 
