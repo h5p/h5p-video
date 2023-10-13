@@ -99,10 +99,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.autoPaused = !self.pressToPlay;
 
       new IntersectionObserver(function (entries) {
+        if (!state) {
+          return;
+        }
         const entry = entries[0];
 
         // This video element became visible
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && state === Video.PAUSED) {
           // Autoplay if autoplay is enabled and it was not explicitly
           // paused by a user
           if (parameters.playback.autoplay && self.autoPaused) {
@@ -110,7 +113,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state !== Video.PAUSED) {
+        else if (state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1) {
           self.autoPaused = true;
           self.pause();
         }
