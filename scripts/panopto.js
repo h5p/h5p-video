@@ -20,6 +20,7 @@ H5P.VideoPanopto = (function ($) {
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
     let isLoaded = false;
+    // let isLoaded = false;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -75,9 +76,9 @@ H5P.VideoPanopto = (function ($) {
         },
         events: {
           onIframeReady: function () {
-            isLoaded = true;
             $placeholder.children(0).text('');
-            if (canHasAutoplay) {
+            if (options.autoplay) {
+              isLoaded = true;
               player.loadVideo();
             }
             self.trigger('containerLoaded');
@@ -109,6 +110,10 @@ H5P.VideoPanopto = (function ($) {
             if (state > -1 && state < 4) {
               self.trigger('stateChange', state);
             }
+
+            if(state == 2 && player.getCurrentTime() == options.startAt) {
+              self.play();
+            }
           },
           onPlaybackRateChange: function () {
             self.trigger('playbackRateChange', self.getPlaybackRate());
@@ -130,14 +135,6 @@ H5P.VideoPanopto = (function ($) {
         }
       });
     };
-
-    /**
-     * Indicates if the video must be clicked for it to start playing.
-     * This is always true for Panopto since all videos auto play.
-     *
-     * @public
-     */
-    self.pressToPlay = true;
 
     /**
     * Appends the video player to the DOM.
@@ -191,7 +188,13 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.playVideo) {
         return;
       }
-      player.playVideo();
+
+      if (isLoaded) {
+        player.playVideo();
+      } else {
+        isLoaded = true;
+        player.loadVideo(); // Loads and starts playing
+      }
     };
 
     /**
