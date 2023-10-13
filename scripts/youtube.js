@@ -118,6 +118,9 @@ H5P.VideoYouTube = (function ($) {
 
               self.trigger('stateChange', state.data);
             }
+            if (state.data === 1 && self.toPause) {
+              self.pause();
+            }
           },
           onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
@@ -258,11 +261,18 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.pause = function () {
+      delete self.toPause;
       self.off('ready', self.play);
       if (!player || !player.pauseVideo) {
         return;
       }
-      player.pauseVideo();
+      const state = player.getPlayerState();
+      if (state && state !== 3 && state !== -1) {
+        player.pauseVideo();
+      }
+      else {
+        self.toPause = true;
+      }
     };
 
     /**
@@ -275,7 +285,6 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
-
       player.seekTo(time, true);
     };
 
