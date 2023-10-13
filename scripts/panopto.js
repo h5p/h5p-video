@@ -20,7 +20,6 @@ H5P.VideoPanopto = (function ($) {
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
     let isLoaded = false;
-    // let isLoaded = false;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
