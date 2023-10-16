@@ -184,18 +184,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
-      if (self.WAS_RESET) {
-        self.seek(parameters.startAt || 0);
-        if (!parameters.playback.autoplay) {
-          self.pause();
-        }
-        self.WAS_RESET = false;
-      } else if (self.oldTime) {
-        self.seek(self.oldTime);
-        if (!parameters.playback.autoplay) {
-          self.pause();
-        }
+      self.seek(self.WAS_RESET ? parameters.startAt || 0 : self.oldTime);
+      if (!parameters.playback.autoplay) {
+        self.pause();
       }
+      self.WAS_RESET = false;
 
       self.trigger('resize');
     });
