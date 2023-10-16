@@ -268,7 +268,7 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
       const state = player.getPlayerState();
-      if (state && state !== 3 && state !== -1) {
+      if (![undefined, 3, -1, 5].includes(state)) {
         player.pauseVideo();
       }
       else {
