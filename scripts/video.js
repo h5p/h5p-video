@@ -113,7 +113,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1) {
+        else if (state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1 && !parameters.playback.autoplay) {
           self.autoPaused = true;
           self.pause();
         }
@@ -201,7 +201,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     if (sources.length) {
       const options = {
         controls: parameters.visuals.controls,
-        autoplay: false,
+        autoplay: parameters.playback.autoplay,
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
