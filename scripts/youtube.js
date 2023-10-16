@@ -248,6 +248,7 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.play = function () {
+      self.off('ready', self.play);
       if (!player || !player.playVideo) {
         self.on('ready', self.play);
         return;

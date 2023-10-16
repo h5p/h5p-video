@@ -99,9 +99,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.autoPaused = !self.pressToPlay;
 
       new IntersectionObserver(function (entries) {
-        if (!state) {
-          return;
-        }
         const entry = entries[0];
 
         // This video element became visible
@@ -113,7 +110,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1 && !parameters.playback.autoplay) {
+        else if (state && state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1 && !parameters.playback.autoplay) {
           self.autoPaused = true;
           self.pause();
         }
@@ -179,19 +176,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.resetTask = function () {
       self.WAS_RESET = true;
       delete self.oldTime;
-      self.seek(parameters.startAt || 0);
       self.pause();
+      self.seek(parameters.startAt || 0);
     };
 
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       if (self.WAS_RESET) {
         self.seek(parameters.startAt || 0);
-        self.pause();
         self.WAS_RESET = false;
       } else if(self.oldTime) {
         self.seek(self.oldTime);
-        self.pause();
       }
 
       self.trigger('resize');
