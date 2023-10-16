@@ -20,6 +20,7 @@ H5P.VideoPanopto = (function ($) {
     var id = 'h5p-panopto-' + numInstances;
     numInstances++;
     let isLoaded = false;
+    let isPlayerReady = false;
 
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
@@ -75,6 +76,7 @@ H5P.VideoPanopto = (function ($) {
         },
         events: {
           onIframeReady: function () {
+            isPlayerReady = true;
             $placeholder.children(0).text('');
             if (options.autoplay && canHasAutoplay) {
               player.loadVideo();
@@ -184,7 +186,7 @@ H5P.VideoPanopto = (function ($) {
      */
     self.play = function () {
       canHasPlay = true;
-      if (!player || !player.playVideo) {
+      if (!player || !player.playVideo || !isPlayerReady) {
         return;
       }
 
