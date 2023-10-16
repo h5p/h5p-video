@@ -118,6 +118,11 @@ H5P.VideoYouTube = (function ($) {
 
               self.trigger('stateChange', state.data);
             }
+            if (state.data === 1 && self.toPause) {
+              // if video has been buffering, we were unable to pause at that time
+              // so here we waited for state change and check self.toPause
+              self.pause();
+            }
           },
           onPlaybackQualityChange: function (quality) {
             self.trigger('qualityChange', quality.data);
@@ -245,6 +250,7 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.play = function () {
+      self.off('ready', self.play);
       if (!player || !player.playVideo) {
         self.on('ready', self.play);
         return;
@@ -258,11 +264,22 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.pause = function () {
+      delete self.toPause;
       self.off('ready', self.play);
       if (!player || !player.pauseVideo) {
         return;
       }
-      player.pauseVideo();
+      const state = player.getPlayerState();
+
+      // Check if current state allows pausing
+      //  if yes - pause now
+      //  if no - set flag and check for it on state change
+      if (![3, -1, 5].includes(state)) {
+        player.pauseVideo();
+      }
+      else {
+        self.toPause = true;
+      }
     };
 
     /**
@@ -275,7 +292,6 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
-
       player.seekTo(time, true);
     };
 
