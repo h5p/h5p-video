@@ -177,7 +177,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.WAS_RESET = true;
       delete self.oldTime;
       self.seek(parameters.startAt || 0);
-      self.pause();
+      if (!parameters.playback.autoplay) {
+        self.pause();
+      }
     };
 
     // Resize the video when we know its aspect ratio
