@@ -119,6 +119,8 @@ H5P.VideoYouTube = (function ($) {
               self.trigger('stateChange', state.data);
             }
             if (state.data === 1 && self.toPause) {
+              // if video has been buffering, we were unable to pause at that time
+              // so here we waited for state change and check self.toPause
               self.pause();
             }
           },
@@ -268,6 +270,10 @@ H5P.VideoYouTube = (function ($) {
         return;
       }
       const state = player.getPlayerState();
+
+      // Check if current state allows pausing
+      //  if yes - pause now
+      //  if no - set flag and check for it on state change
       if (![3, -1, 5].includes(state)) {
         player.pauseVideo();
       }
