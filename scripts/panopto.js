@@ -112,7 +112,7 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
-            if (state == 2 && player.getCurrentTime() == options.startAt) {
+            if (state == 2 && player.getCurrentTime() == options.startAt && options.autoplay) {
               self.play();
             }
           },
