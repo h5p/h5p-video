@@ -110,7 +110,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state && state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1 && !parameters.playback.autoplay) {
+        else if (state && state === Video.PLAYING) {
           self.autoPaused = true;
           self.pause();
         }
