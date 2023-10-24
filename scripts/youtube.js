@@ -78,6 +78,10 @@ H5P.VideoYouTube = (function ($) {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
+            // Both video.js and IV seek when loaded, which trigger autoplay for YouTube videos. To prevent this when autoplay is disabled, we pause the video.
+            if (!options.autoplay) {
+              self.toPause = true;
+            }
           },
           onApiChange: function () {
             if (loadCaptionsModule) {
