@@ -112,7 +112,7 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
-            if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
+            if (state && [-1, 3].indexOf(state) === -1 && self.toSeek) {
               self.seek(self.toSeek);
               delete self.toSeek;
             }
