@@ -112,6 +112,10 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
+            if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
+              self.seek(self.toSeek);
+              delete self.toSeek;
+            }
             if (state == 2 && player.getCurrentTime() == options.startAt && options.autoplay) {
               self.play();
             }
@@ -225,6 +229,10 @@ H5P.VideoPanopto = (function ($) {
      */
     self.seek = function (time) {
       if (!player || !player.seekTo) {
+        return;
+      }
+      if (!player.isReady) {
+        self.toSeek = time;
         return;
       }
 
