@@ -203,7 +203,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       }
 
       if(!self.WAS_RESET) {
-        options.startAt = self.oldTime || (parameters.startAt || 0);
+        options.startAt = self.oldTime !== undefined ? self.oldTime : (parameters.startAt || 0);
       }
 
       var html5Handler;

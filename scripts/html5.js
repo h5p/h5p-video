@@ -243,8 +243,14 @@ H5P.VideoHtml5 = (function ($) {
               return;
             }
 
-            // seek to specified start at time
-            self.seek(options.startAt);
+            if (video.poster) {
+              $(video).one('play', function () {
+                self.seek(self.getCurrentTime() || options.startAt);
+              });
+            } else {
+              self.seek(options.startAt);
+            }
+
             break;
 
           case 'error':
