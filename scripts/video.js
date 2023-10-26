@@ -110,6 +110,10 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
+        else if (state !== Video.PAUSED) {
+          self.autoPaused = true;
+          self.pause();
+        }
       }, {
         root: null,
         threshold: [0, 1] // Get events when it is shown and hidden
