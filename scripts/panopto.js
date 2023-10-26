@@ -71,7 +71,7 @@ H5P.VideoPanopto = (function ($) {
           offerviewer: false,
           autoplay: false,
           showbrand: false,
-          start: 0,
+          start: options.startAt,
           hideoverlay: !options.controls,
         },
         events: {
@@ -112,10 +112,10 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
-            if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
-              self.seek(self.toSeek);
-              delete self.toSeek;
-            }
+            // if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
+            //   self.seek(self.toSeek);
+            //   delete self.toSeek;
+            // }
             if (state == 2 && player.getCurrentTime() == options.startAt && options.autoplay) {
               self.play();
             }
@@ -231,10 +231,10 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
-      if (!player.isReady) {
-        self.toSeek = time;
-        return;
-      }
+      // if (!player.isReady) {
+      //   self.toSeek = time;
+      //   return;
+      // }
 
       player.seekTo(time);
     };

@@ -71,17 +71,13 @@ H5P.VideoYouTube = (function ($) {
           showinfo: 0,
           iv_load_policy: 3,
           wmode: "opaque",
-          start: Math.floor(options.startAt || 0),
+          start: Math.floor(options.startAt),
           playsinline: 1
         },
         events: {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
-            // Both video.js and IV seek when loaded, which trigger autoplay for YouTube videos. To prevent this when autoplay is disabled, we pause the video.
-            if (!options.autoplay) {
-              self.toPause = true;
-            }
           },
           onApiChange: function () {
             if (loadCaptionsModule) {
@@ -254,7 +250,6 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.play = function () {
-      self.off('ready', self.play);
       if (!player || !player.playVideo) {
         self.on('ready', self.play);
         return;

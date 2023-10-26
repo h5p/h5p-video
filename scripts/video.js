@@ -110,10 +110,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state && state !== Video.PAUSED && state !== Video.BUFFERING && state !== -1 && !parameters.playback.autoplay) {
-          self.autoPaused = true;
-          self.pause();
-        }
       }, {
         root: null,
         threshold: [0, 1] // Get events when it is shown and hidden
@@ -188,11 +184,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
           self.pause();
         }
         self.WAS_RESET = false;
-      } else if (self.oldTime) {
-        self.seek(self.oldTime);
-        if (!parameters.playback.autoplay) {
-          self.pause();
-        }
       }
 
       self.trigger('resize');

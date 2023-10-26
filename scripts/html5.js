@@ -242,6 +242,9 @@ H5P.VideoHtml5 = (function ($) {
               video.addEventListener('durationchange', andLoaded, false);
               return;
             }
+
+            // seek to specified start at time
+            self.seek(options.startAt);
             break;
 
           case 'error':
