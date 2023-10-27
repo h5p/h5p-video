@@ -13,6 +13,7 @@ H5P.VideoPanopto = (function ($) {
     var self = this;
 
     self.volume = 100;
+    self.toSeek = undefined;
 
     var player;
     var playbackRate = 1;
@@ -112,11 +113,11 @@ H5P.VideoPanopto = (function ($) {
               self.trigger('stateChange', state);
             }
 
-            // if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
-            //   self.seek(self.toSeek);
-            //   delete self.toSeek;
-            // }
-            if (state == 2 && player.getCurrentTime() == options.startAt && options.autoplay) {
+            if ([H5P.Video.PLAYING, H5P.Video.PAUSED].includes(state) && typeof self.toSeek === 'number') {
+              self.seek(self.toSeek);
+              delete self.toSeek;
+            }
+            if (state === H5P.Video.PAUSED && player.getCurrentTime() === options.startAt && options.autoplay) {
               self.play();
             }
           },
@@ -231,10 +232,10 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
-      // if (!player.isReady) {
-      //   self.toSeek = time;
-      //   return;
-      // }
+      if (!player.isReady) {
+        self.toSeek = time;
+        return;
+      }
 
       player.seekTo(time);
     };
