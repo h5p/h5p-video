@@ -80,8 +80,7 @@ H5P.VideoPanopto = (function ($) {
             isPlayerReady = true;
             $placeholder.children(0).text('');
             if (options.autoplay && canHasAutoplay) {
-              player.loadVideo();
-              isLoaded = true;
+              self.play();
             }
             self.trigger('containerLoaded');
             self.trigger('resize'); // Avoid black iframe if loading is slow
@@ -102,23 +101,16 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-
-            if (!canHasPlay) {
-              self.pause(); // Only autoplay if play() has been called before load
-            }
           },
           onStateChange: function (state) {
-            // TODO: Playback rate fix for IE11?
-            if (state > -1 && state < 4) {
-              self.trigger('stateChange', state);
-            }
-
             if ([H5P.Video.PLAYING, H5P.Video.PAUSED].includes(state) && typeof self.toSeek === 'number') {
               self.seek(self.toSeek);
               delete self.toSeek;
             }
-            if (state === H5P.Video.PAUSED && player.getCurrentTime() === options.startAt && options.autoplay) {
-              self.play();
+
+            // TODO: Playback rate fix for IE11?
+            if (state > -1 && state < 4) {
+              self.trigger('stateChange', state);
             }
           },
           onPlaybackRateChange: function () {
@@ -126,9 +118,10 @@ H5P.VideoPanopto = (function ($) {
           },
           onError: function (error) {
             if (error === ApiError.PlayWithSoundNotAllowed) {
-              setTimeout(function () {
-                self.unMute();
-              }, 10);
+              // pause and allow user to handle playing
+              self.pause();
+
+              self.unMute(); // because player is automuted on this error
             }
             else {
               self.trigger('error', l10n.unknownError);
@@ -210,7 +203,7 @@ H5P.VideoPanopto = (function ($) {
      */
     self.pause = function () {
       canHasPlay = false;
-      if (!player || !player.pauseVideo) {
+      if (!player || !player.pauseVideo || self.WAS_RESET) {
         return;
       }
       try {
