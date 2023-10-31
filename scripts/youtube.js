@@ -71,14 +71,14 @@ H5P.VideoYouTube = (function ($) {
           showinfo: 0,
           iv_load_policy: 3,
           wmode: "opaque",
-          start: Math.floor(options.startAt || 0),
+          start: Math.floor(options.startAt),
           playsinline: 1
         },
         events: {
           onReady: function () {
             self.trigger('ready');
             self.trigger('loaded');
-            // Both video.js and IV seek when loaded, which trigger autoplay for YouTube videos. To prevent this when autoplay is disabled, we pause the video.
+
             if (!options.autoplay) {
               self.toPause = true;
             }
@@ -111,6 +111,15 @@ H5P.VideoYouTube = (function ($) {
           },
           onStateChange: function (state) {
             if (state.data > -1 && state.data < 4) {
+              if (self.toPause) {
+                // if video buffering, was likely paused already - skip
+                if (state.data === H5P.Video.BUFFERING) {
+                  delete self.toPause;
+                }
+                else {
+                  self.pause();
+                }
+              }
 
               // Fix for keeping playback rate in IE11
               if (H5P.Video.IE11_PLAYBACK_RATE_FIX && state.data === H5P.Video.PLAYING && playbackRate !== 1) {
@@ -121,11 +130,6 @@ H5P.VideoYouTube = (function ($) {
               // End IE11 fix
 
               self.trigger('stateChange', state.data);
-            }
-            if (state.data === 1 && self.toPause) {
-              // if video has been buffering, we were unable to pause at that time
-              // so here we waited for state change and check self.toPause
-              self.pause();
             }
           },
           onPlaybackQualityChange: function (quality) {
@@ -254,7 +258,6 @@ H5P.VideoYouTube = (function ($) {
      * @public
      */
     self.play = function () {
-      self.off('ready', self.play);
       if (!player || !player.playVideo) {
         self.on('ready', self.play);
         return;
@@ -273,17 +276,7 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.pauseVideo) {
         return;
       }
-      const state = player.getPlayerState();
-
-      // Check if current state allows pausing
-      //  if yes - pause now
-      //  if no - set flag and check for it on state change
-      if (![3, -1, 5].includes(state)) {
-        player.pauseVideo();
-      }
-      else {
-        self.toPause = true;
-      }
+      player.pauseVideo();
     };
 
     /**
@@ -296,9 +289,26 @@ H5P.VideoYouTube = (function ($) {
       if (!player || !player.seekTo) {
         return;
       }
+
       player.seekTo(time, true);
     };
 
+    /**
+     * Recreate player with initial time
+     *
+     * @public
+     * @param {Number} time
+     */
+    self.resetPlayback = function (time) {
+      options.startAt = time;
+
+      if (player) {
+        player.destroy();
+        player = undefined;
+      }
+
+      create();
+    }
     /**
      * Get elapsed time since video beginning.
      *

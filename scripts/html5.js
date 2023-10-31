@@ -242,6 +242,16 @@ H5P.VideoHtml5 = (function ($) {
               video.addEventListener('durationchange', andLoaded, false);
               return;
             }
+
+            if (video.poster) {
+              $(video).one('play', function () {
+                self.seek(self.getCurrentTime() || options.startAt);
+              });
+            }
+            else {
+              self.seek(options.startAt);
+            }
+
             break;
 
           case 'error':
@@ -457,7 +467,8 @@ H5P.VideoHtml5 = (function ($) {
         video.addEventListener('loadeddata', function() {
           video.play();
         }, false);
-      } else {
+      }
+      else {
         return video.play();
       }
     };

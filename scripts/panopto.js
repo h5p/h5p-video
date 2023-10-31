@@ -13,6 +13,7 @@ H5P.VideoPanopto = (function ($) {
     var self = this;
 
     self.volume = 100;
+    self.toSeek = undefined;
 
     var player;
     var playbackRate = 1;
@@ -82,11 +83,17 @@ H5P.VideoPanopto = (function ($) {
               player.loadVideo();
               isLoaded = true;
             }
+
             self.trigger('containerLoaded');
             self.trigger('resize'); // Avoid black iframe if loading is slow
           },
           onReady: function () {
+            self.videoLoaded = true;
             self.trigger('loaded');
+
+            if (typeof self.oldTime === 'number') {
+              self.seek(self.oldTime);
+            }
             if (player.hasCaptions()) {
               const captions = [];
 
@@ -101,23 +108,20 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
-
-            if (!canHasPlay) {
-              self.pause(); // Only autoplay if play() has been called before load
-            }
           },
           onStateChange: function (state) {
+            if ([H5P.Video.PLAYING, H5P.Video.PAUSED].includes(state) && typeof self.seekToTime === 'number') {
+              player.seekTo(self.seekToTime);
+              delete self.seekToTime;
+            }
+            // since panopto has different load sequence in IV, need additional condition here
+            if (self.WAS_RESET) {
+              self.WAS_RESET = false;
+            }
+
             // TODO: Playback rate fix for IE11?
             if (state > -1 && state < 4) {
               self.trigger('stateChange', state);
-            }
-
-            if ([-1, 3].indexOf(state) === -1 && self.toSeek) {
-              self.seek(self.toSeek);
-              delete self.toSeek;
-            }
-            if (state == 2 && player.getCurrentTime() == options.startAt && options.autoplay) {
-              self.play();
             }
           },
           onPlaybackRateChange: function () {
@@ -125,9 +129,10 @@ H5P.VideoPanopto = (function ($) {
           },
           onError: function (error) {
             if (error === ApiError.PlayWithSoundNotAllowed) {
-              setTimeout(function () {
-                self.unMute();
-              }, 10);
+              // pause and allow user to handle playing
+              self.pause();
+
+              self.unMute(); // because player is automuted on this error
             }
             else {
               self.trigger('error', l10n.unknownError);
@@ -196,7 +201,8 @@ H5P.VideoPanopto = (function ($) {
 
       if (isLoaded) {
         player.playVideo();
-      } else {
+      }
+      else {
         player.loadVideo(); // Loads and starts playing
         isLoaded = true;
       }
@@ -212,7 +218,12 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.pauseVideo) {
         return;
       }
+      if (self.WAS_RESET && !options.autoplay) {
+        self.toPause = true;
+        return;
+      }
       try {
+        delete self.toPause;
         player.pauseVideo();
       }
       catch (err) {
@@ -228,16 +239,38 @@ H5P.VideoPanopto = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      if (!player || !player.seekTo) {
+      if (!player || !player.seekTo || !self.videoLoaded) {
         return;
       }
       if (!player.isReady) {
-        self.toSeek = time;
+        self.seekToTime = time;
         return;
       }
 
       player.seekTo(time);
+
+      if (self.WAS_RESET) {
+        // need to check just to be sure, since state === 1 is unusable
+        delete self.seekToTime;
+        self.WAS_RESET = false;
+      }
     };
+
+    /**
+     * Recreate player with initial time
+     *
+     * @public
+     * @param {Number} time
+     */
+    self.resetPlayback = function (time) {
+      if (player && player.isReady && self.videoLoaded) {
+        self.seek(time);
+        self.pause();
+      }
+      else {
+        self.seekToTime = time;
+      }
+    }
 
     /**
      * Get elapsed time since video beginning.
