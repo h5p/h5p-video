@@ -174,14 +174,22 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     *
     */
     self.resetTask = function () {
-      self.WAS_RESET = true;
       delete self.oldTime;
-      self.seek(parameters.startAt || 0);
-      self.pause();
+      if (self.resetPlayback) {
+        self.resetPlayback(parameters.startAt || 0);
+      }
+      else {
+        self.seek(parameters.startAt || 0);
+        self.pause();
+        self.WAS_RESET = true;
+      }
     };
 
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
+      self.trigger('resize');
+
+      // reset time if wasn't done immediately
       if (self.WAS_RESET) {
         self.seek(parameters.startAt || 0);
         if (!parameters.playback.autoplay) {
@@ -190,7 +198,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         self.WAS_RESET = false;
       }
 
-      self.trigger('resize');
     });
 
     // Find player for video sources
@@ -205,8 +212,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
         disableFullscreen: parameters.visuals.disableFullscreen === true
       }
-
-      if(!self.WAS_RESET) {
+      if (!self.WAS_RESET) {
         options.startAt = self.oldTime !== undefined ? self.oldTime : (parameters.startAt || 0);
       }
 

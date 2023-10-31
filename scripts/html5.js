@@ -247,7 +247,8 @@ H5P.VideoHtml5 = (function ($) {
               $(video).one('play', function () {
                 self.seek(self.getCurrentTime() || options.startAt);
               });
-            } else {
+            }
+            else {
               self.seek(options.startAt);
             }
 
@@ -466,7 +467,8 @@ H5P.VideoHtml5 = (function ($) {
         video.addEventListener('loadeddata', function() {
           video.play();
         }, false);
-      } else {
+      }
+      else {
         return video.play();
       }
     };

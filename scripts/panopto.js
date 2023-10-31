@@ -72,7 +72,7 @@ H5P.VideoPanopto = (function ($) {
           offerviewer: false,
           autoplay: false,
           showbrand: false,
-          start: options.startAt,
+          start: 0,
           hideoverlay: !options.controls,
         },
         events: {
@@ -80,13 +80,20 @@ H5P.VideoPanopto = (function ($) {
             isPlayerReady = true;
             $placeholder.children(0).text('');
             if (options.autoplay && canHasAutoplay) {
-              self.play();
+              player.loadVideo();
+              isLoaded = true;
             }
+
             self.trigger('containerLoaded');
             self.trigger('resize'); // Avoid black iframe if loading is slow
           },
           onReady: function () {
+            self.videoLoaded = true;
             self.trigger('loaded');
+
+            if (typeof self.oldTime === 'number') {
+              self.seek(self.oldTime);
+            }
             if (player.hasCaptions()) {
               const captions = [];
 
@@ -103,9 +110,13 @@ H5P.VideoPanopto = (function ($) {
             }
           },
           onStateChange: function (state) {
-            if ([H5P.Video.PLAYING, H5P.Video.PAUSED].includes(state) && typeof self.toSeek === 'number') {
-              self.seek(self.toSeek);
-              delete self.toSeek;
+            if ([H5P.Video.PLAYING, H5P.Video.PAUSED].includes(state) && typeof self.seekToTime === 'number') {
+              player.seekTo(self.seekToTime);
+              delete self.seekToTime;
+            }
+            // since panopto has different load sequence in IV, need additional condition here
+            if (self.WAS_RESET) {
+              self.WAS_RESET = false;
             }
 
             // TODO: Playback rate fix for IE11?
@@ -190,7 +201,8 @@ H5P.VideoPanopto = (function ($) {
 
       if (isLoaded) {
         player.playVideo();
-      } else {
+      }
+      else {
         player.loadVideo(); // Loads and starts playing
         isLoaded = true;
       }
@@ -203,10 +215,15 @@ H5P.VideoPanopto = (function ($) {
      */
     self.pause = function () {
       canHasPlay = false;
-      if (!player || !player.pauseVideo || self.WAS_RESET) {
+      if (!player || !player.pauseVideo) {
+        return;
+      }
+      if (self.WAS_RESET && !options.autoplay) {
+        self.toPause = true;
         return;
       }
       try {
+        delete self.toPause;
         player.pauseVideo();
       }
       catch (err) {
@@ -222,16 +239,38 @@ H5P.VideoPanopto = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      if (!player || !player.seekTo) {
+      if (!player || !player.seekTo || !self.videoLoaded) {
         return;
       }
       if (!player.isReady) {
-        self.toSeek = time;
+        self.seekToTime = time;
         return;
       }
 
       player.seekTo(time);
+
+      if (self.WAS_RESET) {
+        // need to check just to be sure, since state === 1 is unusable
+        delete self.seekToTime;
+        self.WAS_RESET = false;
+      }
     };
+
+    /**
+     * Recreate player with initial time
+     *
+     * @public
+     * @param {Number} time
+     */
+    self.resetPlayback = function (time) {
+      if (player && player.isReady && self.videoLoaded) {
+        self.seek(time);
+        self.pause();
+      }
+      else {
+        self.seekToTime = time;
+      }
+    }
 
     /**
      * Get elapsed time since video beginning.
