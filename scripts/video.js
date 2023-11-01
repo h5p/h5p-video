@@ -17,6 +17,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.oldTime = extras.previousState?.time;
     self.contentId = id;
     self.WAS_RESET = false;
+    self.startAt = parameters.startAt || 0;
 
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;

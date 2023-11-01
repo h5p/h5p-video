@@ -94,6 +94,9 @@ H5P.VideoPanopto = (function ($) {
             if (typeof self.oldTime === 'number') {
               self.seek(self.oldTime);
             }
+            else if (typeof self.startAt === 'number' && self.startAt > 0) {
+              self.seek(self.startAt);
+            }
             if (player.hasCaptions()) {
               const captions = [];
 
