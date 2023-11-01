@@ -53,7 +53,7 @@ H5P.VideoYouTube = (function ($) {
       var loadCaptionsModule = true;
 
       var videoId = getId(sources[0].path);
-console.log('creating new player')
+
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
