@@ -303,8 +303,9 @@ H5P.VideoYouTube = (function ($) {
       options.startAt = time;
 
       if (player) {
-        if (player.getPlayerState === H5P.Video.PLAYING) {
+        if (player.getPlayerState() === H5P.Video.PLAYING) {
           player.pauseVideo();
+          self.trigger('stateChange', H5P.Video.PAUSED);
         }
         player.destroy();
         player = undefined;
