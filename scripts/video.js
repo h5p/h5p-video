@@ -211,7 +211,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
-        disableFullscreen: parameters.visuals.disableFullscreen === true
+        disableFullscreen: parameters.visuals.disableFullscreen === true,
+        deactivateSound: parameters.playback.deactivateSound,
       }
       if (!self.WAS_RESET) {
         options.startAt = self.oldTime !== undefined ? self.oldTime : (parameters.startAt || 0);
