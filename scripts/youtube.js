@@ -82,6 +82,10 @@ H5P.VideoYouTube = (function ($) {
             if (!options.autoplay) {
               self.toPause = true;
             }
+            
+            if (options.deactivateSound) {
+              self.mute();
+            }
           },
           onApiChange: function () {
             if (loadCaptionsModule) {
