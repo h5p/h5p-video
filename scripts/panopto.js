@@ -364,7 +364,7 @@ H5P.VideoPanopto = (function ($) {
      * @returns {Boolean}
      */
     self.isLoaded = function () {
-      return isLoaded;
+      return isPlayerReady;
     };
 
     /**
