@@ -110,6 +110,10 @@ H5P.VideoPanopto = (function ($) {
               currentTrack = captions[currentTrack] ? captions[currentTrack] : null;
 
               self.trigger('captions', captions);
+
+              if (!canHasPlay) {
+                self.pause();
+              }
             }
           },
           onStateChange: function (state) {
