@@ -84,7 +84,6 @@ H5P.VideoPanopto = (function ($) {
             self.trigger('resize'); // Avoid black iframe if loading is slow
           },
           onReady: function () {
-            self.trigger('loaded');
             if (player.hasCaptions()) {
               const captions = [];
 
@@ -99,6 +98,8 @@ H5P.VideoPanopto = (function ($) {
 
               self.trigger('captions', captions);
             }
+
+            self.trigger('loaded');
 
             if (!canHasPlay) {
               self.pause(); // Only autoplay if play() has been called before load
