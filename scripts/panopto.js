@@ -154,6 +154,14 @@ H5P.VideoPanopto = (function ($) {
     };
 
     /**
+     * Indicates if the video must be clicked for it to start playing.
+     * This is always true for Panopto since all videos auto play.
+     *
+     * @public
+     */
+    self.pressToPlay = true;
+
+    /**
     * Appends the video player to the DOM.
     *
     * @public
@@ -205,8 +213,7 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.playVideo || !isPlayerReady) {
         return;
       }
-
-      if (isLoaded) {
+      if (isLoaded || self.videoLoaded) {
         player.playVideo();
       }
       else {
@@ -225,12 +232,7 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.pauseVideo) {
         return;
       }
-      if (self.WAS_RESET && !options.autoplay) {
-        self.toPause = true;
-        return;
-      }
       try {
-        delete self.toPause;
         player.pauseVideo();
       }
       catch (err) {
@@ -249,6 +251,7 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.seekTo || !self.videoLoaded) {
         return;
       }
+      canHasPlay = true;
       if (!player.isReady) {
         self.seekToTime = time;
         return;
