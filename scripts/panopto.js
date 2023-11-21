@@ -36,7 +36,6 @@ H5P.VideoPanopto = (function ($) {
       }
     }
     catch (err) {}
-    let canHasPlay = !canHasAutoplay;
 
     /**
      * Use the Panopto API to create a new player
@@ -110,10 +109,6 @@ H5P.VideoPanopto = (function ($) {
               currentTrack = captions[currentTrack] ? captions[currentTrack] : null;
 
               self.trigger('captions', captions);
-
-              if (!canHasPlay) {
-                self.pause();
-              }
             }
           },
           onStateChange: function (state) {
@@ -209,7 +204,6 @@ H5P.VideoPanopto = (function ($) {
      * @public
      */
     self.play = function () {
-      canHasPlay = true;
       if (!player || !player.playVideo || !isPlayerReady) {
         return;
       }
@@ -228,7 +222,6 @@ H5P.VideoPanopto = (function ($) {
      * @public
      */
     self.pause = function () {
-      canHasPlay = false;
       if (!player || !player.pauseVideo) {
         return;
       }
@@ -251,7 +244,6 @@ H5P.VideoPanopto = (function ($) {
       if (!player || !player.seekTo || !self.videoLoaded) {
         return;
       }
-      canHasPlay = true;
       if (!player.isReady) {
         self.seekToTime = time;
         return;
