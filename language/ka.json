@@ -5,127 +5,127 @@
       "description": "ვიდეოს ყველა ბრაუზერში მუშაობის უზრუნველსაყოფად, თქვენ უნდა დაამატოთ WebM და MP4 ფორმატირებული წყაროები."
     },
     {
-      "label": "Visuals",
+      "label": "გარეგნული მხარე",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "ყდის სურათი"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "მოარგე ვიდეოს გამშვებს, რომ გამოიყენოს მთლიანი სივრცე",
+          "description": "თუ არ არის დაყენებული, ვიდეოს გამშვებს ექნება ისეთივე გაფართოება, რაც ვიდეოს აქვს."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "აჩვენე ვიდეოს გამშვების კონტროლები",
+          "description": "დაამატე კონტროლები ვიდეოს გამშვებს. ეს მისცემს მომხმარებლებს, ჩართვის, დაპაუზების და ა.შ. შესაძლებლობას."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "ჩართვა",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "ვიდეოს ავტომატური ჩართვა",
+          "description": "ვიდეოს ავტომატური ჩართვა. შესაძლოა, მობილურ მოწყობილობებზე არ იმუშაოს."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "ვიდეოს განმეორება",
+          "description": "ავტომატურად ჩაირთოს ვიდეო თავიდან, როცა ის დასრულდება."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "ვიდეოს ლოკალიზაცია",
       "fields": [
         {
-          "label": "Name",
-          "default": "Video",
-          "description": "Helps identify content of this type."
+          "label": "სახელი",
+          "default": "ვიდეო",
+          "description": "გვეხმარება ამ სახის კონტენტის იდენტიფიცირებაში."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "იტვირთება",
+          "default": "ვიდეოს გამშვები იტვირთება..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "გამშვები ვერ ვიპოვე",
+          "default": "მოცემული ვიდეო ფორმატის გამშვები ვერ ვიპოვე."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "წყარო არ არის",
+          "default": "ვიდეოს აკლია წყაროები."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "არ შესრულდა",
+          "default": "მედიის ჩამრთველი არ გაეშვა."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "ქსელის პრობლემა",
+          "default": "ქსელის პრობლემა."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "ვიდეოს წყარო არ ირთვება",
+          "default": "მედიის ჩართვა ვერ მოხერხდა."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "ფორმატის მხარდაჭერა არ არსებობს",
+          "default": "ვიდეოს ფორმატს ვერ ვკითხულობ."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "მედია დაშიფრულია",
+          "default": "მედია დაშიფრულია."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "უცნობი შეცდომა",
+          "default": "უცნობი შეცდომა."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Youtube-ის არავალიდური ID",
+          "default": "YouTube-ის არავალიდური ID."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "YouTube-ის არავალიდური ID",
+          "default": "მოცემული YouTube ID-ით ვიდეო ვერ ვიპოვე."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "YouTube-ის აკრძალული ვიდეო",
+          "default": "ამ ვიდეოს მფლობელი არ გვაძლევს მისი ჩართვის უფლებას."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "ხელმისაწვდომობა",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "დაამატე ვიდეო",
+          "entity": "ვიდეო",
           "field": {
-            "label": "Track",
+            "label": "ვიდეო",
             "fields": [
               {
-                "label": "Track label"
+                "label": "ვიდეოს წარწერა"
               },
               {
-                "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
+                "label": "ტიპის სახეობა, შეეხევა <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML სტანდარტს</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "სუბტიტრები"
                   },
                   {
-                    "label": "Captions"
+                    "label": "სუბტიტრები"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "აღწერები"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "თავები"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "წყაროს ენა უნდა იყოს განსაზღვრული სუბტიტრებისთვის",
+                "description": "უნდა იყოს ვალიდური BCP 47 ენის თეგი."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "ვიდეო ფაილი (WebVTT)"
               }
             ]
           }
