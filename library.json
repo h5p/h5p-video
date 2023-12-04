@@ -1,4 +1,3 @@
-
 {
   "machineName": "H5P.Video",
   "title": "Video",
@@ -8,7 +7,7 @@
   "author": "Joubel",
   "majorVersion": 1,
   "minorVersion": 6,
-  "patchVersion": 37,
+  "patchVersion": 38,
   "runnable": 0,
   "coreApi": {
     "majorVersion": 1,
