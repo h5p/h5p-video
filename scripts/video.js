@@ -164,9 +164,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     * @returns {object} Current state.
     */
     self.getCurrentState = function () {
-      return {
-        time: self.getCurrentTime() || self.oldTime,
-      };
+      if (self.getCurrentTime) {
+        return {
+          time: self.getCurrentTime() || self.oldTime,
+        };
+      }
     };
 
     /**
