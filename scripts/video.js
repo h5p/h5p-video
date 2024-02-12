@@ -12,9 +12,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @param {Boolean} [parameters.startAt] Start time of video
    * @param {Number} id Content identifier
    */
-  function Video(parameters, id) {
+  function Video(parameters, id, extras) {
     var self = this;
+    self.oldTime = extras.previousState?.time;
     self.contentId = id;
+    self.WAS_RESET = false;
+    self.startAt = parameters.startAt || 0;
 
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
@@ -88,7 +91,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     const handleAutoPlayPause = function ($container) {
       // Keep the current state
       let state;
-      self.on('stateChange', function(event) {
+      self.on('stateChange', function(event) {
         state = event.data;
       });
 
@@ -154,23 +157,65 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       return handlerName;
     };
 
+    /**
+    * @public
+    * Get current state for resume support.
+    *
+    * @returns {object} Current state.
+    */
+    self.getCurrentState = function () {
+      return {
+        time: self.getCurrentTime() || self.oldTime,
+      };
+    };
+
+    /**
+    * @public
+    * Reset current state (time).
+    *
+    */
+    self.resetTask = function () {
+      delete self.oldTime;
+      if (self.resetPlayback) {
+        self.resetPlayback(parameters.startAt || 0);
+      }
+      else {
+        self.seek(parameters.startAt || 0);
+        self.pause();
+        self.WAS_RESET = true;
+      }
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
+
+      // reset time if wasn't done immediately
+      if (self.WAS_RESET) {
+        self.seek(parameters.startAt || 0);
+        if (!parameters.playback.autoplay) {
+          self.pause();
+        }
+        self.WAS_RESET = false;
+      }
+
     });
 
     // Find player for video sources
     if (sources.length) {
       const options = {
         controls: parameters.visuals.controls,
-        autoplay: false,
+        autoplay: parameters.playback.autoplay,
         loop: parameters.playback.loop,
         fit: parameters.visuals.fit,
         poster: parameters.visuals.poster === undefined ? undefined : parameters.visuals.poster,
-        startAt: parameters.startAt || 0,
         tracks: tracks,
         disableRemotePlayback: parameters.visuals.disableRemotePlayback === true,
-        disableFullscreen: parameters.visuals.disableFullscreen === true
+        disableFullscreen: parameters.visuals.disableFullscreen === true,
+        deactivateSound: parameters.playback.deactivateSound,
+      }
+      if (!self.WAS_RESET) {
+        options.startAt = self.oldTime !== undefined ? self.oldTime : (parameters.startAt || 0);
       }
 
       var html5Handler;
@@ -213,6 +258,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @constant {Number}
    */
   Video.VIDEO_CUED = 5;
+  
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');

@@ -221,19 +221,6 @@ H5P.VideoHtml5 = (function ($) {
     var mapEvent = function (native, h5p, arg) {
       video.addEventListener(native, function () {
         switch (h5p) {
-          case 'stateChange':
-            if (lastState === arg) {
-              return; // Avoid firing event twice.
-            }
-
-            var validStartTime = options.startAt && options.startAt > 0;
-            if (arg === H5P.Video.PLAYING && validStartTime) {
-              video.currentTime = options.startAt;
-              delete options.startAt;
-            }
-
-            break;
-
           case 'loaded':
             isLoaded = true;
 
@@ -255,6 +242,16 @@ H5P.VideoHtml5 = (function ($) {
               video.addEventListener('durationchange', andLoaded, false);
               return;
             }
+
+            if (video.poster) {
+              $(video).one('play', function () {
+                self.seek(self.getCurrentTime() || options.startAt);
+              });
+            }
+            else {
+              self.seek(options.startAt);
+            }
+
             break;
 
           case 'error':
@@ -477,9 +474,14 @@ H5P.VideoHtml5 = (function ($) {
       if (!isLoaded) {
         // Make sure video is loaded before playing
         video.load();
-      }
 
-      return video.play();
+        video.addEventListener('loadeddata', function() {
+          video.play();
+        }, false);
+      }
+      else {
+        return video.play();
+      }
     };
 
     /**
@@ -515,6 +517,20 @@ H5P.VideoHtml5 = (function ($) {
       }
 
       video.currentTime = time;
+      // Use canplaythrough for IOs devices
+      // Use loadedmetadata for all other devices.
+      const eventName = navigator.userAgent.match(/iPad|iPod|iPhone/i) ? "canplaythrough" : "loadedmetadata";
+      function seekTo() {
+        video.currentTime = time;
+        video.removeEventListener(eventName, seekTo);
+      };
+
+      if (video.readyState === 4) {
+        seekTo();
+      }
+      else {
+        video.addEventListener(eventName, seekTo);
+      }
     };
 
     /**
@@ -738,6 +754,16 @@ H5P.VideoHtml5 = (function ($) {
     nextTick(function () {
       self.trigger('ready');
     });
+
+    /**
+     * Check video is loaded and ready play.
+     *
+     * @public
+     * @param {Boolean}
+     */
+    self.isLoaded = function () {
+      return isLoaded;
+    };
   }
 
   /**

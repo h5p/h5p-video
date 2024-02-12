@@ -7,7 +7,7 @@
     {
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Iškabos paveikslėlis"
         },
         {
           "description": "Jei nenustatyta, vaizdo įrašų grotuvo kraštinių santykis bus toks pat kaip ir vaizdo įrašo.",
@@ -31,10 +31,10 @@
           "description": "Automatiškai paleisti vaizdo įrašą iš naujo, kai jis pasibaigs."
         }
       ],
-      "label": "Playback"
+      "label": "Groti"
     },
     {
-      "label": "Video localization",
+      "label": "Video lokalizacija",
       "fields": [
         {
           "default": "Vaizdo įrašas",
@@ -43,92 +43,92 @@
         },
         {
           "label": "Įkeliama",
-          "default": "Video player loading..."
+          "default": "Vaizdo įrašų grotuvas įkeliamas..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Grotuvai nerasti",
+          "default": "Nerasta vaizdo grotuvų, palaikančių nurodytą vaizdo įrašo formatą."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Nėra šaltinių",
+          "default": "Nerastas video šaltinis."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Atšaukta",
+          "default": "Medijos grojimas atšauktas."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Tinklo sutrikimas",
+          "default": "Tinklo sutrikimas."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Negalima dekoduoti video",
+          "default": "Negalima dekoduoti medijos."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Formatas nepalaikomas",
+          "default": "Vaizdo įrašo formatas nepalaikomas."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Medija užšifruota",
+          "default": "Medija užšifruota."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Nežinoma klaida",
+          "default": "Nežinoma klaida."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "Neteisingas YouTube ID",
+          "default": "Neteisingas YouTube ID."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "Nežinomas YouTube ID",
+          "default": "Nepavyko rasti vaizdo įrašo su nurodytu „YouTube“ ID."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Uždraustas YouTube video",
+          "default": "Šio vaizdo įrašo savininkas neleidžia jo įterpti."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Pritaikomumas",
       "fields": [
         {
-          "entity": "Track",
+          "entity": "Takelis",
           "field": {
             "fields": [
               {
-                "label": "Track label"
+                "label": "Takelio pavadinimas"
               },
               {
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Subtitrai"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Titrai"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Aprašymai"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Skyriai"
                   }
                 ],
-                "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
+                "label": "Įveskite tipą, žr. <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Originalo kalba turi būti apibrėžta subtitrams",
+                "description": "Turi būti galiojanti BCP 47 kalbos žyma. Jei tipo atributas nustatytas į subtitrus, tada reikia apibrėžti srclang."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Failo takelis (WebVTT)"
               }
             ],
-            "label": "Track"
+            "label": "Takelis"
           },
-          "label": "Add video track"
+          "label": "Pridėti vaizdo įrašo takelį"
         }
       ]
     }
