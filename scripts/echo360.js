@@ -10,9 +10,7 @@ H5P.VideoEchoVideo = (function () {
    * @param {Object} l10n Localization strings
    */
   function EchoPlayer(sources, options, l10n) {
-    // Since all the methods of the Echo Player SDK are promise-based, we keep
-    // track of all relevant state variables so that we can implement the
-    // H5P.Video API where all methods return synchronously.
+    // State variables for the Player.
     var numInstances = 0;
     let player = undefined;
     let buffered = 0;
@@ -21,6 +19,7 @@ H5P.VideoEchoVideo = (function () {
     let currentTime = 0;
     let duration = 0;
     let isMuted = 0;
+    let loadingComplete = false;
     let volume = 0;
     let playbackRate = 1;
     let qualities = [];
@@ -28,6 +27,7 @@ H5P.VideoEchoVideo = (function () {
     let failedLoading = false;
     let ratio = 9 / 16;
 
+    // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
     const id = `h5p-echo-${++numInstances}`;
     const wrapperElement = document.createElement('div');
@@ -35,13 +35,6 @@ H5P.VideoEchoVideo = (function () {
     const placeholderElement = document.createElement('div');
     placeholderElement.innerHTML = `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100;" aria-label="${l10n.loading}"></div>`;
     wrapperElement.append(placeholderElement);
-
-    const compareQualities = (a, b) => {
-      return b.width * b.height - a.width * a.height;
-    }
-    const removeLoadingIndicator = () => {
-      placeholderElement.replaceChildren();
-    };
 
     const resolutions = {
       921600: '720p', //"1280x720"
@@ -53,6 +46,16 @@ H5P.VideoEchoVideo = (function () {
     };
 
     const auto = { label: 'auto', name: 'auto' };
+
+    /**
+     * 
+     */
+    const compareQualities = (a, b) => {
+      return b.width * b.height - a.width * a.height;
+    };
+    const removeLoadingIndicator = () => {
+      placeholderElement.replaceChildren();
+    };
 
     const mapToResToName = (quality) => {
       const resolution = resolutions[quality.width * quality.height];
@@ -84,6 +87,7 @@ H5P.VideoEchoVideo = (function () {
         player.loadingPromise.then(() => {
           this.trigger('ready');
           this.trigger('loaded');
+          this.loadingComplete = true;
           this.trigger('qualityChange', 'auto');
           this.trigger('resize');
           if (options.startAt) {
@@ -184,6 +188,11 @@ H5P.VideoEchoVideo = (function () {
       $container.addClass('h5p-echo').append(wrapperElement);
       createEchoPlayer();
     };
+
+    this.isLoaded = () => {
+      return loadingComplete;
+    };
+
     /**
      * Get list of available qualities.
      *
