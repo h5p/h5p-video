@@ -27,6 +27,7 @@ H5P.VideoEchoVideo = (function () {
     let loadingFailedTimeout;
     let failedLoading = false;
     let ratio = 9 / 16;
+
     const LOADING_TIMEOUT_IN_SECONDS = 30;
     const id = `h5p-echo-${++numInstances}`;
     const wrapperElement = document.createElement('div');
@@ -35,13 +36,12 @@ H5P.VideoEchoVideo = (function () {
     placeholderElement.innerHTML = `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100;" aria-label="${l10n.loading}"></div>`;
     wrapperElement.append(placeholderElement);
 
-    function compareQualities(a, b) {
+    const compareQualities = (a, b) => {
       return b.width * b.height - a.width * a.height;
     }
     const removeLoadingIndicator = () => {
       placeholderElement.replaceChildren();
     };
-
 
     const resolutions = {
       921600: '720p', //"1280x720"
@@ -76,12 +76,12 @@ H5P.VideoEchoVideo = (function () {
      */
     const registerEchoPlayerEventListeneners = (player) => {
       player.resolveLoading = null;
-      player.loadingPromise = new Promise(function (resolve) {
+      player.loadingPromise = new Promise((resolve) => {
         player.resolveLoading = resolve;
       });
       player.onload = async () => {
         clearTimeout(loadingFailedTimeout);
-        player.loadingPromise.then(function () {
+        player.loadingPromise.then(() => {
           this.trigger('ready');
           this.trigger('loaded');
           this.trigger('qualityChange', 'auto');
@@ -91,6 +91,7 @@ H5P.VideoEchoVideo = (function () {
             // instantiation, so we instead perform an initial seek here.
             this.seek(options.startAt);
           }
+          return true;
         });
       };
       window.addEventListener('message', function (event) {
