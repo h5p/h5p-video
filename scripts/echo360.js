@@ -18,9 +18,9 @@ H5P.VideoEchoVideo = (function () {
     let currentTextTrack;
     let currentTime = 0;
     let duration = 0;
-    let isMuted = 0;
+    let isMuted = false;
     let loadingComplete = false;
-    let volume = 0;
+    let volume = 1;
     let playbackRate = 1;
     let qualities = [];
     let loadingFailedTimeout;
@@ -98,7 +98,7 @@ H5P.VideoEchoVideo = (function () {
           return true;
         });
       };
-      window.addEventListener('message', function (event) {
+      window.addEventListener('message', (event) => {
         let message = '';
         try {
           message = JSON.parse(event.data);
@@ -156,7 +156,7 @@ H5P.VideoEchoVideo = (function () {
       // allows the guard statement above to be hit if this function is called
       // more than once.
       player = null;
-      wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;"></iframe>';
+      wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>';
       player = wrapperElement.firstChild;
       // Create a new player
       registerEchoPlayerEventListeneners(player);
@@ -226,7 +226,7 @@ H5P.VideoEchoVideo = (function () {
      *
      * @public
      */
-    this.play = async () => {
+    this.play = () => {
       if (!player) {
         this.on('ready', this.play);
         return;
