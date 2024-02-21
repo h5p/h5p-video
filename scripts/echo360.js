@@ -1,5 +1,5 @@
 /** @namespace Echo */
-H5P.VideoEchoVideo = (function ($) {
+H5P.VideoEchoVideo = (function () {
 
   /**
    * EchoVideo video player for H5P.
@@ -29,17 +29,17 @@ H5P.VideoEchoVideo = (function ($) {
     let ratio = 9 / 16;
     const LOADING_TIMEOUT_IN_SECONDS = 30;
     const id = `h5p-echo-${++numInstances}`;
-    const $wrapper = $('<div/>');
-    const $placeholder = $('<div/>', {
-      id: id,
-      html: `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100;" aria-label="${l10n.loading}"></div>`
-    }).appendTo($wrapper);
+    const wrapperElement = document.createElement('div');
+    wrapperElement.setAttribute('id', id);
+    const placeholderElement = document.createElement('div');
+    placeholderElement.innerHTML = `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100;" aria-label="${l10n.loading}"></div>`;
+    wrapperElement.append(placeholderElement);
 
     function compareQualities(a, b) {
       return b.width * b.height - a.width * a.height;
     }
     const removeLoadingIndicator = () => {
-      $placeholder.find('div.h5p-video-loading').remove();
+      placeholderElement.replaceChildren();
     };
 
 
@@ -131,13 +131,19 @@ H5P.VideoEchoVideo = (function ($) {
         }
       });
     };
+
+    const isNodeVisible = (node) => {
+      let style = window.getComputedStyle(node);
+      return ((style.display !== 'none') && (style.visibility !== 'hidden'));
+    };
+
     /**
      * Create a new player by embedding an iframe.
      *
      * @private
      */
     const createEchoPlayer = async () => {
-      if (!$placeholder.is(':visible') || player !== undefined) {
+      if (!isNodeVisible(placeholderElement) || player !== undefined) {
         return;
       }
       // Since the SDK is loaded asynchronously below, explicitly set player to
@@ -145,17 +151,15 @@ H5P.VideoEchoVideo = (function ($) {
       // allows the guard statement above to be hit if this function is called
       // more than once.
       player = null;
-      player = $wrapper.html('<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;"></iframe>')[0].firstChild;
+      wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;"></iframe>';
+      player = wrapperElement.firstChild;
       // Create a new player
       registerEchoPlayerEventListeneners(player);
       loadingFailedTimeout = setTimeout(() => {
         failedLoading = true;
         removeLoadingIndicator();
-        $wrapper.html(`<p class="echo-failed-loading">${l10n.unknownError}</p>`);
-        $wrapper.css({
-          width: null,
-          height: null
-        });
+        wrapperElement.innerHTML = `<p class="echo-failed-loading">${l10n.unknownError}</p>`;
+        wrapperElement.style.cssText = 'width: null; height: null;';
         this.trigger('resize');
         this.trigger('error', l10n.unknownError);
       }, LOADING_TIMEOUT_IN_SECONDS * 1000);
@@ -176,7 +180,7 @@ H5P.VideoEchoVideo = (function ($) {
      * @param {jQuery} $container
      */
     this.appendTo = ($container) => {
-      $container.addClass('h5p-echo').append($wrapper);
+      $container.addClass('h5p-echo').append(wrapperElement);
       createEchoPlayer();
     };
     /**
@@ -374,7 +378,7 @@ H5P.VideoEchoVideo = (function ($) {
       return currentTextTrack;
     };
     this.on('resize', () => {
-      if (failedLoading || !$wrapper.is(':visible')) {
+      if (failedLoading || !isNodeVisible(wrapperElement)) {
         return;
       }
       if (player === undefined) {
@@ -383,19 +387,13 @@ H5P.VideoEchoVideo = (function ($) {
         return;
       }
       // Use as much space as possible
-      $wrapper.css({
-        width: '100%',
-        height: 'auto'
-      });
-      const width = $wrapper[0].clientWidth;
-      const height = options.fit ? $wrapper[0].clientHeight : (width * (ratio));
+      wrapperElement.style.cssText = 'width: 100%; height: auto;';
+      const width = wrapperElement.clientWidth;
+      const height = options.fit ? wrapperElement.clientHeight : (width * (ratio));
       // Validate height before setting
       if (height > 0) {
         // Set size
-        $wrapper.css({
-          width: width + 'px',
-          height: height + 'px'
-        });
+        wrapperElement.style.cssText = 'width: ' + width + 'px; height: ' + height + 'px;';
       }
     });
   }
