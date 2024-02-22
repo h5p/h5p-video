@@ -158,7 +158,7 @@ H5P.VideoEchoVideo = (function () {
           else {
             this.trigger('stateChange', H5P.Video.PAUSED);
           }
-          if (currentTime >== (duration - 1) && options.loop) {
+          if (currentTime >= (duration - 1) && options.loop) {
             this.seek(0);
             this.play();
           }
@@ -193,6 +193,16 @@ H5P.VideoEchoVideo = (function () {
       // allows the guard statement above to be hit if this function is called
       // more than once.
       player = null;
+      let queryString = '?';
+      if (options.controls) {
+        queryString += 'controls=true&';
+      }
+      if (options.disableFullscreen) {
+        queryString += 'disableFullscreen=true&';
+      }
+      if (options.deactivateSound) {
+        queryString += 'deactivateSound=true&';
+      }
       wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>';
       player = wrapperElement.firstChild;
       // Create a new player
