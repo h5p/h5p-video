@@ -321,13 +321,13 @@ H5P.VideoEchoVideo = (function () {
      * Return the video duration.
      *
      * @public
-     * @returns {Number} Video duration in seconds
+     * @returns {?Number} Video duration in seconds
      */
     this.getDuration = () => {
       if (duration > 0) {
         return duration;
       }
-      return;
+      return null;
     };
 
     /**
