@@ -165,10 +165,19 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     * @returns {object} Current state.
     */
     self.getCurrentState = function () {
-      return {
-        time: self.getCurrentTime() || self.oldTime,
-      };
+      if (self.getCurrentTime) {
+        return {
+          time: self.getCurrentTime() || self.oldTime,
+        };
+      }
     };
+
+    /**
+     * The two functions below needs to be defined in this base class,
+     * since it is used in this class even if no handler was found.
+     */
+    self.seek = () => {};
+    self.pause = () => {};
 
     /**
     * @public
@@ -177,14 +186,18 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     */
     self.resetTask = function () {
       delete self.oldTime;
-      if (self.resetPlayback) {
-        self.resetPlayback(parameters.startAt || 0);
-      }
-      else {
-        self.seek(parameters.startAt || 0);
-        self.pause();
-        self.WAS_RESET = true;
-      }
+      self.resetPlayback(parameters.startAt || 0);
+    };
+
+    /**
+     * Default implementation of resetPlayback. May be overridden by sub classes.
+     *
+     * @param {*} startAt
+     */
+    self.resetPlayback = startAt => {
+      self.seek(startAt);
+      self.pause();
+      self.WAS_RESET = true;
     };
 
     // Resize the video when we know its aspect ratio
