@@ -427,7 +427,8 @@ H5P.VideoEchoVideo = (function () {
      * @param {Number} rate Must be one of available rates from getPlaybackRates
      */
     this.setPlaybackRate = async (rate) => {
-      this.post('playbackrate', rate);
+      const echoRate = parseFloat(rate);
+      this.post('playbackrate', echoRate);
       playbackRate = rate;
       this.trigger('playbackRateChange', rate);
     };
