@@ -151,7 +151,6 @@ H5P.VideoEchoVideo = (function () {
         else if (message.event === 'timeline') {
           duration = message.data.duration;
           currentTime = message.data.currentTime ?? 0;
-          this.trigger('resize');
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
           }
