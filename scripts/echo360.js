@@ -112,11 +112,6 @@ H5P.VideoEchoVideo = (function () {
           this.loadingComplete = true;
           this.trigger('qualityChange', 'auto');
           this.trigger('resize');
-          if (options.startAt) {
-            // Echo.Player doesn't have an option for setting start time upon
-            // instantiation, so we instead perform an initial seek here.
-            this.seek(options.startAt);
-          }
           if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
             this.play();
           }
@@ -201,6 +196,10 @@ H5P.VideoEchoVideo = (function () {
       }
       if (options.deactivateSound) {
         queryString += 'deactivateSound=true&';
+      }
+      if (options.startAt) {
+        // Implicit conversion to millis
+        queryString += 'startTimeMillis=' + startAt + '000&';
       }
       wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>';
       player = wrapperElement.firstChild;
