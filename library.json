@@ -24,6 +24,9 @@
       "path": "scripts/panopto.js"
     },
     {
+      "path": "scripts/nanoo-tv.js"
+    },
+    {
       "path": "scripts/html5.js"
     },
     {
