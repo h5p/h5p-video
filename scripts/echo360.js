@@ -37,28 +37,6 @@ H5P.VideoEchoVideo = (function () {
     placeholderElement.innerHTML = `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100; border: none;" aria-label="${l10n.loading}"></div>`;
     wrapperElement.append(placeholderElement);
 
-    const resolutions = {
-      921600: '720p', //"1280x720"
-      2073600: '1080p', //"1920x1080"
-      2211840: '2K', //"2048x1080"
-      3686400: '1440p', // "2560x1440"
-      8294400: '4K', // "3840x2160"
-      33177600: '8K' // "7680x4320"
-    };
-
-    const auto = { label: 'auto', name: 'auto' };
-
-    /**
-     * Determine which quality is greater by counting the pixels.
-     * @private
-     * @param {Object} a - object with width and height properties
-     * @param {Object} b - object with width and height properties
-     * @returns {Number} positive if second parameter has more pixels
-     */
-    const compareQualities = (a, b) => {
-      return b.width * b.height - a.width * a.height;
-    };
-
     /**
      * Remove all elements from the placeholder dom element.
      *
@@ -69,28 +47,16 @@ H5P.VideoEchoVideo = (function () {
     };
 
     /**
-     * Generate a descriptive name for a resolution object with width and height.
-     * @private
-     * @param {Object} quality - object with width and height properties
-     * @returns {String} either a predefined name for the resolution or something like 1080p
-     */
-    const mapToResToName = (quality) => {
-      const resolution = resolutions[quality.width * quality.height];
-      if (resolution) return resolution;
-      return `${quality.height}p`;
-    };
-
-    /**
      * Generate an array of objects for use in a dropdown from the list of resolutions.
      * @private
-     * @param {Array} qualityLevels - list of objects with width and height properties
+     * @param {Array} qualityLevels - list of objects with supported qualities for the media
      * @returns {Array} list of objects with label and name properties
      */
     const mapQualityLevels = (qualityLevels) => {
-      const qualities = qualityLevels.sort(compareQualities).map((quality) => {
-        return { label: mapToResToName(quality), name: (quality.width + 'x' + quality.height) };
-      });
-      return [...qualities, auto];
+      const qualities = qualityLevels.map((quality) => {
+        return { label: quality.label.toLowerCase(), name: quality.value }
+      })
+      return qualities;
     };
 
     /**
@@ -110,7 +76,6 @@ H5P.VideoEchoVideo = (function () {
           this.trigger('ready');
           this.trigger('loaded');
           this.loadingComplete = true;
-          this.trigger('qualityChange', 'auto');
           this.trigger('resize');
           if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
             this.play();
@@ -132,9 +97,10 @@ H5P.VideoEchoVideo = (function () {
         if (message.event === 'init') {
           duration = message.data.duration;
           currentTime = message.data.currentTime ?? 0;
-          qualities = mapQualityLevels(message.data.qualityLevels);
-          currentQuality = qualities.length - 1;
+          qualities = mapQualityLevels(message.data.qualityOptions);
+          currentQuality = qualities[0].name;
           player.resolveLoading();
+          this.trigger('qualityChange', currentQuality);
           this.trigger('resize');
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
