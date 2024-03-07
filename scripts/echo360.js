@@ -79,6 +79,9 @@ H5P.VideoEchoVideo = (function () {
           this.trigger('resize');
           if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
             this.play();
+            this.trigger('stateChange', H5P.Video.PLAYING);
+          } else {
+            this.trigger('stateChange', H5P.Video.PAUSED);
           }
           return true;
         });
@@ -245,7 +248,6 @@ H5P.VideoEchoVideo = (function () {
         return;
       }
       this.post('play', 0);
-
     };
 
     /**
