@@ -112,7 +112,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             self.play();
           }
         }
-        else if (state !== Video.PAUSED) {
+        else if (state !== Video.PAUSED && state !== Video.ENDED) {
           self.autoPaused = true;
           self.pause();
         }
@@ -272,7 +272,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    * @constant {Number}
    */
   Video.VIDEO_CUED = 5;
-  
+
 
   // Used to convert between html and text, since URLs have html entities.
   var $cleaner = H5P.jQuery('<div/>');
