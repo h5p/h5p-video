@@ -166,7 +166,8 @@
         // Implicit conversion to millis
         queryString += 'startTimeMillis=' + options.startAt + '000&';
       }
-      wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>';
+
+      wrapperElement.innerHTML = `<iframe src="${sources[0].path}${queryString}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>`;
       player = wrapperElement.firstChild;
       // Create a new player
       registerEchoPlayerEventListeneners(player);
