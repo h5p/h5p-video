@@ -109,7 +109,7 @@
           }
         }
         else if (message.event === 'timeline') {
-          duration = message.data.duration;
+          duration = message.data.duration ?? this.getDuration();
           currentTime = message.data.currentTime ?? 0;
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
