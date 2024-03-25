@@ -169,7 +169,7 @@ H5P.VideoEchoVideo = (() => {
       }
       if (options.startAt) {
         // Implicit conversion to millis
-        queryString += 'startTimeMillis=' + options.startAt + '000&';
+        queryString += `startTimeMillis=${options.startAt * 1000}&`;
       }
 
       wrapperElement.innerHTML = `<iframe src="${sources[0].path}${queryString}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>`;
