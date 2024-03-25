@@ -1,5 +1,6 @@
 /** @namespace Echo */
-H5P.VideoEchoVideo = (function () {
+
+  let numInstances = 0;
 
   /**
    * EchoVideo video player for H5P.
@@ -11,7 +12,6 @@ H5P.VideoEchoVideo = (function () {
    */
   function EchoPlayer(sources, options, l10n) {
     // State variables for the Player.
-    var numInstances = 0;
     let player = undefined;
     let buffered = 0;
     let currentQuality;
