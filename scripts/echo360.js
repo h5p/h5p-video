@@ -78,7 +78,11 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
-          if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
+
+          if (
+            options.autoplay &&
+            document.featurePolicy?.allowsFeature('autoplay')
+          ) {
             this.play();
             this.trigger('stateChange', H5P.Video.PLAYING);
           }
