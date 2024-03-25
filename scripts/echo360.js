@@ -80,9 +80,8 @@
           if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
             this.play();
             this.trigger('stateChange', H5P.Video.PLAYING);
-          } else {
-            this.trigger('stateChange', H5P.Video.PAUSED);
           }
+
           return true;
         });
       };
@@ -107,9 +106,6 @@
           this.trigger('resize');
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
-          }
-          else {
-            this.trigger('stateChange', H5P.Video.PAUSED);
           }
         }
         else if (message.event === 'timeline') {
