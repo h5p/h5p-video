@@ -1,4 +1,5 @@
 /** @namespace Echo */
+H5P.VideoEchoVideo = (() => {
 
   let numInstances = 0;
 
@@ -54,8 +55,8 @@
      */
     const mapQualityLevels = (qualityLevels) => {
       const qualities = qualityLevels.map((quality) => {
-        return { label: quality.label.toLowerCase(), name: quality.value }
-      })
+        return { label: quality.label.toLowerCase(), name: quality.value };
+      });
       return qualities;
     };
 
