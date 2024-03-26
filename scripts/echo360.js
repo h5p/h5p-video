@@ -1,5 +1,7 @@
 /** @namespace Echo */
-H5P.VideoEchoVideo = (function () {
+H5P.VideoEchoVideo = (() => {
+
+  let numInstances = 0;
 
   /**
    * EchoVideo video player for H5P.
@@ -11,7 +13,6 @@ H5P.VideoEchoVideo = (function () {
    */
   function EchoPlayer(sources, options, l10n) {
     // State variables for the Player.
-    var numInstances = 0;
     let player = undefined;
     let buffered = 0;
     let currentQuality;
@@ -54,8 +55,8 @@ H5P.VideoEchoVideo = (function () {
      */
     const mapQualityLevels = (qualityLevels) => {
       const qualities = qualityLevels.map((quality) => {
-        return { label: quality.label.toLowerCase(), name: quality.value }
-      })
+        return { label: quality.label.toLowerCase(), name: quality.value };
+      });
       return qualities;
     };
 
@@ -77,12 +78,15 @@ H5P.VideoEchoVideo = (function () {
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
-          if (options.autoplay && document.featurePolicy.allowsFeature('autoplay')) {
+
+          if (
+            options.autoplay &&
+            document.featurePolicy?.allowsFeature('autoplay')
+          ) {
             this.play();
             this.trigger('stateChange', H5P.Video.PLAYING);
-          } else {
-            this.trigger('stateChange', H5P.Video.PAUSED);
           }
+
           return true;
         });
       };
@@ -108,12 +112,9 @@ H5P.VideoEchoVideo = (function () {
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
           }
-          else {
-            this.trigger('stateChange', H5P.Video.PAUSED);
-          }
         }
         else if (message.event === 'timeline') {
-          duration = message.data.duration;
+          duration = message.data.duration ?? this.getDuration();
           currentTime = message.data.currentTime ?? 0;
           if (message.data.playing) {
             this.trigger('stateChange', H5P.Video.PLAYING);
@@ -168,9 +169,10 @@ H5P.VideoEchoVideo = (function () {
       }
       if (options.startAt) {
         // Implicit conversion to millis
-        queryString += 'startTimeMillis=' + options.startAt + '000&';
+        queryString += `startTimeMillis=${options.startAt * 1000}&`;
       }
-      wrapperElement.innerHTML = '<iframe src="' + sources[0].path + '" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>';
+
+      wrapperElement.innerHTML = `<iframe src="${sources[0].path}${queryString}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0"></iframe>`;
       player = wrapperElement.firstChild;
       // Create a new player
       registerEchoPlayerEventListeneners(player);
