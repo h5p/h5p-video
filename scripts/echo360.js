@@ -440,7 +440,6 @@ H5P.VideoEchoVideo = (() => {
       wrapperElement.style.cssText = 'width: 100%; height: 100%;';
       const width = wrapperElement.clientWidth;
       const height = options.fit ? wrapperElement.clientHeight : (width * (ratio));
-      console.log(`echo360 video height ${height}`);
       // Validate height before setting
       if (height > 0) {
         // Set size
