@@ -102,6 +102,7 @@ H5P.VideoEchoVideo = (() => {
         if (message.context !== 'Echo360') {
           return;
         }
+
         if (message.event === 'init') {
           duration = message.data.duration;
           currentTime = message.data.currentTime ?? 0;
@@ -117,15 +118,30 @@ H5P.VideoEchoVideo = (() => {
         else if (message.event === 'timeline') {
           duration = message.data.duration ?? this.getDuration();
           currentTime = message.data.currentTime ?? 0;
+
+          /*
+           * Should work, but it was better if the player itself clearly sent
+           * the state (playing, paused, ended) instead of us having to infer
+           */
+          if (
+            currentState === H5P.Video.PLAYING &&
+            Math.round(currentTime) >= Math.floor(duration)
+          ) {
+            changeState(H5P.Video.ENDED);
+
+            if (options.loop) {
+              this.seek(0);
+              this.play();
+            }
+            return;
+          }
+
           if (message.data.playing) {
             changeState(H5P.Video.PLAYING);
           }
-          else {
+          else if (currentState === H5P.Video.PLAYING) {
+            // Condition prevents video to be paused on startup
             changeState(H5P.Video.PAUSED);
-          }
-          if (currentTime >= (duration - 1) && options.loop) {
-            this.seek(0);
-            this.play();
           }
         }
       });
