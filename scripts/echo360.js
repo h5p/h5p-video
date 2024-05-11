@@ -139,6 +139,11 @@ H5P.VideoEchoVideo = (() => {
      */
     const isNodeVisible = (node) => {
       let style = window.getComputedStyle(node);
+
+      if (node.offsetWidth === 0) {
+        return false;
+      }
+
       return ((style.display !== 'none') && (style.visibility !== 'hidden'));
     };
 
