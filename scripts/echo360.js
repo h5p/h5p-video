@@ -81,8 +81,10 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('resize');
 
           if (
-            options.autoplay &&
-            document.featurePolicy?.allowsFeature('autoplay')
+            options.autoplay && (
+              !document.featurePolicy ||
+              document.featurePolicy?.allowsFeature('autoplay')
+            )
           ) {
             this.play();
             changeState(H5P.Video.PLAYING);
