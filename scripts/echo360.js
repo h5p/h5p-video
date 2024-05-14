@@ -87,7 +87,6 @@ H5P.VideoEchoVideo = (() => {
             )
           ) {
             this.play();
-            changeState(H5P.Video.PLAYING);
           }
 
           return true;
