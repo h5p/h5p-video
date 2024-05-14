@@ -289,6 +289,40 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     this.value = value;
   };
 
+ /**
+  * Determine whether video can be autoplayed.
+  * @returns {Promise<boolean>} Whether autoplay is allowed.
+  */
+  Video.isAutoplayAllowed = async () => {
+   if (document.featurePolicy?.allowsFeature('autoplay')) {
+     return true; // Browser supports `featurePolicy` and can tell directly
+   }
+
+   const video = document.createElement('video');
+
+   /*
+    * Without a video source, the play Promise will be rejected with an error
+    * if it cannot be autoplayed, but not resolve at all if it can be
+    * autoplayed. Using a timeout to detect the latter case here.
+    */
+   const timeoutMs = 50; // If play promise rejects, then within few ms
+
+   const timeoutPromise = new Promise((resolve) => {
+     window.setTimeout(() => {
+       resolve(true); // Timeout reached, autoplay is allowed
+     }, timeoutMs);
+   });
+
+   let;
+   try {
+     result = (await Promise.race([video.play(), timeoutPromise])) ?? true;
+   } catch (error) {
+     result = false;
+   }
+
+   return result;
+ };
+
   /** @constant {Boolean} */
   Video.IE11_PLAYBACK_RATE_FIX = (navigator.userAgent.match(/Trident.*rv[ :]*11\./) ? true : false);
 

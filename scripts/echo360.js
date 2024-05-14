@@ -74,18 +74,14 @@ H5P.VideoEchoVideo = (() => {
       });
       player.onload = async () => {
         clearTimeout(loadingFailedTimeout);
-        player.loadingPromise.then(() => {
+        player.loadingPromise.then(async () => {
           this.trigger('ready');
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
 
-          if (
-            options.autoplay && (
-              !document.featurePolicy ||
-              document.featurePolicy?.allowsFeature('autoplay')
-            )
-          ) {
+          const autoplayIsAllowed = await H5P.Video.isAutoplayAllowed();
+          if (options.autoplay && autoplayIsAllowed) {
             this.play();
           }
 
