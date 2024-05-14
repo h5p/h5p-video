@@ -27,6 +27,7 @@ H5P.VideoEchoVideo = (() => {
     let loadingFailedTimeout;
     let failedLoading = false;
     let ratio = 9 / 16;
+    let currentState = H5P.Video.VIDEO_CUED;
 
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
@@ -80,11 +81,13 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('resize');
 
           if (
-            options.autoplay &&
-            document.featurePolicy?.allowsFeature('autoplay')
+            options.autoplay && (
+              !document.featurePolicy ||
+              document.featurePolicy?.allowsFeature('autoplay')
+            )
           ) {
             this.play();
-            this.trigger('stateChange', H5P.Video.PLAYING);
+            changeState(H5P.Video.PLAYING);
           }
 
           return true;
@@ -101,6 +104,7 @@ H5P.VideoEchoVideo = (() => {
         if (message.context !== 'Echo360') {
           return;
         }
+
         if (message.event === 'init') {
           duration = message.data.duration;
           currentTime = message.data.currentTime ?? 0;
@@ -110,24 +114,50 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('qualityChange', currentQuality);
           this.trigger('resize');
           if (message.data.playing) {
-            this.trigger('stateChange', H5P.Video.PLAYING);
+            changeState(H5P.Video.PLAYING);
           }
         }
         else if (message.event === 'timeline') {
           duration = message.data.duration ?? this.getDuration();
           currentTime = message.data.currentTime ?? 0;
+
+          /*
+           * Should work, but it was better if the player itself clearly sent
+           * the state (playing, paused, ended) instead of us having to infer
+           */
+          if (
+            currentState === H5P.Video.PLAYING &&
+            Math.round(currentTime) >= Math.floor(duration)
+          ) {
+            changeState(H5P.Video.ENDED);
+
+            if (options.loop) {
+              this.seek(0);
+              this.play();
+            }
+            return;
+          }
+
           if (message.data.playing) {
-            this.trigger('stateChange', H5P.Video.PLAYING);
+            changeState(H5P.Video.PLAYING);
           }
-          else {
-            this.trigger('stateChange', H5P.Video.PAUSED);
-          }
-          if (currentTime >= (duration - 1) && options.loop) {
-            this.seek(0);
-            this.play();
+          else if (currentState === H5P.Video.PLAYING) {
+            // Condition prevents video to be paused on startup
+            changeState(H5P.Video.PAUSED);
           }
         }
       });
+    };
+
+    /**
+     * Change state of the player.
+     * @param {number} state State id (H5P.Video[statename]).
+     */
+    const changeState = (state) => {
+      if (state !== currentState) {
+        currentState = state;
+        this.trigger('stateChange', state);
+      }
     };
 
     /**
@@ -139,6 +169,11 @@ H5P.VideoEchoVideo = (() => {
      */
     const isNodeVisible = (node) => {
       let style = window.getComputedStyle(node);
+
+      if (node.offsetWidth === 0) {
+        return false;
+      }
+
       return ((style.display !== 'none') && (style.visibility !== 'hidden'));
     };
 
