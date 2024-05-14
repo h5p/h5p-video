@@ -28,6 +28,8 @@ H5P.VideoEchoVideo = (() => {
     let failedLoading = false;
     let ratio = 9 / 16;
     let currentState = H5P.Video.VIDEO_CUED;
+    // Echo360 updates the timeline ~ every 0.25 seconds.
+    const echoUncertaintyCompensationS = 0.3;
 
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
@@ -107,7 +109,7 @@ H5P.VideoEchoVideo = (() => {
 
         if (message.event === 'init') {
           duration = message.data.duration;
-          currentTime = message.data.currentTime ?? 0;
+          this.setCurrentTime(message.data.currentTime ?? 0);
           qualities = mapQualityLevels(message.data.qualityOptions);
           currentQuality = qualities[0].name;
           player.resolveLoading();
@@ -119,15 +121,15 @@ H5P.VideoEchoVideo = (() => {
         }
         else if (message.event === 'timeline') {
           duration = message.data.duration ?? this.getDuration();
-          currentTime = message.data.currentTime ?? 0;
+          this.setCurrentTime(message.data.currentTime ?? 0);
 
           /*
            * Should work, but it was better if the player itself clearly sent
-           * the state (playing, paused, ended) instead of us having to infer
+           * the state (playing, paused, ended) instead of us having to infer.
            */
           if (
             currentState === H5P.Video.PLAYING &&
-            Math.round(currentTime) >= Math.floor(duration)
+            this.getCurrentTime() + echoUncertaintyCompensationS >= duration
           ) {
             changeState(H5P.Video.ENDED);
 
@@ -304,7 +306,7 @@ H5P.VideoEchoVideo = (() => {
      */
     this.seek = (time) => {
       this.post('seek', time);
-      currentTime = time;
+      this.setCurrentTime(time);
     };
 
     /**
@@ -327,8 +329,23 @@ H5P.VideoEchoVideo = (() => {
      * @returns {Number} Seconds elapsed since beginning of video
      */
     this.getCurrentTime = () => {
-      return currentTime;
+      let delta = 0;
+      if (currentState === H5P.Video.PLAYING) {
+        delta = Date.now() - (this.lastTimeSetAt ?? Date.now());
+      }
+
+      return currentTime + delta / 1000;
     };
+
+    /**
+     * Set current time.
+     * @param {number} timeS Time in seconds.
+     */
+    this.setCurrentTime = (timeS) => {
+      currentTime = timeS;
+
+      this.lastTimeSetAt = Date.now();
+    }
 
     /**
      * Return the video duration.
