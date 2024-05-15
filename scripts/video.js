@@ -313,7 +313,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      }, timeoutMs);
    });
 
-   let;
+   let result;
    try {
      result = (await Promise.race([video.play(), timeoutPromise])) ?? true;
    } catch (error) {
