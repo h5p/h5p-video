@@ -28,6 +28,9 @@ H5P.VideoEchoVideo = (() => {
     let failedLoading = false;
     let ratio = 9 / 16;
     let currentState = H5P.Video.VIDEO_CUED;
+    // Echo360 server doesn't sync seek time with regular play time fast enough
+    let timelineUpdatesToSkip = 0;
+    let timeUpdateTimeout;
     // Echo360 updates the timeline ~ every 0.25 seconds.
     const echoUncertaintyCompensationS = 0.3;
 
@@ -121,7 +124,13 @@ H5P.VideoEchoVideo = (() => {
         }
         else if (message.event === 'timeline') {
           duration = message.data.duration ?? this.getDuration();
-          this.setCurrentTime(message.data.currentTime ?? 0);
+
+          if (timelineUpdatesToSkip === 0) {
+            this.setCurrentTime(message.data.currentTime ?? 0);
+          }
+          else {
+            timelineUpdatesToSkip--;
+          }
 
           /*
            * Should work, but it was better if the player itself clearly sent
@@ -141,11 +150,13 @@ H5P.VideoEchoVideo = (() => {
           }
 
           if (message.data.playing) {
+            timeUpdate(currentTime);
             changeState(H5P.Video.PLAYING);
           }
           else if (currentState === H5P.Video.PLAYING) {
             // Condition prevents video to be paused on startup
             changeState(H5P.Video.PAUSED);
+            window.clearTimeout(timeUpdateTimeout);
           }
         }
       });
@@ -178,6 +189,22 @@ H5P.VideoEchoVideo = (() => {
 
       return ((style.display !== 'none') && (style.visibility !== 'hidden'));
     };
+
+    const timeUpdate = (time) => {
+      window.clearTimeout(timeUpdateTimeout);
+
+      this.lastTimeUpdate = Date.now();
+
+      timeUpdateTimeout = window.setTimeout(() => {
+        if (currentState !== H5P.Video.PLAYING) {
+          return;
+        }
+
+        const delta = Date.now() - this.lastTimeUpdate;
+        this.setCurrentTime(currentTime + delta / 1000);
+        timeUpdate(currentTime);
+      }, 40); // 25 fps
+    }
 
     /**
      * Create a new player by embedding an iframe.
@@ -295,6 +322,8 @@ H5P.VideoEchoVideo = (() => {
      * @public
      */
     this.pause = () => {
+      // Compensate for Echo360's delayed time updates
+      timelineUpdatesToSkip = 1;
       this.post('pause', 0);
     };
 
@@ -307,6 +336,8 @@ H5P.VideoEchoVideo = (() => {
     this.seek = (time) => {
       this.post('seek', time);
       this.setCurrentTime(time);
+      // Compensate for Echo360's delayed time updates
+      timelineUpdatesToSkip = 1;
     };
 
     /**
@@ -329,12 +360,7 @@ H5P.VideoEchoVideo = (() => {
      * @returns {Number} Seconds elapsed since beginning of video
      */
     this.getCurrentTime = () => {
-      let delta = 0;
-      if (currentState === H5P.Video.PLAYING) {
-        delta = Date.now() - (this.lastTimeSetAt ?? Date.now());
-      }
-
-      return currentTime + delta / 1000;
+      return currentTime;
     };
 
     /**
@@ -343,8 +369,6 @@ H5P.VideoEchoVideo = (() => {
      */
     this.setCurrentTime = (timeS) => {
       currentTime = timeS;
-
-      this.lastTimeSetAt = Date.now();
     }
 
     /**
