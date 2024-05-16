@@ -28,6 +28,11 @@ H5P.VideoEchoVideo = (() => {
     let failedLoading = false;
     let ratio = 9 / 16;
     let currentState = H5P.Video.VIDEO_CUED;
+    // Echo360 server doesn't sync seek time with regular play time fast enough
+    let timelineUpdatesToSkip = 0;
+    let timeUpdateTimeout;
+    // Echo360 updates the timeline ~ every 0.25 seconds.
+    const echoUncertaintyCompensationS = 0.3;
 
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
@@ -102,7 +107,7 @@ H5P.VideoEchoVideo = (() => {
 
         if (message.event === 'init') {
           duration = message.data.duration;
-          currentTime = message.data.currentTime ?? 0;
+          this.setCurrentTime(message.data.currentTime ?? 0);
           qualities = mapQualityLevels(message.data.qualityOptions);
           currentQuality = qualities[0].name;
           player.resolveLoading();
@@ -114,15 +119,21 @@ H5P.VideoEchoVideo = (() => {
         }
         else if (message.event === 'timeline') {
           duration = message.data.duration ?? this.getDuration();
-          currentTime = message.data.currentTime ?? 0;
+
+          if (timelineUpdatesToSkip === 0) {
+            this.setCurrentTime(message.data.currentTime ?? 0);
+          }
+          else {
+            timelineUpdatesToSkip--;
+          }
 
           /*
            * Should work, but it was better if the player itself clearly sent
-           * the state (playing, paused, ended) instead of us having to infer
+           * the state (playing, paused, ended) instead of us having to infer.
            */
           if (
             currentState === H5P.Video.PLAYING &&
-            Math.round(currentTime) >= Math.floor(duration)
+            this.getCurrentTime() + echoUncertaintyCompensationS >= duration
           ) {
             changeState(H5P.Video.ENDED);
 
@@ -134,11 +145,13 @@ H5P.VideoEchoVideo = (() => {
           }
 
           if (message.data.playing) {
+            timeUpdate(currentTime);
             changeState(H5P.Video.PLAYING);
           }
           else if (currentState === H5P.Video.PLAYING) {
             // Condition prevents video to be paused on startup
             changeState(H5P.Video.PAUSED);
+            window.clearTimeout(timeUpdateTimeout);
           }
         }
       });
@@ -171,6 +184,22 @@ H5P.VideoEchoVideo = (() => {
 
       return ((style.display !== 'none') && (style.visibility !== 'hidden'));
     };
+
+    const timeUpdate = (time) => {
+      window.clearTimeout(timeUpdateTimeout);
+
+      this.lastTimeUpdate = Date.now();
+
+      timeUpdateTimeout = window.setTimeout(() => {
+        if (currentState !== H5P.Video.PLAYING) {
+          return;
+        }
+
+        const delta = Date.now() - this.lastTimeUpdate;
+        this.setCurrentTime(currentTime + delta / 1000);
+        timeUpdate(currentTime);
+      }, 40); // 25 fps
+    }
 
     /**
      * Create a new player by embedding an iframe.
@@ -288,6 +317,8 @@ H5P.VideoEchoVideo = (() => {
      * @public
      */
     this.pause = () => {
+      // Compensate for Echo360's delayed time updates
+      timelineUpdatesToSkip = 1;
       this.post('pause', 0);
     };
 
@@ -299,7 +330,9 @@ H5P.VideoEchoVideo = (() => {
      */
     this.seek = (time) => {
       this.post('seek', time);
-      currentTime = time;
+      this.setCurrentTime(time);
+      // Compensate for Echo360's delayed time updates
+      timelineUpdatesToSkip = 1;
     };
 
     /**
@@ -324,6 +357,14 @@ H5P.VideoEchoVideo = (() => {
     this.getCurrentTime = () => {
       return currentTime;
     };
+
+    /**
+     * Set current time.
+     * @param {number} timeS Time in seconds.
+     */
+    this.setCurrentTime = (timeS) => {
+      currentTime = timeS;
+    }
 
     /**
      * Return the video duration.
