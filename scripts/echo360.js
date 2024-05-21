@@ -343,7 +343,7 @@ H5P.VideoEchoVideo = (() => {
      * @param data
      */
     this.post = (event, data) => {
-      if (player) {
+      if (player?.contentWindow) {
         player.contentWindow.postMessage(JSON.stringify({ event: event, data: data }), '*');
       }
     };
