@@ -402,7 +402,7 @@ H5P.VideoPanopto = (function ($) {
      * @returns {Array} available playback rates
      */
     self.getPlaybackRates = function () {
-      return [0.25, 0.5, 1, 1.25, 1.5, 2];
+      return H5P.Video.DEFAULT_PLAYBACK_RATES;
     };
 
     /**
@@ -424,10 +424,16 @@ H5P.VideoPanopto = (function ($) {
      * Listen to event "playbackRateChange" to check if successful.
      *
      * @public
-     * @params {Number} suggested rate that may be rounded to supported values
+     * @params {Number|string} newPlaybackRate Suggested rate that may be rounded to supported values.
      */
     self.setPlaybackRate = function (newPlaybackRate) {
       if (!player || !player.setPlaybackRate) {
+        return;
+      }
+
+      newPlaybackRate = Number(newPlaybackRate); // argument may be string
+
+      if (self.getPlaybackRates().indexOf(newPlaybackRate) === -1) {
         return;
       }
 
