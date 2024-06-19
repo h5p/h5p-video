@@ -539,7 +539,7 @@ H5P.VideoYouTube = (function ($) {
           height: height + 'px'
         });
 
-        // player.setSize(width, height);
+        player.setSize(width, height);
       }
     });
   }
