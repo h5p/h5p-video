@@ -16,11 +16,11 @@ H5P.VideoYouTube = (function ($) {
     var playbackRate = 1;
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
-
+    var ratio = 9/16;
     var $wrapper = $('<div/>');
-    var $placeholder = $('<div/>', {
-      id: id,
-      text: l10n.loading
+    var $placeholder = $('<div />', {
+      text: l10n.loading,
+      html: `<div style="position: relative; padding: ${ratio*100}% 0 0 0;"><div id="${id}"></div></div>`
     }).appendTo($wrapper);
 
     // Optional placeholder
@@ -166,6 +166,7 @@ H5P.VideoYouTube = (function ($) {
           }
         }
       });
+      player.g.style = "position:absolute;top:0;left:0;width:100%;height:100%;";
     };
 
     /**
@@ -524,7 +525,7 @@ H5P.VideoYouTube = (function ($) {
       // Use as much space as possible
       $wrapper.css({
         width: '100%',
-        height: '100%'
+        height: 'auto'
       });
 
       var width = $wrapper[0].clientWidth;
@@ -538,7 +539,7 @@ H5P.VideoYouTube = (function ($) {
           height: height + 'px'
         });
 
-        player.setSize(width, height);
+        // player.setSize(width, height);
       }
     });
   }
