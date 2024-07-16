@@ -132,9 +132,11 @@ H5P.VideoEchoVideo = (() => {
            * Should work, but it was better if the player itself clearly sent
            * the state (playing, paused, ended) instead of us having to infer.
            */
+          const compensatedTime = this.getCurrentTime() +
+            echoUncertaintyCompensationS * this.getPlaybackRate()
+
           if (
-            currentState === H5P.Video.PLAYING &&
-            this.getCurrentTime() + echoUncertaintyCompensationS >= duration
+            currentState === H5P.Video.PLAYING && compensatedTime >= duration
           ) {
             changeState(H5P.Video.ENDED);
 
