@@ -136,7 +136,8 @@ H5P.VideoEchoVideo = (() => {
             echoUncertaintyCompensationS * this.getPlaybackRate()
 
           if (
-            currentState === H5P.Video.PLAYING && compensatedTime >= duration
+            currentState === H5P.Video.PLAYING &&
+              Math.ceil(compensatedTime) >= duration
           ) {
             changeState(H5P.Video.ENDED);
 
