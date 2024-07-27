@@ -31,8 +31,17 @@ H5P.VideoEchoVideo = (() => {
     // Echo360 server doesn't sync seek time with regular play time fast enough
     let timelineUpdatesToSkip = 0;
     let timeUpdateTimeout;
-    // Echo360 updates the timeline ~ every 0.25 seconds.
-    const echoUncertaintyCompensationS = 0.3;
+
+    /*
+     * Echo360 player does send time updates ~ 0.25 seconds by default and
+     * ends playing the video without sending a final time update or an
+     * Video Ended event. We take care of determining reaching the video end
+     * ourselves.
+     */
+    const echoMinUncertaintyCompensationS = 0.3;
+    const timelineUpdateDeltaSlackMS = 50;
+    let echoUncertaintyCompensationS = echoMinUncertaintyCompensationS;
+    let previousTickMS;
 
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
@@ -119,6 +128,8 @@ H5P.VideoEchoVideo = (() => {
           }
         }
         else if (message.event === 'timeline') {
+          updateUncertaintyCompensation();
+
           duration = message.data.duration ?? this.getDuration();
 
           if (timelineUpdatesToSkip === 0) {
@@ -160,6 +171,32 @@ H5P.VideoEchoVideo = (() => {
         }
       });
     };
+
+    /**
+     * Update the uncertainty compensation value.
+     * Computes the delta time between the last two timeline events sent by the
+     * Echo360 player and updates the compensation value.
+     */
+    const updateUncertaintyCompensation = () => {
+      if (currentState === H5P.Video.PLAYING) {
+        const time = Date.now();
+
+        if (previousTickMS) {
+          echoUncertaintyCompensationS = Math.max(
+            echoMinUncertaintyCompensationS,
+            (time - previousTickMS + timelineUpdateDeltaSlackMS) /
+              1000
+          )
+        } else {
+          echoUncertaintyCompensationS = echoMinUncertaintyCompensationS;
+        }
+
+        previousTickMS = time;
+      }
+      else {
+        delete previousTickMS;
+      }
+    }
 
     /**
      * Change state of the player.
