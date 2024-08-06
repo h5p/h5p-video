@@ -16,7 +16,7 @@ H5P.VideoEchoVideo = (() => {
     let player = undefined;
     let buffered = 0;
     let currentQuality;
-    let currentTextTrack;
+    let currentTextTrack = [];
     let currentTime = 0;
     let duration = 0;
     let isMuted = false;
@@ -46,6 +46,7 @@ H5P.VideoEchoVideo = (() => {
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
     const id = `h5p-echo-${++numInstances}`;
+    const instanceId = crypto.randomUUID();
     const wrapperElement = document.createElement('div');
     const placeholderElement = document.createElement('div');
 
@@ -93,6 +94,7 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
+          this.trigger('captions', currentTextTrack)
 
           const autoplayIsAllowed = !window.H5PEditor &&
             await H5P.Video.isAutoplayAllowed();
@@ -111,7 +113,7 @@ H5P.VideoEchoVideo = (() => {
         catch (e) {
           return;
         }
-        if (message.context !== 'Echo360') {
+        if (message.context !== 'Echo360' || message.instanceId !== instanceId) {
           return;
         }
 
@@ -120,6 +122,13 @@ H5P.VideoEchoVideo = (() => {
           this.setCurrentTime(message.data.currentTime ?? 0);
           qualities = mapQualityLevels(message.data.qualityOptions);
           currentQuality = qualities[0].name;
+          captions = message.data.captions;
+          textTracks = message.data.textTracks;
+          if (captions) {
+            for(let i = 0; i < textTracks.length; i++) {
+               currentTextTrack.push(new H5P.Video.LabelValue(textTracks[i].label, textTracks[i].value));
+            }
+          }
           player.resolveLoading();
           this.trigger('qualityChange', currentQuality);
           this.trigger('resize');
@@ -258,6 +267,8 @@ H5P.VideoEchoVideo = (() => {
       // more than once.
       player = null;
       let queryString = '?';
+      queryString += `instanceId=${instanceId}&`;
+
       if (options.controls) {
         queryString += 'controls=true&';
       }
@@ -387,7 +398,7 @@ H5P.VideoEchoVideo = (() => {
      */
     this.post = (event, data) => {
       if (player?.contentWindow) {
-        player.contentWindow.postMessage(JSON.stringify({ event: event, data: data }), '*');
+        player.contentWindow.postMessage(JSON.stringify({ event: event, context: 'Echo360', instanceId: instanceId, data: data }), '*');
       }
     };
 
@@ -523,12 +534,16 @@ H5P.VideoEchoVideo = (() => {
      * @param {H5P.Video.LabelValue} track Captions to display
      */
     this.setCaptionsTrack = (track) => {
-      if (!track) {
-        this.post('texttrack', null);
-        currentTextTrack = null;
+      let echoCaption;
+      for (let i = 0; i < currentTextTrack.length; i++) {
+        if (track && track.value === currentTextTrack[i].value) {
+            currentTextTrack[i].mode = 'showing';
+            echoCaption = currentTextTrack[i];
+        } else {
+            currentTextTrack[i].mode = 'disabled';
+        }
       }
-      this.post('texttrack', track.value);
-      currentTextTrack = track;
+      this.post('captions', echoCaption ? echoCaption.value : 'off');
     };
 
     /**
@@ -538,7 +553,12 @@ H5P.VideoEchoVideo = (() => {
      * @returns {H5P.Video.LabelValue}
      */
     this.getCaptionsTrack = () => {
-      return currentTextTrack;
+      for (let i = 0; i < currentTextTrack.length; i++) {
+        if(currentTextTrack[i].mode === 'showing') {
+          return currentTextTrack[i]
+        }
+      } 
+      return null
     };
 
     this.on('resize', () => {
