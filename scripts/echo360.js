@@ -46,7 +46,7 @@ H5P.VideoEchoVideo = (() => {
     // Player specific immutable variables.
     const LOADING_TIMEOUT_IN_SECONDS = 30;
     const id = `h5p-echo-${++numInstances}`;
-    const instanceId = crypto.randomUUID();
+    const instanceId = H5P.createUUID();
     const wrapperElement = document.createElement('div');
     const placeholderElement = document.createElement('div');
 
