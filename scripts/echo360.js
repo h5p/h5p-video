@@ -16,7 +16,7 @@ H5P.VideoEchoVideo = (() => {
     let player = undefined;
     let buffered = 0;
     let currentQuality;
-    let currentTextTrack = [];
+    let trackOptions = [];
     let currentTime = 0;
     let duration = 0;
     let isMuted = false;
@@ -94,7 +94,7 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
-          this.trigger('captions', currentTextTrack)
+          this.trigger('captions', trackOptions)
 
           const autoplayIsAllowed = !window.H5PEditor &&
             await H5P.Video.isAutoplayAllowed();
@@ -113,21 +113,24 @@ H5P.VideoEchoVideo = (() => {
         catch (e) {
           return;
         }
-        if (message.context !== 'Echo360' || message.instanceId !== instanceId) {
+        if (
+          message.context !== 'Echo360' || message.instanceId !== instanceId
+        ) {
           return;
         }
 
         if (message.event === 'init') {
           duration = message.data.duration;
           this.setCurrentTime(message.data.currentTime ?? 0);
+
           qualities = mapQualityLevels(message.data.qualityOptions);
           currentQuality = qualities[0].name;
-          captions = message.data.captions;
-          textTracks = message.data.textTracks;
-          if (captions) {
-            for(let i = 0; i < textTracks.length; i++) {
-               currentTextTrack.push(new H5P.Video.LabelValue(textTracks[i].label, textTracks[i].value));
-            }
+
+          textTracks = message.data.textTracks ?? [];
+          if (message.data.captions) {
+            trackOptions = textTracks.map((track) =>
+              new H5P.Video.LabelValue(track.label, track.value)
+            );
           }
           player.resolveLoading();
           this.trigger('qualityChange', currentQuality);
@@ -267,6 +270,7 @@ H5P.VideoEchoVideo = (() => {
       // more than once.
       player = null;
       let queryString = '?';
+
       queryString += `instanceId=${instanceId}&`;
 
       if (options.controls) {
@@ -397,9 +401,15 @@ H5P.VideoEchoVideo = (() => {
      * @param data
      */
     this.post = (event, data) => {
-      if (player?.contentWindow) {
-        player.contentWindow.postMessage(JSON.stringify({ event: event, context: 'Echo360', instanceId: instanceId, data: data }), '*');
-      }
+      player?.contentWindow?.postMessage(
+        JSON.stringify({
+          event: event,
+          context: 'Echo360',
+          instanceId: instanceId,
+          data: data
+        }),
+        '*'
+      );
     };
 
     /**
@@ -534,15 +544,14 @@ H5P.VideoEchoVideo = (() => {
      * @param {H5P.Video.LabelValue} track Captions to display
      */
     this.setCaptionsTrack = (track) => {
-      let echoCaption;
-      for (let i = 0; i < currentTextTrack.length; i++) {
-        if (track && track.value === currentTextTrack[i].value) {
-            currentTextTrack[i].mode = 'showing';
-            echoCaption = currentTextTrack[i];
-        } else {
-            currentTextTrack[i].mode = 'disabled';
-        }
-      }
+      const echoCaption = trackOptions.find(
+        (trackItem) => track?.value === trackItem.value
+      );
+
+      trackOptions.forEach(trackItem => {
+        trackItem.mode = (trackItem === echoCaption) ? 'showing' : 'disabled';
+      });
+
       this.post('captions', echoCaption ? echoCaption.value : 'off');
     };
 
@@ -550,15 +559,12 @@ H5P.VideoEchoVideo = (() => {
      * Get current captions track.
      *
      * @public
-     * @returns {H5P.Video.LabelValue}
+     * @returns {H5P.Video.LabelValue|null} Current captions track.
      */
     this.getCaptionsTrack = () => {
-      for (let i = 0; i < currentTextTrack.length; i++) {
-        if(currentTextTrack[i].mode === 'showing') {
-          return currentTextTrack[i]
-        }
-      } 
-      return null
+      return trackOptions.find(
+        (trackItem) => trackItem.mode === 'showing'
+      ) ?? null;
     };
 
     this.on('resize', () => {
