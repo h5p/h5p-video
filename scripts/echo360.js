@@ -283,10 +283,7 @@ H5P.VideoEchoVideo = (() => {
         queryString += 'deactivateSound=true&';
       }
       if (options.startAt) {
-        // Round to 3 decimal places to avoid floating point errors server-side
-        options.startAt = Math.round(options.startAt * 1000) / 1000;
-        // Implicit conversion to millis
-        queryString += `startTimeMillis=${options.startAt * 1000}&`;
+        queryString += `startTimeMillis=${Math.round(options.startAt * 1000)}&`;
       }
 
       wrapperElement.innerHTML = `<iframe src="${sources[0].path}${queryString}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0" scrolling="no"></iframe>`;
