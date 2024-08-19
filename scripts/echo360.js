@@ -48,10 +48,13 @@ H5P.VideoEchoVideo = (() => {
     const id = `h5p-echo-${++numInstances}`;
     const instanceId = H5P.createUUID();
     const wrapperElement = document.createElement('div');
+
     const placeholderElement = document.createElement('div');
+    placeholderElement.classList.add('h5p-video-loading');
+    placeholderElement.setAttribute('style', 'height: 100%; min-height: 200px; display: block; z-index: 100; border: none;');
+    placeholderElement.setAttribute('aria-label', l10n.loading);
 
     wrapperElement.setAttribute('id', id);
-    placeholderElement.innerHTML = `<div class="h5p-video-loading" style="height: 100%; min-height: 200px; display: block; z-index: 100; border: none;" aria-label="${l10n.loading}"></div>`;
     wrapperElement.append(placeholderElement);
 
     /**
