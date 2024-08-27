@@ -32,6 +32,9 @@ H5P.VideoEchoVideo = (() => {
     let timelineUpdatesToSkip = 0;
     let timeUpdateTimeout;
 
+    const timeUpdateIntervalDefaultMs = 40; // 25 fps by default
+    let timeUpdateIntervalMs = timeUpdateIntervalDefaultMs;
+
     /*
      * Echo360 player does send time updates ~ 0.25 seconds by default and
      * ends playing the video without sending a final time update or an
@@ -260,7 +263,7 @@ H5P.VideoEchoVideo = (() => {
         const delta = Date.now() - this.lastTimeUpdate;
         this.setCurrentTime(currentTime + delta / 1000);
         timeUpdate(currentTime);
-      }, 40); // 25 fps
+      }, timeUpdateIntervalMs);
     }
 
     /**
@@ -540,6 +543,13 @@ H5P.VideoEchoVideo = (() => {
       const echoRate = parseFloat(rate);
       this.post('playbackrate', echoRate);
       playbackRate = rate;
+
+      // Reduce time update interval for slower playback
+      timeUpdateIntervalMs = Math.max(
+        timeUpdateIntervalDefaultMs,
+        timeUpdateIntervalDefaultMs / rate
+      );
+
       this.trigger('playbackRateChange', rate);
     };
 
