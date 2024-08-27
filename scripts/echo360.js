@@ -133,19 +133,19 @@ H5P.VideoEchoVideo = (() => {
             );
           }
           player.resolveLoading();
-          
+
           // Player sends `init` event after rebuffering, unfortunately.
           if (!this.wasInitialized) {
             qualities = mapQualityLevels(message.data.qualityOptions);
             currentQuality = qualities[0].name;
             this.trigger('qualityChange', currentQuality);
           }
-          
+
           this.trigger('resize');
           if (message.data.playing) {
             changeState(H5P.Video.PLAYING);
           }
-          
+
           this.wasInitialized = true;
         }
         else if (message.event === 'timeline') {
