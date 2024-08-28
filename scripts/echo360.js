@@ -133,19 +133,19 @@ H5P.VideoEchoVideo = (() => {
             );
           }
           player.resolveLoading();
-          
+
           // Player sends `init` event after rebuffering, unfortunately.
           if (!this.wasInitialized) {
             qualities = mapQualityLevels(message.data.qualityOptions);
             currentQuality = qualities[0].name;
             this.trigger('qualityChange', currentQuality);
           }
-          
+
           this.trigger('resize');
           if (message.data.playing) {
             changeState(H5P.Video.PLAYING);
           }
-          
+
           this.wasInitialized = true;
         }
         else if (message.event === 'timeline') {
@@ -257,7 +257,7 @@ H5P.VideoEchoVideo = (() => {
           return;
         }
 
-        const delta = Date.now() - this.lastTimeUpdate;
+        const delta = (Date.now() - this.lastTimeUpdate) * this.getPlaybackRate();
         this.setCurrentTime(currentTime + delta / 1000);
         timeUpdate(currentTime);
       }, 40); // 25 fps
