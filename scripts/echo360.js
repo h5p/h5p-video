@@ -34,6 +34,8 @@ H5P.VideoEchoVideo = (() => {
 
     const timeUpdateIntervalDefaultMs = 40; // 25 fps by default
     let timeUpdateIntervalMs = timeUpdateIntervalDefaultMs;
+    const previousTimes = []; // Buffer for previous times to prevent jumps
+    const previousTimesBuffer = 2;
 
     /*
      * Echo360 player does send time updates ~ 0.25 seconds by default and
@@ -261,7 +263,7 @@ H5P.VideoEchoVideo = (() => {
         }
 
         const delta = Date.now() - this.lastTimeUpdate;
-        this.setCurrentTime(currentTime + delta / 1000);
+        this.setCurrentTimeGuarded(currentTime + delta / 1000);
         timeUpdate(currentTime);
       }, timeUpdateIntervalMs);
     }
@@ -438,6 +440,38 @@ H5P.VideoEchoVideo = (() => {
     this.setCurrentTime = (timeS) => {
       currentTime = timeS;
     }
+
+    /**
+     * Set current time with guard against Echo360's delayed time updates.
+     * @param {number} timeS Time in seconds.
+     * @returns
+     */
+    this.setCurrentTimeGuarded = (timeS) => {
+      const maxIndex = previousTimes.length - 1;
+
+      // Prevent currentTime from jumping back and forth
+      if (
+        previousTimes[maxIndex - 1] < previousTimes[maxIndex] &&
+        previousTimes[maxIndex] > timeS &&
+        previousTimes[maxIndex - 1] <= timeS // Allow seeking back
+      ) {
+        return;
+      }
+      this.updatePreviousTimes(currentTime);
+
+      this.setCurrentTime(timeS);
+    }
+
+    /**
+     * Update previous times storage.
+     * @param {number} timeS Time in seconds to store.
+     */
+    this.updatePreviousTimes = (timeS) => {
+      if (previousTimes.length >= previousTimesBuffer) {
+        previousTimes.shift();
+      }
+      previousTimes.push(timeS);
+    };
 
     /**
      * Return the video duration.
