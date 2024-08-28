@@ -32,11 +32,6 @@ H5P.VideoEchoVideo = (() => {
     let timelineUpdatesToSkip = 0;
     let timeUpdateTimeout;
 
-    const timeUpdateIntervalDefaultMs = 40; // 25 fps by default
-    let timeUpdateIntervalMs = timeUpdateIntervalDefaultMs;
-    const previousTimes = []; // Buffer for previous times to prevent jumps
-    const previousTimesBuffer = 2;
-
     /*
      * Echo360 player does send time updates ~ 0.25 seconds by default and
      * ends playing the video without sending a final time update or an
@@ -263,9 +258,9 @@ H5P.VideoEchoVideo = (() => {
         }
 
         const delta = (Date.now() - this.lastTimeUpdate) * this.getPlaybackRate();
-        this.setCurrentTimeGuarded(currentTime + delta / 1000);
+        this.setCurrentTime(currentTime + delta / 1000);
         timeUpdate(currentTime);
-      }, timeUpdateIntervalMs);
+      }, 40); // 25 fps
     }
 
     /**
@@ -442,38 +437,6 @@ H5P.VideoEchoVideo = (() => {
     }
 
     /**
-     * Set current time with guard against Echo360's delayed time updates.
-     * @param {number} timeS Time in seconds.
-     * @returns
-     */
-    this.setCurrentTimeGuarded = (timeS) => {
-      const maxIndex = previousTimes.length - 1;
-
-      // Prevent currentTime from jumping back and forth
-      if (
-        previousTimes[maxIndex - 1] < previousTimes[maxIndex] &&
-        previousTimes[maxIndex] > timeS &&
-        previousTimes[maxIndex - 1] <= timeS // Allow seeking back
-      ) {
-        return;
-      }
-      this.updatePreviousTimes(currentTime);
-
-      this.setCurrentTime(timeS);
-    }
-
-    /**
-     * Update previous times storage.
-     * @param {number} timeS Time in seconds to store.
-     */
-    this.updatePreviousTimes = (timeS) => {
-      if (previousTimes.length >= previousTimesBuffer) {
-        previousTimes.shift();
-      }
-      previousTimes.push(timeS);
-    };
-
-    /**
      * Return the video duration.
      *
      * @public
@@ -577,13 +540,6 @@ H5P.VideoEchoVideo = (() => {
       const echoRate = parseFloat(rate);
       this.post('playbackrate', echoRate);
       playbackRate = rate;
-
-      // Reduce time update interval for slower playback
-      timeUpdateIntervalMs = Math.max(
-        timeUpdateIntervalDefaultMs,
-        timeUpdateIntervalDefaultMs / rate
-      );
-
       this.trigger('playbackRateChange', rate);
     };
 
