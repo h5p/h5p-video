@@ -262,7 +262,7 @@ H5P.VideoEchoVideo = (() => {
           return;
         }
 
-        const delta = Date.now() - this.lastTimeUpdate;
+        const delta = (Date.now() - this.lastTimeUpdate) * this.getPlaybackRate();
         this.setCurrentTimeGuarded(currentTime + delta / 1000);
         timeUpdate(currentTime);
       }, timeUpdateIntervalMs);
