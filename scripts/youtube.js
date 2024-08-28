@@ -480,7 +480,7 @@ H5P.VideoYouTube = (function ($) {
      * Listen to event "playbackRateChange" to check if successful.
      *
      * @public
-     * @params {Number} suggested rate that may be rounded to supported values
+     * @params {Number|string} newPlaybackRate suggested rate that may be rounded to supported values.
      */
     self.setPlaybackRate = function (newPlaybackRate) {
       if (!player || !player.setPlaybackRate) {
@@ -488,6 +488,11 @@ H5P.VideoYouTube = (function ($) {
       }
 
       playbackRate = Number(newPlaybackRate);
+
+      if ((self.getPlaybackRates() || []).indexOf(playbackRate) === -1) {
+        return;
+      }
+
       player.setPlaybackRate(playbackRate);
     };
 

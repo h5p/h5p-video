@@ -517,7 +517,7 @@ H5P.VideoEchoVideo = (() => {
      * @returns {Array} Available playback rates
      */
     this.getPlaybackRates = () => {
-      return [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+      return H5P.Video.DEFAULT_PLAYBACK_RATES;
     };
 
     /**
@@ -538,6 +538,11 @@ H5P.VideoEchoVideo = (() => {
      */
     this.setPlaybackRate = async (rate) => {
       const echoRate = parseFloat(rate);
+
+      if (self.getPlaybackRates().indexOf(echoRate) === -1) {
+        return;
+      }
+
       this.post('playbackrate', echoRate);
       playbackRate = rate;
       this.trigger('playbackRateChange', rate);
