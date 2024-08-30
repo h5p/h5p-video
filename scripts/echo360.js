@@ -97,7 +97,9 @@ H5P.VideoEchoVideo = (() => {
           this.trigger('loaded');
           this.loadingComplete = true;
           this.trigger('resize');
-          this.trigger('captions', trackOptions)
+          if (trackOptions.length) {
+            this.trigger('captions', trackOptions);
+          }
 
           const autoplayIsAllowed = !window.H5PEditor &&
             await H5P.Video.isAutoplayAllowed();
