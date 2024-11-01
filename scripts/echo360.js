@@ -3,6 +3,8 @@ H5P.VideoEchoVideo = (() => {
 
   let numInstances = 0;
 
+  const CONTROLS_HEIGHT = 100;
+
   /**
    * EchoVideo video player for H5P.
    *
@@ -112,6 +114,7 @@ H5P.VideoEchoVideo = (() => {
       };
       window.addEventListener('message', (event) => {
         let message = '';
+
         try {
           message = JSON.parse(event.data);
         }
@@ -125,6 +128,12 @@ H5P.VideoEchoVideo = (() => {
         }
 
         if (message.event === 'init') {
+          // Set ratio if width and height is received from Echo360
+          if (message.data.width && message.data.height) {
+            // If controls are displayed we have to add a magic height to make it visible :(
+            ratio = ((message.data.height + (options.controls ? CONTROLS_HEIGHT : 0)) / message.data.width);
+          }
+
           duration = message.data.duration;
           this.setCurrentTime(message.data.currentTime ?? 0);
 
