@@ -466,9 +466,15 @@ H5P.VideoVimeo = (function ($) {
      * Set the current playback rate.
      *
      * @public
-     * @param {Number} rate Must be one of available rates from getPlaybackRates
+     * @param {Number|string} rate Must be one of available rates from getPlaybackRates.
      */
     self.setPlaybackRate = async (rate) => {
+      rate = Number(rate);
+
+      if (self.getPlaybackRates().indexOf(rate) === -1) {
+        return;
+      }
+
       playbackRate = await player.setPlaybackRate(rate);
       self.trigger('playbackRateChange', rate);
     };
