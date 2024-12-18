@@ -516,7 +516,7 @@ H5P.VideoPanopto = (function ($) {
    * @returns {String} Panopto video identifier
    */
   var getId = function (url) {
-    const matches = url.match(/^[^\/]+:\/\/([^\/]*panopto\.[^\/]+)\/Panopto\/.+\?id=(.+)$/);
+    const matches = url.match(/^[^\/]+:\/\/([^\/]+)\/Panopto\/.+\?id=(.+)$/);
     if (matches && matches.length === 3) {
       return [matches[1], matches[2]];
     }
