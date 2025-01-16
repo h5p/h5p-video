@@ -130,7 +130,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * @param {jQuery} $container
      */
     self.attach = function ($container) {
-      $container.addClass('h5p-video').html('');
+      $container.addClass('h5p-video h5p-theme').html('');
 
       if (self.appendTo !== undefined) {
         self.appendTo($container);
