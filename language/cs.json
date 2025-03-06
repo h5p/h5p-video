@@ -30,6 +30,10 @@
         {
           "label": "Video ve smyčce",
           "description": "Po skončení se video automaticky spustí znovu."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

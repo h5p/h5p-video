@@ -30,6 +30,10 @@
         {
           "label": "Lặp video",
           "description": "Tự động phát lại video khi hết."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

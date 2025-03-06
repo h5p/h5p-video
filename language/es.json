@@ -30,6 +30,10 @@
         {
           "label": "Bucle de vídeo",
           "description": "Volver a reproducir el vídeo automáticamente cuando termine."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
