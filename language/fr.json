@@ -30,6 +30,10 @@
         {
           "label": "Rejouer la vidéo",
           "description": "La vidéo est rejouée quand elle est terminée."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

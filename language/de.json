@@ -30,6 +30,10 @@
         {
           "label": "Videoschleife",
           "description": "Startet das Video erneut, sobald es vorbei ist."
+        },
+        {
+          "label": "Automatisches Pausieren deaktivieren",
+          "description": "Verhindert, dass das Video automatisch pausiert, wenn es aus dem Sichtfeld verschwindet."
         }
       ]
     },

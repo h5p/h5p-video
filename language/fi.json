@@ -30,6 +30,10 @@
         {
           "label": "Toista videota",
           "description": "Aloittaa videon lopttua sen alusta aina uudestaan."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
