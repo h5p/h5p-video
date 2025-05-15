@@ -449,7 +449,11 @@ H5P.VideoVimeo = (function ($) {
      * @returns {Array} Available playback rates
      */
     self.getPlaybackRates = () => {
-      return [0.5, 1, 1.5, 2];
+      /*
+       * Vimeo Player SDK only supports the interval [0.5, 2],
+       * see https://developer.vimeo.com/player/sdk/reference#methods-for-playback-controls
+       */
+      return H5P.Video.DEFAULT_PLAYBACK_RATES.filter((rate) => rate >= 0.5 && rate <= 2);
     };
 
     /**
