@@ -29,6 +29,10 @@
         {
           "label": "Видео давталт",
           "description": "Видео дуусахад автоматаар дахин эхлүүлнэ үү."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ],
       "label": "Тоглуулах"
