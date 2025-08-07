@@ -326,5 +326,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
   /** @constant {Boolean} */
   Video.IE11_PLAYBACK_RATE_FIX = (navigator.userAgent.match(/Trident.*rv[ :]*11\./) ? true : false);
 
+  /** @constant {Number[]} */
+  Video.DEFAULT_PLAYBACK_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+
   return Video;
 })(H5P.jQuery, H5P.ContentCopyrights, H5P.MediaCopyright, H5P.videoHandlers || []);
