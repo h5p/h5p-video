@@ -1,131 +1,131 @@
 {
   "semantics": [
     {
-      "label": "Video sources",
-      "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources."
+      "label": "Surse video",
+      "description": "Pentru a vă asigura că videoclipul funcționează în toate browserele, ar trebui să adăugați surse în format WebM și MP4."
     },
     {
-      "label": "Visuals",
+      "label": "Elemente vizuale",
       "fields": [
         {
-          "label": "Poster image"
+          "label": "Imagine poster"
         },
         {
-          "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "label": "Ajustează playerul video pentru a utiliza tot spațiul disponibil",
+          "description": "Dacă nu este setat, playerul video va avea același raport de aspect ca și videoclipul."
         },
         {
-          "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "label": "Afișează controalele playerului video",
+          "description": "Adaugă controale la playerul video. Acest lucru permite utilizatorilor să redea, să pună pauză etc."
         }
       ]
     },
     {
-      "label": "Playback",
+      "label": "Redare",
       "fields": [
         {
-          "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "label": "Redare automată a videoclipului",
+          "description": "Pornește redarea videoclipului automat. Este posibil să nu funcționeze pe dispozitivele mobile."
         },
         {
-          "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "label": "Redare în buclă a videoclipului",
+          "description": "Repornește automat videoclipul de la capăt când se termină."
         }
       ]
     },
     {
-      "label": "Video localization",
+      "label": "Localizare video",
       "fields": [
         {
-          "label": "Name",
+          "label": "Nume",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "description": "Ajută la identificarea conținutului de acest tip."
         },
         {
-          "label": "Loading",
-          "default": "Video player loading..."
+          "label": "Se încarcă",
+          "default": "Se încarcă playerul video..."
         },
         {
-          "label": "No players found",
-          "default": "Found no video players that supports the given video format."
+          "label": "Nu s-au găsit playere",
+          "default": "Nu s-a găsit niciun player video care să suporte formatul video dat."
         },
         {
-          "label": "No sources",
-          "default": "Video is missing sources."
+          "label": "Fără surse",
+          "default": "Videoclipului îi lipsesc sursele."
         },
         {
-          "label": "Aborted",
-          "default": "Media playback has been aborted."
+          "label": "Anulat",
+          "default": "Redarea media a fost anulată."
         },
         {
-          "label": "Network failure",
-          "default": "Network failure."
+          "label": "Eroare de rețea",
+          "default": "Eroare de rețea."
         },
         {
-          "label": "Cannot decode video source",
-          "default": "Unable to decode media."
+          "label": "Imposibil de decodat sursa video",
+          "default": "Imposibil de decodat media."
         },
         {
-          "label": "Format not supported",
-          "default": "Video format not supported."
+          "label": "Format neacceptat",
+          "default": "Formatul video nu este acceptat."
         },
         {
-          "label": "Media encrypted",
-          "default": "Media encrypted."
+          "label": "Media criptată",
+          "default": "Media este criptată."
         },
         {
-          "label": "Unknown error",
-          "default": "Unknown error."
+          "label": "Eroare necunoscută",
+          "default": "Eroare necunoscută."
         },
         {
-          "label": "Invalid YouTube ID",
-          "default": "Invalid YouTube ID."
+          "label": "ID YouTube invalid",
+          "default": "ID YouTube invalid."
         },
         {
-          "label": "Unknown YouTube ID",
-          "default": "Unable to find video with the given YouTube ID."
+          "label": "ID YouTube necunoscut",
+          "default": "Nu s-a putut găsi videoclipul cu ID-ul YouTube dat."
         },
         {
-          "label": "Restricted YouTube video",
-          "default": "The owner of this video does not allow it to be embedded."
+          "label": "Videoclip YouTube restricționat",
+          "default": "Proprietarul acestui videoclip nu permite încorporarea sa."
         }
       ]
     },
     {
-      "label": "Accessibility",
+      "label": "Accesibilitate",
       "fields": [
         {
-          "label": "Add video track",
-          "entity": "Track",
+          "label": "Adaugă pistă video",
+          "entity": "Pistă",
           "field": {
-            "label": "Track",
+            "label": "Pistă",
             "fields": [
               {
-                "label": "Track label"
+                "label": "Etichetă pistă"
               },
               {
-                "label": "Type kind, refer to <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
+                "label": "Tip, consultați <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">standardul HTML actual</a>",
                 "options": [
                   {
-                    "label": "Subtitles"
+                    "label": "Subtitrări"
                   },
                   {
-                    "label": "Captions"
+                    "label": "Legende"
                   },
                   {
-                    "label": "Descriptions"
+                    "label": "Descrieri"
                   },
                   {
-                    "label": "Chapters"
+                    "label": "Capitole"
                   }
                 ]
               },
               {
-                "label": "Source language, must be defined for subtitles",
-                "description": "Must be a valid BCP 47 language tag. If the kind attribute is set to subtitles, then srclang must be defined."
+                "label": "Limba sursă, trebuie definită pentru subtitrări",
+                "description": "Trebuie să fie o etichetă de limbă BCP 47 validă. Dacă atributul `kind` este setat la `subtitles`, atunci `srclang` trebuie definit."
               },
               {
-                "label": "Track file (WebVTT)"
+                "label": "Fișier pistă (WebVTT)"
               }
             ]
           }
