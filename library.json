@@ -21,6 +21,9 @@
       "path": "scripts/youtube.js"
     },
     {
+      "path" : "scripts/ottflix.js"
+    },
+    {
       "path": "scripts/panopto.js"
     },
     {
