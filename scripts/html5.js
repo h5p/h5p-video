@@ -20,13 +20,12 @@ H5P.VideoHtml5 = (function ($) {
      * @return {string}
      */
     const getCrossOriginPath = function (source) {
-      let path = H5P.getPath(source.path, self.contentId);
+      let path = H5P.getPath(source, self.contentId);
       if (video.crossOrigin !== null && H5P.addQueryParameter && H5PIntegration.crossoriginCacheBuster) {
         path = H5P.addQueryParameter(path, H5PIntegration.crossoriginCacheBuster);
       }
       return path
     };
-
 
     /**
      * Register track to video
@@ -57,6 +56,39 @@ H5P.VideoHtml5 = (function ($) {
       return track;
     };
 
+    const playHls = function (source){
+      function playSource() {
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Native (Safari / iOS)
+          video.src = source;
+          video.play && video.play();
+        } else {
+          // Load hls.js on demand
+          loadHlsScript(function () {
+            if (Hls.isSupported()) {
+              let hls = new Hls();
+              hls.loadSource(source.path);
+              hls.attachMedia(video);
+            } else {
+              error(null,"HLS is not supported in this browser.");
+            }
+          });
+        }
+      }
+      function loadHlsScript(callback) {
+        if (window.Hls) {
+          // Already loaded
+          callback();
+          return;
+        }
+        var script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
+        script.onload = callback;
+        document.head.appendChild(script);
+      }
+      loadHlsScript(playSource);
+    }
+
     /**
      * Small helper to set the inital video source.
      * Useful if some of the loading happens asynchronously.
@@ -71,16 +103,28 @@ H5P.VideoHtml5 = (function ($) {
       }
 
       if (H5P.setSource !== undefined) {
-        H5P.setSource(video, qualities[currentQuality].source, self.contentId)
+        let source = qualities[currentQuality].source;
+        H5P.setSource(video, source, self.contentId);
+
+        let type = getType(source);
+        if (type.indexOf("vnd.apple.mpegurl") > 1) {
+          playHls(qualities[currentQuality].source);
+        }
       }
       else {
         // Backwards compatibility (H5P < v1.22)
-        const srcPath = H5P.getPath(qualities[currentQuality].source.path, self.contentId);
+        const srcPath = H5P.getPath(qualities[currentQuality].source, self.contentId);
         if (H5P.getCrossOrigin !== undefined) {
           var crossOrigin = H5P.getCrossOrigin(srcPath);
           video.setAttribute('crossorigin', crossOrigin !== null ? crossOrigin : 'anonymous');
         }
-        video.src = srcPath;
+
+        let type = getType(srcPath);
+        if (type.indexOf("vnd.apple.mpegurl") > 1) {
+          playHls(srcPath);
+        } else {
+          video.src = srcPath;
+        }
       }
 
       // Add poster if provided
@@ -707,22 +751,6 @@ H5P.VideoHtml5 = (function ($) {
       });
     });
 
-    // Alternative to 'canplay' event
-    /*self.on('resize', function () {
-      if (video.offsetParent === null) {
-        return;
-      }
-
-      video.style.width = '100%';
-      video.style.height = '100%';
-
-      var width = video.clientWidth;
-      var height = options.fit ? video.clientHeight : (width * (video.videoHeight / video.videoWidth));
-
-      video.style.width = width + 'px';
-      video.style.height = height + 'px';
-    });*/
-
     // Video controls are ready
     nextTick(function () {
       self.trigger('ready');
@@ -756,7 +784,9 @@ H5P.VideoHtml5 = (function ($) {
     // Cycle through sources
     for (var i = 0; i < sources.length; i++) {
       var type = getType(sources[i]);
-      if (type && video.canPlayType(type) !== '') {
+      if (type.indexOf("vnd.apple.mpegurl") > 1) {
+        return true;
+      } else if (type && video.canPlayType(type) !== '') {
         // We should be able to play this
         return true;
       }
@@ -776,10 +806,15 @@ H5P.VideoHtml5 = (function ($) {
     var type = source.mime;
     if (!type) {
       // Try to get type from URL
-      var matches = source.path.match(/\.(\w+)$/);
+      var matches = source.match(/\.(\w+)$/);
       if (matches && matches[1]) {
-        type = 'video/' + matches[1];
+        var ext = matches[1].toLowerCase();
+        type = 'video/' + ext;
       }
+    }
+
+    if (type.indexOf('m3u8')>1) {
+      type = "application/vnd.apple.mpegurl";
     }
 
     if (type && source.codecs) {
@@ -812,7 +847,7 @@ H5P.VideoHtml5 = (function ($) {
       var type = source.type = getType(source);
 
       // Check if we support this type
-      var isPlayable = type && (type === 'video/unknown' || video.canPlayType(type) !== '');
+      var isPlayable = type && (type === 'video/unknown' || type === 'application/vnd.apple.mpegurl' || video.canPlayType(type) !== '');
       if (!isPlayable) {
         continue; // We cannot play this source
       }
