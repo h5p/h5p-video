@@ -30,6 +30,10 @@
         {
           "label": "Redare în buclă a videoclipului",
           "description": "Repornește automat videoclipul de la capăt când se termină."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

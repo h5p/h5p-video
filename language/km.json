@@ -30,6 +30,10 @@
         {
           "label": "លេងឡើងវិញ",
           "description": "លេងវីដេអូដដែលៗដោយស្វ័យប្រវត្តិ"
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

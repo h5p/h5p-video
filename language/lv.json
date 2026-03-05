@@ -30,6 +30,10 @@
         {
           "label": "Riņķot video",
           "description": "Automātiski sākt video no jauna, kad tas beidzas."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
