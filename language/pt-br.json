@@ -30,6 +30,10 @@
         {
           "label": "Vídeo reproduzido em sequência (loop)",
           "description": "Recomeçar automaticamente o vídeo após o término."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

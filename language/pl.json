@@ -30,6 +30,10 @@
         {
           "label": "Zapętl wideo",
           "description": "Automatycznie rozpocznij odtwarzanie wideo od nowa po jego zakończeniu."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

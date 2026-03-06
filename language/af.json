@@ -30,6 +30,10 @@
         {
           "label": "Herhaal video",
           "description": "Begin die video outomaties weer as dit eindig."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

@@ -29,6 +29,10 @@
         {
           "label": "Kartoti vaizdo įrašą",
           "description": "Automatiškai paleisti vaizdo įrašą iš naujo, kai jis pasibaigs."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ],
       "label": "Groti"

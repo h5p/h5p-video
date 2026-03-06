@@ -30,6 +30,10 @@
         {
           "label": "Video herhalen",
           "description": "Automatisch de video opnieuw starten wanneer die afgelopen is."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },

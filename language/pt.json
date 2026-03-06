@@ -30,6 +30,10 @@
         {
           "label": "Repetição do vídeo",
           "description": "Reproduz novamente o vídeo após terminar."
+        },
+        {
+          "label": "Deactivate auto-pause",
+          "description": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
