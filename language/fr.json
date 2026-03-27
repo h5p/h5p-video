@@ -21,7 +21,7 @@
       ]
     },
     {
-      "label": "Playback",
+      "label": "Lecture",
       "fields": [
         {
           "label": "Démarrage automatique",
@@ -42,7 +42,7 @@
       "fields": [
         {
           "label": "Nom",
-          "default": "Video",
+          "default": "Vidéo",
           "description": "Aide à identifier le type de contenu."
         },
         {
