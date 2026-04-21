@@ -27,6 +27,12 @@
       "path": "scripts/echo360.js"
     },
     {
+      "path": "scripts/bunny.js"
+    },
+    {
+      "path": "scripts/gumlet.js"
+    },
+    {
       "path": "scripts/html5.js"
     },
     {
