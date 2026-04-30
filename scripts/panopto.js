@@ -47,7 +47,7 @@ H5P.VideoPanopto = (function ($) {
         return;
       }
 
-      if (window.EmbedApi === undefined) {
+      if (typeof EmbedApi === 'undefined') {
         // Load API first
         loadAPI(create);
         return;
