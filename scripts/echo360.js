@@ -226,7 +226,7 @@ H5P.VideoEchoVideo = (() => {
         previousTickMS = time;
       }
       else {
-        delete previousTickMS;
+        previousTickMS = undefined;
       }
     }
 
