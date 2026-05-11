@@ -531,7 +531,7 @@ H5P.VideoPanopto = (function ($) {
     else {
       // Load the API our self
       var tag = document.createElement('script');
-      tag.src = 'https://developers.panopto.com/scripts/embedapi.min.js';
+      tag.src = 'https://developers.panopto.com/scripts/v1.2.0/embedapi.min.js';
       var firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       window.onPanoptoEmbedApiReady = loaded;
