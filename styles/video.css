@@ -44,3 +44,7 @@
   padding: 2.5em 1em;
   background: #222;
 }
+
+.h5p-video.h5p-panopto iframe {
+  display: block;
+}

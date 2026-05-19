@@ -58,6 +58,9 @@ H5P.VideoPanopto = (function ($) {
         width = 200;
       }
 
+      // Clear placeholder since iframe is appended and we don't want resize issues
+      $placeholder.html('');
+
       const videoId = getId(sources[0].path);
       player = new EmbedApi(id, {
         width: width,
@@ -77,7 +80,6 @@ H5P.VideoPanopto = (function ($) {
         events: {
           onIframeReady: function () {
             isPlayerReady = true;
-            $placeholder.children(0).text('');
             if (options.autoplay && canHasAutoplay) {
               player.loadVideo();
               isLoaded = true;
@@ -141,7 +143,6 @@ H5P.VideoPanopto = (function ($) {
             }
           },
           onLoginShown: function () {
-            $placeholder.children().first().remove(); // Remove loading message
             self.trigger('loaded'); // Resize parent
           }
         }
