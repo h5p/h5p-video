@@ -184,6 +184,11 @@
         "optional": true,
         "entity": "Track",
         "min": 0,
+        "accessibility": {
+          "importance": "Compliance",
+          "relatedCriteria": "SC 1.2.2 Captions (Prerecorded) (Level A)",
+          "accessibleWhen": "MinimumOne, captions"
+        },
         "field": {
           "name": "track",
           "type": "group",
