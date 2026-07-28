@@ -306,7 +306,7 @@ H5P.VideoEchoVideo = (() => {
         queryString += `startTimeMillis=${Math.round(options.startAt * 1000)}&`;
       }
 
-      wrapperElement.innerHTML = `<iframe src="${sources[0].path}${queryString}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0" scrolling="no"></iframe>`;
+      wrapperElement.innerHTML = `<iframe src="${encodeURI(sources[0].path + queryString)}" style="display: inline-block; width: 100%; height: 100%;" allow="autoplay; fullscreen" frameborder="0" scrolling="no"></iframe>`;
       player = wrapperElement.firstChild;
       // Create a new player
       registerEchoPlayerEventListeneners(player);
