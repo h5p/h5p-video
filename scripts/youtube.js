@@ -166,7 +166,7 @@ H5P.VideoYouTube = (function ($) {
           }
         }
       });
-      player.g.style = "position:absolute;top:0;left:0;width:100%;height:100%;";
+      player.getIframe().style = "position:absolute;top:0;left:0;width:100%;height:100%;";
     };
 
     /**
