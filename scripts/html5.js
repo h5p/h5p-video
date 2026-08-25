@@ -142,6 +142,9 @@ H5P.VideoHtml5 = (function ($) {
     var playbackRate = 1;
     var skipRateChange = false;
 
+    // 360 degree videos are unsupported by the vanilla HTML5 player.
+    var is360 = false;
+
     // Create player
     var video = document.createElement('video');
 
@@ -737,6 +740,24 @@ H5P.VideoHtml5 = (function ($) {
     self.isLoaded = function () {
       return isLoaded;
     };
+
+    /**
+     * True/false if this API supports 360 degree video controls.
+     * 
+     * @return {Boolean} 360 video support
+     */
+    self.supports360Controls = function () {
+      return false;
+    }
+
+    /**
+     * True/false if loaded video is 360 degree video.
+     * 
+     * @return {Boolean} Is this a 360 degree video
+     */
+    self.is360 = function () {
+      return is360;
+    }
   }
 
   /**

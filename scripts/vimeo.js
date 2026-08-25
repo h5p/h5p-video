@@ -32,6 +32,7 @@ H5P.VideoVimeo = (function ($) {
     let failedLoading = false;
     let ratio = 9/16;
     let isLoaded = false;
+    let is360 = null;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -135,6 +136,14 @@ H5P.VideoVimeo = (function ($) {
           // instantiation, so we instead perform an initial seek here.
           currentTime = await self.seek(options.startAt);
         }
+
+        // Update 360 degree video status by trying to fetch the view properties.
+        // If video is 360 video, this will return a data object, otherwise it throws an UnsupportedError.
+        is360 = await player.getCameraProps().then((result) => {
+          return true;
+        }).catch((error) => {
+          return false;
+        });
 
         self.trigger('ready');
         self.trigger('loaded');
@@ -530,6 +539,109 @@ H5P.VideoVimeo = (function ($) {
         });
       }
     });
+
+    /**
+     * True/false if this API supports 360 degree video controls.
+     * 
+     * @return {Boolean} 360 video support
+     */
+    self.supports360Controls = function () {
+      return true;
+    }
+
+    /**
+     * True/false if loaded video is 360 degree video.
+     * 
+     * @return {Boolean} Is this a 360 degree video
+     */
+    self.is360 = function () {
+      return is360;
+    }
+
+    /**
+     * Returns view properties for 360 degree videos, if available.
+     * Data object contains 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * If data is not available, returns null.
+     * The Vimeo API appears to always either return view data or throws an UnsupportedError
+     * if video is not 360 video.
+     * 
+     * @return {Object | null} 360 video properties
+     */
+    self.get360ViewProperties = async function() {
+      let props = null;
+
+      if(is360 === null || is360 === false) {
+        return props;
+      }
+
+      await player.getCameraProps().then((result) => {
+        props = result;
+      }).catch((error) => {
+        props = null;
+      });
+
+      return props;
+    }
+
+    /**
+     * Sets view properties for 360 degree videos, if available.
+     * Data object must contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * 
+     * @param {Object} properties 360 view properties to set
+     * @return {void}
+     */
+    self.set360ViewProperties = async function(properties) {
+      const currentProperties = await player.getCameraProps().then((props) => {
+        return props;
+      }).catch((error) => {
+        return {};
+      });
+
+      const updatedProps = {
+        ...currentProperties,
+        ...properties
+      };
+
+      await player.setCameraProps(updatedProps);
+      self.trigger('360ViewPropertiesChange', updatedProps);
+    }
+
+    /**
+     * Returns an array of objects, that contain key => value pairs for HTML 'style'
+     * properties that need to be applied to individual <div> elements to build a 360 overlay,
+     * that avoids native player UI elements.
+     * If no special overlay required (simple fullscreen overlay can be used), returns null.
+     * 
+     * @return {Object[]|null}
+     */
+    self.get360OverlayTemplate = function() {
+      return [
+        {
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: 'calc(100% - 48px)'
+        },
+        {
+          top: 0,
+          right: 0,
+          height: '100%',
+          width: '12px'
+        },
+        {
+          top: 0,
+          left: 'calc(100% - 48px)',
+          height: 'calc(50% - 4px)',
+          width: '48px'
+        },
+        {
+          bottom: 0,
+          left: 'calc(100% - 48px)',
+          height: 'calc(50% - 34px)',
+          width: '48px'
+        }
+      ]
+    };
   }
 
   /**

@@ -23,6 +23,9 @@ H5P.VideoPanopto = (function ($) {
     let isLoaded = false;
     let isPlayerReady = false;
 
+    // Panopto supports 360 degree videos, but currently has no documented API support.
+    let is360 = null;
+
     var $wrapper = $('<div/>');
     var $placeholder = $('<div/>', {
       id: id,
@@ -495,6 +498,61 @@ H5P.VideoPanopto = (function ($) {
     });
 
     let currentTrack;
+
+    /**
+     * True/false if this API supports 360 degree video controls.
+     * Panopto supports 360 degree videos, but the available player API documentation contains no functions related to camera control.
+     * 
+     * @return {Boolean} 360 video support
+     */
+    this.supports360Controls = function () {
+      return false;
+    }
+
+    /**
+     * True/false if loaded video is 360 degree video.
+     * 
+     * @return {Boolean} Is this a 360 degree video
+     */
+    this.is360 = function () {
+      return is360;
+    }
+
+    /**
+     * Should return current view properties for 360 degree videos, if available.
+     * Data object should contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * If data is not available, returns null.
+     * The Panopto player API currently doesn't support camera control functions - if this changes, this function should be updated.
+     * 
+     * @return {Object | null} 360 view properties
+     */
+    this.get360ViewProperties = function() {
+      return null;
+    }
+
+    /**
+     * Should set view properties for 360 degree videos, if available.
+     * Data object should contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * The Panopto player API currently doesn't support camera control functions - if this changes, this function should be updated.
+     * 
+     * @param {Object} properties 360 view properties to set
+     * @return {void}
+     */
+    this.set360ViewProperties = function(properties) {
+      return;
+    }
+
+    /**
+     * Returns an array of objects, that contain key => value pairs for HTML 'style'
+     * properties that need to be applied to individual <div> elements to build a 360 overlay,
+     * that avoids native player UI elements.
+     * If no special overlay required (simple fullscreen overlay can be used), returns null.
+     * 
+     * @return {Object[]|null}
+     */
+    self.get360OverlayTemplate = function() {
+      return null;
+    };
   }
 
   /**

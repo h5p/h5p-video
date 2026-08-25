@@ -17,6 +17,7 @@ H5P.VideoYouTube = (function ($) {
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
     var ratio = 9/16;
+    var is360 = null;
     var $wrapper = $('<div/>');
     var $placeholder = $('<div />', {
       text: l10n.loading,
@@ -132,6 +133,11 @@ H5P.VideoYouTube = (function ($) {
                 player.setPlaybackRate(playbackRate);
               }
               // End IE11 fix
+
+              // 360 video check - if 'is360' variable is null, the check should be done, skip otherwise.
+              if(is360 === null && state.data === H5P.Video.PLAYING) {
+                is360 = Object.keys(player.getSphericalProperties()).length !== 0;
+              }
 
               self.trigger('stateChange', state.data);
             }
@@ -542,6 +548,115 @@ H5P.VideoYouTube = (function ($) {
         player.setSize(width, height);
       }
     });
+
+    /**
+     * True/false if this API supports 360 degree video camera control functions.
+     * 
+     * @return {Boolean} 360 video support
+     */
+    self.supports360Controls = function () {
+      return true;
+    }
+
+    /**
+     * True/false if loaded video is 360 degree video.
+     * 
+     * @return {Boolean} Is this a 360 degree video
+     */
+    self.is360 = function () {
+      return is360;
+    }
+
+    /**
+     * Returns view properties for 360 degree videos, if available. Not available until after play.
+     * Contains data object with 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * If data is not available, returns null.
+     * 
+     * @return {Object | null} 360 view properties
+     */
+    self.get360ViewProperties = async function() {
+      if(is360 === null || is360 === false) {
+        return null;
+      }
+
+      return player.getSphericalProperties();
+    }
+
+    /**
+     * Sets view properties for 360 degree videos, if available. Not available until after play.
+     * Data object must contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * 
+     * @param {Object} properties 360 view properties to set
+     * @return {void}
+     */
+    self.set360ViewProperties = async function(properties) {
+      if(is360 === null || is360 === false) {
+        return;
+      }
+
+      var updatedProps = {
+        ...player.getSphericalProperties(),
+        ...properties
+      };
+
+      player.setSphericalProperties(updatedProps);
+      self.trigger('360ViewPropertiesChange', updatedProps);
+    };
+
+    /**
+     * Returns an array of objects, that contain key => value pairs for HTML 'style'
+     * properties that need to be applied to individual <div> elements to build a 360 overlay,
+     * that avoids native player UI elements.
+     * If no special overlay required (simple fullscreen overlay can be used), returns null.
+     * 
+     * @return {Object[]|null}
+     */
+    self.get360OverlayTemplate = function() {
+      return [
+        {
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '14px'
+        },
+        {
+          top: 0,
+          right: 0,
+          height: '100%',
+          width: '24px'
+        },
+        {
+          top: '53px',
+          left: 0,
+          height: 'calc(100% - 113px)',
+          width: 'calc(50% - 28px)'
+        },
+        {
+          top: '53px',
+          right: 0,
+          height: 'calc(100% - 113px)',
+          width: 'calc(50% - 28px)'
+        },
+        {
+          top: '53px',
+          right: 0,
+          height: 'calc(50% - 81px)',
+          width: '100%'
+        },
+        {
+          bottom: '60px',
+          right: 0,
+          height: 'calc(50% - 87px)',
+          width: '100%'
+        },
+        {
+          bottom: 0,
+          left: '85px',
+          height: '61px',
+          width: 'calc(100% - 430px)'
+        },
+      ]
+    };
   }
 
   /**
