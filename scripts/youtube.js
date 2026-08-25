@@ -617,13 +617,13 @@ H5P.VideoYouTube = (function ($) {
           top: 0,
           left: 0,
           height: '100%',
-          width: '14px'
+          width: '22px'
         },
         {
           top: 0,
           right: 0,
           height: '100%',
-          width: '24px'
+          width: '30px'
         },
         {
           top: '53px',
@@ -646,14 +646,26 @@ H5P.VideoYouTube = (function ($) {
         {
           bottom: '60px',
           right: 0,
-          height: 'calc(50% - 87px)',
+          height: 'calc(50% - 88px)',
           width: '100%'
         },
         {
-          bottom: 0,
-          left: '85px',
-          height: '61px',
+          bottom: '11px',
+          left: '86px',
+          height: '49px',
           width: 'calc(100% - 430px)'
+        },
+        {
+          bottom: '11px',
+          left: 0,
+          height: '49px',
+          width: '30px'
+        },
+        {
+          bottom: 0,
+          left: 0,
+          height: '11px',
+          width: '100%'
         },
       ]
     };

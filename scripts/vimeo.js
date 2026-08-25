@@ -620,7 +620,7 @@ H5P.VideoVimeo = (function ($) {
           top: 0,
           left: 0,
           height: '100%',
-          width: 'calc(100% - 48px)'
+          width: 'calc(100% - 47px)'
         },
         {
           top: 0,
@@ -631,13 +631,13 @@ H5P.VideoVimeo = (function ($) {
         {
           top: 0,
           left: 'calc(100% - 48px)',
-          height: 'calc(50% - 4px)',
+          height: 'calc(50% - 3px)',
           width: '48px'
         },
         {
           bottom: 0,
           left: 'calc(100% - 48px)',
-          height: 'calc(50% - 34px)',
+          height: 'calc(50% - 32px)',
           width: '48px'
         }
       ]
