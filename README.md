@@ -19,6 +19,7 @@ stateChange | Triggered whenever the state of the video changes. Possible `event
 playbackRateChange | Triggered when the video playback speed changes. This is similar to the native _ratechange_ however it mocks away some IE issues.
 captions | Triggered when captions become available, i.e. may not be trigger until after _play()_.<br>`event.data` contains a list of valid text tracks that the user may choose from.
 qualityChange | Triggered to confirm that the quality was successfully changed. I.e. choosing a different quality does not guarantee it will play.<br>Useful for updating the UI with which quality is currently active.
+360ViewPropertiesChange | Triggered to confirm that 360 degree view properties were successfully changed. Event data contains set view values.
 
 Here's an example of how you can use these events to react when a user interacts with an Interactive Video.
 You'll want to be adding this third-party script through your H5P plugin's _scripts_alter_ hook.
