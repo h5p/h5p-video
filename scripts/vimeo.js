@@ -33,6 +33,7 @@ H5P.VideoVimeo = (function ($) {
     let ratio = 9/16;
     let isLoaded = false;
     let is360 = null;
+    let current360ViewProperties = null;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -137,11 +138,12 @@ H5P.VideoVimeo = (function ($) {
           currentTime = await self.seek(options.startAt);
         }
 
-        // Update 360 degree video status by trying to fetch the view properties.
-        // If video is 360 video, this will return a data object, otherwise it throws an UnsupportedError.
         is360 = await player.getCameraProps().then((result) => {
+          current360ViewProperties = result;
           return true;
-        }).catch((error) => {
+        })
+        .catch((error) => {
+          // Vimeo throws an UnsupportedError for non-360 videos.
           return false;
         });
 
@@ -541,80 +543,58 @@ H5P.VideoVimeo = (function ($) {
     });
 
     /**
-     * True/false if this API supports 360 degree video controls.
+     * Check if loaded video is a 360 degree video.
      * 
-     * @return {Boolean} 360 video support
+     * @override
+     * @return {Boolean | null} Is loaded video 360 video.
      */
-    self.supports360Controls = function () {
-      return true;
-    }
-
-    /**
-     * True/false if loaded video is 360 degree video.
-     * 
-     * @return {Boolean} Is this a 360 degree video
-     */
-    self.is360 = function () {
+    self.is360 = () => {
       return is360;
     }
 
     /**
-     * Returns view properties for 360 degree videos, if available.
-     * Data object contains 'yaw', 'pitch', 'roll' and 'fov' keys.
-     * If data is not available, returns null.
-     * The Vimeo API appears to always either return view data or throws an UnsupportedError
-     * if video is not 360 video.
+     * Check if this API supports 360 degree video controls.
      * 
-     * @return {Object | null} 360 video properties
+     * @override
+     * @return {Boolean} 360 controls availability.
      */
-    self.get360ViewProperties = async function() {
-      let props = null;
-
-      if(is360 === null || is360 === false) {
-        return props;
-      }
-
-      await player.getCameraProps().then((result) => {
-        props = result;
-      }).catch((error) => {
-        props = null;
-      });
-
-      return props;
+    self.canControl360 = () => {
+      return true;
     }
 
     /**
-     * Sets view properties for 360 degree videos, if available.
-     * Data object must contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values.
      * 
-     * @param {Object} properties 360 view properties to set
-     * @return {void}
+     * @override
+     * @return {Object | null} Current 360 view properties.
      */
-    self.set360ViewProperties = async function(properties) {
-      const currentProperties = await player.getCameraProps().then((props) => {
-        return props;
-      }).catch((error) => {
-        return {};
-      });
+    self.get360ViewProperties = () => {
+      return current360ViewProperties;
+    }
 
+    /**
+     * Update 360 degree view properties. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
+     * 
+     * @override
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
       const updatedProps = {
-        ...currentProperties,
+        ...current360ViewProperties,
         ...properties
       };
 
-      await player.setCameraProps(updatedProps);
+      current360ViewProperties = await player.setCameraProps(updatedProps);
       self.trigger('360ViewPropertiesChange', updatedProps);
     }
 
     /**
-     * Returns an array of objects, that contain key => value pairs for HTML 'style'
-     * properties that need to be applied to individual <div> elements to build a 360 overlay,
-     * that avoids native player UI elements.
-     * If no special overlay required (simple fullscreen overlay can be used), returns null.
+     * Returns properties for custom overlay elemets.
      * 
-     * @return {Object[]|null}
+     * @override
+     * @return {Object[] | null}
      */
-    self.get360OverlayTemplate = function() {
+    self.get360OverlayTemplate = () => {
       return [
         {
           top: 0,

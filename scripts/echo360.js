@@ -30,9 +30,6 @@ H5P.VideoEchoVideo = (() => {
     let failedLoading = false;
     let ratio = 9 / 16;
 
-    // Echo360 supports 360 degree videos, but currently has no documented API support.
-    let is360 = null;
-
     let currentState = H5P.Video.VIDEO_CUED;
     // Echo360 server doesn't sync seek time with regular play time fast enough
     let timelineUpdatesToSkip = 0;
@@ -618,63 +615,6 @@ H5P.VideoEchoVideo = (() => {
         wrapperElement.style.cssText = 'width: ' + width + 'px; height: ' + height + 'px;';
       }
     });
-
-    /**
-     * True/false if this API supports 360 degree video controls.
-     * Echo360 supports 360 degree videos, but has no available player API documentation.
-     * Video control support is unclear - assume support does not exist until docs become available.
-     * 
-     * @return {Boolean} 360 video support
-     */
-    this.supports360Controls = function () {
-      return false;
-    }
-
-    /**
-     * True/false if loaded video is 360 degree video.
-     * Echo360 has no public player API documentation - if this changes this function should be updated.
-     * 
-     * @return {Boolean} Is this a 360 degree video
-     */
-    this.is360 = function () {
-      return is360;
-    }
-
-    /**
-     * Should return current view properties for 360 degree videos, if available.
-     * Data object should contain 'yaw', 'pitch', 'roll' and 'fov' keys.
-     * If data is not available, returns null.
-     * The Echo360 has no public player API documentation - if this changes this function should be updated.
-     * 
-     * @return {Object | null} 360 view properties
-     */
-    this.get360ViewProperties = function() {
-      return null;
-    }
-
-    /**
-     * Should set view properties for 360 degree videos, if available.
-     * Data object should contain 'yaw', 'pitch', 'roll' and 'fov' keys.
-     * The Echo360 has no public player API documentation - if this changes this function should be updated.
-     * 
-     * @param {Object} properties 360 view properties to set
-     * @return {void}
-     */
-    this.set360ViewProperties = function(properties) {
-      return;
-    }
-
-    /**
-     * Returns an array of objects, that contain key => value pairs for HTML 'style'
-     * properties that need to be applied to individual <div> elements to build a 360 overlay,
-     * that avoids native player UI elements.
-     * If no special overlay required (simple fullscreen overlay can be used), returns null.
-     * 
-     * @return {Object[]|null}
-     */
-    self.get360OverlayTemplate = function() {
-      return null;
-    };
   }
 
   /**

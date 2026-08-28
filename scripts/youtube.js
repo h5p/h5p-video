@@ -134,8 +134,7 @@ H5P.VideoYouTube = (function ($) {
               }
               // End IE11 fix
 
-              // 360 video check - if 'is360' variable is null, the check should be done, skip otherwise.
-              if(is360 === null && state.data === H5P.Video.PLAYING) {
+              if (is360 === null && state.data === H5P.Video.PLAYING) {
                 is360 = Object.keys(player.getSphericalProperties()).length !== 0;
               }
 
@@ -550,51 +549,53 @@ H5P.VideoYouTube = (function ($) {
     });
 
     /**
-     * True/false if this API supports 360 degree video camera control functions.
+     * Check if loaded video is a 360 degree video.
      * 
-     * @return {Boolean} 360 video support
+     * @override
+     * @return {Boolean | null} Is loaded video 360.
      */
-    self.supports360Controls = function () {
-      return true;
-    }
-
-    /**
-     * True/false if loaded video is 360 degree video.
-     * 
-     * @return {Boolean} Is this a 360 degree video
-     */
-    self.is360 = function () {
+    self.is360 = () => {
       return is360;
     }
 
     /**
-     * Returns view properties for 360 degree videos, if available. Not available until after play.
-     * Contains data object with 'yaw', 'pitch', 'roll' and 'fov' keys.
-     * If data is not available, returns null.
+     * Check if this API supports 360 degree video controls.
      * 
-     * @return {Object | null} 360 view properties
+     * @override
+     * @return {Boolean} 360 controls availability.
      */
-    self.get360ViewProperties = async function() {
-      if(is360 === null || is360 === false) {
-        return null;
-      }
-
-      return player.getSphericalProperties();
+    self.canControl360 = () => {
+      return true;
     }
 
     /**
-     * Sets view properties for 360 degree videos, if available. Not available until after play.
-     * Data object must contain 'yaw', 'pitch', 'roll' and 'fov' keys.
+     * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values. Not available until after play.
      * 
-     * @param {Object} properties 360 view properties to set
-     * @return {void}
+     * @override
+     * @return {Object | null} Current 360 view properties.
      */
-    self.set360ViewProperties = async function(properties) {
-      if(is360 === null || is360 === false) {
+    self.get360ViewProperties = () => {
+      if (!player || !player.getSphericalProperties || is360 === null || is360 === false) {
+        return null;
+      }
+
+      let sphericalProperties = player.getSphericalProperties();
+
+      return Object.keys(sphericalProperties).length > 0 ? sphericalProperties : null;
+    }
+
+    /**
+     * Update 360 degree view properties. Not available until after play. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
+     * 
+     * @override
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      if (!player || !player.getSphericalProperties || !player.setSphericalProperties || is360 === null || is360 === false) {
         return;
       }
 
-      var updatedProps = {
+      let updatedProps = {
         ...player.getSphericalProperties(),
         ...properties
       };
@@ -604,14 +605,12 @@ H5P.VideoYouTube = (function ($) {
     };
 
     /**
-     * Returns an array of objects, that contain key => value pairs for HTML 'style'
-     * properties that need to be applied to individual <div> elements to build a 360 overlay,
-     * that avoids native player UI elements.
-     * If no special overlay required (simple fullscreen overlay can be used), returns null.
+     * Returns properties for custom overlay elemets.
      * 
-     * @return {Object[]|null}
+     * @override
+     * @return {Object[] | null}
      */
-    self.get360OverlayTemplate = function() {
+    self.get360OverlayTemplate = () => {
       return [
         {
           top: 0,

@@ -201,6 +201,59 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.WAS_RESET = true;
     };
 
+    /**
+     * Check if loaded video is a 360 degree video. Default implementation, may be overridden by sub classes.
+     * 
+     * @return {Boolean | null} Is loaded video 360 video.
+     */
+    self.is360 = () => {
+      return false;
+    };
+
+    /**
+     * Check if this API supports 360 degree video controls. Default implementation, may be overridden by sub classes.
+     * 
+     * @public
+     * @return {Boolean} 360 controls availability.
+     */
+    self.canControl360 = () => {
+      return false;
+    };
+
+    /**
+     * Return current 360 view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @return {Object | null} Current 360 view properties.
+     */
+    self.get360ViewProperties = () => {
+      return null;
+    };
+
+    /**
+     * Update 360 degree view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      return;
+    };
+
+    /**
+     * Return properties for custom overlay elements. Default implementation, may be overridden by sub classes.
+     * 
+     * Event listners can't be added to embedded iFrames. The only way to capture events is by adding a
+     * transparent overlay element. Some players render native UI elemets, which need to be avoided to
+     * preserve functionality, so the overlay can be built out of multiple elements around existing UI.
+     *
+     * @public
+     * @return {Object[] | null} Overlay parts and properties.
+     */
+    self.get360OverlayTemplate = () => {
+      return null;
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
