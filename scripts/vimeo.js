@@ -449,7 +449,11 @@ H5P.VideoVimeo = (function ($) {
      * @returns {Array} Available playback rates
      */
     self.getPlaybackRates = () => {
-      return [0.5, 1, 1.5, 2];
+      /*
+       * Vimeo Player SDK only supports the interval [0.5, 2],
+       * see https://developer.vimeo.com/player/sdk/reference#methods-for-playback-controls
+       */
+      return H5P.Video.DEFAULT_PLAYBACK_RATES.filter((rate) => rate >= 0.5 && rate <= 2);
     };
 
     /**
@@ -466,9 +470,15 @@ H5P.VideoVimeo = (function ($) {
      * Set the current playback rate.
      *
      * @public
-     * @param {Number} rate Must be one of available rates from getPlaybackRates
+     * @param {Number|string} rate Must be one of available rates from getPlaybackRates.
      */
     self.setPlaybackRate = async (rate) => {
+      rate = Number(rate);
+
+      if (self.getPlaybackRates().indexOf(rate) === -1) {
+        return;
+      }
+
       playbackRate = await player.setPlaybackRate(rate);
       self.trigger('playbackRateChange', rate);
     };
