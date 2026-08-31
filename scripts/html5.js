@@ -149,7 +149,7 @@ H5P.VideoHtml5 = (function ($) {
     var qualities = getQualities(sources, video);
     var currentQuality;
 
-    numQualities = 0;
+    let numQualities = 0;
     for (let quality in qualities) {
       numQualities++;
     }
