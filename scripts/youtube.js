@@ -57,6 +57,7 @@ H5P.VideoYouTube = (function ($) {
       player = new YT.Player(id, {
         width: width,
         height: width * (9/16),
+        host: 'https://www.youtube-nocookie.com',
         videoId: videoId,
         playerVars: {
           origin: ORIGIN,
