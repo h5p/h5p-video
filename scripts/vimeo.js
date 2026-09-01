@@ -597,24 +597,28 @@ H5P.VideoVimeo = (function ($) {
     self.get360OverlayTemplate = () => {
       return [
         {
+          position: 'absolute',
           top: 0,
           left: 0,
           height: '100%',
           width: 'calc(100% - 47px)'
         },
         {
+          position: 'absolute',
           top: 0,
           right: 0,
           height: '100%',
           width: '12px'
         },
         {
+          position: 'absolute',
           top: 0,
           left: 'calc(100% - 48px)',
           height: 'calc(50% - 3px)',
           width: '48px'
         },
         {
+          position: 'absolute',
           bottom: 0,
           left: 'calc(100% - 48px)',
           height: 'calc(50% - 32px)',

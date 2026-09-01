@@ -613,54 +613,63 @@ H5P.VideoYouTube = (function ($) {
     self.get360OverlayTemplate = () => {
       return [
         {
+          position: 'absolute',
           top: 0,
           left: 0,
           height: '100%',
           width: '22px'
         },
         {
+          position: 'absolute',
           top: 0,
           right: 0,
           height: '100%',
           width: '30px'
         },
         {
+          position: 'absolute',
           top: '53px',
           left: 0,
           height: 'calc(100% - 113px)',
           width: 'calc(50% - 28px)'
         },
         {
+          position: 'absolute',
           top: '53px',
           right: 0,
           height: 'calc(100% - 113px)',
           width: 'calc(50% - 28px)'
         },
         {
+          position: 'absolute',
           top: '53px',
           right: 0,
           height: 'calc(50% - 81px)',
           width: '100%'
         },
         {
+          position: 'absolute',
           bottom: '60px',
           right: 0,
           height: 'calc(50% - 88px)',
           width: '100%'
         },
         {
+          position: 'absolute',
           bottom: '11px',
           left: '86px',
           height: '49px',
           width: 'calc(100% - 430px)'
         },
         {
+          position: 'absolute',
           bottom: '11px',
           left: 0,
           height: '49px',
           width: '30px'
         },
         {
+          position: 'absolute',
           bottom: 0,
           left: 0,
           height: '11px',
