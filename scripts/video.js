@@ -24,6 +24,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
 
+    self.firstPlay = true;
+
+    // 360 video related props
+    self.user360Draging = false;
+    self.user360DragingLastLocation = null;
+    self.is360EventSlotOpen = true;
+    // Event overflow prevention - only process next event (X)ms after last successful one
+    self.eventThrottleTime = parameters?.threeSixty?.eventThrottleTime || 10;
+    // Sensitivity for drag events - values between 1500 (less sensitive) and 300 (more sensitive) work best
+    self.dragSensitivity = parameters?.threeSixty?.dragSensitivity || 700;
+
     // Reference to the handler
     var handlerName = '';
 
@@ -201,6 +212,167 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.WAS_RESET = true;
     };
 
+    /**
+     * Check if loaded video is a 360 degree video. Default implementation, may be overridden by sub classes.
+     * 
+     * @return {Boolean | null} Is loaded video 360 video.
+     */
+    self.is360 = () => {
+      return false;
+    };
+
+    /**
+     * Check if this API supports 360 degree video controls. Default implementation, may be overridden by sub classes.
+     * 
+     * @public
+     * @return {Boolean} 360 controls availability.
+     */
+    self.canControl360 = () => {
+      return false;
+    };
+
+    /**
+     * Return current 360 view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @return {Object | null} Current 360 view properties.
+     */
+    self.get360ViewProperties = () => {
+      return null;
+    };
+
+    /**
+     * Update 360 degree view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      self.trigger('360ViewPropertiesChange', properties);
+      return;
+    };
+
+    /**
+     * Return properties for custom overlay elements. Default implementation, may be overridden by sub classes.
+     * 
+     * Event listners can't be added to embedded iFrames. The only way to capture events is by adding a
+     * transparent overlay element. Some players render native UI elemets, which need to be avoided to
+     * preserve functionality, so the overlay can be built out of multiple elements around existing UI.
+     *
+     * @public
+     * @return {Object[] | null} Overlay parts and properties.
+     */
+    self.get360OverlayTemplate = () => {
+      return null;
+    };
+
+    /**
+     * Create overlay and attach listeners for 360 video events.
+     *
+     * @public
+     */
+    self.create360Listeners = () => {
+      const overlayTemplate = self.get360OverlayTemplate();
+      const videoContainer = document.getElementsByClassName('h5p-video');
+
+      if (videoContainer.length === 0) {
+        return;
+      }
+
+      if (overlayTemplate === null) {
+        // If handler has no special overlay, use simple 100%x100% <div>. 
+        let overlayElement = document.createElement('div');
+        overlayElement.classList.add('h5p-video-360-overlay', 'h5p-video-360-overlay-default');
+        videoContainer[0].append(overlayElement);
+      }
+      else {
+        overlayTemplate.forEach((templatePartProperties) => {
+          let overlayPartElement = document.createElement('div');
+          overlayPartElement.classList.add('h5p-video-360-overlay');
+          
+          Object.keys(templatePartProperties).forEach((cssPropery) => {
+            overlayPartElement.style[cssPropery] = templatePartProperties[cssPropery];
+          });
+
+          videoContainer[0].append(overlayPartElement);
+        });
+      }
+
+      const start360Drag = (x, y) => {
+        self.user360Draging = true;
+        self.user360DragingLastLocation = {
+          x,
+          y
+        };
+      };
+
+      const update360Drag = async (x, y) => {
+        if (!self.is360EventSlotOpen || !self.user360Draging || self.user360DragingLastLocation === null) {
+          return;
+        }
+
+        const current360ViewProps = self.get360ViewProperties();
+
+        if (current360ViewProps === null) {
+          return;
+        }
+
+        self.is360EventSlotOpen = false;
+
+        let diffX = x - self.user360DragingLastLocation.x;
+        let diffY = y - self.user360DragingLastLocation.y;
+        let sensitivity = current360ViewProps.fov / self.dragSensitivity;
+
+        let normalizedYaw = current360ViewProps.yaw - (diffX * sensitivity);
+        normalizedYaw = normalizedYaw > 360 ? (normalizedYaw % 360) : (normalizedYaw % 360 < 0 ? (normalizedYaw + 360) : normalizedYaw);
+        const correctedPitch = Math.max(-90, Math.min(90, (current360ViewProps.pitch + (diffY * sensitivity))));
+
+        await self.set360ViewProperties({
+          yaw: normalizedYaw,
+          pitch: correctedPitch,
+          roll: current360ViewProps.roll,
+          fov: current360ViewProps.fov
+        });
+
+        self.user360DragingLastLocation = {
+          x,
+          y
+        };
+
+        setTimeout(() => {
+          self.is360EventSlotOpen = true;
+        }, self.eventThrottleTime);
+      };
+
+      const stop360Drag = () => {
+        self.user360Draging = false;
+        self.is360EventSlotOpen = true;
+      };
+
+      Array.from(document.getElementsByClassName('h5p-video-360-overlay')).forEach((element) => {
+        element.addEventListener('mousedown', (event) => {
+          start360Drag(event.clientX, event.clientY);
+        });
+        
+        element.addEventListener('touchstart', (event) => {
+          event.preventDefault();
+          start360Drag(event.touches[0].clientX, event.touches[0].clientY);
+        });
+      });
+
+      window.addEventListener('mousemove', (event) => {
+        update360Drag(event.clientX, event.clientY);
+      });
+
+      window.addEventListener('touchmove', (event) => {
+        update360Drag(event.touches[0].clientX, event.touches[0].clientY);
+      });
+
+      ['mouseup', 'touchcancel', 'touchend'].forEach((eventType) => {
+        window.addEventListener(eventType, () => { stop360Drag(); })
+      });
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
@@ -213,7 +385,21 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         }
         self.WAS_RESET = false;
       }
+    });
 
+    self.on('stateChange', (event) => {
+      const state = event.data;
+
+      switch (state) {
+        case H5P.Video.PLAYING:
+          if (self.firstPlay) {
+            if (self.is360 && self.canControl360) {
+              self.create360Listeners();
+            }
+          }
+          self.firstPlay = false;
+          break;
+      }
     });
 
     // Find player for video sources

@@ -48,3 +48,11 @@
 .h5p-video.h5p-panopto iframe {
   display: block;
 }
+
+.h5p-video-360-overlay-default {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
