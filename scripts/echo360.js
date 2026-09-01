@@ -29,7 +29,6 @@ H5P.VideoEchoVideo = (() => {
     let loadingFailedTimeout;
     let failedLoading = false;
     let ratio = 9 / 16;
-
     let currentState = H5P.Video.VIDEO_CUED;
     // Echo360 server doesn't sync seek time with regular play time fast enough
     let timelineUpdatesToSkip = 0;

@@ -142,7 +142,7 @@ H5P.VideoVimeo = (function ($) {
           current360ViewProperties = result;
           return true;
         })
-        .catch((error) => {
+        .catch(() => {
           // Vimeo throws an UnsupportedError for non-360 videos.
           return false;
         });
@@ -550,7 +550,7 @@ H5P.VideoVimeo = (function ($) {
      */
     self.is360 = () => {
       return is360;
-    }
+    };
 
     /**
      * Check if this API supports 360 degree video controls.
@@ -560,7 +560,7 @@ H5P.VideoVimeo = (function ($) {
      */
     self.canControl360 = () => {
       return true;
-    }
+    };
 
     /**
      * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values.
@@ -570,7 +570,7 @@ H5P.VideoVimeo = (function ($) {
      */
     self.get360ViewProperties = () => {
       return current360ViewProperties;
-    }
+    };
 
     /**
      * Update 360 degree view properties. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
@@ -586,7 +586,7 @@ H5P.VideoVimeo = (function ($) {
 
       current360ViewProperties = await player.setCameraProps(updatedProps);
       self.trigger('360ViewPropertiesChange', updatedProps);
-    }
+    };
 
     /**
      * Returns properties for custom overlay elemets.
@@ -624,7 +624,7 @@ H5P.VideoVimeo = (function ($) {
           height: 'calc(50% - 32px)',
           width: '48px'
         }
-      ]
+      ];
     };
   }
 

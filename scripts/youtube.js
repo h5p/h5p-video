@@ -17,7 +17,7 @@ H5P.VideoYouTube = (function ($) {
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
     var ratio = 9/16;
-    var is360 = null;
+    let is360 = null;
     var $wrapper = $('<div/>');
     var $placeholder = $('<div />', {
       text: l10n.loading,
@@ -556,7 +556,7 @@ H5P.VideoYouTube = (function ($) {
      */
     self.is360 = () => {
       return is360;
-    }
+    };
 
     /**
      * Check if this API supports 360 degree video controls.
@@ -566,7 +566,7 @@ H5P.VideoYouTube = (function ($) {
      */
     self.canControl360 = () => {
       return true;
-    }
+    };
 
     /**
      * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values. Not available until after play.
@@ -575,14 +575,14 @@ H5P.VideoYouTube = (function ($) {
      * @return {Object | null} Current 360 view properties.
      */
     self.get360ViewProperties = () => {
-      if (!player || !player.getSphericalProperties || is360 === null || is360 === false) {
+      if (!player?.getSphericalProperties || !is360) {
         return null;
       }
 
-      let sphericalProperties = player.getSphericalProperties();
+      const sphericalProperties = player.getSphericalProperties();
 
       return Object.keys(sphericalProperties).length > 0 ? sphericalProperties : null;
-    }
+    };
 
     /**
      * Update 360 degree view properties. Not available until after play. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
@@ -591,7 +591,7 @@ H5P.VideoYouTube = (function ($) {
      * @param {Object} properties Updated 360 view properties.
      */
     self.set360ViewProperties = async (properties) => {
-      if (!player || !player.getSphericalProperties || !player.setSphericalProperties || is360 === null || is360 === false) {
+      if (!player?.getSphericalProperties || !player?.setSphericalProperties || !is360) {
         return;
       }
 
