@@ -41,7 +41,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.dragEnabled = false;
     // Sensitivity for drag events - lower value -> higher sensitivity.
     self.dragSensitivity = Math.max(300, Math.min(parameters?.threeSixty?.dragSensitivity || THREESIXTY_DRAG_SENSITIVITY, 1500));
-    self.mouseControlSensitivity = Math.max(1, Math.min(parameters?.threeSixty?.mouseControlSensitivity || THREESIXTY_MOUSE_SENSITIVITY, 8))
+    self.mouseControlSensitivity = Math.max(1, Math.min(parameters?.threeSixty?.mouseControlSensitivity || THREESIXTY_MOUSE_SENSITIVITY, 8));
 
 
     // Reference to the handler
@@ -279,11 +279,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * @public
      */
     self.create360Controls = () => {
-      if (self.$container === null || document.getElementsByClassName('h5p-video-360-mouse-controls-container-' + self.uniqueId ?? '').length) {
+      if (self.$container === null || document.getElementsByClassName('h5p-video-360-mouse-controls-container-' + (self.uniqueId ?? '')).length) {
         return;
       }
 
-      let mouseControlContainerElement = document.createElement('div');
+      const mouseControlContainerElement = document.createElement('div');
       mouseControlContainerElement.classList.add('h5p-video-360-mouse-controls-container-' + self.uniqueId);
 
       const controlsOffsetData = self.get360ControlsOffset();
@@ -323,7 +323,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.$container.append(mouseControlContainerElement);
 
       const updateView = (direction, sensitivity) => {
-        let viewProps = self.get360ViewProperties();
+        const viewProps = self.get360ViewProperties();
 
         switch (direction) {
           case 'u':
@@ -357,7 +357,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         const repeat = () => {
           action();
           t = setTimeout(repeat, delay);
-        }
+        };
 
         button.onmousedown = () => {
           repeat();
@@ -365,11 +365,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
         button.onmouseup = () => {
           clearTimeout(t);
-        }
+        };
 
         button.onmouseleave = () => {
           clearTimeout(t);
-        }
+        };
       };
 
       Array.from(document.getElementsByClassName('h5p-video-360-mouse-controls-button-' + self.uniqueId)).forEach((buttonElement) => {
@@ -403,14 +403,14 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * @public
      */
     self.create360Overlay = () => {
-      if (!self.$container || document.getElementsByClassName('h5p-video-360-overlay-' + self.uniqueId ?? '').length) {
+      if (!self.$container || document.getElementsByClassName('h5p-video-360-overlay-' + (self.uniqueId ?? '')).length) {
         return;
       }
 
-      let overlayContainerElement = document.createElement('div');
+      const overlayContainerElement = document.createElement('div');
       overlayContainerElement.classList.add('h5p-video-360-overlay-container-' + self.uniqueId);
       
-      let overlayElement = document.createElement('div');
+      const overlayElement = document.createElement('div');
       overlayElement.classList.add('h5p-video-360-overlay-' + self.uniqueId, 'h5p-video-360-overlay-default');
       overlayElement.hidden = !self.dragEnabled;
       overlayContainerElement.append(overlayElement);
@@ -435,9 +435,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
         self.is360EventSlotOpen = false;
 
-        let diffX = x - self.user360DragingLastLocation.x;
-        let diffY = y - self.user360DragingLastLocation.y;
-        let sensitivity = current360ViewProps.fov / self.dragSensitivity;
+        const diffX = x - self.user360DragingLastLocation.x;
+        const diffY = y - self.user360DragingLastLocation.y;
+        const sensitivity = current360ViewProps.fov / self.dragSensitivity;
 
         let normalizedYaw = current360ViewProps.yaw - (diffX * sensitivity);
 
@@ -487,7 +487,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       });
 
       ['mouseup', 'touchcancel', 'touchend'].forEach((eventType) => {
-        window.addEventListener(eventType, () => { stop360Drag(); })
+        window.addEventListener(eventType, () => { stop360Drag(); });
       });
     };
 
