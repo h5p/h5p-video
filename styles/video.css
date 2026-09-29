@@ -59,6 +59,8 @@
 
 [class*='h5p-video-360-mouse-controls-container-'] {
   position: absolute;
+  top: 20px;
+  left: 20px;
   display: flex;
   flex-direction: column;
   padding: 2px;
@@ -66,6 +68,10 @@
   width: 75px;
   height: 75px;
   background-color: #2c2c2caa;
+}
+
+.h5p-video.h5p-youtube [class*='h5p-video-360-mouse-controls-container-'] {
+  top: 80px;
 }
 
 .h5p-video-360-mouse-controls-row {

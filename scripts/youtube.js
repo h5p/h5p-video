@@ -603,16 +603,6 @@ H5P.VideoYouTube = (function ($) {
       player.setSphericalProperties(updatedProps);
       self.trigger('360ViewPropertiesChange', updatedProps);
     };
-
-    /**
-     * Returns properties for custom overlay elements.
-     * 
-     * @override
-     * @return {Object[] | null}
-     */
-    self.get360ControlsOffset = () => {
-      return {left: '20px', top: '80px'};
-    };
   }
 
   /**

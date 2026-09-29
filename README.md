@@ -57,6 +57,7 @@ Property | Description | Default value
 ------------ | ------------- | ------------
 threeSixty.eventThrottleTime | Time, in miliseconds, that needs to pass after a successful 360 view update, for new events to be registered. Used to prevent event overflow. Only used for 360 degree videos. | 10
 threeSixty.dragSensitivity | Sensitivity for mouse dragging when changing 360 view. Accepts values between 300 and 1500. The lower the number, the faster the view moves. Only used for 360 degree videos. | 700
+threeSixty.mouseSensitivity | Defines the movement speed for 360 view changes via the UI directional buttons. Accepts values between 1 and 9. The higher the number, the faster the view moves. Only used for 360 degree videos. | 2
 
 
 ## Changing Video Quality

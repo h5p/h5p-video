@@ -22,7 +22,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     self.$container = null;
     self.oldTime = extras.previousState?.time;
     self.contentId = id;
-    self.uniqueId = crypto.getRandomValues(new Uint16Array(1))[0];
+    self.uniqueId = H5P.createUUID();
     self.WAS_RESET = false;
     self.startAt = parameters.startAt || 0;
     self.hasNoAutoPause = parameters.playback?.hasNoAutoPause || false;
@@ -39,10 +39,13 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     // Event overflow prevention - only process next event (X)ms after last successful one
     self.eventThrottleTime = parameters?.threeSixty?.eventThrottleTime || THREESIXTY_EVENT_THROTLE_TIME;
     self.dragEnabled = false;
-    // Sensitivity for drag events - lower value -> higher sensitivity.
-    self.dragSensitivity = Math.max(300, Math.min(parameters?.threeSixty?.dragSensitivity || THREESIXTY_DRAG_SENSITIVITY, 1500));
-    self.mouseControlSensitivity = Math.max(1, Math.min(parameters?.threeSixty?.mouseControlSensitivity || THREESIXTY_MOUSE_SENSITIVITY, 8));
 
+    const clampValue = (number, min, max) =>  Math.max(min, Math.min(number, max));
+
+    // Sensitivity for drag events - lower value -> higher sensitivity.
+    self.dragSensitivity = clampValue(parameters?.threeSixty?.dragSensitivity || THREESIXTY_DRAG_SENSITIVITY, 300, 1500);
+
+    self.mouseControlSensitivity = clampValue(parameters?.threeSixty?.mouseControlSensitivity || THREESIXTY_MOUSE_SENSITIVITY, 1, 8);
 
     // Reference to the handler
     var handlerName = '';
@@ -264,16 +267,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     };
 
     /**
-     * Return offset data for control UI elements.
-     * 
-     * @public
-     * @return {Object} CSS properties for absolute offset.
-     */
-    self.get360ControlsOffset = () => {
-      return {left: '20px', top: '20px'};
-    };
-
-    /**
      * Create 360 view mouse control UI and attach listeners.
      *
      * @public
@@ -285,12 +278,6 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       const mouseControlContainerElement = document.createElement('div');
       mouseControlContainerElement.classList.add('h5p-video-360-mouse-controls-container-' + self.uniqueId);
-
-      const controlsOffsetData = self.get360ControlsOffset();
-
-      Object.keys(controlsOffsetData).forEach((cssProperty) => {
-        mouseControlContainerElement.style[cssProperty] = controlsOffsetData[cssProperty];
-      });
 
       mouseControlContainerElement.innerHTML = `
         <div class="h5p-video-360-mouse-controls-row">
@@ -340,14 +327,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
             break;
         }
 
-        if (viewProps.yaw > 360) {
-          viewProps.yaw %= 360;
-        }
-        else {
-          viewProps.yaw = viewProps.yaw % 360 < 0 ? (viewProps.yaw + 360) : viewProps.yaw;
-        }
-
-        viewProps.pitch = Math.max(-90, Math.min(viewProps.pitch, 90));
+        viewProps.yaw = ((viewProps.yaw % 360) + 360) % 360;
+        viewProps.pitch = clampValue(viewProps.pitch, -90, 90);
 
         self.set360ViewProperties(viewProps);
       };
@@ -372,7 +353,9 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         };
       };
 
-      Array.from(document.getElementsByClassName('h5p-video-360-mouse-controls-button-' + self.uniqueId)).forEach((buttonElement) => {
+      const mouseControlButtonsArray = Array.from(document.getElementsByClassName('h5p-video-360-mouse-controls-button-' + self.uniqueId));
+
+      mouseControlButtonsArray.forEach((buttonElement) => {
         buttonHoldRepeater(
           buttonElement,
           () => updateView(buttonElement.dataset.direction, self.mouseControlSensitivity),
@@ -380,20 +363,14 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         );
       });
 
-      document.getElementsByClassName('h5p-video-360-mouse-controls-drag-toggle-button-' + self.uniqueId)[0].addEventListener('click', () => {
+      document.getElementsByClassName('h5p-video-360-mouse-controls-drag-toggle-button-' + self.uniqueId)[0].addEventListener('click', (event) => {
         self.dragEnabled = !self.dragEnabled;
 
+        event.target.classList.toggle('h5p-video-360-mouse-controls-drag-toggle-button-active', self.dragEnabled);
         document.getElementsByClassName('h5p-video-360-overlay-' + self.uniqueId)[0].hidden = !self.dragEnabled;
-        Array.from(document.getElementsByClassName('h5p-video-360-mouse-controls-button-' + self.uniqueId)).forEach((element) => {
+        mouseControlButtonsArray.forEach((element) => {
           element.disabled = self.dragEnabled;
         });
-
-        if (self.dragEnabled) {
-          document.getElementsByClassName('h5p-video-360-mouse-controls-drag-toggle-button-' + self.uniqueId)[0].classList.add('h5p-video-360-mouse-controls-drag-toggle-button-active');
-        }
-        else {
-          document.getElementsByClassName('h5p-video-360-mouse-controls-drag-toggle-button-' + self.uniqueId)[0].classList.remove('h5p-video-360-mouse-controls-drag-toggle-button-active');
-        }
       });
     };
 
@@ -439,20 +416,12 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         const diffY = y - self.user360DragingLastLocation.y;
         const sensitivity = current360ViewProps.fov / self.dragSensitivity;
 
-        let normalizedYaw = current360ViewProps.yaw - (diffX * sensitivity);
-
-        if (normalizedYaw > 360) {
-          normalizedYaw %= 360;
-        }
-        else {
-          normalizedYaw = normalizedYaw % 360 < 0 ? (normalizedYaw + 360) : normalizedYaw;
-        }
-
-        const correctedPitch = Math.max(-90, Math.min(90, (current360ViewProps.pitch + (diffY * sensitivity))));
+        const normalizedYaw = ((current360ViewProps.yaw + (diffX * sensitivity) % 360) + 360) % 360;
+        const clampedPitch = clampValue(current360ViewProps.pitch + (diffY * sensitivity), -90, 90);
 
         await self.set360ViewProperties({
           yaw: normalizedYaw,
-          pitch: correctedPitch,
+          pitch: clampedPitch,
           roll: current360ViewProps.roll,
           fov: current360ViewProps.fov
         });
@@ -469,14 +438,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         self.is360EventSlotOpen = true;
       };
 
-      document.getElementsByClassName('h5p-video-360-overlay-container-' + self.uniqueId)[0].addEventListener('mousedown', (event) => {
-        start360Drag(event.clientX, event.clientY);
-      });
-        
-      document.getElementsByClassName('h5p-video-360-overlay-container-' + self.uniqueId)[0].addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        start360Drag(event.touches[0].clientX, event.touches[0].clientY);
-      });
+      overlayContainerElement.addEventListener('mousedown', (event) => start360Drag(event.clientX, event.clientY));
+      overlayContainerElement.addEventListener('touchstart', (event) => start360Drag(event.touches[0].clientX, event.touches[0].clientY));
 
       window.addEventListener('mousemove', (event) => {
         update360Drag(event.clientX, event.clientY);
@@ -487,7 +450,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       });
 
       ['mouseup', 'touchcancel', 'touchend'].forEach((eventType) => {
-        window.addEventListener(eventType, () => { stop360Drag(); });
+        window.addEventListener(eventType, () => stop360Drag());
       });
     };
 
