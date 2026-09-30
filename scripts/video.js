@@ -285,7 +285,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         r: self.activeKeyboardButtons.r || self.activeMouseButtons.r
       };
 
-      if (Number(activeDirections.u) + Number(activeDirections.d) + Number(activeDirections.l) + Number(activeDirections.r) === 0) {
+      if (!activeDirections.u && !activeDirections.d && !activeDirections.l && !activeDirections.r) {
         self.update360ViewTimeout = null;
         return;
       }
