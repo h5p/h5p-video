@@ -388,11 +388,11 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
       ['keyup', 'keydown'].forEach((eventType) => {
         window.addEventListener(eventType, (event) => {
-          if (!validKeys.includes(event.key)) {
+          if (!validKeys.includes(event.key.toLowerCase())) {
             return;
           }
 
-          self.activeKeyboardButtons[self.keyboardControlMapping[event.key]] = eventType === 'keydown';
+          self.activeKeyboardButtons[self.keyboardControlMapping[event.key.toLowerCase()]] = eventType === 'keydown';
 
           if (eventType === 'keydown' && self.update360ViewTimeout === null) {
             update360View();
