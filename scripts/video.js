@@ -1,6 +1,11 @@
 /** @namespace H5P */
 H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
+  const THREESIXTY_EVENT_THROTLE_TIME = 10;
+  const THREESIXTY_DRAG_SENSITIVITY = 700;
+  const THREESIXTY_BUTTON_SENSITIVITY = 2;
+  const THREESIXTY_DEFAULT_KEYBOARD_MAPPING = {'w': 'u', 'a': 'l', 's': 'd', 'd': 'r'};
+
   /**
    * The ultimate H5P video player!
    *
@@ -15,14 +20,36 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
    */
   function Video(parameters, id, extras = {}) {
     var self = this;
+    self.$container = null;
     self.oldTime = extras.previousState?.time;
     self.contentId = id;
+    self.uniqueId = H5P.createUUID();
     self.WAS_RESET = false;
     self.startAt = parameters.startAt || 0;
     self.hasNoAutoPause = parameters.playback?.hasNoAutoPause || false;
 
     // Ref youtube.js - ipad & youtube - issue
     self.pressToPlay = false;
+
+    self.firstPlay = true;
+
+    // 360 video related props
+    self.user360Draging = false;
+    self.user360DragingLastLocation = null;
+    self.is360EventSlotOpen = true;
+    // Event overflow prevention - only process next event (X)ms after last successful one
+    self.eventThrottleTime = parameters?.threeSixty?.eventThrottleTime || THREESIXTY_EVENT_THROTLE_TIME;
+    self.dragEnabled = false;
+
+    const clampValue = (number, min, max) =>  Math.max(min, Math.min(number, max));
+
+    // Sensitivity for drag events - lower value -> higher sensitivity.
+    self.dragSensitivity = clampValue(parameters?.threeSixty?.dragSensitivity || THREESIXTY_DRAG_SENSITIVITY, 300, 1500);
+    self.buttonControlSensitivity = clampValue(parameters?.threeSixty?.buttonControlSensitivity || THREESIXTY_BUTTON_SENSITIVITY, 1, 8);
+    self.activeMouseButtons = {u: false, l: false, d: false, r: false};
+    self.activeKeyboardButtons = {u: false, l: false, d: false, r: false};
+    self.keyboardControlMapping = { ...THREESIXTY_DEFAULT_KEYBOARD_MAPPING, ...parameters?.threeSixty?.keyboardControlMapping };
+    self.update360ViewTimeout = null;
 
     // Reference to the handler
     var handlerName = '';
@@ -131,6 +158,8 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
      * @param {jQuery} $container
      */
     self.attach = function ($container) {
+      self.$container = $container;
+
       $container.addClass('h5p-video h5p-theme').html('');
 
       if (self.appendTo !== undefined) {
@@ -201,6 +230,257 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
       self.WAS_RESET = true;
     };
 
+    /**
+     * Check if loaded video is a 360 degree video. Default implementation, may be overridden by sub classes.
+     * 
+     * @return {Boolean | null} Is loaded video 360 video.
+     */
+    self.is360 = () => {
+      return false;
+    };
+
+    /**
+     * Check if this API supports 360 degree video controls. Default implementation, may be overridden by sub classes.
+     * 
+     * @public
+     * @return {Boolean} 360 controls availability.
+     */
+    self.canControl360 = () => {
+      return false;
+    };
+
+    /**
+     * Return current 360 view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @return {Object | null} Current 360 view properties.
+     */
+    self.get360ViewProperties = () => {
+      return null;
+    };
+
+    /**
+     * Update 360 degree view properties. Default implementation, may be overridden by sub classes.
+     *
+     * @public
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      self.trigger('360ViewPropertiesChange', properties);
+      return;
+    };
+
+    /**
+     * Helper function used to update 360 view properties based on currently pressed mouse/keyboard buttons. Self-calls via timeout if any buttons are active on execution.
+     * 
+     * @returns void
+     */
+    const update360View = () => {
+      const viewProps = self.get360ViewProperties();
+
+      const activeDirections = {
+        u: self.activeKeyboardButtons.u || self.activeMouseButtons.u,
+        l: self.activeKeyboardButtons.l || self.activeMouseButtons.l,
+        d: self.activeKeyboardButtons.d || self.activeMouseButtons.d,
+        r: self.activeKeyboardButtons.r || self.activeMouseButtons.r
+      };
+
+      if (!activeDirections.u && !activeDirections.d && !activeDirections.l && !activeDirections.r) {
+        self.update360ViewTimeout = null;
+        return;
+      }
+
+      viewProps.pitch += Number(activeDirections.u) * self.buttonControlSensitivity;
+      viewProps.pitch -= Number(activeDirections.d) * self.buttonControlSensitivity;
+      viewProps.yaw += Number(activeDirections.l) * self.buttonControlSensitivity;
+      viewProps.yaw -= Number(activeDirections.r) * self.buttonControlSensitivity;
+
+      viewProps.yaw = ((viewProps.yaw % 360) + 360) % 360;
+      viewProps.pitch = clampValue(viewProps.pitch, -90, 90);
+
+      self.set360ViewProperties(viewProps);
+
+      self.update360ViewTimeout = setTimeout(update360View, self.eventThrottleTime);
+    };
+
+    /**
+     * Create 360 view mouse control UI and attach listeners.
+     *
+     * @public
+     */
+    self.create360MouseControls = () => {
+      if (self.$container === null || document.getElementsByClassName('h5p-video-360-mouse-controls-container-' + (self.uniqueId ?? '')).length) {
+        return;
+      }
+
+      const mouseControlContainerElement = document.createElement('div');
+      mouseControlContainerElement.classList.add('h5p-video-360-mouse-controls-container-' + self.uniqueId);
+
+      mouseControlContainerElement.innerHTML = `
+        <div class="h5p-video-360-mouse-controls-row">
+          <div></div>
+          <div>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="u">↑</button>
+          </div>
+          <div></div>
+        </div>
+        <div class="h5p-video-360-mouse-controls-row">
+          <div>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="l">←</button>
+          </div>
+          <div>
+            <button class="h5p-video-360-mouse-controls-drag-toggle-button-${self.uniqueId}">D</button>
+          </div>
+          <div>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="r">→</button>
+          </div>
+        </div>
+        <div class="h5p-video-360-mouse-controls-row">
+          <div></div>
+          <div>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="d">↓</button>
+          </div>
+          <div></div>
+        </div>
+      `;
+
+      self.$container.append(mouseControlContainerElement);
+
+      const mouseControlButtonsArray = Array.from(document.getElementsByClassName('h5p-video-360-mouse-controls-button-' + self.uniqueId));
+
+      mouseControlButtonsArray.forEach((button) => {
+        button.onmousedown = () => {
+          self.activeMouseButtons[button.dataset.direction] = true;
+          if (self.update360ViewTimeout === null) {
+            update360View();
+          }
+        };
+
+        ['onmouseup', 'onmouseleave'].forEach((eventType) => {
+          button[eventType] = () => {
+            self.activeMouseButtons[button.dataset.direction] = false;
+          };
+        });
+      });
+
+      document.getElementsByClassName('h5p-video-360-mouse-controls-drag-toggle-button-' + self.uniqueId)[0].addEventListener('click', (event) => {
+        self.dragEnabled = !self.dragEnabled;
+
+        event.target.classList.toggle('h5p-video-360-mouse-controls-drag-toggle-button-active', self.dragEnabled);
+        document.getElementsByClassName('h5p-video-360-overlay-' + self.uniqueId)[0].hidden = !self.dragEnabled;
+        mouseControlButtonsArray.forEach((element) => {
+          element.disabled = self.dragEnabled;
+        });
+      });
+    };
+
+    /**
+     * Create 360 view keyboard control listeners.
+     *
+     * @public
+     */
+    self.create360KeyboardListeners = () => {
+      if (self.$container === null) {
+        return;
+      }
+
+      const validKeys = Object.keys(self.keyboardControlMapping);
+
+      ['keyup', 'keydown'].forEach((eventType) => {
+        window.addEventListener(eventType, (event) => {
+          if (!validKeys.includes(event.key.toLowerCase())) {
+            return;
+          }
+
+          self.activeKeyboardButtons[self.keyboardControlMapping[event.key.toLowerCase()]] = eventType === 'keydown';
+
+          if (eventType === 'keydown' && self.update360ViewTimeout === null) {
+            update360View();
+          }
+        });
+      });
+    };
+
+    /**
+     * Create drag overlay and attach listeners for 360 video drag events.
+     *
+     * @public
+     */
+    self.create360Overlay = () => {
+      if (!self.$container || document.getElementsByClassName('h5p-video-360-overlay-' + (self.uniqueId ?? '')).length) {
+        return;
+      }
+
+      const overlayContainerElement = document.createElement('div');
+      overlayContainerElement.classList.add('h5p-video-360-overlay-container-' + self.uniqueId);
+      
+      const overlayElement = document.createElement('div');
+      overlayElement.classList.add('h5p-video-360-overlay-' + self.uniqueId, 'h5p-video-360-overlay-default');
+      overlayElement.hidden = !self.dragEnabled;
+      overlayContainerElement.append(overlayElement);
+
+      self.$container.append(overlayContainerElement);
+
+      const start360Drag = (x, y) => {
+        self.user360Draging = true;
+        self.user360DragingLastLocation = {x, y};
+      };
+
+      const update360Drag = async (x, y) => {
+        if (!self.is360EventSlotOpen || !self.user360Draging || self.user360DragingLastLocation === null) {
+          return;
+        }
+
+        const current360ViewProps = self.get360ViewProperties();
+
+        if (current360ViewProps === null) {
+          return;
+        }
+
+        self.is360EventSlotOpen = false;
+
+        const diffX = x - self.user360DragingLastLocation.x;
+        const diffY = y - self.user360DragingLastLocation.y;
+        const sensitivity = current360ViewProps.fov / self.dragSensitivity;
+
+        const normalizedYaw = ((current360ViewProps.yaw + (diffX * sensitivity) % 360) + 360) % 360;
+        const clampedPitch = clampValue(current360ViewProps.pitch + (diffY * sensitivity), -90, 90);
+
+        await self.set360ViewProperties({
+          yaw: normalizedYaw,
+          pitch: clampedPitch,
+          roll: current360ViewProps.roll,
+          fov: current360ViewProps.fov
+        });
+
+        self.user360DragingLastLocation = {x, y};
+
+        setTimeout(() => {
+          self.is360EventSlotOpen = true;
+        }, self.eventThrottleTime);
+      };
+
+      const stop360Drag = () => {
+        self.user360Draging = false;
+        self.is360EventSlotOpen = true;
+      };
+
+      overlayContainerElement.addEventListener('mousedown', (event) => start360Drag(event.clientX, event.clientY));
+      overlayContainerElement.addEventListener('touchstart', (event) => start360Drag(event.touches[0].clientX, event.touches[0].clientY));
+
+      window.addEventListener('mousemove', (event) => {
+        update360Drag(event.clientX, event.clientY);
+      });
+
+      window.addEventListener('touchmove', (event) => {
+        update360Drag(event.touches[0].clientX, event.touches[0].clientY);
+      });
+
+      ['mouseup', 'touchcancel', 'touchend'].forEach((eventType) => {
+        window.addEventListener(eventType, () => stop360Drag());
+      });
+    };
+
     // Resize the video when we know its aspect ratio
     self.on('loaded', function () {
       self.trigger('resize');
@@ -213,7 +493,17 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         }
         self.WAS_RESET = false;
       }
+    });
 
+    self.on('stateChange', (event) => {
+      if (event.data === H5P.Video.PLAYING) {
+        if (self.firstPlay && self.is360 && self.canControl360) {
+          self.create360Overlay();
+          self.create360MouseControls();
+          self.create360KeyboardListeners();
+        }
+        self.firstPlay = false;
+      }
     });
 
     // Find player for video sources

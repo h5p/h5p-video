@@ -17,6 +17,7 @@ H5P.VideoYouTube = (function ($) {
     var id = 'h5p-youtube-' + numInstances;
     numInstances++;
     var ratio = 9/16;
+    let is360 = null;
     var $wrapper = $('<div/>');
     var $placeholder = $('<div />', {
       text: l10n.loading,
@@ -132,6 +133,10 @@ H5P.VideoYouTube = (function ($) {
                 player.setPlaybackRate(playbackRate);
               }
               // End IE11 fix
+
+              if (is360 === null && state.data === H5P.Video.PLAYING) {
+                is360 = Object.keys(player.getSphericalProperties()).length !== 0;
+              }
 
               self.trigger('stateChange', state.data);
             }
@@ -542,6 +547,62 @@ H5P.VideoYouTube = (function ($) {
         player.setSize(width, height);
       }
     });
+
+    /**
+     * Check if loaded video is a 360 degree video.
+     * 
+     * @override
+     * @return {Boolean | null} Is loaded video 360.
+     */
+    self.is360 = () => {
+      return is360;
+    };
+
+    /**
+     * Check if this API supports 360 degree video controls.
+     * 
+     * @override
+     * @return {Boolean} 360 controls availability.
+     */
+    self.canControl360 = () => {
+      return true;
+    };
+
+    /**
+     * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values. Not available until after play.
+     * 
+     * @override
+     * @return {Object | null} Current 360 view properties.
+     */
+    self.get360ViewProperties = () => {
+      if (!player?.getSphericalProperties || !is360) {
+        return null;
+      }
+
+      const sphericalProperties = player.getSphericalProperties();
+
+      return Object.keys(sphericalProperties).length > 0 ? sphericalProperties : null;
+    };
+
+    /**
+     * Update 360 degree view properties. Not available until after play. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
+     * 
+     * @override
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      if (!player?.getSphericalProperties || !player?.setSphericalProperties || !is360) {
+        return;
+      }
+
+      const updatedProps = {
+        ...player.getSphericalProperties(),
+        ...properties
+      };
+
+      player.setSphericalProperties(updatedProps);
+      self.trigger('360ViewPropertiesChange', updatedProps);
+    };
   }
 
   /**

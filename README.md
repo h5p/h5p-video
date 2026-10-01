@@ -19,6 +19,7 @@ stateChange | Triggered whenever the state of the video changes. Possible `event
 playbackRateChange | Triggered when the video playback speed changes. This is similar to the native _ratechange_ however it mocks away some IE issues.
 captions | Triggered when captions become available, i.e. may not be trigger until after _play()_.<br>`event.data` contains a list of valid text tracks that the user may choose from.
 qualityChange | Triggered to confirm that the quality was successfully changed. I.e. choosing a different quality does not guarantee it will play.<br>Useful for updating the UI with which quality is currently active.
+360ViewPropertiesChange | Triggered to confirm that 360 degree view properties were successfully changed.<br>`event.data` contains an `{ yaw, pitch, roll, fov }` object with updated view values.
 
 Here's an example of how you can use these events to react when a user interacts with an Interactive Video.
 You'll want to be adding this third-party script through your H5P plugin's _scripts_alter_ hook.
@@ -48,6 +49,17 @@ H5P.jQuery(document).on('ready', function () {
   }
 });
 ```
+
+## Overriding default properties
+Several default properties can be overriden when creating a new instance of the Video class by passing values in the `parameters` property of the constructor.
+
+Property | Description | Default value
+------------ | ------------- | ------------
+threeSixty.eventThrottleTime | Time, in miliseconds, that needs to pass after a successful 360 view update, for new events to be registered. Used to prevent event overflow. Only used for 360 degree videos. | 10
+threeSixty.dragSensitivity | Sensitivity for mouse dragging when changing 360 view. Accepts values between 300 and 1500. The lower the number, the faster the view moves. Only used for 360 degree videos. | 700
+threeSixty.buttonControlSensitivity | Defines the movement speed for 360 view changes via the UI directional buttons or keyboard controls. Accepts values between 1 and 9. The higher the number, the faster the view moves. Only used for 360 degree videos. | 2
+threeSixty.keyboardControlMapping | Object (`{'<keyboard_key1>': '<direction1>', ...}`) that defines keyboard key mapping to be used for changing 360 view. Valid direction keys: `'u', 'd', 'l', 'r'`. Only used for 360 degree videos. | `{'w': 'u', 'a': 'l', 's': 'd', 'd': 'r'}`;
+
 
 ## Changing Video Quality
 

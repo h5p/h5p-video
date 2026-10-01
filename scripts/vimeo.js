@@ -32,6 +32,8 @@ H5P.VideoVimeo = (function ($) {
     let failedLoading = false;
     let ratio = 9/16;
     let isLoaded = false;
+    let is360 = null;
+    let current360ViewProperties = null;
 
     const LOADING_TIMEOUT_IN_SECONDS = 8;
 
@@ -135,6 +137,15 @@ H5P.VideoVimeo = (function ($) {
           // instantiation, so we instead perform an initial seek here.
           currentTime = await self.seek(options.startAt);
         }
+
+        is360 = await player.getCameraProps().then((result) => {
+          current360ViewProperties = result;
+          return true;
+        })
+        .catch(() => {
+          // Vimeo throws an UnsupportedError for non-360 videos.
+          return false;
+        });
 
         self.trigger('ready');
         self.trigger('loaded');
@@ -530,6 +541,52 @@ H5P.VideoVimeo = (function ($) {
         });
       }
     });
+
+    /**
+     * Check if loaded video is a 360 degree video.
+     * 
+     * @override
+     * @return {Boolean | null} Is loaded video 360 video.
+     */
+    self.is360 = () => {
+      return is360;
+    };
+
+    /**
+     * Check if this API supports 360 degree video controls.
+     * 
+     * @override
+     * @return {Boolean} 360 controls availability.
+     */
+    self.canControl360 = () => {
+      return true;
+    };
+
+    /**
+     * Return current 360 view properties. Contains 'yaw', 'pitch', 'roll' and 'fov' values.
+     * 
+     * @override
+     * @return {Object | null} Current 360 view properties.
+     */
+    self.get360ViewProperties = () => {
+      return current360ViewProperties;
+    };
+
+    /**
+     * Update 360 degree view properties. Should contain 'yaw', 'pitch', 'roll' and 'fov' values.
+     * 
+     * @override
+     * @param {Object} properties Updated 360 view properties.
+     */
+    self.set360ViewProperties = async (properties) => {
+      const updatedProps = {
+        ...current360ViewProperties,
+        ...properties
+      };
+
+      current360ViewProperties = await player.setCameraProps(updatedProps);
+      self.trigger('360ViewPropertiesChange', updatedProps);
+    };
   }
 
   /**
