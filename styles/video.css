@@ -44,3 +44,8 @@
   padding: 2.5em 1em;
   background: #222;
 }
+
+/* Font size inherit for Firefox captions */
+.h5p-video::cue {
+  font-size: 1em;
+}
