@@ -12,11 +12,11 @@
         },
         {
           "label": "Ajustează playerul video pentru a utiliza tot spațiul disponibil",
-          "description": "Dacă nu este setat, playerul video va avea același raport de aspect ca și videoclipul."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Afișează controalele playerului video",
-          "description": "Adaugă controale la playerul video. Acest lucru permite utilizatorilor să redea, să pună pauză etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Redare automată a videoclipului",
-          "description": "Pornește redarea videoclipului automat. Este posibil să nu funcționeze pe dispozitivele mobile."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Redare în buclă a videoclipului",
-          "description": "Repornește automat videoclipul de la capăt când se termină."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nume",
           "default": "Video",
-          "description": "Ajută la identificarea conținutului de acest tip."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Se încarcă",

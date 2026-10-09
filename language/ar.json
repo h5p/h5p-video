@@ -12,11 +12,11 @@
         },
         {
           "label": "مشغل فيديو مناسبا لاستخدام كل المساحة المتاحة",
-          "description": "إذا لم يتم تعيين مشغل فيديو سيكون لها نسبة الارتفاع نفس الفيديو"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "مشاهدة ضوابط مشغل فيديو",
-          "description": "إضافة عناصر تحكم إلى مشغل الفيديو. وهذا يسمح للمستخدمين للعب، وقفة، الخ"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "التشغيل التلقائي الفيديو",
-          "description": "بدء تشغيل الفيديو تلقائيا. قد لا تعمل على الأجهزة النقالة"
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "تشغيل مستمر للفيديو",
-          "description": "بدء تلقائيا الفيديو مرة أخرى عندما ينتهي"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "الاسم",
           "default": "Video",
-          "description": "يساعد على تحديد المضمون من هذا النوع"
+          "details": "Helps identify content of this type."
         },
         {
           "label": "تحميل",

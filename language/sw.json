@@ -12,11 +12,11 @@
         },
         {
           "label": "Weka kichezaji video kutumia nafasi zote zinazopatikana",
-          "description": "Kama hujaweka kichezaji video itakuwa na uwiano sawa kama video yenyewe."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Onyesha vidhibiti vya kichezaji video",
-          "description": "Ongeza vidhibiti kwenye kichezaji video. Hii inaruhusu watumiaji kucheza, kusitisha, na kadhalika."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Cheza video kiotomatiki",
-          "description": "Anza kucheza video kiotomatiki. Huenda isifanye kazi kwenye vifaa vya runuru."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Video ya kitanzi",
-          "description": "Anzisha video kiotomatiki tena inapoisha."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Jina",
           "default": "Video",
-          "description": "Husaidia kutambua maudhui ya aina hii."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Kupakia",

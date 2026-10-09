@@ -12,11 +12,11 @@
         },
         {
           "label": "התאמת נגן הוידאו כך שישתמש בכל השטח הזמין",
-          "description": "אם לא הוגדר, לנגן הווידאו יהיה יחס גובה-רוחב זהה לזה של הסרטון."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "תצוגת סרגל כפתורי הוידאו",
-          "description": "הוספת פקדים לנגן הווידאו. זה מאפשר למשתמשים לנגן את הסרטון, להשהות וכו."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "הפעלה אוטומטית של הוידאו",
-          "description": "הפעלת הסרטון באופן אוטומטי. ייתכן שלא יפעל במכשירים ניידים."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "תצוגה מחזורית של הוידאו",
-          "description": "הפעלת הסרטון שוב באופן אוטומטי כאשר הוא מסתיים."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "שם",
           "default": "וידאו",
-          "description": "עוזר לזהות תוכן מסוג זה."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "נטען",

@@ -12,11 +12,11 @@
         },
         {
           "label": "Den Videoplayer in den verfügbaren Platz einpassen",
-          "description": "Wird dies nicht ausgewählt, hat der Videoplayer das gleiche Seitenverhältnis wie das Video."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Videoplayer-Steuerelemente anzeigen",
-          "description": "Dies ermöglicht den Lernenden das Abspielen, Pausieren, usw."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Video automatisch abspielen",
-          "description": "Die Videowiedergabe beginnt nach dem Laden automatisch. Funktioniert auf mobilen Geräten evtl. nicht."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Videoschleife",
-          "description": "Startet das Video erneut, sobald es vorbei ist."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Automatisches Pausieren deaktivieren",
-          "description": "Verhindert, dass das Video automatisch pausiert, wenn es aus dem Sichtfeld verschwindet."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Name",
           "default": "Video",
-          "description": "Hilft dabei, Inhalte dieses Typs als solche zu erkennen."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Lädt",

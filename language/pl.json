@@ -12,11 +12,11 @@
         },
         {
           "label": "Dopasuj odtwarzacz wideo, aby wykorzystać całą dostępną przestrzeń ekranu",
-          "description": "Jeśli nie jest ustawiony, odtwarzacz wideo będzie miał takie same proporcje jak wideo."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Pokaż panel sterujący odtwarzacza wideo",
-          "description": "Dodaj elementy panelu sterującego do odtwarzacza wideo. Pozwala to użytkownikom na odtwarzanie, wstrzymywanie itp."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Automatyczne odtwarzanie wideo",
-          "description": "Rozpocznij automatyczne odtwarzanie wideo. Może nie działać na urządzeniach mobilnych."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Zapętl wideo",
-          "description": "Automatycznie rozpocznij odtwarzanie wideo od nowa po jego zakończeniu."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nazwa",
           "default": "Wideo",
-          "description": "Pomaga zidentyfikować treści tego typu."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Ładowanie",

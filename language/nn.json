@@ -12,11 +12,11 @@
         },
         {
           "label": "Tilpass størrelse",
-          "description": "Forstørr og forminsk avhengig av tilgjengeleg størrelse"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Slå på kontrollar",
-          "description": "Kontrollane lar mellom anna brukaren setje videoavspelinga på pause"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Slå på automatisk avspeling",
-          "description": "Med automatisk avspeling startar videoen å spele av seg sjølv med ein gong. Viss automatisk avspeling er slått av må brukaren trykkje for å starte avspelinga. Merk at automatisk avspeling ikkje virkar på mobile einingar."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Automatisk omstart",
-          "description": "Start videoen på nytt når avspillingen er ferdig."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Navn",
           "default": "Video",
-          "description": "Hjelper med å identifisere innholdstypen."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Laster",

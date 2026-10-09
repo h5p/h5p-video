@@ -12,11 +12,11 @@
         },
         {
           "label": "Den Videoplayer so anpassen, dass er den insgesamt verfügbaren Platz verwendet",
-          "description": "Wird dies nicht ausgewählt, hat der Videoplayer das gleiche Seitenverhältnis wie das Video."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Prikaži podešavanja za video-plajer",
-          "description": "Ovo omogućava da korisnik video pusti, pauzira, isl."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Pusti automatski video",
-          "description": "Ovo moćda neće funkcionirati na mobilnim uređajima."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Problem sa videom",
-          "description": "Startaj video ispočetka."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Naziv",
           "default": "Video",
-          "description": "Pomaže da se identificira tip videa."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Učitava se",

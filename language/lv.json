@@ -12,11 +12,11 @@
         },
         {
           "label": "Pielāgot video atskaņotāju, lai izmantotu visu pieejamo laukumu",
-          "description": "Ja nav atzīmēts, video atskaņotāja izmērs būs tāds pats kā video malu attiecība."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Rādīt video atskaņotāja vadīklas",
-          "description": "Pievienot video atskaņotājam vadīklas. Tas ļaus lietotājiem atskaņot, pauzēt utml."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Video automātiskā atskaņošana",
-          "description": "Sākt atskaņot video automātiski. Var darboties ne visās mobilajās ierīcēs."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Riņķot video",
-          "description": "Automātiski sākt video no jauna, kad tas beidzas."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nosaukums",
           "default": "Video",
-          "description": "Palīdz identificēt šāda tipa saturu."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Ielāde",
