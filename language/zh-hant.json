@@ -12,11 +12,11 @@
         },
         {
           "label": "影片播放器自動調整成最大畫面",
-          "description": "如果不勾選，影片會依原始尺寸比例播放。"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "顯示影片播放控制項",
-          "description": "在播放器下顯示影片控制項，讓用戶能夠使用暫停、靜音等功能。"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "影片自動播放",
-          "description": "在連結影片後自動播放。在行動裝置上可能無效。"
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "影片循環播放",
-          "description": "在影片播放完後會重新播放。"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "形式的名稱",
           "default": "影片",
-          "description": "幫助識別這個內容的形式。"
+          "details": "Helps identify content of this type."
         },
         {
           "label": "正在載入的顯示文字",

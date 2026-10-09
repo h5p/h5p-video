@@ -12,11 +12,11 @@
         },
         {
           "label": "Umístit přehrávač videa tak, aby využíval veškerý dostupný prostor",
-          "description": "Pokud není nastaven, bude mít přehrávač videa stejný poměr stran jako video."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Zobrazit ovládací prvky přehrávače videa",
-          "description": "Přidejte do přehrávače videa ovládací prvky. To umožňuje uživatelům spustit, pozastavit atd."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Automatické přehrávání videa",
-          "description": "Spustit přehrávání videa automaticky. Na mobilních zařízeních nemusí fungovat."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Video ve smyčce",
-          "description": "Po skončení se video automaticky spustí znovu."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Název",
           "default": "Video",
-          "description": "Pomáhá identifikovat obsah tohoto typu."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Nahrávání",

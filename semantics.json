@@ -5,7 +5,6 @@
     "label": "Video sources",
     "importance": "high",
     "description": "Add both WebM and MP4 formatted sources to ensure that the video works in all browsers.",
-    "state": "update",
     "disableCopyright": true
   },
   {
@@ -26,9 +25,7 @@
         "label": "Fit video player to use all available space",
         "importance": "low",
         "default": true,
-        "details": "If not set the video player will have the same aspect ratio as the video.",
-        "state": "update"
-
+        "details": "If not set the video player will have the same aspect ratio as the video."
       },
       {
         "name": "controls",
@@ -36,8 +33,7 @@
         "label": "Show video player controls",
         "importance": "low",
         "default": true,
-        "details": "The controls allow users to play, pause, etc.",
-        "state": "update"
+        "details": "The controls allow users to play, pause, etc."
       }
     ]
   },
@@ -53,8 +49,7 @@
         "label": "Auto-play video",
         "importance": "low",
         "default": false,
-        "details": "Start playing the video automatically. May not work on mobile devices.",
-        "state": "update"
+        "details": "Start playing the video automatically. May not work on mobile devices."
       },
       {
         "name": "loop",
@@ -62,8 +57,7 @@
         "label": "Loop video",
         "importance": "low",
         "default": false,
-        "details": "Automatically start the video over again when it ends.",
-        "state": "update"
+        "details": "Automatically start the video over again when it ends."
       },
       {
         "name": "hasNoAutoPause",
@@ -71,8 +65,7 @@
         "label": "Deactivate auto-pause",
         "importance": "low",
         "default": false,
-        "details": "Prevents video from pausing automatically if video gets hidden.",
-        "state": "update"
+        "details": "Prevents video from pausing automatically if video gets hidden."
       }
     ]
   },
@@ -89,8 +82,7 @@
         "label": "Name",
         "importance": "low",
         "default": "Video",
-        "details": "Helps identify content of this type.",
-        "state": "update"
+        "details": "Helps identify content of this type."
       },
       {
         "name": "loading",

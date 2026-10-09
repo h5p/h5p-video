@@ -12,11 +12,11 @@
         },
         {
           "label": "Ajustar o leitor de vídeo para ocupar todo o espaço disponível",
-          "description": "Se desativado, o leitor terá o mesmo tamanho do vídeo fornecido."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Mostrar controlos do leitor de vídeo",
-          "description": "Adicionar controlos ao leitor de vídeo. Permite que o utilizador reproduza o vídeo, faça pausa, etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Reprodução automática do vídeo",
-          "description": "O vídeo é reproduzido automaticamente. Pode não funcionar em dispositivos móveis."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Repetição do vídeo",
-          "description": "Reproduz novamente o vídeo após terminar."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nome",
           "default": "Vídeo",
-          "description": "Ajuda a identificar conteúdo deste tipo."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "A carregar",

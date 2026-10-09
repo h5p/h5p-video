@@ -12,11 +12,11 @@
         },
         {
           "label": "Pas die videospeler aan om alle beskikbare spasie te gebruik",
-          "description": "Indien dit nie ingestel is nie, sal die videospeler dieselfde beeldverhouding as die video hê."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Wys videospelerknoppies",
-          "description": "Voeg knoppies by die videospeler. Dit stel gebruikers in staat om te speel, te stop, ens."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Speel video outomaties",
-          "description": "Begin om die video outomaties te speel. Sal moontlik nie op mobiele toestelle werk nie."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Herhaal video",
-          "description": "Begin die video outomaties weer as dit eindig."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Naam",
           "default": "Video",
-          "description": "Help om inhoud van hierdie soort te identifiseer."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Besig om te laai",

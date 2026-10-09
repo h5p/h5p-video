@@ -12,11 +12,11 @@
         },
         {
           "label": "Sovita videosoitin kehykseen",
-          "description": "Jos ei ole valittuna, niin videosoitin säilyttää videon kuvasuhteen."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Näytä videon ohjaimet",
-          "description": "Lisää ohjaimet soittimeen. Mahdollistaa käynnistyksen, keskeytyksen jne..."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Käynnistä video automaattisesti",
-          "description": "Käynnistä video automaattisesti. Ei ehkä toimi mobiililaitteilla."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Toista videota",
-          "description": "Aloittaa videon lopttua sen alusta aina uudestaan."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nimi",
           "default": "Video",
-          "description": "Auttaa tunnistamaan tämän sisältötyypin."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Lataa",

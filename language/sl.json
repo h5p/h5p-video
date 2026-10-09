@@ -12,11 +12,11 @@
         },
         {
           "label": "Prilagodi predvajalnik razpoložljivemu prostoru",
-          "description": "V nasprotnem primeru bo predvajalnik prevzel velikost videoposnetka."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Prikaži kontrolnike v predvajalniku",
-          "description": "Kontrolniki na primer uporabniku dovoljujejo začasno prekinitev predvajanja."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Samodejno predvajanje.",
-          "description": "Nastavitev samodejnega predvajanja. Ne deluje na vseh mobilnih napravah."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Predvajanje v zanki",
-          "description": "Vklop predvajanja videoposnetka v zanki."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Ime",
           "default": "Videoposnetek",
-          "description": "Služi za identifikacijo vsebine tipa medija."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Nalaganje",
