@@ -48,3 +48,8 @@
 .h5p-video.h5p-panopto iframe {
   display: block;
 }
+
+/* Font size inherit for Firefox captions */
+.h5p-video::cue {
+  font-size: 1em;
+}
