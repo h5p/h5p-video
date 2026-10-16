@@ -12,11 +12,11 @@
         },
         {
           "label": "Установите видеоплеер, чтобы использовать все доступное пространство",
-          "description": "Если не установлен, видео плеер будет иметь такое же соотношение сторон, как видео."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Показать элементы управления видеоплеером",
-          "description": "Добавьте элементы управления в видеоплеер. Это позволяет пользователям воспроизводить, приостанавливать и т. Д.."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Автовоспроизведение видео",
-          "description": "Начните воспроизведение видео автоматически. Может не работать на мобильных устройствах."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Зацикливать видео",
-          "description": "Автоматически начинать видео снова, когда оно заканчивается."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Название",
           "default": "Видео",
-          "description": "Помогает идентифицировать контент этого типа."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Загрузка",

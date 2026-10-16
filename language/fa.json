@@ -12,11 +12,11 @@
         },
         {
           "label": "پخش‌کننده ویدئو را طوری کار بگذار که از همه فضای موجود استفاده کند",
-          "description": "در صورت عدم تنظیم، پخش‌کننده ویدئو نسبت تصویر برابر نسبت تصویر ویدئو خواهد داشت."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "نمایش کنترل‌های پخش‌کننده ویدئو",
-          "description": "افزودن کنترل‌ها به پخش‌کننده ویدئو. این به کاربران اجازه می‌دهد ویدئو را پخش کنند، متوقف کنند، ..."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "پخش خودکار ویدئو",
-          "description": "شروع خودکار پخش ویدئو. ممکن است در دستگاه موبایل کار نکند."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "پخش مکرر ویدئو",
-          "description": "شروع دوباره ویدئو به صورت خودکار وقتی ویدئو به پایان می‌رسد."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "نام",
           "default": "ویدئو",
-          "description": "به شناسایی محتوای از این نوع کمک می‌کند."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "در حال بارگیری",

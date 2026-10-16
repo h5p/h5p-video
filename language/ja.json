@@ -12,11 +12,11 @@
         },
         {
           "label": "利用可能なすべてのスペースを使用するようにビデオプレーヤーを合わせる",
-          "description": "設定されていない場合、ビデオプレイヤーのアスペクト比はビデオと同じになります。"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "ビデオプレーヤのコントロールを表示します。",
-          "description": "ビデオプレーヤーにコントロールを追加します。 これにより、ユーザーは再生、一時停止などが可能になります。"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "ビデオの自動再生",
-          "description": "自動的にビデオの再生を開始します。 モバイルデバイスでは動作しない可能性があります。"
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "ビデオをループ",
-          "description": "ビデオが終了すると自動的にビデオを再び開始します。"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "名前",
           "default": "ビデオ",
-          "description": "このタイプのコンテンツを識別するのに役立ちます。"
+          "details": "Helps identify content of this type."
         },
         {
           "label": "読み込み中",

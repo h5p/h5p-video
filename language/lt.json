@@ -1,49 +1,49 @@
 {
   "semantics": [
     {
-      "description": "Norėdami užtikrinti, kad vaizdo įrašas veiktų visose naršyklėse, turėtumėte pridėti ir WebM, ir MP4 formato šaltinius.",
-      "label": "Vaizdo įrašų šaltiniai"
+      "label": "Vaizdo įrašų šaltiniai",
+      "description": "Norėdami užtikrinti, kad vaizdo įrašas veiktų visose naršyklėse, turėtumėte pridėti ir WebM, ir MP4 formato šaltinius."
     },
     {
+      "label": "Visuals",
       "fields": [
         {
           "label": "Iškabos paveikslėlis"
         },
         {
-          "description": "Jei nenustatyta, vaizdo įrašų grotuvo kraštinių santykis bus toks pat kaip ir vaizdo įrašo.",
-          "label": "Įdėkite vaizdo grotuvą, kad išnaudotumėte visą turimą vietą"
+          "label": "Įdėkite vaizdo grotuvą, kad išnaudotumėte visą turimą vietą",
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
-          "description": "Pridėti valdiklius prie vaizdo įrašų grotuvo. Tai leidžia naudotojams paleisti, pristabdyti ir pan.",
-          "label": "Rodyti vaizdo įrašų grotuvo valdiklius"
+          "label": "Rodyti vaizdo įrašų grotuvo valdiklius",
+          "details": "The controls allow users to play, pause, etc."
         }
-      ],
-      "label": "Visuals"
+      ]
     },
     {
+      "label": "Groti",
       "fields": [
         {
           "label": "Automatiškai paleisti vaizdo įrašą",
-          "description": "Automatiškai leisti vaizdo įrašą. Gali neveikti mobiliuosiuose įrenginiuose."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Kartoti vaizdo įrašą",
-          "description": "Automatiškai paleisti vaizdo įrašą iš naujo, kai jis pasibaigs."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
-      ],
-      "label": "Groti"
+      ]
     },
     {
       "label": "Video lokalizacija",
       "fields": [
         {
-          "default": "Vaizdo įrašas",
           "label": "Pavadinimas",
-          "description": "Padeda atpažinti tokio tipo turinį."
+          "default": "Vaizdo įrašas",
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Įkeliama",
@@ -99,13 +99,16 @@
       "label": "Pritaikomumas",
       "fields": [
         {
+          "label": "Pridėti vaizdo įrašo takelį",
           "entity": "Takelis",
           "field": {
+            "label": "Takelis",
             "fields": [
               {
                 "label": "Takelio pavadinimas"
               },
               {
+                "label": "Įveskite tipą, žr. <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "Subtitrai"
@@ -119,8 +122,7 @@
                   {
                     "label": "Skyriai"
                   }
-                ],
-                "label": "Įveskite tipą, žr. <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
+                ]
               },
               {
                 "label": "Originalo kalba turi būti apibrėžta subtitrams",
@@ -129,10 +131,8 @@
               {
                 "label": "Failo takelis (WebVTT)"
               }
-            ],
-            "label": "Takelis"
-          },
-          "label": "Pridėti vaizdo įrašo takelį"
+            ]
+          }
         }
       ]
     }

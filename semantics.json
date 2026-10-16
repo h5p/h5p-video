@@ -4,7 +4,7 @@
     "type": "video",
     "label": "Video sources",
     "importance": "high",
-    "description": "To ensure that the video works in all browsers you should add both WebM and MP4 formatted sources.",
+    "description": "Add both WebM and MP4 formatted sources to ensure that the video works in all browsers.",
     "disableCopyright": true
   },
   {
@@ -25,7 +25,7 @@
         "label": "Fit video player to use all available space",
         "importance": "low",
         "default": true,
-        "description": "If not set the video player will have the same aspect ratio as the video."
+        "details": "If not set the video player will have the same aspect ratio as the video."
       },
       {
         "name": "controls",
@@ -33,7 +33,7 @@
         "label": "Show video player controls",
         "importance": "low",
         "default": true,
-        "description": "Add controls to the video player. This allows users to play, pause, etc."
+        "details": "The controls allow users to play, pause, etc."
       }
     ]
   },
@@ -49,7 +49,7 @@
         "label": "Auto-play video",
         "importance": "low",
         "default": false,
-        "description": "Start playing the video automatically. May not work on mobile devices."
+        "details": "Start playing the video automatically. May not work on mobile devices."
       },
       {
         "name": "loop",
@@ -57,7 +57,7 @@
         "label": "Loop video",
         "importance": "low",
         "default": false,
-        "description": "Automatically start the video over again when it ends."
+        "details": "Automatically start the video over again when it ends."
       },
       {
         "name": "hasNoAutoPause",
@@ -65,7 +65,7 @@
         "label": "Deactivate auto-pause",
         "importance": "low",
         "default": false,
-        "description": "Prevents video from pausing automatically if video gets hidden."
+        "details": "Prevents video from pausing automatically if video gets hidden."
       }
     ]
   },
@@ -82,7 +82,7 @@
         "label": "Name",
         "importance": "low",
         "default": "Video",
-        "description": "Helps identify content of this type."
+        "details": "Helps identify content of this type."
       },
       {
         "name": "loading",

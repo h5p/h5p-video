@@ -12,11 +12,11 @@
         },
         {
           "label": "მოარგე ვიდეოს გამშვებს, რომ გამოიყენოს მთლიანი სივრცე",
-          "description": "თუ არ არის დაყენებული, ვიდეოს გამშვებს ექნება ისეთივე გაფართოება, რაც ვიდეოს აქვს."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "აჩვენე ვიდეოს გამშვების კონტროლები",
-          "description": "დაამატე კონტროლები ვიდეოს გამშვებს. ეს მისცემს მომხმარებლებს, ჩართვის, დაპაუზების და ა.შ. შესაძლებლობას."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "ვიდეოს ავტომატური ჩართვა",
-          "description": "ვიდეოს ავტომატური ჩართვა. შესაძლოა, მობილურ მოწყობილობებზე არ იმუშაოს."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "ვიდეოს განმეორება",
-          "description": "ავტომატურად ჩაირთოს ვიდეო თავიდან, როცა ის დასრულდება."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "სახელი",
           "default": "ვიდეო",
-          "description": "გვეხმარება ამ სახის კონტენტის იდენტიფიცირებაში."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "იტვირთება",

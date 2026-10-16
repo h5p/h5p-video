@@ -12,11 +12,11 @@
         },
         {
           "label": "视频播放器自动调整成最大画面",
-          "description": "如果不勾选，视频会依原始尺寸比例播放。"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "显示视频播放控制项",
-          "description": "在播放器下显示视频控制项，让用户能够使用暂停、静音等功能。"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "视频自动播放",
-          "description": "在连接视频后自动播放。在行动装置上可能无效。"
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "影视频循环播放",
-          "description": "在视频播放完后重新播放。"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "形式的名称",
           "default": "视频",
-          "description": "帮助识别这个内容的形式。"
+          "details": "Helps identify content of this type."
         },
         {
           "label": "正在载入的显示文字",

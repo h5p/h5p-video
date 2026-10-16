@@ -12,11 +12,11 @@
         },
         {
           "label": "Fit video player to use all available space",
-          "description": "If not set the video player will have the same aspect ratio as the video."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Show video player controls",
-          "description": "Add controls to the video player. This allows users to play, pause, etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Auto-play video",
-          "description": "Start playing the video automatically. May not work on mobile devices."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Loop video",
-          "description": "Automatically start the video over again when it ends."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Name",
           "default": "Video",
-          "description": "Helps identify content of this type."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Loading",

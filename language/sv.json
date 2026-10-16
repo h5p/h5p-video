@@ -12,11 +12,11 @@
         },
         {
           "label": "Anpassa videospelaren så att allt tillgängligt utrymme används",
-          "description": "Om inte angivet, så kommer videospelaren ha samma bildförhållande som själva videon."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Visa videospelar-kontroller",
-          "description": "Lägger till kontroller till videospelaren. Gör det möjligt att spela upp, pausa, etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Auto-spela video",
-          "description": "Börja spela videon automatiskt. Kanske inte stöds på mobila enheter."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Loopa video",
-          "description": "När videon är slut, starta automatiskt om från början."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Namn",
           "default": "Video",
-          "description": "Underlättar att identifiera innehåll av denna typ."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Laddar",

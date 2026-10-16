@@ -12,11 +12,11 @@
         },
         {
           "label": "Täida videomängijaga kogu võimalik ala",
-          "description": "Kui ei ole märgitud, siis videomängija järgib sama kuvasuhet, mis on videol."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Näita videomängija juhtnuppe",
-          "description": "Lisa videomängijale juhtnupud. Nii saab kasutaja videot mängima panna, pausida jne."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Video automaatne mängimine",
-          "description": "Alustab video mängimist automaatselt. Ei pruugi töötada mobiilseadmeis."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Esita videot korduses",
-          "description": "Käivita video lõppu jõudmisel automaatselt uuesti."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nimi",
           "default": "Video",
-          "description": "Aitab määrata selle tüübi sisu."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Laadimine",

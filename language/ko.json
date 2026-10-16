@@ -12,11 +12,11 @@
         },
         {
           "label": "비디오 플레이어가 사용 가능한 모든 공간을 사용할 수 있도록 맞추기",
-          "description": "설정하지 않으면 비디오 플레이어의 가로 세로 비율이 비디오와 같습니다."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "비디오 플레이어 컨트롤 표시",
-          "description": "비디오 플레이어에 컨트롤을 추가하여 사용자는 재생, 일시정지 등을 할 수 있다."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "비디오 자동 재생",
-          "description": "비디오 자동 재생을 시작합니다. 모바일 장치에서는 작동하지 않을 수 있음."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "반복 재생",
-          "description": "영상이 끝나면 자동으로 다시 시작"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "이름",
           "default": "비디오",
-          "description": "이 유형의 콘텐츠를 식별하는 데 도움이 됨."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "로딩중",

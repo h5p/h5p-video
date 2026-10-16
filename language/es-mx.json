@@ -12,11 +12,11 @@
         },
         {
           "label": "Se ajusta el reproductor de video para usar todo el espacio disponible",
-          "description": "Si no se configura, el reproductor de video tendrá la misma proporción de aspecto que el video."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Mostrar controles del reproductor de video",
-          "description": "Añadir controles al reproductor de video. Esto le permite a los usuarios el reproducir, pausar, etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Auto-reproducir video",
-          "description": "Comenzar a reproducir el video automáticamente. Podría no funcionar en dispositivos móviles."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Bucle de video",
-          "description": "Automáticamente iniciar el video una y otra vez cuando se termine."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nombre",
           "default": "Vídeo",
-          "description": "Ayuda a identificar el contenido de este tipo."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Cargando",

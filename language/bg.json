@@ -12,11 +12,11 @@
         },
         {
           "label": "Видео плейъра да използва цялото свободно пространство",
-          "description": "Ако не е активно, видео плейърът ще има същата пропорция и размери като изходното видео."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Покаpзване на контролния пункт на видео плейъра",
-          "description": "Добави контролен пункт към плейъра. Това ще позволи на потребителите да стартират, спират на пауза и т.н."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Автоматично възпроизвеждане на видео",
-          "description": "Започнете автоматично възпроизвеждане на видеоклипа. Може да не работи при мобилни устройства."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Повтаряне на видео",
-          "description": "Автоматично стартирайте видеото отново, когато свърши."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Заглавие",
           "default": "Видео",
-          "description": "Помага да се идентифицира съдържанието на този тип."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Зареждане",

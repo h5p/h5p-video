@@ -12,11 +12,11 @@
         },
         {
           "label": "Ajusta el reproductor de vídeo perquè ocupi tot l’espai disponible",
-          "description": "Si no està establert, el reproductor de vídeo tindrà la mateixa relació d’aspecte que el vídeo."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Mostra els controls del reproductor de vídeo",
-          "description": "Afegeix controls al reproductor de vídeo. Això permet als usuaris iniciar el vídeo, fer pausa, etc."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Reprodueix automàticament el vídeo",
-          "description": "El vídeo començarà a reproduir-se automàticament. Pot ser que no funcioni en dispositius mòbils."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Repeteix el vídeo",
-          "description": "Torna a iniciar automàticament el vídeo quan acabi."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "Nom",
           "default": "Video",
-          "description": "Ajuda a identificar el contingut d’aquest estil."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "S’està carregant",

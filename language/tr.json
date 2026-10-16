@@ -12,11 +12,11 @@
         },
         {
           "label": "Mevcut tüm alanı kullanmak için video oynatıcıyı sığdır",
-          "description": "Ayarlanmazsa, video oynatıcı video ile aynı en boy oranına sahip olacaktır."
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "Video oynatıcı kontrollerini göster",
-          "description": "Video oynatıcıya kontroller ekleyiniz. Bu, kullanıcılara oynatma, duraklatma vb. izinler verir."
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "Videoyu otomatik oynat",
-          "description": "Videoyu otomatik olarak oynatmaya başlayınız. Mobil cihazlarda çalışmayabilir."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Videoyu tekrarla",
-          "description": "Bittiğinde videoyu otomatik olarak yeniden başlatınız."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "İsim",
           "default": "Video",
-          "description": "Bu türdeki içeriği tanımlamaya yardımcı olur."
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Yükleniyor",

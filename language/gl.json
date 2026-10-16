@@ -1,49 +1,49 @@
 {
   "semantics": [
     {
-      "description": "Para asegurarte de que o vídeo funcione en todos os navegadores, deberías engadir fontes de vídeo en ámbolos formatos WebM e MP4.",
-      "label": "Fontes de vídeo"
+      "label": "Fontes de vídeo",
+      "description": "Para asegurarte de que o vídeo funcione en todos os navegadores, deberías engadir fontes de vídeo en ámbolos formatos WebM e MP4."
     },
     {
+      "label": "Visuais",
       "fields": [
         {
           "label": "Imaxe do póster"
         },
         {
-          "description": "Se non se activa, o reprodutor de vídeo terá a mesma relación de aspecto que o vídeo.",
-          "label": "Fai que o reprodutor de vídeo use todo o espazo dispoñible"
+          "label": "Fai que o reprodutor de vídeo use todo o espazo dispoñible",
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
-          "description": "Engadir controles ao reprodutor de vídeo. Isto permite que os usuarios reproduzan, poñan en pausa, etc.",
-          "label": "Amosar controles de reprodución de vídeo"
+          "label": "Amosar controles de reprodución de vídeo",
+          "details": "The controls allow users to play, pause, etc."
         }
-      ],
-      "label": "Visuais"
+      ]
     },
     {
+      "label": "Reprodución",
       "fields": [
         {
           "label": "Auto-reproducir vídeo",
-          "description": "Empezar a reprodución do vídeo automaticamente. Pode non funcionar en dispositivos móbiles."
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "Reproducir en bucle",
-          "description": "Volver a iniciar o vídeo automaticamente cando remata."
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
-      ],
-      "label": "Reprodución"
+      ]
     },
     {
       "label": "Localización do vídeo",
       "fields": [
         {
-          "default": "Vídeo",
           "label": "Nome",
-          "description": "Axuda a identificar contido deste tipo."
+          "default": "Vídeo",
+          "details": "Helps identify content of this type."
         },
         {
           "label": "Cargando",
@@ -99,13 +99,16 @@
       "label": "Accesibilidade",
       "fields": [
         {
+          "label": "Engadir pista de vídeo",
           "entity": "Pista",
           "field": {
+            "label": "Pista",
             "fields": [
               {
                 "label": "Etiqueta da pista"
               },
               {
+                "label": "Tipo kind, consultar <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>",
                 "options": [
                   {
                     "label": "Subtítulos"
@@ -119,8 +122,7 @@
                   {
                     "label": "Capítulos"
                   }
-                ],
-                "label": "Tipo kind, consultar <a target=\"_blank\" href=\"https://html.spec.whatwg.org/multipage/embedded-content.html#the-track-element\">HTML living standard</a>"
+                ]
               },
               {
                 "label": "Idioma de orixe, debe definirse para os subtítulos",
@@ -129,10 +131,8 @@
               {
                 "label": "Ficheiro de pista (WebVTT)"
               }
-            ],
-            "label": "Pista"
-          },
-          "label": "Engadir pista de vídeo"
+            ]
+          }
         }
       ]
     }

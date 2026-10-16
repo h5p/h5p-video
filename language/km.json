@@ -12,11 +12,11 @@
         },
         {
           "label": "ដាក់វីដេអូឲ្យសមនឹងទំហំទីតាំងដែលមាន",
-          "description": "ប្រសិនបើមិនកំណត់បែបនេះទេ វីដេអូនឹងបង្ហាញទៅតាមទំហំដើមរបស់វា។"
+          "details": "If not set the video player will have the same aspect ratio as the video."
         },
         {
           "label": "បង្ហាញប៊ូតុងបញ្ជាវីដេអូ",
-          "description": "បង្ហាញប៊ូតុងបញ្ជានៅលើកម្មវិធីចាក់វីដេអូ ដើម្បីឲ្យគេអាចលេង ផ្អាក ។ល។"
+          "details": "The controls allow users to play, pause, etc."
         }
       ]
     },
@@ -25,15 +25,15 @@
       "fields": [
         {
           "label": "លេងវីដេអូដោយស្វ័យប្រវត្តិ",
-          "description": "ចាប់ផ្តើមលេងវីដេអូដោយស្វ័យប្រវត្តិ។ អាចនឹងមិនដំណើរការនៅលើឧបករណ៍ចល័ត។"
+          "details": "Start playing the video automatically. May not work on mobile devices."
         },
         {
           "label": "លេងឡើងវិញ",
-          "description": "លេងវីដេអូដដែលៗដោយស្វ័យប្រវត្តិ"
+          "details": "Automatically start the video over again when it ends."
         },
         {
           "label": "Deactivate auto-pause",
-          "description": "Prevents video from pausing automatically if video gets hidden."
+          "details": "Prevents video from pausing automatically if video gets hidden."
         }
       ]
     },
@@ -43,7 +43,7 @@
         {
           "label": "ឈ្មោះ",
           "default": "វីដេអូ",
-          "description": "ជួយសម្គាល់មាតិកាប្រភេទនេះ"
+          "details": "Helps identify content of this type."
         },
         {
           "label": "កំពុងដំណើរការ",
