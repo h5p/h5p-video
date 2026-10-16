@@ -76,6 +76,10 @@ H5P.VideoYouTube = (function ($) {
         },
         events: {
           onReady: function () {
+            // The iframe may have been (re)created after construction, e.g.
+            // when the container was hidden. Make sure it is positioned.
+            styleIframe();
+
             self.trigger('ready');
             self.trigger('loaded');
 
@@ -166,6 +170,15 @@ H5P.VideoYouTube = (function ($) {
           }
         }
       });
+      styleIframe();
+    };
+
+    /**
+     * Position the YouTube iframe to fill the wrapper.
+     *
+     * @private
+     */
+    var styleIframe = function () {
       player.getIframe().style = "position:absolute;top:0;left:0;width:100%;height:100%;";
     };
 
