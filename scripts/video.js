@@ -58,26 +58,36 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     H5P.EventDispatcher.call(self);
 
     // Default language localization
-    parameters = $.extend(true, parameters, {
-      l10n: {
-        name: 'Video',
-        loading: 'Video player loading...',
-        noPlayers: 'Found no video players that supports the given video format.',
-        noSources: 'Video source is missing.',
-        aborted: 'Media playback has been aborted.',
-        networkFailure: 'Network failure.',
-        cannotDecode: 'Unable to decode media.',
-        formatNotSupported: 'Video format not supported.',
-        mediaEncrypted: 'Media encrypted.',
-        unknownError: 'Unknown error.',
-        vimeoPasswordError: 'Password-protected Vimeo videos are not supported.',
-        vimeoPrivacyError: 'The Vimeo video cannot be used due to its privacy settings.',
-        vimeoLoadingError: 'The Vimeo video could not be loaded.',
-        invalidYtId: 'Invalid YouTube ID.',
-        unknownYtId: 'Unable to find video with the given YouTube ID.',
-        restrictedYt: 'The owner of this video does not allow it to be embedded.'
-      }
-    });
+    parameters.l10n = {
+      name: 'Video',
+      loading: 'Video player loading...',
+      noPlayers: 'Found no video players that supports the given video format.',
+      noSources: 'Video source is missing.',
+      aborted: 'Media playback has been aborted.',
+      networkFailure: 'Network failure.',
+      cannotDecode: 'Unable to decode media.',
+      formatNotSupported: 'Video format not supported.',
+      mediaEncrypted: 'Media encrypted.',
+      unknownError: 'Unknown error.',
+      vimeoPasswordError: 'Password-protected Vimeo videos are not supported.',
+      vimeoPrivacyError: 'The Vimeo video cannot be used due to its privacy settings.',
+      vimeoLoadingError: 'The Vimeo video could not be loaded.',
+      invalidYtId: 'Invalid YouTube ID.',
+      unknownYtId: 'Unable to find video with the given YouTube ID.',
+      restrictedYt: 'The owner of this video does not allow it to be embedded.',
+      threeSixtyUp: 'Move camera view up',
+      threeSixtyDown: 'Move camera view down',
+      threeSixtyLeft: 'Move camera view left',
+      threeSixtyRight: 'Move camera view right',
+      threeSixtyDragEnable: 'Enable mouse dragging for camera view changes',
+      threeSixtyDragDisable: 'Disable mouse dragging for camera view changes',
+      ...parameters.l10n ?? {}
+    };
+
+    parameters.l10n.threeSixtyUp += ' (' + Object.keys(self.keyboardControlMapping).find(key => self.keyboardControlMapping[key] === 'u') + ')';
+    parameters.l10n.threeSixtyDown += ' (' + Object.keys(self.keyboardControlMapping).find(key => self.keyboardControlMapping[key] === 'd') + ')';
+    parameters.l10n.threeSixtyLeft += ' (' + Object.keys(self.keyboardControlMapping).find(key => self.keyboardControlMapping[key] === 'l') + ')';
+    parameters.l10n.threeSixtyRight += ' (' + Object.keys(self.keyboardControlMapping).find(key => self.keyboardControlMapping[key] === 'r') + ')';
 
     parameters.a11y = parameters.a11y || [];
     parameters.playback = parameters.playback || {};
@@ -233,7 +243,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
     /**
      * Check if loaded video is a 360 degree video. Default implementation, may be overridden by sub classes.
      * 
-     * @return {Boolean | null} Is loaded video 360 video.
+     * @return {Boolean} Is loaded video 360 video.
      */
     self.is360 = () => {
       return false;
@@ -320,25 +330,25 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         <div class="h5p-video-360-mouse-controls-row">
           <div></div>
           <div>
-            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="u">↑</button>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" aria-label="${parameters.l10n.threeSixtyUp}" data-direction="u">&#xe930;</button>
           </div>
           <div></div>
         </div>
         <div class="h5p-video-360-mouse-controls-row">
           <div>
-            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="l">←</button>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" aria-label="${parameters.l10n.threeSixtyLeft}" data-direction="l">&#xe900;</button>
           </div>
           <div>
-            <button class="h5p-video-360-mouse-controls-drag-toggle-button-${self.uniqueId}">D</button>
+            <button class="h5p-video-360-mouse-controls-drag-toggle-button-${self.uniqueId}" aria-label="${parameters.l10n.threeSixtyDragEnable}">&#xe915;</button>
           </div>
           <div>
-            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="r">→</button>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" aria-label="${parameters.l10n.threeSixtyRight}" data-direction="r">&#xe901;</button>
           </div>
         </div>
         <div class="h5p-video-360-mouse-controls-row">
           <div></div>
           <div>
-            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" data-direction="d">↓</button>
+            <button class="h5p-video-360-mouse-controls-button-${self.uniqueId}" aria-label="${parameters.l10n.threeSixtyDown}" data-direction="d">&#xe931;</button>
           </div>
           <div></div>
         </div>
@@ -367,6 +377,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
         self.dragEnabled = !self.dragEnabled;
 
         event.target.classList.toggle('h5p-video-360-mouse-controls-drag-toggle-button-active', self.dragEnabled);
+        event.target.setAttribute('aria-label', self.dragEnabled ? parameters.l10n.threeSixtyDragDisable : parameters.l10n.threeSixtyDragEnable);
         document.getElementsByClassName('h5p-video-360-overlay-' + self.uniqueId)[0].hidden = !self.dragEnabled;
         mouseControlButtonsArray.forEach((element) => {
           element.disabled = self.dragEnabled;
@@ -497,7 +508,7 @@ H5P.Video = (function ($, ContentCopyrights, MediaCopyright, handlers) {
 
     self.on('stateChange', (event) => {
       if (event.data === H5P.Video.PLAYING) {
-        if (self.firstPlay && self.is360 && self.canControl360) {
+        if (self.firstPlay && self.is360() && self.canControl360()) {
           self.create360Overlay();
           self.create360MouseControls();
           self.create360KeyboardListeners();
